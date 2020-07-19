@@ -1,10 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QHBoxLayout>
-#include <QToolBox>
+
+#include <QToolBar>
 #include <QPushButton>
-//#include <QLayout>
-#include <QGraphicsView>
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,22 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-/*    auto toolBox = new QToolBox();
-    auto pButton1 = new QPushButton("One");
-    auto widget = new QWidget();
-    auto aLayout = new QGridLayout();
-    aLayout->addWidget(pButton1);
-    widget->setLayout(aLayout);
-    toolBox->addItem(widget, "sddf");
-
-    auto scene = new QGraphicsScene(centralWidget());
-
-    auto view = new QGraphicsView(scene, centralWidget());
-
-    auto layout = new QHBoxLayout(centralWidget());
-    layout->addWidget(toolBox);
-    layout->addWidget(view);
-    centralWidget()->setLayout(layout);*/
+    initialize();
 }
 
 MainWindow::~MainWindow()
@@ -35,3 +19,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::initialize()
+{
+    QPushButton* backBtn = new QPushButton("back", this);
+    ui->toolBar->addWidget(backBtn);
+    QPushButton* copyBtn = new QPushButton("copy", this);
+    ui->toolBar->addWidget(copyBtn);
+    QPushButton* pasteBtn = new QPushButton("paste", this);
+    ui->toolBar->addWidget(pasteBtn);
+
+    QComboBox* fontBtn = new QComboBox(this);
+    fontBtn->addItem("宋体");
+    fontBtn->addItem("黑体");
+    ui->toolBar->addWidget(fontBtn);
+
+    ui->toolBar->addSeparator();
+
+    QComboBox* fontSizeBtn = new QComboBox(this);
+    fontSizeBtn->addItem("8");
+    fontSizeBtn->addItem("10");
+    ui->toolBar->addWidget(fontSizeBtn);
+
+    ui->toolBar->addSeparator();
+
+    QComboBox* fontColorBtn = new QComboBox(this);
+    fontColorBtn->addItem("black");
+    fontColorBtn->addItem("blue");
+    ui->toolBar->addWidget(fontColorBtn);
+
+    _scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene());
+}

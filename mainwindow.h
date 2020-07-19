@@ -16,10 +16,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QGraphicsView* getView() { return view; }
+    QGraphicsScene* scene() { return _scene; }
 private:
     Ui::MainWindow *ui;
 
-    QGraphicsView* view;
+    QGraphicsScene* _scene;
+
+    void initialize();
 };
 #endif // MAINWINDOW_H
