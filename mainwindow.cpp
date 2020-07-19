@@ -11,16 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    initialize();
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::initialize()
-{
     QPushButton* backBtn = new QPushButton("back", this);
     ui->toolBar->addWidget(backBtn);
     QPushButton* copyBtn = new QPushButton("copy", this);
@@ -49,4 +39,9 @@ void MainWindow::initialize()
 
     _scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene());
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
 }

@@ -21,7 +21,5 @@ private:
     Ui::MainWindow *ui;
 
     QGraphicsScene* _scene;
-
-    void initialize();
 };
 #endif // MAINWINDOW_H
