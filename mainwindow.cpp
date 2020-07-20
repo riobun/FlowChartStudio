@@ -27,10 +27,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->toolBar->addSeparator();
 
-    QComboBox* fontSizeBtn = new QComboBox(this);
-    fontSizeBtn->addItem("8");
-    fontSizeBtn->addItem("10");
-    ui->toolBar->addWidget(fontSizeBtn);
+    QComboBox* fontSizeCombo = new QComboBox(this);
+    fontSizeCombo->setEditable(true);
+    for (int i = 6; i < 52; i = i + 2)
+        fontSizeCombo->addItem(QString().setNum(i));
+    QIntValidator *validator = new QIntValidator(2, 64, this);
+    fontSizeCombo->setValidator(validator);
+    ui->toolBar->addWidget(fontSizeCombo);
 
     ui->toolBar->addSeparator();
 
@@ -46,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     textAction = fontColorToolBtn->menu()->defaultAction();
     fontColorToolBtn->setIcon(createColorToolButtonIcon(":/images/textpointer.png", Qt::black));
     fontColorToolBtn->setAutoFillBackground(true);
-     ui->toolBar->addWidget(fontColorToolBtn);
+    ui->toolBar->addWidget(fontColorToolBtn);
 
     //侧边栏
     connect(ui->bgColorBtn,&QPushButton::clicked,[](){
@@ -58,8 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->arrowColorBtn,&QPushButton::clicked,[](){
         QColorDialog::getColor(QColor(Qt::black));
     });
-    ui->arrowComboBox->addItem("实线");
-    ui->arrowComboBox->addItem("虚线");
+    ui->arrowComboBox->addItem(" 实线");
+    ui->arrowComboBox->addItem(" 虚线");
 
 
 
