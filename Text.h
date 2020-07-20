@@ -8,7 +8,7 @@
 class Text{
 public:
 
-    Text& create_text(QPoint primary_location,double primary_width,double primary_hight);//参数：节点或鼠标位置，节点大小
+    Text(QPoint primary_location,double primary_width,double primary_hight);//参数：节点或鼠标位置，节点大小
     void delete_text();
     void delete_char(int position);//参数：待删除字符位置
     void change_char(int position,char c);//待替换字符位置，新字符
