@@ -45,3 +45,18 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_addRectangleButton_clicked()
+{
+
+}
+
+void MainWindow::on_addDiamondButton_clicked()
+{
+
+}
+
+void MainWindow::on_addArrowButton_clicked()
+{
+
+}
