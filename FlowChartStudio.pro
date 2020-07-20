@@ -19,12 +19,16 @@ SOURCES += \
     arrow.cpp \
     graphelement.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    node.cpp \
+    rectangle.cpp
 
 HEADERS += \
     arrow.h \
     graphelement.h \
-    mainwindow.h
+    mainwindow.h \
+    node.h \
+    rectangle.h
 
 FORMS += \
     mainwindow.ui
