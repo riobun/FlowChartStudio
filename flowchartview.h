@@ -10,6 +10,9 @@ class FlowChartView : public QGraphicsView
 
 public:
     FlowChartView(QWidget *parent = nullptr);
+
+private:
+    void mousePressEvent(QMouseEvent *event) final;
 };
 
 #endif // FLOWCHARTVIEW_H
