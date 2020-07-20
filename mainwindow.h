@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
+#include <QToolButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,9 +25,20 @@ private slots:
 
     void on_addArrowButton_clicked();
 
+    void textColorChanged();
+    void textButtonTriggered();
+
+
 private:
     Ui::MainWindow *ui;
 
     QGraphicsScene* _scene;
+
+    QMenu *createColorMenu(const char *slot, QColor defaultColor);
+    QIcon createColorToolButtonIcon(const QString &image, QColor color);
+    QIcon createColorIcon(QColor color);
+
+    QAction *textAction;
+    QToolButton* fontColorToolBtn;
 };
 #endif // MAINWINDOW_H
