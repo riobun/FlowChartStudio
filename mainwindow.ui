@@ -36,7 +36,7 @@
         <attribute name="label">
          <string>图形元素</string>
         </attribute>
-        <widget class="QToolButton" name="toolButton">
+        <widget class="QToolButton" name="addRectangleButton">
          <property name="geometry">
           <rect>
            <x>30</x>
@@ -59,7 +59,7 @@
           </size>
          </property>
         </widget>
-        <widget class="QToolButton" name="toolButton_2">
+        <widget class="QToolButton" name="addDiamondButton">
          <property name="geometry">
           <rect>
            <x>30</x>
@@ -82,7 +82,7 @@
           </size>
          </property>
         </widget>
-        <widget class="QToolButton" name="toolButton_3">
+        <widget class="QToolButton" name="addArrowButton">
          <property name="geometry">
           <rect>
            <x>30</x>

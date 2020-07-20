@@ -17,6 +17,13 @@ public:
     ~MainWindow();
 
     QGraphicsScene* scene() { return _scene; }
+private slots:
+    void on_addRectangleButton_clicked();
+
+    void on_addDiamondButton_clicked();
+
+    void on_addArrowButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
