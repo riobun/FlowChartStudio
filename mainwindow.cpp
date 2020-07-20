@@ -11,12 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QPushButton* backBtn = new QPushButton("back", this);
-    ui->toolBar->addWidget(backBtn);
-    QPushButton* copyBtn = new QPushButton("copy", this);
-    ui->toolBar->addWidget(copyBtn);
-    QPushButton* pasteBtn = new QPushButton("paste", this);
-    ui->toolBar->addWidget(pasteBtn);
+    ui->toolBar->addWidget(ui->backBtn);
+    ui->toolBar->addWidget(ui->copyBtn);
+    ui->toolBar->addWidget(ui->pasteBtn);
+
+    ui->toolBar->addSeparator();
 
     QComboBox* fontBtn = new QComboBox(this);
     fontBtn->addItem("宋体");
