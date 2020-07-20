@@ -21,7 +21,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
-    rectangle.cpp
+    rectangle.cpp\
+    text.cpp
 
 HEADERS += \
     arrow.h \
