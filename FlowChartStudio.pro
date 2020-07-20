@@ -32,6 +32,7 @@ HEADERS += \
     mainwindow.h \
     node.h \
     rectangle.h\
+    shape.h \
     text.h
 
 FORMS += \
