@@ -28,7 +28,8 @@ HEADERS += \
     graphelement.h \
     mainwindow.h \
     node.h \
-    rectangle.h
+    rectangle.h\
+    text.h
 
 FORMS += \
     mainwindow.ui
