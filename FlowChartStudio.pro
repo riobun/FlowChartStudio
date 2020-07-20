@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     arrow.cpp \
+    diamond.cpp \
     graphelement.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 HEADERS += \
     arrow.h \
+    diamond.h \
     graphelement.h \
     mainwindow.h \
     node.h \

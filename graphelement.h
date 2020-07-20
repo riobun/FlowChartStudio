@@ -6,6 +6,9 @@ class GraphElement
 {
 public:
     GraphElement();
+    int GetID();
+protected:
+    int id;
 };
 
 #endif // GRAPHELEMENT_H

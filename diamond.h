@@ -1,12 +1,12 @@
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef DIAMOND_H
+#define DIAMOND_H
 #include"QGraphicsItem"
 #include"node.h"
-class Rectangle:public Node
+class Diamond:public Node
 {
 public:
-    Rectangle();
-    Rectangle(QPointF lc,double wd,double h);
+    Diamond();
+    Diamond(QPointF lc,double wd,double h);
     virtual void Paint(QGraphicsScene* qgs) override;
     virtual void Remove(QGraphicsScene *qgs) override;
     virtual void SetVisibility(bool vis) override;
@@ -15,9 +15,9 @@ public:
     virtual void SetBackgroundColor(const QColor &qc) override;
     virtual void SetWidth(double wd) override;
     virtual void SetHeight(double h) override;
-    ~Rectangle();
+    ~Diamond();
 private:
-    QGraphicsRectItem* shape=new QGraphicsRectItem();
+    QGraphicsPolygonItem* shape=new QGraphicsPolygonItem();
 };
 
-#endif // RECTANGLE_H
+#endif // DIAMOND_H

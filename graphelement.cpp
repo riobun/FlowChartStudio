@@ -4,3 +4,8 @@ GraphElement::GraphElement()
 {
 
 }
+
+int GraphElement::GetID()
+{
+    return id;
+}
