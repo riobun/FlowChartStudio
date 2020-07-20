@@ -7,6 +7,7 @@ enum class Shape
     Diamond,
     Arrow,
     SubGraph,
+    Text,
 };
 
 #endif // SHAPE_H
