@@ -18,7 +18,7 @@ public:
     void move_text(QPoint new_location);//参数：新的坐标位置
 
     QFont get_text_fond();
-    QString get_test_content();
+    QString get_text_content();
     QPoint get_text_location();
 
 private:
