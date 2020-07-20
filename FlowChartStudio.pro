@@ -17,11 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     arrow.cpp \
-<<<<<<< HEAD
     diamond.cpp \
-=======
     flowchartview.cpp \
->>>>>>> 1a01f82967c53f09205347d9c91ba755c0023cf1
     graphelement.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -31,11 +28,8 @@ SOURCES += \
 
 HEADERS += \
     arrow.h \
-<<<<<<< HEAD
     diamond.h \
-=======
     flowchartview.h \
->>>>>>> 1a01f82967c53f09205347d9c91ba755c0023cf1
     graphelement.h \
     mainwindow.h \
     node.h \
