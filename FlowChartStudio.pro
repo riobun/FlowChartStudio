@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     arrow.cpp \
+    flowchartview.cpp \
     graphelement.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     arrow.h \
+    flowchartview.h \
     graphelement.h \
     mainwindow.h \
     node.h \
