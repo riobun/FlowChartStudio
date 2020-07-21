@@ -4,7 +4,14 @@
 
 enum class ElementProperty
 {
-
+    Visibility,
+    Size,
+    Location,
+    BackgroundColor,
+    FrameColor,
+    Font,
+    FontColor,
+    String,
 };
 
 #endif // ELEMENTPROPERTY_H
