@@ -1,10 +1,10 @@
-#include "deleteelementaction.h"
+#include "deletenodeaction.h"
 #include "addnodeaction.h"
 #include "mainwindow.h"
 #include "rectangle.h"
 #include "diamond.h"
 
-DeleteElementAction::DeleteElementAction(Node* node, bool isAdded) : Action(isAdded), node(node)
+DeleteNodeAction::DeleteNodeAction(Node* node, bool isAdded) : Action(isAdded), node(node)
 {
     point = node->GetLocation();
     size = QSizeF(node->GetWidth(), node->GetHeight());
@@ -18,13 +18,13 @@ DeleteElementAction::DeleteElementAction(Node* node, bool isAdded) : Action(isAd
     }
 }
 
-void DeleteElementAction::Do()
+void DeleteNodeAction::Do()
 {
     auto scene = MainWindow::instance()->scene();
     node->Remove(scene);
 }
 
-void DeleteElementAction::Undo()
+void DeleteNodeAction::Undo()
 {
     AddNodeAction(shape, point, size, false).Do();
 }

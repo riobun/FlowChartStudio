@@ -5,16 +5,17 @@
 #include "text.h"
 
 
-class AddTextAction : public Action
+class ChangeTextAction : public Action
 {
     Q_OBJECT
 public:
-    AddTextAction(QPointF point, QString string = "", QFont font = QFont(), QColor color = QColor(),
-                  bool isAdded = true);
+    ChangeTextAction(bool isCreated, QPointF point, QString string = "", QFont font = QFont(),
+                     QColor color = QColor(), Text* text = nullptr, bool isAdded = true);
 
     void Do() override;
     void Undo() override;
 private:
+    bool isCreated;
     Text* text;
     QPointF point;
     QString string;

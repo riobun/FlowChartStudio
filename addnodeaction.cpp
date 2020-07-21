@@ -2,7 +2,7 @@
 
 #include "mainwindow.h"
 #include "addnodeaction.h"
-#include "deleteelementaction.h"
+#include "deletenodeaction.h"
 #include "rectangle.h"
 #include "diamond.h"
 #include "text.h"
@@ -31,5 +31,5 @@ void AddNodeAction::Do()
 
 void AddNodeAction::Undo()
 {
-    DeleteElementAction(node, false).Do();
+    DeleteNodeAction(node, false).Do();
 }
