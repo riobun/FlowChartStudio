@@ -18,8 +18,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     action.cpp \
     addelementaction.cpp \
+    addtextaction.cpp \
     arrow.cpp \
     deleteelementaction.cpp \
+    deletetextaction.cpp \
     diamond.cpp \
     flowchartview.cpp \
     graphelement.cpp \
@@ -32,8 +34,10 @@ SOURCES += \
 HEADERS += \
     action.h \
     addelementaction.h \
+    addtextaction.h \
     arrow.h \
     deleteelementaction.h \
+    deletetextaction.h \
     diamond.h \
     elementshape.h \
     flowchartview.h \

@@ -27,11 +27,6 @@ void AddElementAction::Do()
         node = new Diamond(point, size.rwidth(), size.height());
         node->Paint(scene);
     }
-    else if (shape == ElementShape::Text)
-    {
-        auto text = new Text(point.toPoint(), size.rwidth(), size.height());
-        text->build_text(scene, QColor(), QFont());
-    }
 }
 
 void AddElementAction::Undo()
