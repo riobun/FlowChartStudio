@@ -27,6 +27,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
+    nodeevents.cpp \
     rectangle.cpp\
     rectangleitem.cpp \
     text.cpp
@@ -45,6 +46,7 @@ HEADERS += \
     graphelement.h \
     mainwindow.h \
     node.h \
+    nodeevents.h \
     rectangle.h\
     rectangleitem.h \
     text.h
