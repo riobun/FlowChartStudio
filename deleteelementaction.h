@@ -8,11 +8,11 @@
 #include "elementshape.h"
 
 
-class DeleteNodeAction : public Action
+class DeleteElementAction : public Action
 {
     Q_OBJECT
 public:
-    DeleteNodeAction(Node* node, bool isAdded = true);
+    DeleteElementAction(Node* node, bool isAdded = true);
 
     void Do() override;
     void Undo() override;

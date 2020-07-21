@@ -1,6 +1,6 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
-#include"QGraphicsItem"
+#include"rectangleitem.h"
 #include"node.h"
 class Rectangle:public Node
 {
@@ -15,9 +15,10 @@ public:
     virtual void SetBackgroundColor(const QColor &qc) override;
     virtual void SetWidth(double wd) override;
     virtual void SetHeight(double h) override;
+    virtual void BindToText(QGraphicsScene* qgs) override;
     ~Rectangle();
 private:
-    QGraphicsRectItem* shape=new QGraphicsRectItem();
+    RectangleItem* shape=new RectangleItem();
 };
 
 #endif // RECTANGLE_H

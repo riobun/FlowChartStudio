@@ -2,7 +2,7 @@
 
 
 
-Text::Text(QPoint primary_location,double primary_width,double primary_height) {
+Text::Text(QPointF primary_location,double primary_width,double primary_height) {
     location = primary_location;
     width = primary_width;
     height = primary_height;
@@ -31,6 +31,10 @@ void Text::build_text(QGraphicsScene* scene, QColor c, QFont f) {//创建文本�
     item->setBrush(brush);
     item->setVisible(true);
     scene->addItem(item);
+    
+     QPen pen = item->pen();
+    pen.setColor(QColor(0x00, 0xff, 0x00, 0x00));
+    item->setPen(pen);
 
     QRectF rect = text->boundingRect();
     font = f;
@@ -94,6 +98,11 @@ void Text::reset_color(QColor new_color) {
     text->setDefaultTextColor(color);
 }
 
+void Text::resize_text(double d_width, double d_height) {
+    width += d_width;
+    height += d_height;
+    item->setRect(location.x() - width / 2, location.y() - height / 2, width, height);
+}
 
 QFont Text::get_text_fond() {
     return font;

@@ -26,6 +26,7 @@ public:
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { undoStack.append(action); }
+    void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
 
 public slots:
     void Undo();
