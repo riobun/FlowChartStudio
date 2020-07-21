@@ -2,8 +2,11 @@
 #include "mainwindow.h"
 
 
-Action::Action(QObject *parent) : QObject(parent)
+Action::Action(bool isAdded, QObject *parent) : QObject(parent)
 {
-    auto window = MainWindow::instance();
-    window->Doing(this);
+    if (isAdded)
+    {
+        auto window = MainWindow::instance();
+        window->Doing(this);
+    }
 }

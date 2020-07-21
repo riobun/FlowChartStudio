@@ -2,7 +2,7 @@
 #define ADDELEMENTACTION_H
 
 #include <QPointF>
-#include <QGraphicsScene>
+#include <QSizeF>
 
 #include "action.h"
 #include "elementshape.h"
@@ -13,7 +13,7 @@ class AddElementAction : public Action
 {
     Q_OBJECT
 public:
-    AddElementAction(ElementShape shape, QPointF point);
+    AddElementAction(ElementShape shape, QPointF point, QSizeF size, bool isAdded = true);
 
     void Do() override;
     void Undo() override;
@@ -21,7 +21,7 @@ public:
 private:
     ElementShape shape;
     QPointF point;
-    QGraphicsScene* scene;
+    QSizeF size;
     Node* node;
 };
 

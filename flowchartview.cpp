@@ -16,7 +16,6 @@ FlowChartView::FlowChartView(QWidget *parent) : QGraphicsView(parent)
 void FlowChartView::mousePressEvent(QMouseEvent *event)
 {
     auto window = MainWindow::instance();
-    auto scene = window->scene();
     auto shape = window->nextAddedShape();
     auto button = event->button();
     if (button == Qt::MouseButton::LeftButton)
@@ -25,7 +24,7 @@ void FlowChartView::mousePressEvent(QMouseEvent *event)
         auto point = mapToScene(rawPoint.toPoint());
         if (shape != ElementShape::Unknown)
         {
-            auto action = new AddElementAction(shape, point);
+            auto action = new AddElementAction(shape, point, QSizeF(100, 50));
             action->Do();
         }
         window->setNextAddedShape(ElementShape::Unknown);

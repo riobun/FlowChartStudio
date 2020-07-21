@@ -7,7 +7,7 @@ class Action : public QObject
 {
     Q_OBJECT
 public:
-    explicit Action(QObject *parent = nullptr);
+    explicit Action(bool isAdded = true, QObject *parent = nullptr);
 
     virtual void Do() = 0;
     virtual void Undo() = 0;

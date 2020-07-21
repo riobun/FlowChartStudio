@@ -2,41 +2,39 @@
 
 #include "mainwindow.h"
 #include "addelementaction.h"
+#include "deleteelementaction.h"
 #include "rectangle.h"
 #include "diamond.h"
 #include "text.h"
 
 
-AddElementAction::AddElementAction(ElementShape shape, QPointF point) : shape(shape), point(point)
+AddElementAction::AddElementAction(ElementShape shape, QPointF point, QSizeF size, bool isAdded) :
+    Action(isAdded), shape(shape), point(point), size(size)
 {
 
 }
 
 void AddElementAction::Do()
 {
-    auto window = MainWindow::instance();
-    scene = window->scene();
+    auto scene = MainWindow::instance()->scene();
     if (shape == ElementShape::Rectangle)
     {
-        node = new Rectangle(point, 100.0, 50.0);
+        node = new Rectangle(point, size.rwidth(), size.height());
         node->Paint(scene);
     }
     else if (shape == ElementShape::Diamond)
     {
-        node = new Diamond(point, 100.0, 50.0);
+        node = new Diamond(point, size.rwidth(), size.height());
         node->Paint(scene);
     }
     else if (shape == ElementShape::Text)
     {
-        auto text = new Text(point.toPoint(), 100.0, 50.0);
+        auto text = new Text(point.toPoint(), size.rwidth(), size.height());
         text->build_text(scene, QColor(), QFont());
     }
 }
 
 void AddElementAction::Undo()
 {
-    if (node != nullptr)
-    {
-        node->Remove(scene);
-    }
+    DeleteElementAction(node, false).Do();
 }
