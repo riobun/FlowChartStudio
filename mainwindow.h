@@ -35,6 +35,15 @@ private slots:
     void textColorChanged();
     void textButtonTriggered();
 
+    void itemColorChanged();
+    void fillButtonTriggered();
+
+    void bdColorChanged();
+    void bdButtonTriggered();
+
+    void arrowColorChanged();
+    void arrowColorButtonTriggered();
+
     void on_addRectangleButton_clicked();
     void on_addDiamondButton_clicked();
     void on_addArrowButton_clicked();
@@ -52,7 +61,13 @@ private:
     QIcon createColorIcon(QColor color);
 
     QAction *textAction;
+    QAction *fillAction;
+    QAction *bdAction;
+    QAction *arrowColorAction;
+    QToolButton* arrowColorToolBtn;
+    QToolButton* bdColorToolBtn;
     QToolButton* fontColorToolBtn;
+    QToolButton* fillColorToolBtn;
 
     ElementShape _nextAddedShape;
     int _selectedId;

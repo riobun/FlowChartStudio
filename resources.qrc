@@ -13,5 +13,9 @@
         <file>images/underline.png</file>
         <file>images/bold.png</file>
         <file>images/italic.png</file>
+        <file>images/floodfill.png</file>
+        <file>images/linepointer.png</file>
+        <file>images/arrowcolor.png</file>
+        <file>images/bdcolor.png</file>
     </qresource>
 </RCC>

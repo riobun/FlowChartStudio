@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->toolBar->addSeparator();
 
+    //字号
     QComboBox* fontSizeCombo = new QComboBox(this);
     fontSizeCombo->setEditable(true);
     for (int i = 6; i < 52; i = i + 2)
@@ -46,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->toolBar->addSeparator();
 
+    //字体颜色
     fontColorToolBtn = new QToolButton(this);
     fontColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
     fontColorToolBtn->setMenu(createColorMenu(SLOT(textColorChanged()), Qt::black));
@@ -54,20 +56,41 @@ MainWindow::MainWindow(QWidget *parent)
     fontColorToolBtn->setAutoFillBackground(true);
     ui->toolBar->addWidget(fontColorToolBtn);
 
-    //侧边栏
-    connect(ui->bgColorBtn,&QPushButton::clicked,[](){
-        QColorDialog::getColor(QColor(Qt::white));
-    });
-    connect(ui->bdColorBtn,&QPushButton::clicked,[](){
-        QColorDialog::getColor(QColor(Qt::black));
-    });
-    connect(ui->arrowColorBtn,&QPushButton::clicked,[](){
-        QColorDialog::getColor(QColor(Qt::black));
-    });
+    ui->toolBar->addSeparator();
+
+    //填充颜色
+    fillColorToolBtn = new QToolButton(this);
+    fillColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    fillColorToolBtn->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
+    fillAction = fillColorToolBtn->menu()->defaultAction();
+    fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/floodfill.png", Qt::white));
+    ui->toolBar->addWidget(fillColorToolBtn);
+
+    //边框颜色
+    bdColorToolBtn = new QToolButton(this);
+    bdColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    bdColorToolBtn->setMenu(createColorMenu(SLOT(bdColorChanged()), Qt::black));
+    bdAction = bdColorToolBtn->menu()->defaultAction();
+    bdColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/bdcolor.png", Qt::black));
+    ui->toolBar->addWidget(bdColorToolBtn);
+
+    //箭头颜色
+    arrowColorToolBtn = new QToolButton(this);
+    arrowColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    arrowColorToolBtn->setMenu(createColorMenu(SLOT(bdColorChanged()), Qt::black));
+    arrowColorAction = arrowColorToolBtn->menu()->defaultAction();
+    arrowColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/arrowcolor.png", Qt::black));
+    ui->toolBar->addWidget(arrowColorToolBtn);
+
+    ui->toolBar->addSeparator();
+
+    ui->toolBar->addWidget(ui->arrowComboBox);
     ui->arrowComboBox->addItem(" 实线");
     ui->arrowComboBox->addItem(" 虚线");
-
-
+    ui->arrowComboBox->addItem(" 点线");
 
 
     //菜单栏信号
@@ -166,6 +189,49 @@ void MainWindow::textButtonTriggered()
 {
 //    scene->setTextColor(qvariant_cast<QColor>(textAction->data()));
 }
+
+void MainWindow::itemColorChanged()
+{
+    fillAction = qobject_cast<QAction *>(sender());
+    fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/floodfill.png",
+                                     qvariant_cast<QColor>(fillAction->data())));
+    fillButtonTriggered();
+}
+
+void MainWindow::fillButtonTriggered()
+{
+    //scene->setItemColor(qvariant_cast<QColor>(fillAction->data()));
+}
+
+void MainWindow::bdColorChanged()
+{
+    bdAction = qobject_cast<QAction *>(sender());
+    bdColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/bdcolor.png",
+                                     qvariant_cast<QColor>(bdAction->data())));
+    bdButtonTriggered();
+}
+
+void MainWindow::bdButtonTriggered()
+{
+    //scene->setBdColor(qvariant_cast<QColor>(bdAction->data()));
+}
+
+void MainWindow::arrowColorChanged()
+{
+    arrowColorAction = qobject_cast<QAction *>(sender());
+    arrowColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/arrowcolor.png",
+                                     qvariant_cast<QColor>(arrowColorAction->data())));
+    arrowColorButtonTriggered();
+}
+
+void MainWindow::arrowColorButtonTriggered()
+{
+    //scene->setBdColor(qvariant_cast<QColor>(bdAction->data()));
+}
+
 
 void MainWindow::on_addRectangleButton_clicked()
 {
