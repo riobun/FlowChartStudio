@@ -1,5 +1,5 @@
 #include "deleteelementaction.h"
-#include "addelementaction.h"
+#include "addnodeaction.h"
 #include "mainwindow.h"
 #include "rectangle.h"
 #include "diamond.h"
@@ -26,5 +26,5 @@ void DeleteElementAction::Do()
 
 void DeleteElementAction::Undo()
 {
-    AddElementAction(shape, point, size, false).Do();
+    AddNodeAction(shape, point, size, false).Do();
 }

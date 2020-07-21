@@ -9,11 +9,11 @@
 #include "node.h"
 
 
-class AddElementAction : public Action
+class AddNodeAction : public Action
 {
     Q_OBJECT
 public:
-    AddElementAction(ElementShape shape, QPointF point, QSizeF size, bool isAdded = true);
+    AddNodeAction(ElementShape shape, QPointF point, QSizeF size, bool isAdded = true);
 
     void Do() override;
     void Undo() override;

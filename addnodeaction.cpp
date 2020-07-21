@@ -1,20 +1,20 @@
 #include <QGraphicsScene>
 
 #include "mainwindow.h"
-#include "addelementaction.h"
+#include "addnodeaction.h"
 #include "deleteelementaction.h"
 #include "rectangle.h"
 #include "diamond.h"
 #include "text.h"
 
 
-AddElementAction::AddElementAction(ElementShape shape, QPointF point, QSizeF size, bool isAdded) :
+AddNodeAction::AddNodeAction(ElementShape shape, QPointF point, QSizeF size, bool isAdded) :
     Action(isAdded), shape(shape), point(point), size(size)
 {
 
 }
 
-void AddElementAction::Do()
+void AddNodeAction::Do()
 {
     auto scene = MainWindow::instance()->scene();
     if (shape == ElementShape::Rectangle)
@@ -29,7 +29,7 @@ void AddElementAction::Do()
     }
 }
 
-void AddElementAction::Undo()
+void AddNodeAction::Undo()
 {
     DeleteElementAction(node, false).Do();
 }

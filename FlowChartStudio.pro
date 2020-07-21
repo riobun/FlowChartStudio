@@ -17,7 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     action.cpp \
-    addelementaction.cpp \
+    addnodeaction.cpp \
     addtextaction.cpp \
     arrow.cpp \
     deleteelementaction.cpp \
@@ -33,7 +33,7 @@ SOURCES += \
 
 HEADERS += \
     action.h \
-    addelementaction.h \
+    addnodeaction.h \
     addtextaction.h \
     arrow.h \
     deleteelementaction.h \

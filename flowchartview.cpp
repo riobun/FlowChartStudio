@@ -5,7 +5,7 @@
 #include "rectangle.h"
 #include "diamond.h"
 #include "text.h"
-#include "addelementaction.h"
+#include "addnodeaction.h"
 #include "addtextaction.h"
 
 
@@ -30,7 +30,7 @@ void FlowChartView::mousePressEvent(QMouseEvent *event)
         }
         else if (shape != ElementShape::Unknown)
         {
-            auto action = new AddElementAction(shape, point, QSizeF(100, 50));
+            auto action = new AddNodeAction(shape, point, QSizeF(100, 50));
             action->Do();
         }
         window->setNextAddedShape(ElementShape::Unknown);
