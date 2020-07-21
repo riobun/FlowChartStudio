@@ -2,6 +2,7 @@
 
 #include "nodeevents.h"
 #include "changeelementaction.h"
+#include "mainwindow.h"
 
 
 void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *event)
@@ -15,4 +16,14 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
         auto action = new ChangeElementAction(node, ElementShape::Rectangle, false);
         action->Do();
     }
+}
+
+void NodeEvents::mousePressEvent(Node* node, QGraphicsSceneMouseEvent *event)
+{
+
+}
+
+void NodeEvents::mouseReleaseEvent(Node* node, QGraphicsSceneMouseEvent *event)
+{
+
 }

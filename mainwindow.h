@@ -8,6 +8,8 @@
 
 #include "elementshape.h"
 #include "action.h"
+#include "node.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,6 +29,8 @@ public:
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { undoStack.append(action); }
     void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
+
+    QVector<Node*> selectedNodes;
 
 public slots:
     void Undo();
