@@ -1,6 +1,3 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-
 #include <QToolBar>
 #include <QPushButton>
 #include <QComboBox>
@@ -8,6 +5,10 @@
 #include <QFontComboBox>
 #include <QFontDialog>
 #include <QToolButton>
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "flowchartscene.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -114,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
 
-    _scene = new QGraphicsScene(this);
+    _scene = new FlowChartScene();
     ui->graphicsView->setScene(scene());
     _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
 
