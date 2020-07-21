@@ -13,6 +13,10 @@ public:
 
 private:
     void mousePressEvent(QMouseEvent *event) final;
+    void mouseReleaseEvent(QMouseEvent *event) final;
+
+private:
+    QPointF mousePressedPoint;
 };
 
 #endif // FLOWCHARTVIEW_H
