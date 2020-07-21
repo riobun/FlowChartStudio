@@ -50,8 +50,7 @@ Text::~Text() {
 
 
 void Text::delete_text() {
-    delete text;
-    delete item;
+    item->setVisible(false);
     //在存储文件中删除
     
 }
