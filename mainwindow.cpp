@@ -88,12 +88,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addSeparator();
 
     ui->toolBar->addWidget(ui->arrowComboBox);
-    ui->arrowComboBox->addItem("Solid Line Arrow");
-    ui->arrowComboBox->addItem("Dash Line Arrow");
-    ui->arrowComboBox->addItem("Dot Line Arrow");
-    ui->arrowComboBox->addItem("DashDot line Arrow");
-    ui->arrowComboBox->addItem("DashDotDot line Arrow");
-
+    ui->arrowComboBox->addItem("实线箭头");
+    ui->arrowComboBox->addItem("虚线箭头");
+    ui->arrowComboBox->addItem("点线箭头");
 
     //菜单栏信号
     //文本框

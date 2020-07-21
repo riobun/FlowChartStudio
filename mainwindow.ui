@@ -293,8 +293,6 @@
      <addaction name="action_arrow1"/>
      <addaction name="action_arrow2"/>
      <addaction name="actiondain"/>
-     <addaction name="actiond"/>
-     <addaction name="actiond_2"/>
     </widget>
     <addaction name="action_arrowColor"/>
     <addaction name="menu"/>
