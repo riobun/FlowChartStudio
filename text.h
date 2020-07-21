@@ -16,7 +16,7 @@ public:
     Text(QPointF position1, QPointF position2);//由图生成（鼠标位置决定大小）
     ~Text();
     void build_text(QGraphicsScene* scene,QColor c,QFont f);//初始化并在界面中显示，注：创建文本框时一定要调用
-    void delete_text();
+    void delete_text(QGraphicsScene* scene);
     void delete_char(int begin, int end);//参数：待删除字符位置
     void add_char(int position, QString str);//增加字符位置，增加的字符
     void reset_font(QFont new_font);//新字体
