@@ -25,6 +25,8 @@ public:
     QGraphicsScene* scene() { return _scene; }
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
+    void Doing(Action* action) { undoStack.append(action); }
+
 public slots:
     void Undo();
     void Redo();

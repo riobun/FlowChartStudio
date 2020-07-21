@@ -5,6 +5,7 @@
 #include "rectangle.h"
 #include "diamond.h"
 #include "text.h"
+#include "addelementaction.h"
 
 
 FlowChartView::FlowChartView(QWidget *parent) : QGraphicsView(parent)
@@ -22,21 +23,10 @@ void FlowChartView::mousePressEvent(QMouseEvent *event)
     {
         auto rawPoint = event->localPos();
         auto point = mapToScene(rawPoint.toPoint());
-        if (shape == ElementShape::Rectangle)
+        if (shape != ElementShape::Unknown)
         {
-
-            auto rectangle = new Rectangle(point, 100.0, 50.0);
-            rectangle->Paint(scene);
-        }
-        else if (shape == ElementShape::Diamond)
-        {
-            auto diamond = new Diamond(point, 100.0, 50.0);
-            diamond->Paint(scene);
-        }
-        else if (shape == ElementShape::Text)
-        {
-            auto text = new Text(point.toPoint(), 100.0, 50.0);
-            text->build_text(scene, QColor(), QFont());
+            auto action = new AddElementAction(shape, point);
+            action->Do();
         }
         window->setNextAddedShape(ElementShape::Unknown);
         mousePressedPoint = point;
