@@ -49,8 +49,8 @@ Text::~Text() {
 }
 
 
-void Text::delete_text() {
-    item->setVisible(false);
+void Text::delete_text(QGraphicsScene* scene) {
+    scene->removeItem(item);
     //在存储文件中删除
     
 }
