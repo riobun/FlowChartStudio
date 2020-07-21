@@ -21,6 +21,7 @@ SOURCES += \
     changeelementaction.cpp \
     diamond.cpp \
     diamonditem.cpp \
+    editelementaction.cpp \
     flowchartview.cpp \
     graphelement.cpp \
     main.cpp \
@@ -36,6 +37,8 @@ HEADERS += \
     changeelementaction.h \
     diamond.h \
     diamonditem.h \
+    editelementaction.h \
+    elementProperty.h \
     elementshape.h \
     flowchartview.h \
     graph.h \
