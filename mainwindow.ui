@@ -292,6 +292,9 @@
      </property>
      <addaction name="action_arrow1"/>
      <addaction name="action_arrow2"/>
+     <addaction name="actiondain"/>
+     <addaction name="actiond"/>
+     <addaction name="actiond_2"/>
     </widget>
     <addaction name="action_arrowColor"/>
     <addaction name="menu"/>
@@ -438,6 +441,21 @@
   <action name="action_arrow2">
    <property name="text">
     <string>虚线</string>
+   </property>
+  </action>
+  <action name="actiondain">
+   <property name="text">
+    <string>点线</string>
+   </property>
+  </action>
+  <action name="actiond">
+   <property name="text">
+    <string>点划线</string>
+   </property>
+  </action>
+  <action name="actiond_2">
+   <property name="text">
+    <string>点点划线</string>
    </property>
   </action>
  </widget>
