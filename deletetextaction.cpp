@@ -12,7 +12,8 @@ DeleteTextAction::DeleteTextAction(Text* text, bool isAdded) : Action(isAdded), 
 
 void DeleteTextAction::Do()
 {
-    text->delete_text();
+    auto scene = MainWindow::instance()->scene();
+    text->delete_text(scene);
 }
 
 void DeleteTextAction::Undo()
