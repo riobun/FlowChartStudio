@@ -37,6 +37,7 @@ void FlowChartView::mousePressEvent(QMouseEvent *event)
             auto text = new Text(point.toPoint(), 100.0, 50.0);
             text->build_text(scene, QColor(), QFont());
         }
+        window->setNextAddedShape(ElementShape::Unknown);
         mousePressedPoint = point;
     }
     else if (button == Qt::MouseButton::RightButton)

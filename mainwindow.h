@@ -22,6 +22,7 @@ public:
     static MainWindow* instance() { return _instance; }
     QGraphicsScene* scene() { return _scene; }
     ElementShape nextAddedShape() const {return _nextAddedShape; }
+    void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
 private slots:
     void textColorChanged();
     void textButtonTriggered();
