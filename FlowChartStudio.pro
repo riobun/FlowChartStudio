@@ -23,12 +23,14 @@ SOURCES += \
     deleteelementaction.cpp \
     deletetextaction.cpp \
     diamond.cpp \
+    diamonditem.cpp \
     flowchartview.cpp \
     graphelement.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
     rectangle.cpp\
+    rectangleitem.cpp \
     text.cpp
 
 HEADERS += \
@@ -39,6 +41,7 @@ HEADERS += \
     deleteelementaction.h \
     deletetextaction.h \
     diamond.h \
+    diamonditem.h \
     elementshape.h \
     flowchartview.h \
     graph.h \
@@ -46,6 +49,7 @@ HEADERS += \
     mainwindow.h \
     node.h \
     rectangle.h\
+    rectangleitem.h \
     text.h
 
 FORMS += \

@@ -23,7 +23,7 @@ void Diamond::Paint(QGraphicsScene* qgs)
     shape->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
-    qgs->addItem(shape);
+    qgs->addItem(shape);    
 }
 
 void Diamond::SetVisibility(bool vis)
@@ -35,6 +35,10 @@ void Diamond::SetLocation(const QPointF &qp)
     location=qp;
     shape->setX(qp.x()-width/2);
     shape->setY(qp.y()-height/2);
+    if(content)
+    {
+        content->move_text(qp);
+    }
 }
 
 void Diamond::SetWidth(double wd)
@@ -74,5 +78,11 @@ void Diamond::SetFrameColor(const QColor &qc)
 void Diamond::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
     qgs->removeItem(shape);
-    delete this;
+    if(content) content->delete_text(qgs);
+}
+
+void Diamond::BindToText(QGraphicsScene* qgs)
+{
+    content=new Text(location,width/2,height/2);
+    content->build_text(qgs);
 }

@@ -2,7 +2,7 @@
 
 
 
-Text::Text(QPoint primary_location,double primary_width,double primary_height) {
+Text::Text(QPointF primary_location,double primary_width,double primary_height) {
     location = primary_location;
     width = primary_width;
     height = primary_height;

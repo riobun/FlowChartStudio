@@ -1,6 +1,6 @@
 #ifndef DIAMOND_H
 #define DIAMOND_H
-#include"QGraphicsItem"
+#include"diamonditem.h"
 #include"node.h"
 class Diamond:public Node
 {
@@ -15,9 +15,10 @@ public:
     virtual void SetBackgroundColor(const QColor &qc) override;
     virtual void SetWidth(double wd) override;
     virtual void SetHeight(double h) override;
+    virtual void BindToText(QGraphicsScene* qgs) override;
     ~Diamond();
 private:
-    QGraphicsPolygonItem* shape=new QGraphicsPolygonItem();
+    DiamondItem* shape=new DiamondItem();
 };
 
 #endif // DIAMOND_H

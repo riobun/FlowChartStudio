@@ -45,6 +45,7 @@ void Rectangle::SetHeight(double h)
     height=h;
     shape->setRect(location.x()-width/2,location.y()-height/2,width,height);
 }
+
 void Rectangle::SetBackgroundColor(const QColor &qc)
 {
     backgroundColor=qc;
@@ -65,5 +66,11 @@ void Rectangle::SetFrameColor(const QColor &qc)
 void Rectangle::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
     qgs->removeItem(shape);
-    delete this;
+    if(content) content->delete_text(qgs);
+}
+
+void Rectangle::BindToText(QGraphicsScene* qgs)
+{
+    content=new Text(location,width,height);
+    content->build_text(qgs);
 }
