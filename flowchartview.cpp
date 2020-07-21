@@ -6,7 +6,7 @@
 #include "diamond.h"
 #include "text.h"
 #include "addnodeaction.h"
-#include "addtextaction.h"
+#include "changetextaction.h"
 
 
 FlowChartView::FlowChartView(QWidget *parent) : QGraphicsView(parent)
@@ -25,7 +25,7 @@ void FlowChartView::mousePressEvent(QMouseEvent *event)
         auto point = mapToScene(rawPoint.toPoint());
         if (shape == ElementShape::Text)
         {
-            auto action = new AddTextAction(point);
+            auto action = new ChangeTextAction(true, point);
             action->Do();
         }
         else if (shape != ElementShape::Unknown)
