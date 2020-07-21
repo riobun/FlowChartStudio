@@ -331,8 +331,8 @@
     <property name="title">
      <string>编辑</string>
     </property>
-    <addaction name="action1_7"/>
-    <addaction name="action1_8"/>
+    <addaction name="undoAction"/>
+    <addaction name="redoAction"/>
     <addaction name="action1_9"/>
     <addaction name="action1_10"/>
     <addaction name="action1_11"/>
@@ -415,14 +415,20 @@
     <string>关闭</string>
    </property>
   </action>
-  <action name="action1_7">
+  <action name="undoAction">
    <property name="text">
     <string>撤回</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
-  <action name="action1_8">
+  <action name="redoAction">
    <property name="text">
     <string>重做</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
   <action name="action1_9">

@@ -25,8 +25,10 @@ public:
     QGraphicsScene* scene() { return _scene; }
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
+public slots:
     void Undo();
     void Redo();
+
 private slots:
     void textColorChanged();
     void textButtonTriggered();

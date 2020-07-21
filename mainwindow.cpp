@@ -97,6 +97,9 @@ MainWindow::MainWindow(QWidget *parent)
     _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
 
     _instance = this;
+
+    connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
+    connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
 }
 
 MainWindow::~MainWindow()
