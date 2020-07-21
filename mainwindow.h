@@ -27,11 +27,8 @@ private slots:
     void textButtonTriggered();
 
     void on_addRectangleButton_clicked();
-
     void on_addDiamondButton_clicked();
-
     void on_addArrowButton_clicked();
-
     void on_addTextButton_clicked();
 
 private:
@@ -49,5 +46,6 @@ private:
     QToolButton* fontColorToolBtn;
 
     ElementShape _nextAddedShape;
+    int _selectedId;
 };
 #endif // MAINWINDOW_H
