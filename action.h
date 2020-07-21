@@ -9,6 +9,9 @@ class Action : public QObject
 public:
     explicit Action(QObject *parent = nullptr);
 
+    void virtual Do();
+    void virtual Undo();
+
 signals:
 
 };

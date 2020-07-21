@@ -4,8 +4,10 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QToolButton>
+#include <QVector>
 
 #include "elementshape.h"
+#include "action.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,6 +25,8 @@ public:
     QGraphicsScene* scene() { return _scene; }
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
+    void Undo();
+    void Redo();
 private slots:
     void textColorChanged();
     void textButtonTriggered();
@@ -48,5 +52,7 @@ private:
 
     ElementShape _nextAddedShape;
     int _selectedId;
+    QVector<Action*> undoStack;
+    QVector<Action*> redoStack;
 };
 #endif // MAINWINDOW_H

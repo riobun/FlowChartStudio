@@ -24,6 +24,7 @@ void FlowChartView::mousePressEvent(QMouseEvent *event)
         auto point = mapToScene(rawPoint.toPoint());
         if (shape == ElementShape::Rectangle)
         {
+
             auto rectangle = new Rectangle(point, 100.0, 50.0);
             rectangle->Paint(scene);
         }

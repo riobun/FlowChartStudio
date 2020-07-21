@@ -183,3 +183,25 @@ void MainWindow::on_addTextButton_clicked()
 {
     _nextAddedShape = ElementShape::Text;
 }
+
+void MainWindow::Undo()
+{
+    if (undoStack.size() > 0)
+    {
+        auto action = undoStack.last();
+        undoStack.removeLast();
+        action->Undo();
+        redoStack.append(action);
+    }
+}
+
+void MainWindow::Redo()
+{
+    if (redoStack.size() > 0)
+    {
+        auto action = redoStack.last();
+        redoStack.removeLast();
+        action->Do();
+        undoStack.append(action);
+    }
+}
