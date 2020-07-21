@@ -14,7 +14,7 @@
    <string>FlowChartStudio</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGraphicsView" name="graphicsView">
+   <widget class="FlowChartView" name="graphicsView">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -87,7 +87,7 @@
     <property name="title">
      <string>图形元素</string>
     </property>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="addRectangleButton">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -110,7 +110,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="addDiamondButton">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -133,7 +133,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="addArrowButton">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -156,7 +156,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="addTextButton">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -313,7 +313,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -499,6 +499,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FlowChartView</class>
+   <extends>QGraphicsView</extends>
+   <header>flowchartview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

@@ -29,12 +29,12 @@ SOURCES += \
 HEADERS += \
     arrow.h \
     diamond.h \
+    elementshape.h \
     flowchartview.h \
     graphelement.h \
     mainwindow.h \
     node.h \
     rectangle.h\
-    shape.h \
     text.h
 
 FORMS += \

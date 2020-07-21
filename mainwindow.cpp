@@ -9,6 +9,9 @@
 #include <QFontDialog>
 #include <QToolButton>
 
+
+MainWindow* MainWindow::_instance;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -91,26 +94,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     _scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene());
+    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+
+    _instance = this;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::on_addRectangleButton_clicked()
-{
-
-}
-
-void MainWindow::on_addDiamondButton_clicked()
-{
-
-}
-
-void MainWindow::on_addArrowButton_clicked()
-{
-
 }
 
 QMenu *MainWindow::createColorMenu(const char *slot, QColor defaultColor)
@@ -171,4 +162,24 @@ void MainWindow::textColorChanged()
 void MainWindow::textButtonTriggered()
 {
 //    scene->setTextColor(qvariant_cast<QColor>(textAction->data()));
+}
+
+void MainWindow::on_addRectangleButton_clicked()
+{
+    _nextAddedShape = ElementShape::Rectangle;
+}
+
+void MainWindow::on_addDiamondButton_clicked()
+{
+    _nextAddedShape = ElementShape::Diamond;
+}
+
+void MainWindow::on_addArrowButton_clicked()
+{
+    _nextAddedShape = ElementShape::Arrow;
+}
+
+void MainWindow::on_addTextButton_clicked()
+{
+    _nextAddedShape = ElementShape::Text;
 }

@@ -5,6 +5,8 @@
 #include <QGraphicsView>
 #include <QToolButton>
 
+#include "elementshape.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -17,20 +19,25 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    static MainWindow* instance() { return _instance; }
     QGraphicsScene* scene() { return _scene; }
+    ElementShape nextAddedShape() const {return _nextAddedShape; }
 private slots:
+    void textColorChanged();
+    void textButtonTriggered();
+
     void on_addRectangleButton_clicked();
 
     void on_addDiamondButton_clicked();
 
     void on_addArrowButton_clicked();
 
-    void textColorChanged();
-    void textButtonTriggered();
-
+    void on_addTextButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+    static MainWindow* _instance;
 
     QGraphicsScene* _scene;
 
@@ -40,5 +47,7 @@ private:
 
     QAction *textAction;
     QToolButton* fontColorToolBtn;
+
+    ElementShape _nextAddedShape;
 };
 #endif // MAINWINDOW_H
