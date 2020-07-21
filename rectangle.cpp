@@ -17,6 +17,7 @@ void Rectangle::Paint(QGraphicsScene* qgs)
 {
     shape->setRect(location.x()-width/2,location.y()-height/2,width,height);
     shape->setVisible(true);
+    shape->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
     qgs->addItem(shape);
