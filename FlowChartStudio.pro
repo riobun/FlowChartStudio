@@ -17,10 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     action.cpp \
-    addnodeaction.cpp \
     arrow.cpp \
-    changetextaction.cpp \
-    deletenodeaction.cpp \
+    changeelementaction.cpp \
     diamond.cpp \
     diamonditem.cpp \
     flowchartview.cpp \
@@ -34,10 +32,8 @@ SOURCES += \
 
 HEADERS += \
     action.h \
-    addnodeaction.h \
     arrow.h \
-    changetextaction.h \
-    deletenodeaction.h \
+    changeelementaction.h \
     diamond.h \
     diamonditem.h \
     elementshape.h \
