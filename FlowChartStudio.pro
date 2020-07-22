@@ -48,6 +48,7 @@ HEADERS += \
     mainwindow.h \
     node.h \
     nodeevents.h \
+    nodeitem.h \
     rectangle.h\
     text.h
 
