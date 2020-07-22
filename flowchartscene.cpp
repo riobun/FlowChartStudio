@@ -1,4 +1,5 @@
 #include "flowchartscene.h"
+#include <QGraphicsSceneMouseEvent>
 
 FlowChartScene::FlowChartScene()
 {

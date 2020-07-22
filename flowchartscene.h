@@ -2,6 +2,7 @@
 #define FLOWCHARTSCENE_H
 
 #include <QGraphicsScene>
+#include "rectangle.h"
 
 
 class FlowChartScene : public QGraphicsScene
@@ -14,6 +15,9 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+private:
+    Rectangle* rect;
+    QPointF selectLeftTop;
 };
 
 #endif // FLOWCHARTSCENE_H
