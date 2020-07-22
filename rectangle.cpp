@@ -86,5 +86,6 @@ void Rectangle::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 void Rectangle::BindToText(QGraphicsScene* qgs)
 {
     content=new Text(location,width,height);
+    content->putup_text(qgs);
     content->build_text();
 }

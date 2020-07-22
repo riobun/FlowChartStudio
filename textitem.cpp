@@ -4,7 +4,7 @@
 #include"textitem.h"
 
 // 自定义 Item
-TextItem::TextItem(QGraphicsItem* parent=0)
+TextItem::TextItem(QGraphicsItem* parent)
     : QGraphicsRectItem(parent)
 {
 

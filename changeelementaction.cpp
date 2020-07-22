@@ -14,7 +14,8 @@ void ChangeElementAction::Do()
         auto text = static_cast<Text*>(element);
         if (isCreated)
         {
-            text->build_text(scene, QColor(), QFont());
+            text->putup_text(scene);
+            text->build_text( QColor(), QFont());
         }
         else
         {
