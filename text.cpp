@@ -24,14 +24,12 @@ Text::Text(QPointF position1, QPointF position2) {//两个鼠标位置表示对�
     }
 }
 
-void Text::build_text(QGraphicsScene* scene, QColor c, QFont f) {//创建文本框
+void Text::build_text(QColor c, QFont f) {//创建文本框
     item->setRect(location.x()-width/2,location.y()-height/2,width,height);
     QBrush brush = item->brush();
     brush.setColor(QColor(0x00, 0xff, 0x00, 0x00));//透明
     item->setBrush(brush);
     item->setVisible(true);
-    item->setFlags(QGraphicsItem::ItemIsSelectable);
-    scene->addItem(item);
     
      QPen pen = item->pen();
     pen.setColor(QColor(0x00, 0xff, 0x00, 0x00));
@@ -46,6 +44,9 @@ void Text::build_text(QGraphicsScene* scene, QColor c, QFont f) {//创建文本�
     p.setX(p.x() - rect.width() / 2);
     text->setPos(p);
 
+}
+void Text::putup_text(QGraphicsScene* scene) {
+    scene->addItem(item);
 }
 
 Text::~Text() {
@@ -120,4 +121,6 @@ QPointF Text::get_text_location() {
 QColor Text::get_text_color() {
     return color;
 }
-
+TextItem* Text::get_item() {
+    return item;
+}
