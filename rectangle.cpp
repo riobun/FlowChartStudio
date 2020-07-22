@@ -6,7 +6,7 @@ Rectangle::Rectangle()
 }
 Rectangle:: Rectangle(QPointF lc,double wd,double h):Node(lc,wd,h)
 {
-
+         backgroundColor=Qt::blue;
 
 }
 Rectangle::~Rectangle()
@@ -15,9 +15,11 @@ Rectangle::~Rectangle()
 }
 void Rectangle::Paint(QGraphicsScene* qgs)
 {
-    shape->setRect(location.x()-width/2,location.y()-height/2,width,height);
+    QPolygonF polygon;
+    polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
+    polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
+    shape->setPolygon(polygon);
     shape->setVisible(true);
-    shape->setFlags(QGraphicsItem::ItemIsSelectable);
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
     qgs->addItem(shape);
@@ -30,20 +32,32 @@ void Rectangle::SetVisibility(bool vis)
 void Rectangle::SetLocation(const QPointF &qp)
 {
     location=qp;
-    shape->setX(qp.x()-width/2);
-    shape->setY(qp.y()-height/2);
+    QPolygonF polygon;
+    polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
+    polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
+    shape->setPolygon(polygon);
+    if(content)
+    {
+
+    }
 }
 
 void Rectangle::SetWidth(double wd)
 {
     width=wd;
-    shape->setRect(location.x()-width/2,location.y()-height/2,width,height);
+    QPolygonF polygon;
+    polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
+    polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
+    shape->setPolygon(polygon);
 }
 
 void Rectangle::SetHeight(double h)
 {
     height=h;
-    shape->setRect(location.x()-width/2,location.y()-height/2,width,height);
+    QPolygonF polygon;
+    polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
+    polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
+    shape->setPolygon(polygon);
 }
 
 void Rectangle::SetBackgroundColor(const QColor &qc)

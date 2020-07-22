@@ -33,8 +33,10 @@ void Diamond::SetVisibility(bool vis)
 void Diamond::SetLocation(const QPointF &qp)
 {
     location=qp;
-    shape->setX(qp.x()-width/2);
-    shape->setY(qp.y()-height/2);
+    QPolygonF polygon;
+    polygon<<QPointF(location.x()-width/2,location.y())<<QPointF(location.x(),location.y()-height/2);
+    polygon<<QPointF(location.x()+width/2,location.y())<<QPointF(location.x(),location.y()+height/2);
+    shape->setPolygon(polygon);
     if(content)
     {
         content->move_text(qp);

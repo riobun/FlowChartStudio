@@ -5,6 +5,8 @@
 #include <QtMath>
 #include<QMouseEvent>
 #include"idpool.h"
+extern int k1[100][2];
+extern int k2[100][2];
 GraphElement::GraphElement()
 {
     for(int i=0;i<100;i++){

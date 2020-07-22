@@ -20,7 +20,6 @@ SOURCES += \
     arrow.cpp \
     changeelementaction.cpp \
     diamond.cpp \
-    diamonditem.cpp \
     editelementaction.cpp \
     flowchartscene.cpp \
     flowchartview.cpp \
@@ -29,8 +28,8 @@ SOURCES += \
     mainwindow.cpp \
     node.cpp \
     nodeevents.cpp \
+    nodeitem.cpp \
     rectangle.cpp\
-    rectangleitem.cpp \
     text.cpp
 
 HEADERS += \
@@ -38,7 +37,6 @@ HEADERS += \
     arrow.h \
     changeelementaction.h \
     diamond.h \
-    diamonditem.h \
     editelementaction.h \
     elementProperty.h \
     elementshape.h \
@@ -50,8 +48,8 @@ HEADERS += \
     mainwindow.h \
     node.h \
     nodeevents.h \
+    nodeitem.h \
     rectangle.h\
-    rectangleitem.h \
     text.h
 
 FORMS += \

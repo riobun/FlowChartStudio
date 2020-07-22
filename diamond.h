@@ -17,8 +17,6 @@ public:
     virtual void SetHeight(double h) override;
     virtual void BindToText(QGraphicsScene* qgs) override;
     ~Diamond();
-private:
-    DiamondItem* shape = new DiamondItem(this);
 };
 
 #endif // DIAMOND_H

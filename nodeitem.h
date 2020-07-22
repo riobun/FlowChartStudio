@@ -1,14 +1,11 @@
-#ifndef RECTANGLEITEM_H
-#define RECTANGLEITEM_H
-
-#include <QGraphicsItem>
-
+#ifndef NODEITEM_H
+#define NODEITEM_H
+#include"QGraphicsItem"
 class Node;
-
-class RectangleItem:public QGraphicsRectItem
+class NodeItem:public QGraphicsPolygonItem
 {
 public:
-    RectangleItem(Node* node) : node(node) {}
+    NodeItem(Node* node):node(node){};
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -23,4 +20,4 @@ private:
     Node* node;
 };
 
-#endif // RECTANGLEITEM_H
+#endif // NODEITEM_H

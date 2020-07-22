@@ -6,6 +6,7 @@
 #include"qpen.h"
 #include"graphelement.h"
 #include"QGraphicsScene"
+#include"nodeitem.h"
 class Arrow;
 class Node:public GraphElement
 {
@@ -34,6 +35,7 @@ protected:
     QPointF location=QPointF(0.0,0.0);//表示图形中心位置
     double width,height;
     QColor backgroundColor=Qt::white,frameColor=Qt::black;
+    NodeItem* shape=new NodeItem(this);
 private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;

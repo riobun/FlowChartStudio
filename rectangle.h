@@ -17,8 +17,6 @@ public:
     virtual void SetHeight(double h) override;
     virtual void BindToText(QGraphicsScene* qgs) override;
     ~Rectangle();
-private:
-    RectangleItem* shape=new RectangleItem(this);
 };
 
 #endif // RECTANGLE_H

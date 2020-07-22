@@ -5,7 +5,6 @@
 #include <QGraphicsView>
 #include <QToolButton>
 #include <QVector>
-
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"

@@ -1,20 +1,13 @@
 #include "rectangleitem.h"
 #include "nodeevents.h"
 #include "node.h"
-/*
+
 void RectangleItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-
-}
-
-void RectangleItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-
-}
-
-void RectangleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-
+    if(isSelected)
+    {
+        node->SetLocation(event->pos());
+    }
 }
 
 void RectangleItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
@@ -31,16 +24,26 @@ void RectangleItem::keyReleaseEvent(QKeyEvent *event)
 {
 
 }
-*/
+
 
 void RectangleItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    NodeEvents::mousePressEvent(node, event);
+    if(contains(event->pos()))
+    {
+        isSelected=true;
+        NodeEvents::mousePressEvent(node, event);
+    }
+
+
 }
 
 void RectangleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    NodeEvents::mouseReleaseEvent(node, event);
+    if(isSelected)
+    {
+       NodeEvents::mouseReleaseEvent(node, event);
+    }
+    isSelected=false;
 }
 
 void RectangleItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
