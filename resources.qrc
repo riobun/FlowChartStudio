@@ -17,5 +17,8 @@
         <file>images/linepointer.png</file>
         <file>images/arrowcolor.png</file>
         <file>images/bdcolor.png</file>
+        <file>images/file.png</file>
+        <file>images/filefolder.png</file>
+        <file>images/project.png</file>
     </qresource>
 </RCC>
