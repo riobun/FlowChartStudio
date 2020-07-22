@@ -8,6 +8,8 @@
 
 #include "elementshape.h"
 #include "action.h"
+#include "node.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +28,9 @@ public:
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { undoStack.append(action); }
+    void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
+
+    QVector<Node*> selectedNodes;
 
 public slots:
     void Undo();
@@ -34,6 +39,15 @@ public slots:
 private slots:
     void textColorChanged();
     void textButtonTriggered();
+
+    void itemColorChanged();
+    void fillButtonTriggered();
+
+    void bdColorChanged();
+    void bdButtonTriggered();
+
+    void arrowColorChanged();
+    void arrowColorButtonTriggered();
 
     void on_addRectangleButton_clicked();
     void on_addDiamondButton_clicked();
@@ -52,7 +66,13 @@ private:
     QIcon createColorIcon(QColor color);
 
     QAction *textAction;
+    QAction *fillAction;
+    QAction *bdAction;
+    QAction *arrowColorAction;
+    QToolButton* arrowColorToolBtn;
+    QToolButton* bdColorToolBtn;
     QToolButton* fontColorToolBtn;
+    QToolButton* fillColorToolBtn;
 
     ElementShape _nextAddedShape;
     int _selectedId;

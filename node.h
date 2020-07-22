@@ -5,9 +5,8 @@
 #include"QMap"
 #include"qpen.h"
 #include"graphelement.h"
-#include"arrow.h"
 #include"QGraphicsScene"
-
+class Arrow;
 class Node:public GraphElement
 {
 public:

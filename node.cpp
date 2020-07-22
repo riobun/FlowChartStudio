@@ -1,5 +1,5 @@
 #include "node.h"
-
+#include"arrow.h"
 
 Node::Node(){}
 Node::Node(QPointF lc,double w,double h):location(lc),width(w),height(h)

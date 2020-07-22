@@ -18,7 +18,7 @@ public:
     virtual void BindToText(QGraphicsScene* qgs) override;
     ~Diamond();
 private:
-    DiamondItem* shape=new DiamondItem();
+    DiamondItem* shape = new DiamondItem(this);
 };
 
 #endif // DIAMOND_H
