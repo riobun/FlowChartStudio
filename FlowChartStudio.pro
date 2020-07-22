@@ -49,10 +49,8 @@ HEADERS += \
     mainwindow.h \
     node.h \
     nodeevents.h \
-    nodeitem.h \
     rectangle.h\
-    text.h \
-    textitem.h
+    text.h
 
 FORMS += \
     mainwindow.ui
