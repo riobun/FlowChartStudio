@@ -1,6 +1,7 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
+#include <math.h>
 #include"textitem.h"
 
 // 自定义 Item
