@@ -36,15 +36,15 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (size.rx() < 0)
         {
             size.rx() = -size.rx();
-            position.rx() -= event->scenePos().rx() / 2;
+            //position.rx() -= event->scenePos().rx() / 2;
         }
-        else position.rx() -= selectLeftTop.rx() / 2;
+        //else position.rx() -= selectLeftTop.rx() / 2;
         if (size.ry() < 0)
         {
             size.ry() = -size.ry();
-            position.ry() -= event->scenePos().ry() / 2;
+            //position.ry() -= event->scenePos().ry() / 2;
         }
-        else position.ry() -= selectLeftTop.ry() / 2;
+        //else position.ry() -= selectLeftTop.ry() / 2;
         rect->SetWidth(size.rx());
         rect->SetHeight(size.ry());
         rect->SetLocation(position);
