@@ -6,6 +6,8 @@
 #include<QMouseEvent>
 //extern int k1=0;
 //int GraphElement::xy[50][50]={0};
+int k1[100][2];
+int k2[100][2];
 GraphElement::GraphElement()
 {
     for(int i=0;i<100;i++){
