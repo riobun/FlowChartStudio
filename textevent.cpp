@@ -1,12 +1,12 @@
 
 #include <QMenu>
 
-#include "textevents.h"
+#include "textevent.h"
 #include "changeelementaction.h"
 #include "mainwindow.h"
 
 
-void NodeEvents::contextMenuEvent(Text* text, QGraphicsSceneContextMenuEvent *event)
+void TextEvents::contextMenuEvent(Text* text, QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
@@ -19,12 +19,12 @@ void NodeEvents::contextMenuEvent(Text* text, QGraphicsSceneContextMenuEvent *ev
     }
 }
 
-void NodeEvents::mousePressEvent(Text* text, QGraphicsSceneMouseEvent *event)
+void TextEvents::mousePressEvent(Text* text, QGraphicsSceneMouseEvent *event)
 {
 
 }
 
-void NodeEvents::mouseReleaseEvent(Text* text, QGraphicsSceneMouseEvent *event)
+void TextEvents::mouseReleaseEvent(Text* text, QGraphicsSceneMouseEvent *event)
 {
 
 }
