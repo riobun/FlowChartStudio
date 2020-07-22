@@ -6,12 +6,13 @@
 #include "text.h"
 
 
-class TextEvents
+class TextScene
 {
 public:
     static void contextMenuEvent(Text* text, QGraphicsSceneContextMenuEvent *event);
-    static void mousePressEvent(Text* text, QGraphicsSceneMouseEvent *event);
-    static void mouseReleaseEvent(Text* text, QGraphicsSceneMouseEvent *event);
+    static void mousePressEvent( QGraphicsSceneMouseEvent *event);
+    static void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void keyPressEvent(QKeyEvent* event);
 };
 
 #endif 

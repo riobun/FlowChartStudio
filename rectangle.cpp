@@ -6,7 +6,7 @@ Rectangle::Rectangle()
 }
 Rectangle:: Rectangle(QPointF lc,double wd,double h):Node(lc,wd,h)
 {
-         backgroundColor=Qt::blue;
+
 
 }
 Rectangle::~Rectangle()

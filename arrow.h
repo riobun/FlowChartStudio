@@ -1,3 +1,4 @@
+
 #ifndef NEWARROW_H
 #define NEWARROW_H
 #include "graphelement.h"
@@ -11,7 +12,7 @@ class Arrow: public QGraphicsPathItem,public GraphElement
 public:
     enum { Type = UserType + 4 };
 
-    Arrow(Node* startItem, Node* endItem,
+    Arrow(Node *startItem, Node *endItem,
           QGraphicsItem *parent = nullptr);
 
     int type() const override { return Type; }
@@ -22,6 +23,7 @@ public:
     void setSize(int size);
     void setId(int size);
     void setList();
+    QPolygonF polygon();
     Node *startItem() const { return myStartItem; }
     Node *endItem() const { return myEndItem; }
 
