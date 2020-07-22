@@ -2,11 +2,33 @@
 #define NODEITEM_H
 #include"QGraphicsItem"
 class Node;
-class NodeItem:public QGraphicsPolygonItem
+/*
+ 鼠标左键按住拖动
+ shift+鼠标左键按住调整大小
+ */
+class NodeItem:public QObject,public QGraphicsPolygonItem
 {
+Q_OBJECT
 public:
+    explicit NodeItem(QObject *parent = nullptr):QObject(parent){};
     NodeItem(Node* node):node(node){};
-
+    void SetSelected(bool b)
+    {
+        isSelected=b;
+        if(b)
+        {
+            setZValue(100);
+        }
+        else
+        {
+            setZValue(1);
+        }
+        emit Selected(node,b);
+    }
+signals:
+    void Selected(Node* n,bool b);
+    void NewLocation(Node* n,QPointF oldLoc);
+    void NewSize(Node* n,double oldWidth,double oldHeight);
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -17,7 +39,12 @@ protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 private:
     bool isSelected=false;
-    Node* node;
+    bool isFocus=false;
+    bool isResized=false;
+    bool isMoved=false;
+    double lastWidth,lastHeight;
+    QPointF lastLocation;
+    Node* node=nullptr;
 };
 
 #endif // NODEITEM_H
