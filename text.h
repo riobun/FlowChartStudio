@@ -10,7 +10,7 @@
 #include <QGraphicsTextItem>
 #include<QColor>
 #include"textitem.h"
-
+class TextItem;
 class Text {
 public:
     Text(QPointF primary_location, double primary_width, double primary_height);//由节点生成

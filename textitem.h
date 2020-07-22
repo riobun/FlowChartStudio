@@ -3,12 +3,12 @@
 #include<QGraphicsItem>
 
 
-#include "text.h"
-
+class Text;
 
 class TextItem :public QGraphicsItem {
 public:
-	TextItem()(Text*text) : text(text) {}
+      TextItem() {};
+      TextItem(Text* text) : text(text) {}
 protected:
     /*void keyPressEvent(QKeyEvent* event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* event)override;
