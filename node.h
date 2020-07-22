@@ -8,7 +8,7 @@
 #include"arrow.h"
 #include"QGraphicsScene"
 
-class Node:public GraphElement
+class Node:public QGraphicsItem
 {
 public:
     Node();
