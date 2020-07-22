@@ -9,6 +9,7 @@
 #include<QGraphicsScene>
 #include <QGraphicsTextItem>
 #include<QColor>
+#include"textitem.h"
 
 class Text {
 public:
@@ -24,18 +25,19 @@ public:
     Text(Text old_t, QPointF primary_location, double primary_width, double primary_height);//附着于新的节点
     void move_text(QPointF new_location);//参数：新的坐标位置
     void resize_text(double d_width, double d_height);//参数：表示宽和高的位移
+     
     QFont get_text_fond();
     QString get_text_content();
     QPointF get_text_location();
     QColor get_text_color();
-
+    TextItem* get_item();
 private:
     QPointF location;
     QString content;
     QFont font;
     double width, height;
     QColor color;
-    QGraphicsRectItem* item = new QGraphicsRectItem();
+    TextItem* item = new TextItem();
     QGraphicsTextItem* text = new QGraphicsTextItem(item);
 };
 
