@@ -30,6 +30,7 @@ void Text::build_text(QGraphicsScene* scene, QColor c, QFont f) {//创建文本�
     brush.setColor(QColor(0x00, 0xff, 0x00, 0x00));//透明
     item->setBrush(brush);
     item->setVisible(true);
+    item->setFlags(QGraphicsItem::ItemIsSelectable);
     scene->addItem(item);
     
      QPen pen = item->pen();
