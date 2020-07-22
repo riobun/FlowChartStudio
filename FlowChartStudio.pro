@@ -31,7 +31,6 @@ SOURCES += \
     nodeitem.cpp \
     rectangle.cpp\
     text.cpp \
-    textitem.cpp
 
 HEADERS += \
     action.h \
