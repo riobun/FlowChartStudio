@@ -5,6 +5,8 @@
 #include <QFontComboBox>
 #include <QFontDialog>
 #include <QToolButton>
+#include <QStandardItemModel>
+#include <QIcon>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -113,6 +115,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_bdColor,&QAction::triggered,[](){
         QColorDialog::getColor(QColor(Qt::black));
     });
+
+    //项目树形结构
+    QStandardItemModel* model = new QStandardItemModel(ui->treeView);
+    ui->treeView->setModel(model);
+    model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
+    QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目1");
+    model->appendRow(itemProject1);
+    QStandardItem* itemChild1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
+    itemProject1->appendRow(itemChild1);
 
 
     _scene = new FlowChartScene();
