@@ -9,6 +9,11 @@ class Graph:public GraphElement
 {
 public:
     Graph();
+    void resizeGraph(); //调整图形在屏幕上的布局
+    void MoveSubGraph();//移动子图
+    void FoldSubGraph();//折叠
+    void unFoldSubGraph();  //展开
+    void DeleteSubGraph();  //删除子图，当前子图下所有节点归为父节点
 private:
     bool isExpended;
     Node& subGraphNode;
