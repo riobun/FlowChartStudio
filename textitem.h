@@ -1,28 +1,26 @@
 #ifndef TEXTITEM_H
 #define TEXTITEM_H
 #include<QGraphicsItem>
+#include <QGraphicsScene>
 
 
-class Text;
-
-class TextItem :public QGraphicsItem {
+class TextItem : public QGraphicsRectItem
+{
 public:
-      TextItem() {};
-      TextItem(Text* text) : text(text) {}
+    explicit TextItem(QGraphicsItem* parent = 0);
 protected:
-    /*void keyPressEvent(QKeyEvent* event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event)override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event)override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event)override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)override;
-    void keyReleaseEvent(QKeyEvent* event)override;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)override;*/
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    // Shift+左键：进行选择  Alt：准备缩放
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    // Alt+拖拽：进行缩放  移动
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    // 使item可使用qgraphicsitem_cast
+    int type() const;
 private:
-	Text*text;
+    QPointF m_centerPointF;
+    bool m_bResizing;
 };
+
 
 
 #endif
