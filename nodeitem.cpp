@@ -57,7 +57,7 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(isSelected)
+    if(isFocus)
     {
         if(isMoved)
         {
@@ -71,6 +71,7 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
         }
     }
+    isMoved=false;
     isFocus=false;
     isResized=false;
 }
