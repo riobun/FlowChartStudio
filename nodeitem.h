@@ -23,6 +23,7 @@ public:
         {
             setZValue(1);
         }
+        setSelected(b);
     }
 signals:
     void Selected(Node* n,bool b);

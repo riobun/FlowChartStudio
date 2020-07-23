@@ -115,6 +115,11 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
     {
+        auto nodes = MainWindow::instance()->graph->searchNodes(rect);
+        foreach (auto node, nodes)
+        {
+            node->getNodeItem()->SetSelected(true);
+        }
         rect->Remove(this);
         delete rect;
         rect = nullptr;

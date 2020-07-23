@@ -19,6 +19,7 @@ public:
         nodes.insert(node->GetID(), node);
     }
     Node* searchNode(QPointF point);
+    QVector<Node*> searchNodes(Node* node);
 
     void BindToText(QGraphicsScene *qgs) override {}
 private:
