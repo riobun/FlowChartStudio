@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
     //箭头颜色
     arrowColorToolBtn = new QToolButton(this);
     arrowColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    arrowColorToolBtn->setMenu(createColorMenu(SLOT(bdColorChanged()), Qt::black));
+    arrowColorToolBtn->setMenu(createColorMenu(SLOT(arrowColorChanged()), Qt::black));
     arrowColorAction = arrowColorToolBtn->menu()->defaultAction();
     arrowColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/arrowcolor.png", Qt::black));
