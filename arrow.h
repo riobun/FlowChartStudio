@@ -29,6 +29,8 @@ public:
 
     void updatePosition();
 
+    void BindToText(QGraphicsScene* qgs) override{}
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = nullptr) override;

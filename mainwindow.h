@@ -8,6 +8,7 @@
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
+#include "graph.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +33,8 @@ public:
 
     QColor bdColor = Qt::black;
     QColor fillColor = Qt::white;
+    QColor lineColor = Qt::black;
+    Graph* graph = new Graph;
 
 public slots:
     void Undo();
@@ -58,6 +61,7 @@ private slots:
 private:
     void clickbdBtn();
     void clickFillBtn();
+    void clickLineBtn();
 
 private:
     Ui::MainWindow *ui;

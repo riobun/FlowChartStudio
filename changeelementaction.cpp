@@ -33,6 +33,7 @@ void ChangeElementAction::Do()
             auto item = node->getNodeItem();
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             node->Paint(scene);
+            MainWindow::instance()->graph->addNode(node);
         }
         else
         {

@@ -5,6 +5,10 @@
 #include <QMapIterator>
 #include "mainwindow.h"
 #include "node.h"
+#include "changeelementaction.h"
+#include "diamond.h"
+#include "arrow.h"
+
 
 FlowChartScene::FlowChartScene()
 {
@@ -29,23 +33,65 @@ void FlowChartScene::keyReleaseEvent(QKeyEvent *event)
 
 void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (event->button() == Qt::MouseButton::LeftButton)
+    {
+        auto window = MainWindow::instance();
+        auto shape = window->nextAddedShape();
+        auto point = event->scenePos();
+        if (shape == ElementShape::Text)
+        {
+            auto text = new Text(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(text, ElementShape::Text, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::Diamond)
+        {
+            auto diamond = new Diamond(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(diamond, ElementShape::Diamond, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::Rectangle)
+        {
+            auto rectangle = new Rectangle(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(rectangle, ElementShape::Rectangle, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::Arrow)
+        {
+            lineFrom = window->graph->searchNode(point);
+            if (lineFrom)
+            {
+                fromLinePosition = lineFrom->GetLocation();
+                line = new QGraphicsLineItem(QLineF(fromLinePosition, fromLinePosition));
+                line->setPen(QPen(window->lineColor, 2));
+                addItem(line);
+            }
+        }
+        window->setNextAddedShape(ElementShape::Unknown);
+        if (shape == ElementShape::Arrow)
+        {
+            return;
+        }
+    }
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted())
     {
-        if (event->button() == Qt::MouseButton::LeftButton)
-        {
-            selectLeftTop = event->scenePos();
-            rect = new Rectangle(event->scenePos(), 1, 1);
-            rect->Paint(this);
-        }
+        MainWindow::instance()->setNextAddedShape(ElementShape::Unknown);
+        selectLeftTop = event->scenePos();
+        rect = new Rectangle(event->scenePos(), 1, 1);
+        rect->Paint(this);
     }
     keyDownPosition = event->scenePos();
 }
 
 void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsScene::mouseMoveEvent(event);
-    if (rect)
+    if (line)
+    {
+        auto toPosition = event->scenePos();
+        line->setLine(QLineF(fromLinePosition, toPosition));
+    }
+    else if (rect)
     {
         QPointF size = event->scenePos() - selectLeftTop;
         QPointF position = (selectLeftTop + event->scenePos()) / 2;
@@ -61,6 +107,7 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         rect->SetHeight(size.ry());
         rect->SetLocation(position);
     }
+    QGraphicsScene::mouseMoveEvent(event);
 }
 
 void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -68,9 +115,20 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
     {
-
         rect->Remove(this);
+        delete rect;
         rect = nullptr;
     }
-    auto num = MainWindow::instance()->selectedNodes()->size();
+    if (line)
+    {
+        auto to = MainWindow::instance()->graph->searchNode(event->scenePos());
+        if (to)
+        {
+            //auto arrow = new Arrow(lineFrom, to);
+            //MainWindow::instance()->scene()->addItem(arrow);
+        }
+        MainWindow::instance()->scene()->removeItem(line);
+        delete line;
+        line = nullptr;
+    }
 }

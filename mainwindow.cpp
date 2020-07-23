@@ -89,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
     arrowColorAction = arrowColorToolBtn->menu()->defaultAction();
     arrowColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/arrowcolor.png", Qt::black));
+    connect(arrowColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickLineBtn);
     ui->toolBar->addWidget(arrowColorToolBtn);
 
     ui->toolBar->addSeparator();
@@ -251,6 +252,7 @@ void MainWindow::arrowColorChanged()
                                      ":/images/arrowcolor.png",
                                      qvariant_cast<QColor>(arrowColorAction->data())));
     arrowColorButtonTriggered();
+    lineColor = qvariant_cast<QColor>(arrowColorAction->data());
 }
 
 void MainWindow::arrowColorButtonTriggered()
@@ -315,4 +317,9 @@ void MainWindow::clickFillBtn()
     {
         node->SetBackgroundColor(fillColor);
     }
+}
+
+void MainWindow::clickLineBtn()
+{
+
 }

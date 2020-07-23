@@ -23,7 +23,7 @@ SOURCES += \
     diamond.cpp \
     editelementaction.cpp \
     flowchartscene.cpp \
-    flowchartview.cpp \
+    graph.cpp \
     graphelement.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -42,7 +42,6 @@ HEADERS += \
     elementProperty.h \
     elementshape.h \
     flowchartscene.h \
-    flowchartview.h \
     graph.h \
     graphelement.h \
     idpool.h \

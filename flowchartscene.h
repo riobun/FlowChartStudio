@@ -21,6 +21,9 @@ private:
     QPointF selectLeftTop;
     bool isCtrlDown;
     QPointF keyDownPosition;
+    QGraphicsLineItem* line = nullptr;
+    QPointF fromLinePosition;
+    Node* lineFrom;
 };
 
 #endif // FLOWCHARTSCENE_H
