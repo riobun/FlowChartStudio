@@ -44,6 +44,7 @@ void NodeItem::keyReleaseEvent(QKeyEvent *event)
 
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    QGraphicsItem::mousePressEvent(event);
 //    SetSelected(true);
     if(event->button()==Qt::MouseButton::LeftButton)
     {

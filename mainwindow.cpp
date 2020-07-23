@@ -222,6 +222,18 @@ void MainWindow::bdColorChanged()
                                      ":/images/bdcolor.png",
                                      qvariant_cast<QColor>(bdAction->data())));
     bdButtonTriggered();
+    auto color = QColor::fromRgba(bdAction->data().toUInt());
+    if (selectedNodes()->size() > 0)
+    {
+        foreach (auto node, *selectedNodes())
+        {
+            node->SetFrameColor(color);
+        }
+    }
+    else
+    {
+        bdColor = color;
+    }
 }
 
 void MainWindow::bdButtonTriggered()

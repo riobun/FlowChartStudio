@@ -30,6 +30,8 @@ public:
     void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
 
+    QColor bdColor = Qt::black;
+
 public slots:
     void Undo();
     void Redo();
