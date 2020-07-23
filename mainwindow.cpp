@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent)
     fillAction = fillColorToolBtn->menu()->defaultAction();
     fillColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/floodfill.png", Qt::white));
+    connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
+
     ui->toolBar->addWidget(fillColorToolBtn);
 
     //边框颜色
@@ -209,6 +211,12 @@ void MainWindow::itemColorChanged()
                                      ":/images/floodfill.png",
                                      qvariant_cast<QColor>(fillAction->data())));
     fillButtonTriggered();
+    auto color = qvariant_cast<QColor>(fillAction->data());
+    fillColor = color;
+    if (selectedNodes()->size() > 0)
+    {
+        clickFillBtn();
+    }
 }
 
 void MainWindow::fillButtonTriggered()
@@ -224,16 +232,10 @@ void MainWindow::bdColorChanged()
                                      qvariant_cast<QColor>(bdAction->data())));
     bdButtonTriggered();
     auto color = qvariant_cast<QColor>(bdAction->data());
+    bdColor = color;
     if (selectedNodes()->size() > 0)
     {
-        foreach (auto node, *selectedNodes())
-        {
-            node->SetFrameColor(color);
-        }
-    }
-    else
-    {
-        bdColor = color;
+        clickbdBtn();
     }
 }
 
@@ -304,5 +306,13 @@ void MainWindow::clickbdBtn()
     foreach (auto node, *selectedNodes())
     {
         node->SetFrameColor(bdColor);
+    }
+}
+
+void MainWindow::clickFillBtn()
+{
+    foreach (auto node, *selectedNodes())
+    {
+        node->SetBackgroundColor(fillColor);
     }
 }

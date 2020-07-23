@@ -31,6 +31,7 @@ public:
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
 
     QColor bdColor = Qt::black;
+    QColor fillColor = Qt::white;
 
 public slots:
     void Undo();
@@ -56,6 +57,7 @@ private slots:
 
 private:
     void clickbdBtn();
+    void clickFillBtn();
 
 private:
     Ui::MainWindow *ui;
