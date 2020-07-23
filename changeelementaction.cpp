@@ -8,7 +8,8 @@ ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool
 
 void ChangeElementAction::Do()
 {
-    auto scene = MainWindow::instance()->scene();
+    auto window = MainWindow::instance();
+    auto scene = window->scene();
     if (shape == ElementShape::Text)
     {
         auto text = static_cast<Text*>(element);
@@ -27,6 +28,7 @@ void ChangeElementAction::Do()
         auto node = static_cast<Node*>(element);
         if (isCreated)
         {
+            node->SetFrameColor(window->bdColor);
             auto item = node->getNodeItem();
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             node->Paint(scene);
