@@ -19,7 +19,8 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
         else
         {
-            node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+            //node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+            QGraphicsItem::mouseMoveEvent(event);
         }
     }
 }
@@ -74,6 +75,10 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
         }
     }
+    if (lastLocation != event->scenePos())
+    {
+        emit NewLocation(node,lastLocation);
+    }
     isMoved=false;
     isFocus=false;
     isResized=false;
@@ -85,8 +90,6 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value)
     {
         SetSelected(QGraphicsItem::isSelected());
         emit Selected(node, QGraphicsItem::isSelected());
-        auto num = MainWindow::instance()->selectedNodes()->size();
-        auto a = num;
     }
     return value;
 }
