@@ -29,6 +29,7 @@ void ChangeElementAction::Do()
         if (isCreated)
         {
             node->SetFrameColor(window->bdColor);
+            node->SetBackgroundColor(window->fillColor);
             auto item = node->getNodeItem();
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             node->Paint(scene);
