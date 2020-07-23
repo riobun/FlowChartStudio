@@ -66,13 +66,14 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 line->setPen(QPen(window->lineColor, 2));
                 addItem(line);
             }
-        }
-        if (shape == ElementShape::Arrow)
-        {
             window->setNextAddedShape(ElementShape::Unknown);
             return;
         }
         window->setNextAddedShape(ElementShape::Unknown);
+    }
+    else if (event->button() == Qt::MouseButton::RightButton)
+    {
+        return;
     }
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted())
@@ -80,6 +81,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         MainWindow::instance()->setNextAddedShape(ElementShape::Unknown);
         selectLeftTop = event->scenePos();
         rect = new Rectangle(event->scenePos(), 1, 1);
+        rect->getNodeItem()->setZValue(-1000);
         rect->Paint(this);
     }
     keyDownPosition = event->scenePos();
@@ -133,7 +135,7 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem());
             lineFrom->ConnectAsSource(arrow);
             to->ConnectAsDestination(arrow);
-            arrow->setZValue(-1000.0);
+            arrow->setZValue(-100.0);
             MainWindow::instance()->scene()->addItem(arrow);
             arrow->updatePosition();
         }
