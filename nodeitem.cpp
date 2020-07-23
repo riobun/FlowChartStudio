@@ -119,6 +119,8 @@ QPolygonF NodeItem::polygon() const{
         qpf<<QPointF(-w/2,0)<<QPointF(0,h/2)<<QPointF(w/2,0)<<QPointF(0,-h/2)<<QPointF(-w/2,0);
     }
     return qpf;
+
+
 }
 
 QPointF NodeItem::pos() {

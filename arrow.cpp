@@ -91,7 +91,7 @@ void Arrow::setList(){
 //        return ;
     qreal arrowSize = 20;
     list.clear();
-    if(myEndItem->pos().y()>=myStartItem->pos().y()-100-arrowSize&&myEndItem->pos().y()<=myStartItem->pos().y()+100+arrowSize)
+    if(myStartItem->pos().y()>=myEndItem->pos().y()-myEndItem->GetHeight()/2-arrowSize&&myStartItem->pos().y()<=myEndItem->pos().y()+myEndItem->GetHeight()/2+arrowSize)
     {
         QPointF *pa=new QPointF((myEndItem->pos().x()+myStartItem->pos().x())/2, myStartItem->pos().y());
         QPointF *pb=new QPointF((myEndItem->pos().x()+myStartItem->pos().x())/2, myEndItem->pos().y());
@@ -134,7 +134,7 @@ void Arrow::setList(){
         arrowHead.clear();
         arrowHead << ql->p1() << arrowP1 << arrowP2;
         return ;
-    }else if(myEndItem->pos().x()>=myStartItem->pos().x()-100&&myEndItem->pos().x()<=myStartItem->pos().x()+100)
+    }else if(myEndItem->pos().x()>=myStartItem->pos().x()-myStartItem->GetWidth()/2&&myEndItem->pos().x()<=myStartItem->pos().x()+myStartItem->GetWidth()/2)
     {
         QPointF *pa=new QPointF(myStartItem->pos().x(),(myEndItem->pos().y()+myStartItem->pos().y())/2);
         QPointF *pb=new QPointF(myEndItem->pos().x(),(myEndItem->pos().y()+myStartItem->pos().y())/2);
