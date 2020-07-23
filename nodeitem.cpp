@@ -3,6 +3,7 @@
 #include "node.h"
 #include "QKeyEvent"
 #include "QDebug"
+#include <cmath>
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(isFocus)
