@@ -12,12 +12,15 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 private:
     Rectangle* rect=nullptr;
     QPointF selectLeftTop;
+    bool isCtrlDown;
+    QPointF keyDownPosition;
 };
 
 #endif // FLOWCHARTSCENE_H

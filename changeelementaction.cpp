@@ -27,6 +27,8 @@ void ChangeElementAction::Do()
         auto node = static_cast<Node*>(element);
         if (isCreated)
         {
+            auto item = node->getNodeItem();
+            connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             node->Paint(scene);
         }
         else
@@ -39,4 +41,17 @@ void ChangeElementAction::Do()
 void ChangeElementAction::Undo()
 {
     ChangeElementAction(element, shape, !isCreated).Do();
+}
+
+void ChangeElementAction::onNodeSelected(Node* node, bool isSelected)
+{
+    auto selectedNodes = MainWindow::instance()->selectedNodes();
+    if (isSelected)
+    {
+        selectedNodes->insert(node->GetID(), node);
+    }
+    else
+    {
+        selectedNodes->remove(node->GetID());
+    }
 }
