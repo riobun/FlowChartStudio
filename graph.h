@@ -16,7 +16,8 @@ public:
     void DeleteSubGraph();  //删除子图，当前子图下所有节点归为父节点
 private:
     bool isExpended;
-    Node& subGraphNode;
+    Node* subGraphNode;
+    //Node& subGraphNode;
     QMap<int, Node&> nodes;
     QMap<int, Arrow&> Arrows;
     QMap<int, Text&> texts;
