@@ -86,7 +86,7 @@ void Diamond::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 
 void Diamond::BindToText(QGraphicsScene* qgs)
 {
-    content=new Text(location,width/2,height/2);
+    content=new Text(location);
     content->putup_text(qgs);
     content->build_text();
 }
