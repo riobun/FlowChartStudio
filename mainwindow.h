@@ -55,6 +55,9 @@ private slots:
     void on_addTextButton_clicked();
 
 private:
+    void clickbdBtn();
+
+private:
     Ui::MainWindow *ui;
 
     static MainWindow* _instance;

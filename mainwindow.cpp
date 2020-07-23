@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
     bdAction = bdColorToolBtn->menu()->defaultAction();
     bdColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/bdcolor.png", Qt::black));
+    connect(bdColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickbdBtn);
     ui->toolBar->addWidget(bdColorToolBtn);
 
     //箭头颜色
@@ -222,7 +223,7 @@ void MainWindow::bdColorChanged()
                                      ":/images/bdcolor.png",
                                      qvariant_cast<QColor>(bdAction->data())));
     bdButtonTriggered();
-    auto color = QColor::fromRgba(bdAction->data().toUInt());
+    auto color = qvariant_cast<QColor>(bdAction->data());
     if (selectedNodes()->size() > 0)
     {
         foreach (auto node, *selectedNodes())
@@ -295,5 +296,13 @@ void MainWindow::Redo()
         redoStack.removeLast();
         action->Do();
         undoStack.append(action);
+    }
+}
+
+void MainWindow::clickbdBtn()
+{
+    foreach (auto node, *selectedNodes())
+    {
+        node->SetFrameColor(bdColor);
     }
 }
