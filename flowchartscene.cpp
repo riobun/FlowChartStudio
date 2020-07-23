@@ -40,7 +40,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         auto point = event->scenePos();
         if (shape == ElementShape::Text)
         {
-            auto text = new Text(point, 100.0, 50.0);
+            auto text = new Text(point);
             auto action = new ChangeElementAction(text, ElementShape::Text, true);
             action->Do();
         }
