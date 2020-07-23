@@ -90,3 +90,8 @@ void Diamond::BindToText(QGraphicsScene* qgs)
     content->putup_text(qgs);
     content->build_text();
 }
+
+int Diamond::GetType()
+{
+    return 2;
+}

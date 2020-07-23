@@ -16,6 +16,7 @@ public:
     virtual void SetWidth(double wd) override;
     virtual void SetHeight(double h) override;
     virtual void BindToText(QGraphicsScene* qgs) override;
+    virtual int GetType() override;
     ~Diamond();
 };
 

@@ -90,3 +90,8 @@ void Rectangle::BindToText(QGraphicsScene* qgs)
     content->putup_text(qgs);
     content->build_text();
 }
+
+int Rectangle::GetType()
+{
+    return 1;
+}
