@@ -13,8 +13,11 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     auto selectedAction = menu.exec(event->screenPos());
     if (selectedAction == deleteAction)
     {
-        auto action = new ChangeElementAction(node, ElementShape::Rectangle, false);
-        action->Do();
+        foreach (auto node, *MainWindow::instance()->selectedNodes())
+        {
+            auto action = new ChangeElementAction(node, ElementShape::Rectangle, false);
+            action->Do();
+        }
     }
 }
 

@@ -97,5 +97,5 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void NodeItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-
+    NodeEvents::contextMenuEvent(node, event);
 }
