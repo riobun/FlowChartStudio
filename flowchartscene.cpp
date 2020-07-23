@@ -67,11 +67,12 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 addItem(line);
             }
         }
-        window->setNextAddedShape(ElementShape::Unknown);
         if (shape == ElementShape::Arrow)
         {
+            window->setNextAddedShape(ElementShape::Unknown);
             return;
         }
+        window->setNextAddedShape(ElementShape::Unknown);
     }
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted())

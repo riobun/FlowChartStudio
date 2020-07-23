@@ -21,7 +21,7 @@ void Diamond::Paint(QGraphicsScene* qgs)
     polygon<<QPointF(location.x()+width/2,location.y())<<QPointF(location.x(),location.y()+height/2);
     shape->setPolygon(polygon);
     shape->setVisible(true);
-    shape->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+    shape->setFlags(QGraphicsItem::ItemIsSelectable);
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
     qgs->addItem(shape);    

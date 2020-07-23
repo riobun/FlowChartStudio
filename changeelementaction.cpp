@@ -32,6 +32,7 @@ void ChangeElementAction::Do()
             node->SetBackgroundColor(window->fillColor);
             auto item = node->getNodeItem();
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
+            connect(item, &NodeItem::NewLocation, this, &ChangeElementAction::onNodeMoved);
             node->Paint(scene);
             MainWindow::instance()->graph->addNode(node);
         }
@@ -58,5 +59,9 @@ void ChangeElementAction::onNodeSelected(Node* node, bool isSelected)
     {
         selectedNodes->remove(node->GetID());
     }
-    auto num = MainWindow::instance()->selectedNodes()->size();
+}
+
+void ChangeElementAction::onNodeMoved(Node* node, QPointF oldPosition)
+{
+
 }

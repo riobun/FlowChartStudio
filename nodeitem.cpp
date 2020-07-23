@@ -19,7 +19,10 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
         else
         {
-            //node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+            foreach (auto node, *MainWindow::instance()->selectedNodes())
+            {
+                node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+            }
             QGraphicsItem::mouseMoveEvent(event);
         }
     }
@@ -72,14 +75,17 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
             else
             {
-                emit NewLocation(node,lastLocation);
+                foreach (auto node, *MainWindow::instance()->selectedNodes())
+                {
+                    emit node->getNodeItem()->NewLocation(node,lastLocation);
+                }
             }
         }
     }
-    if (lastLocation != event->scenePos())
+/*    if (lastLocation != event->scenePos())
     {
         emit NewLocation(node,lastLocation);
-    }
+    }*/
     isMoved=false;
     isFocus=false;
     isResized=false;
