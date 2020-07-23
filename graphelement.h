@@ -10,8 +10,7 @@
 //public:
 //    GraphElement();
 //};
-extern int k1[100][2];//图形的ID池
-extern int k2[100][2];//流程图的ID池
+
 class GraphElement //图形元素
 {
       public:
@@ -27,8 +26,8 @@ class GraphElement //图形元素
           //创建一个位示图，表示流程图编号分配，每次合并就往编号小的合，然后大的置0，删除图形元素时，判定是否他单独构成一个流程图，如果是就之0
           Text* content=nullptr; //文本内容
           void setId();
-          static  int   xy[50][50];
+
 private:
-          static int maxid;
+//          static int maxid;
 };
 #endif // GRAPHELEMENT_H
