@@ -82,6 +82,7 @@ void Rectangle::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
     qgs->removeItem(shape);
     if(content) content->delete_text(qgs);
+
 }
 
 void Rectangle::BindToText(QGraphicsScene* qgs)

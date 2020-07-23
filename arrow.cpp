@@ -247,18 +247,40 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->setPen(QPen(myColor, asize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->setBrush(myColor);
     painter->drawPolygon(arrowHead);
-//    if (isSelected()) {
-//        painter->setPen(QPen(myColor,1, Qt::DashLine));
-//        QLineF myLine = line();
-//        myLine.translate(0, 4.0);
-//        myLine.translate(0, 12.0);
-//        //线向上移动
-//        painter->drawLine(myLine);
-//        myLine.translate(0,-8.0);
-//        myLine.translate(0, -24.0);
-//        //线向下移动
-//        painter->drawLine(myLine);
- //   }
+    if (isSelected()) {
+                QBrush* brush=new QBrush();
+                painter->setBrush(*brush);
+                painter->setPen(QPen(myColor,1, Qt::DashLine));
+                QPainterPath myPath = path();
+                if((myEndItem->pos().x()<myStartItem->pos().x()&&myEndItem->pos().y()<myStartItem->pos().y())||(myEndItem->pos().x()>myStartItem->pos().x()&&myEndItem->pos().y()>myStartItem->pos().y())){
+        //        myPath.translate(0, 4.0);
+                myPath.translate(12.0, -12.0);
+                //线向上移动
+                painter->drawPath(myPath);
+        //        myPath.translate(0,-8.0);
+                myPath.translate(-24.0, 24.0);
+                //线向下移动
+                painter->drawPath(myPath);
+                }else if((myEndItem->pos().x()>myStartItem->pos().x()&&myEndItem->pos().y()<myStartItem->pos().y())||(myEndItem->pos().x()<myStartItem->pos().x()&&myEndItem->pos().y()>myStartItem->pos().y())){
+                    //        myPath.translate(0, 4.0);
+                            myPath.translate(-12.0, -12.0);
+                            //线向上移动
+                            painter->drawPath(myPath);
+                    //        myPath.translate(0,-8.0);
+                            myPath.translate(24.0, 24.0);
+                            //线向下移动
+                            painter->drawPath(myPath);
+                }else{
+                    //        myPath.translate(0, 4.0);
+                            myPath.translate(12.0, -12.0);
+                            //线向上移动
+                            painter->drawPath(myPath);
+                    //        myPath.translate(0,-8.0);
+                            myPath.translate(-24.0, 24.0);
+                            //线向下移动
+                            painter->drawPath(myPath);
+                }
+            }
 }
 
 //void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){
@@ -278,11 +300,12 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 //    return value;
 //}
 
-//void Arrow::removeArrow()
-//{
-//    endItem()->removeArrow(this);
-//    startItem()->removeArrow(this);
-//}
+void Arrow::removeArrow()
+{
+    endItem()->RemoveAsDestination(this);
+    startItem()->RemoveAsSource(this);
+    delete this;
+}
 //! [1]
 
 //! [2]

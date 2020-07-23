@@ -133,4 +133,9 @@ int NodeItem::GetWidth(){
 int NodeItem::GetHeight(){
     return node->GetHeight();
 }
-
+void NodeItem::RemoveAsSource(Arrow* ar){
+    node->DisconnectAsSource(ar);
+}
+void NodeItem::RemoveAsDestination(Arrow* ar){
+    node->DisconnectAsSource(ar);
+}
