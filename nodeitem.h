@@ -12,6 +12,7 @@ Q_OBJECT
 public:
     explicit NodeItem(QObject *parent = nullptr):QObject(parent) {};
     NodeItem(Node* node):node(node){};
+    Node* getNode(){return node;}
     void SetSelected(bool b)
     {
         isSelected=b;
@@ -25,6 +26,11 @@ public:
         }
         setSelected(b);
     }
+
+    QPolygonF polygon() const;
+    QPointF pos();
+    int GetWidth();
+    int GetHeight();
 signals:
     void Selected(Node* n,bool b);
     void NewLocation(Node* n,QPointF oldLoc);
@@ -47,6 +53,7 @@ private:
     double lastWidth,lastHeight;
     QPointF lastLocation;
     Node* node=nullptr;
+    int mytype=1;
 };
 
 #endif // NODEITEM_H

@@ -31,7 +31,10 @@ public:
     void DisconnectAsDestination(Arrow* ar);
     virtual void Remove(QGraphicsScene* qgs)=0;
     virtual ~Node();
+
+
     NodeItem* getNodeItem() const { return shape; }
+
 protected:
     QPointF location=QPointF(0.0,0.0);//表示图形中心位置
     double width,height;

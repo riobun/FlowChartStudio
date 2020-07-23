@@ -3,6 +3,7 @@
 #include "node.h"
 #include "QKeyEvent"
 #include "QDebug"
+#include "rectangle.h"
 #include <cmath>
 #include "mainwindow.h"
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -43,7 +44,6 @@ void NodeItem::keyReleaseEvent(QKeyEvent *event)
 
 
 }
-
 
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -105,3 +105,30 @@ void NodeItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     NodeEvents::contextMenuEvent(node, event);
 }
+
+
+QPolygonF NodeItem::polygon() const{
+    QPolygonF qpf;
+    int w=node->GetWidth();
+    int h=node->GetHeight();
+    Rectangle* ractangle = dynamic_cast<Rectangle*>(node);
+    if(ractangle!=nullptr){//表示矩形
+        qpf<<QPointF(-w/2,-h/2)<<QPointF(w/2,-h/2)<<QPointF(w/2,h/2)<<QPointF(-w/2,h/2)<<QPointF(w/2,h/2);
+    }
+    else{//2表示菱形
+        qpf<<QPointF(-w/2,0)<<QPointF(0,h/2)<<QPointF(w/2,0)<<QPointF(0,-h/2)<<QPointF(-w/2,0);
+    }
+    return qpf;
+}
+
+QPointF NodeItem::pos() {
+
+    return node->GetLocation();
+}
+int NodeItem::GetWidth(){
+    return node->GetWidth();
+}
+int NodeItem::GetHeight(){
+    return node->GetHeight();
+}
+
