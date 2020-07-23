@@ -28,5 +28,7 @@ class GraphElement //图形元素
           Text* content=nullptr; //文本内容
           void setId();
           static  int   xy[50][50];
+private:
+          static int maxid;
 };
 #endif // GRAPHELEMENT_H

@@ -4,6 +4,7 @@
 #include "QKeyEvent"
 #include "QDebug"
 #include <cmath>
+#include "mainwindow.h"
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(isFocus)
@@ -42,7 +43,7 @@ void NodeItem::keyReleaseEvent(QKeyEvent *event)
 
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    SetSelected(true);
+//    SetSelected(true);
     if(event->button()==Qt::MouseButton::LeftButton)
     {
         isFocus=true;
@@ -76,6 +77,18 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     isMoved=false;
     isFocus=false;
     isResized=false;
+}
+
+QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemSelectedHasChanged)
+    {
+        SetSelected(QGraphicsItem::isSelected());
+        emit Selected(node, QGraphicsItem::isSelected());
+        auto num = MainWindow::instance()->selectedNodes()->size();
+        auto a = num;
+    }
+    return value;
 }
 
 void NodeItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

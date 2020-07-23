@@ -23,7 +23,6 @@ public:
         {
             setZValue(1);
         }
-        emit Selected(node,b);
     }
 signals:
     void Selected(Node* n,bool b);
@@ -37,6 +36,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
     bool isSelected=false;

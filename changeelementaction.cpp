@@ -54,4 +54,5 @@ void ChangeElementAction::onNodeSelected(Node* node, bool isSelected)
     {
         selectedNodes->remove(node->GetID());
     }
+    auto num = MainWindow::instance()->selectedNodes()->size();
 }

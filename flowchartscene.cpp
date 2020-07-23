@@ -65,14 +65,6 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    // 取消已经选中的节点。
-    if (!isCtrlDown && keyDownPosition == event->scenePos())
-    {
-        foreach (auto node, *MainWindow::instance()->selectedNodes())
-        {
-            node->getNodeItem()->SetSelected(false);
-        }
-    }
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
     {
@@ -80,4 +72,5 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         rect->Remove(this);
         rect = nullptr;
     }
+    auto num = MainWindow::instance()->selectedNodes()->size();
 }
