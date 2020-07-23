@@ -113,7 +113,7 @@ QPolygonF NodeItem::polygon() const{
     int h=node->GetHeight();
     Rectangle* ractangle = dynamic_cast<Rectangle*>(node);
     if(ractangle!=nullptr){//表示矩形
-        qpf<<QPointF(-w/2,-h/2)<<QPointF(w/2,-h/2)<<QPointF(w/2,h/2)<<QPointF(-w/2,h/2)<<QPointF(w/2,h/2);
+        qpf<<QPointF(-w/2,-h/2)<<QPointF(w/2,-h/2)<<QPointF(w/2,h/2)<<QPointF(-w/2,h/2)<<QPointF(-w/2,-h/2);
     }
     else{//2表示菱形
         qpf<<QPointF(-w/2,0)<<QPointF(0,h/2)<<QPointF(w/2,0)<<QPointF(0,-h/2)<<QPointF(-w/2,0);
