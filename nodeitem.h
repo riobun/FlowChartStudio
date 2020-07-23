@@ -10,7 +10,7 @@ class NodeItem:public QObject,public QGraphicsPolygonItem
 {
 Q_OBJECT
 public:
-    explicit NodeItem(QObject *parent = nullptr):QObject(parent){};
+    explicit NodeItem(QObject *parent = nullptr):QObject(parent) {};
     NodeItem(Node* node):node(node){};
     void SetSelected(bool b)
     {
@@ -37,6 +37,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+
 private:
     bool isSelected=false;
     bool isFocus=false;

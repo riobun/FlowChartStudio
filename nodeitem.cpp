@@ -42,33 +42,34 @@ void NodeItem::keyReleaseEvent(QKeyEvent *event)
 
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-     SetSelected(true);
-     if(event->button()==Qt::MouseButton::LeftButton)
-     {
-         isFocus=true;
-         lastWidth=node->GetWidth();
-         lastHeight=node->GetHeight();
-         lastLocation=node->GetLocation();
-         if(event->modifiers()==Qt::ShiftModifier)
-         {
-             isResized=true;
-         }
+    SetSelected(true);
+    if(event->button()==Qt::MouseButton::LeftButton)
+    {
+        isFocus=true;
+        lastWidth=node->GetWidth();
+        lastHeight=node->GetHeight();
+        lastLocation=node->GetLocation();
+        if(event->modifiers()==Qt::ShiftModifier)
+        {
+            isResized=true;
+        }
     }
 }
 
 void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    QGraphicsItem::mouseReleaseEvent(event);
     if(isFocus)
     {
         if(isMoved)
         {
             if(isResized)
             {
-                 emit NewSize(node,lastWidth,lastHeight);
+                emit NewSize(node,lastWidth,lastHeight);
             }
             else
             {
-                 emit NewLocation(node,lastLocation);
+                emit NewLocation(node,lastLocation);
             }
         }
     }
