@@ -28,8 +28,7 @@ public:
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { undoStack.append(action); }
     void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
-
-    QVector<Node*> selectedNodes;
+    QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
 
 public slots:
     void Undo();
@@ -75,7 +74,8 @@ private:
 
     ElementShape _nextAddedShape;
     int _selectedId;
-    QVector<Action*> undoStack;
-    QVector<Action*> redoStack;
+    QList<Action*> undoStack;
+    QList<Action*> redoStack;
+    QMap<int, Node*> _selectedNodes;
 };
 #endif // MAINWINDOW_H

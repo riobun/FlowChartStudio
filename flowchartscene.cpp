@@ -1,6 +1,10 @@
 #include "flowchartscene.h"
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 #include <QDebug>
+#include <QMapIterator>
+#include "mainwindow.h"
+#include "node.h"
 
 FlowChartScene::FlowChartScene()
 {
@@ -9,7 +13,18 @@ FlowChartScene::FlowChartScene()
 
 void FlowChartScene::keyPressEvent(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Control)
+    {
+        isCtrlDown = true;
+    }
+}
 
+void FlowChartScene::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Control)
+    {
+        isCtrlDown = false;
+    }
 }
 
 void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -24,6 +39,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             rect->Paint(this);
         }
     }
+    keyDownPosition = event->scenePos();
 }
 
 void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -36,15 +52,11 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (size.rx() < 0)
         {
             size.rx() = -size.rx();
-            //position.rx() -= event->scenePos().rx() / 2;
         }
-        //else position.rx() -= selectLeftTop.rx() / 2;
         if (size.ry() < 0)
         {
             size.ry() = -size.ry();
-            //position.ry() -= event->scenePos().ry() / 2;
         }
-        //else position.ry() -= selectLeftTop.ry() / 2;
         rect->SetWidth(size.rx());
         rect->SetHeight(size.ry());
         rect->SetLocation(position);
@@ -53,6 +65,14 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    // 取消已经选中的节点。
+    if (!isCtrlDown && keyDownPosition == event->scenePos())
+    {
+        foreach (auto node, *MainWindow::instance()->selectedNodes())
+        {
+            node->getNodeItem()->SetSelected(false);
+        }
+    }
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
     {
