@@ -529,16 +529,28 @@
    </property>
   </action>
   <action name="action_arrow1">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/normalline.png</normaloff>:/images/normalline.png</iconset>
+   </property>
    <property name="text">
     <string>实线</string>
    </property>
   </action>
   <action name="action_arrow2">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/dashline.png</normaloff>:/images/dashline.png</iconset>
+   </property>
    <property name="text">
     <string>虚线</string>
    </property>
   </action>
   <action name="actiondain">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/dotline.png</normaloff>:/images/dotline.png</iconset>
+   </property>
    <property name="text">
     <string>点线</string>
    </property>
