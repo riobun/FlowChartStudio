@@ -9,27 +9,24 @@ class Graph:public GraphElement
 {
 public:
     Graph(){}
-    void resizeGraph(){} //调整图形在屏幕上的布局
-    void MoveSubGraph(){}//移动子图
-    void FoldSubGraph(){}//折叠
-    void unFoldSubGraph(){}  //展开
-    void DeleteSubGraph(){}  //删除子图，当前子图下所有节点归为父节点
-    void addNode(Node* node)
-    {
-        nodes.insert(node->GetID(), node);
-    }
-    void removeNode(Node* node)
-    {
-        nodes.remove(node->GetID());
-    }
+    //调用下面这个函数来定义子图，传入要生成子图的节点们
+    Graph(QVector<Node*> v_Node, QVector<Text*> v_Text, QVector<Graph*> v_Graph);
+    void resizeGraph(); //调整图形在屏幕上的布局
+    void MoveSubGraph();//移动子图
+    void FoldSubGraph();//折叠
+    void unFoldSubGraph();  //展开
+    void DeleteSubGraph();  //删除子图，当前子图下所有节点归为父节点
+
+    void addNode(Node* node);
+    void removeNode(Node* node);
     Node* searchNode(QPointF point);
     QVector<Node*> searchNodes(Node* node);
 
     void BindToText(QGraphicsScene *qgs) override {}
 private:
+    void SetVisibility(bool set);
     bool isExpended;
     Node* subGraphNode;
-    //Node& subGraphNode;
     QMap<int, Node*> nodes;
     QMap<int, Arrow*> Arrows;
     QMap<int, Text*> texts;
