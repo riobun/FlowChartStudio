@@ -27,7 +27,7 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
         {
             nodes.append(node);
         }
-        new Graph(nodes, QVector<Text*>(), QVector<Arrow*>());
+        new Graph(nodes, QVector<Text*>(), QVector<Graph*>());
     }
 }
 
