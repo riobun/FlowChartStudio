@@ -15,7 +15,8 @@
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-    setTextInteractionFlags(Qt::TextEditable);
+    content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    //setTextInteractionFlags(Qt::TextEditable);
 }
 /*Text::Text(QPointF position1, QPointF position2,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {//两个鼠标位置表示对角线两个顶点
     location = (position1 + position2) / 2;
@@ -253,8 +254,20 @@ int Text::type() const
  }
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
     if(textInteractionFlags()==Qt::NoTextInteraction){
-        setTextInteractionFlags(Qt::TextEditorInteraction);
-        content=Qt::TextEditorInteraction;
+       // setTextInteractionFlags(Qt::TextEditorInteraction);
+        QString dlgTitle="文本框对话框";
+        QString txtLable="请输入文本框中的文字";
+        QString defaultInput =content;
+        QLineEdit ::EchoMode echoMode=QLineEdit::Normal;
+        bool ok=false;
+        QString t=QInputDialog::getText(NULL,dlgTitle,txtLable,echoMode,defaultInput,&ok);
+        if(ok&&!t.isEmpty()){
+            change_content(t);
+        }
+
+
+
+
     }
     QGraphicsTextItem::mouseDoubleClickEvent(event);
 
