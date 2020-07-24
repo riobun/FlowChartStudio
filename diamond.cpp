@@ -21,7 +21,7 @@ void Diamond::Paint(QGraphicsScene* qgs)
     polygon<<QPointF(location.x()+width/2,location.y())<<QPointF(location.x(),location.y()+height/2);
     shape->setPolygon(polygon);
     shape->setVisible(true);
-    shape->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+    shape->setFlags(QGraphicsItem::ItemIsSelectable);
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
     qgs->addItem(shape);    
@@ -86,7 +86,7 @@ void Diamond::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 
 void Diamond::BindToText(QGraphicsScene* qgs)
 {
-    content=new Text(location,width/2,height/2);
+    content=new Text(location);
     content->putup_text(qgs);
     content->build_text();
 }

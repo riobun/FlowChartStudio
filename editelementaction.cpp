@@ -46,7 +46,7 @@ void EditElementAction::Do()
           else if (property == ElementProperty::Size)
           {
               auto toSize=static_cast<QSizeF*>(to);
-              text->resize_text(toSize->rwidth(),toSize->rheight());
+              //text->resize_text(toSize->rwidth(),toSize->rheight());
 
           }
           else if (property == ElementProperty:: FontColor)

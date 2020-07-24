@@ -8,6 +8,7 @@
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
+#include "graph.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -31,6 +32,9 @@ public:
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
 
     QColor bdColor = Qt::black;
+    QColor fillColor = Qt::white;
+    QColor lineColor = Qt::black;
+    Graph* graph = new Graph;
 
 public slots:
     void Undo();
@@ -55,6 +59,11 @@ private slots:
     void on_addTextButton_clicked();
 
 private:
+    void clickbdBtn();
+    void clickFillBtn();
+    void clickLineBtn();
+
+private:
     Ui::MainWindow *ui;
 
     static MainWindow* _instance;
@@ -75,7 +84,6 @@ private:
     QToolButton* fillColorToolBtn;
 
     ElementShape _nextAddedShape;
-    int _selectedId;
     QList<Action*> undoStack;
     QList<Action*> redoStack;
     QMap<int, Node*> _selectedNodes;

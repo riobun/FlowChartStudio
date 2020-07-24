@@ -6,13 +6,13 @@
 #include <QPen>
 #include <QtMath>
 #include<QMouseEvent>
-class Node;
+class NodeItem;
 class Arrow: public QGraphicsPathItem,public GraphElement
 {
 public:
     enum { Type = UserType + 4 };
 
-    Arrow(Node *startItem, Node *endItem,
+    Arrow(NodeItem *startItem, NodeItem *endItem,
           QGraphicsItem *parent = nullptr);
 
     int type() const override { return Type; }
@@ -23,11 +23,11 @@ public:
     void setSize(int size);
     void setId(int size);
     void setList();
-    QPolygonF polygon();
-    Node *startItem() const { return myStartItem; }
-    Node *endItem() const { return myEndItem; }
-
+    NodeItem *startItem() const { return myStartItem; }
+    NodeItem *endItem() const { return myEndItem; }
+    void removeArrow();
     void updatePosition();
+    virtual void BindToText(QGraphicsScene* qgs) override;
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -36,8 +36,8 @@ protected:
 
 
 private:
-    Node *myStartItem;
-    Node *myEndItem;
+    NodeItem *myStartItem;
+    NodeItem *myEndItem;
     QPolygonF arrowHead;
     QList<QLineF> lines;
     QColor myColor = Qt::black;

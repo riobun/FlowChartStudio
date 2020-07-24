@@ -20,10 +20,11 @@ SOURCES += \
     action.cpp \
     arrow.cpp \
     changeelementaction.cpp \
+    commands.cpp \
     diamond.cpp \
     editelementaction.cpp \
     flowchartscene.cpp \
-    flowchartview.cpp \
+    graph.cpp \
     graphelement.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -37,12 +38,12 @@ HEADERS += \
     action.h \
     arrow.h \
     changeelementaction.h \
+    commands.h \
     diamond.h \
     editelementaction.h \
     elementProperty.h \
     elementshape.h \
     flowchartscene.h \
-    flowchartview.h \
     graph.h \
     graphelement.h \
     idpool.h \

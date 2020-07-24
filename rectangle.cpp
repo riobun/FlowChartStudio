@@ -20,7 +20,7 @@ void Rectangle::Paint(QGraphicsScene* qgs)
     polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
     shape->setPolygon(polygon);
     shape->setVisible(true);
-    shape->setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+    shape->setFlags(QGraphicsItem::ItemIsSelectable);
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
     qgs->addItem(shape);
@@ -82,11 +82,12 @@ void Rectangle::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
     qgs->removeItem(shape);
     if(content) content->delete_text(qgs);
+
 }
 
 void Rectangle::BindToText(QGraphicsScene* qgs)
 {
-    content=new Text(location,width,height);
+    content=new Text(location);
     content->putup_text(qgs);
     content->build_text();
 }

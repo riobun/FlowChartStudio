@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent)
     fillAction = fillColorToolBtn->menu()->defaultAction();
     fillColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/floodfill.png", Qt::white));
+    connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
+
     ui->toolBar->addWidget(fillColorToolBtn);
 
     //边框颜色
@@ -77,15 +79,17 @@ MainWindow::MainWindow(QWidget *parent)
     bdAction = bdColorToolBtn->menu()->defaultAction();
     bdColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/bdcolor.png", Qt::black));
+    connect(bdColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickbdBtn);
     ui->toolBar->addWidget(bdColorToolBtn);
 
     //箭头颜色
     arrowColorToolBtn = new QToolButton(this);
     arrowColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    arrowColorToolBtn->setMenu(createColorMenu(SLOT(bdColorChanged()), Qt::black));
+    arrowColorToolBtn->setMenu(createColorMenu(SLOT(arrowColorChanged()), Qt::black));
     arrowColorAction = arrowColorToolBtn->menu()->defaultAction();
     arrowColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/arrowcolor.png", Qt::black));
+    connect(arrowColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickLineBtn);
     ui->toolBar->addWidget(arrowColorToolBtn);
 
     ui->toolBar->addSeparator();
@@ -208,6 +212,12 @@ void MainWindow::itemColorChanged()
                                      ":/images/floodfill.png",
                                      qvariant_cast<QColor>(fillAction->data())));
     fillButtonTriggered();
+    auto color = qvariant_cast<QColor>(fillAction->data());
+    fillColor = color;
+    if (selectedNodes()->size() > 0)
+    {
+        clickFillBtn();
+    }
 }
 
 void MainWindow::fillButtonTriggered()
@@ -222,17 +232,11 @@ void MainWindow::bdColorChanged()
                                      ":/images/bdcolor.png",
                                      qvariant_cast<QColor>(bdAction->data())));
     bdButtonTriggered();
-    auto color = QColor::fromRgba(bdAction->data().toUInt());
+    auto color = qvariant_cast<QColor>(bdAction->data());
+    bdColor = color;
     if (selectedNodes()->size() > 0)
     {
-        foreach (auto node, *selectedNodes())
-        {
-            node->SetFrameColor(color);
-        }
-    }
-    else
-    {
-        bdColor = color;
+        clickbdBtn();
     }
 }
 
@@ -248,6 +252,7 @@ void MainWindow::arrowColorChanged()
                                      ":/images/arrowcolor.png",
                                      qvariant_cast<QColor>(arrowColorAction->data())));
     arrowColorButtonTriggered();
+    lineColor = qvariant_cast<QColor>(arrowColorAction->data());
 }
 
 void MainWindow::arrowColorButtonTriggered()
@@ -296,4 +301,25 @@ void MainWindow::Redo()
         action->Do();
         undoStack.append(action);
     }
+}
+
+void MainWindow::clickbdBtn()
+{
+    foreach (auto node, *selectedNodes())
+    {
+        node->SetFrameColor(bdColor);
+    }
+}
+
+void MainWindow::clickFillBtn()
+{
+    foreach (auto node, *selectedNodes())
+    {
+        node->SetBackgroundColor(fillColor);
+    }
+}
+
+void MainWindow::clickLineBtn()
+{
+
 }

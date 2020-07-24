@@ -5,22 +5,23 @@
 #include <QtMath>
 #include<QMouseEvent>
 #include"idpool.h"
-extern int k1[100][2];
-extern int k2[100][2];
-int GraphElement::maxid = 0;
-//extern int k1=0;
-//int GraphElement::xy[50][50]={0};
+
+//int GraphElement::maxid = 0;
+
 
 
 GraphElement::GraphElement()
 {
-    Id = ++maxid;
+//    Id = ++maxid;
+     this->setId();
 }
 void GraphElement::setId(){
-    for(int i=0;i<100;i++){
-        if(k1[i][1]==0){
+    for(int i=0;i<200;i++){
+        if(k1[i]==0){
             this->Id=i+1;
-            k1[i][1]=0;
+            k1[i]=1;
+            break;
+            //为0的时候表示ID未被占用，为1的时候表示已经被占用
         }
     }
 }

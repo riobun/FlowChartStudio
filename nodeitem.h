@@ -2,6 +2,7 @@
 #define NODEITEM_H
 #include"QGraphicsItem"
 class Node;
+class Arrow;
 /*
  鼠标左键按住拖动
  shift+鼠标左键按住调整大小
@@ -12,6 +13,7 @@ Q_OBJECT
 public:
     explicit NodeItem(QObject *parent = nullptr):QObject(parent) {};
     NodeItem(Node* node):node(node){};
+    Node* GetNode() {return node;}
     void SetSelected(bool b)
     {
         isSelected=b;
@@ -23,7 +25,15 @@ public:
         {
             setZValue(1);
         }
+        setSelected(b);
     }
+
+    QPolygonF polygon() const;
+    QPointF pos();
+    int GetWidth();
+    int GetHeight();
+    void RemoveAsSource(Arrow* ar);
+    void RemoveAsDestination(Arrow* ar);
 signals:
     void Selected(Node* n,bool b);
     void NewLocation(Node* n,QPointF oldLoc);
@@ -46,6 +56,7 @@ private:
     double lastWidth,lastHeight;
     QPointF lastLocation;
     Node* node=nullptr;
+    int mytype=1;
 };
 
 #endif // NODEITEM_H

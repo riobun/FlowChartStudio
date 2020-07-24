@@ -14,7 +14,7 @@
    <string>FlowChartStudio</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="FlowChartView" name="graphicsView">
+   <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -259,7 +259,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -503,13 +503,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>FlowChartView</class>
-   <extends>QGraphicsView</extends>
-   <header>flowchartview.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

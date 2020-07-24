@@ -17,6 +17,7 @@ public:
     void Undo() override;
 private slots:
     void onNodeSelected(Node* node, bool isSelected);
+    void onNodeMoved(Node* node, QPointF oldPosition);
 private:
     bool isCreated;
     ElementShape shape;

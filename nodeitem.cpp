@@ -3,6 +3,7 @@
 #include "node.h"
 #include "QKeyEvent"
 #include "QDebug"
+#include "rectangle.h"
 #include <cmath>
 #include "mainwindow.h"
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -19,7 +20,10 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
         else
         {
-            //node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+            foreach (auto node, *MainWindow::instance()->selectedNodes())
+            {
+                node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+            }
             QGraphicsItem::mouseMoveEvent(event);
         }
     }
@@ -40,7 +44,6 @@ void NodeItem::keyReleaseEvent(QKeyEvent *event)
 
 
 }
-
 
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -72,14 +75,17 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
             else
             {
-                emit NewLocation(node,lastLocation);
+                foreach (auto node, *MainWindow::instance()->selectedNodes())
+                {
+                    emit node->getNodeItem()->NewLocation(node,lastLocation);
+                }
             }
         }
     }
-    if (lastLocation != event->scenePos())
+/*    if (lastLocation != event->scenePos())
     {
         emit NewLocation(node,lastLocation);
-    }
+    }*/
     isMoved=false;
     isFocus=false;
     isResized=false;
@@ -97,5 +103,39 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void NodeItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+    NodeEvents::contextMenuEvent(node, event);
+}
 
+
+QPolygonF NodeItem::polygon() const{
+    QPolygonF qpf;
+    int w=node->GetWidth();
+    int h=node->GetHeight();
+    Rectangle* ractangle = dynamic_cast<Rectangle*>(node);
+    if(ractangle!=nullptr){//表示矩形
+        qpf<<QPointF(-w/2,-h/2)<<QPointF(w/2,-h/2)<<QPointF(w/2,h/2)<<QPointF(-w/2,h/2)<<QPointF(-w/2,-h/2);
+    }
+    else{//2表示菱形
+        qpf<<QPointF(-w/2,0)<<QPointF(0,h/2)<<QPointF(w/2,0)<<QPointF(0,-h/2)<<QPointF(-w/2,0);
+    }
+    return qpf;
+
+
+}
+
+QPointF NodeItem::pos() {
+
+    return node->GetLocation();
+}
+int NodeItem::GetWidth(){
+    return node->GetWidth();
+}
+int NodeItem::GetHeight(){
+    return node->GetHeight();
+}
+void NodeItem::RemoveAsSource(Arrow* ar){
+    node->DisconnectAsSource(ar);
+}
+void NodeItem::RemoveAsDestination(Arrow* ar){
+    node->DisconnectAsSource(ar);
 }
