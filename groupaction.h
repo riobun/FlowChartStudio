@@ -11,7 +11,7 @@ class GroupAction : public Action
     Q_OBJECT
 
 public:
-    GroupAction& operator<<(Action* action) { actions.append(action); }
+    GroupAction& operator<<(Action* action);
 
     void Do() override;
     void Undo() override;

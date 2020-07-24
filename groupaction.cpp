@@ -1,5 +1,14 @@
 #include "groupaction.h"
+#include "mainwindow.h"
 
+
+GroupAction& GroupAction::operator<<(Action* action)
+{
+    auto window = MainWindow::instance();
+    window->Discard(action);
+    actions.append(action);
+    return *this;
+}
 
 void GroupAction::Do()
 {
@@ -11,7 +20,7 @@ void GroupAction::Do()
 
 void GroupAction::Undo()
 {
-    for (auto i = actions.size(); i >= 0; i--)
+    for (auto i = actions.size() - 1; i >= 0; i--)
     {
         actions[i]->Undo();
     }
