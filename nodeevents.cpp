@@ -10,7 +10,7 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
-    auto subGraphAction = menu.addAction("合成子图");
+    auto subGraphAction = menu.addAction("生成子图");
     auto selectedAction = menu.exec(event->screenPos());
     if (selectedAction == deleteAction)
     {
@@ -27,7 +27,9 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
         {
             nodes.append(node);
         }
-        new Graph(nodes, QVector<Text*>(), QVector<Graph*>());
+        QVector<Text*> texts;
+        QVector<Graph*> graphs;
+        new Graph(nodes, texts, graphs);
     }
 }
 

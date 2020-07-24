@@ -10,7 +10,7 @@ class Graph:public GraphElement
 public:
     Graph(){}
     //调用下面这个函数来定义子图，传入要生成子图的节点们
-    Graph(QVector<Node*> v_Node, QVector<Text*> v_Text, QVector<Graph*> v_Graph);
+    Graph(QVector<Node*>& v_Node, QVector<Text*>& v_Text, QVector<Graph*>& v_Graph);
     void resizeGraph(); //调整图形在屏幕上的布局
     void MoveSubGraph();//移动子图
     void FoldSubGraph();//折叠

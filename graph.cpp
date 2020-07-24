@@ -1,6 +1,6 @@
 #include "graph.h"
 
-Graph::Graph(QVector<Node*> v_Node, QVector<Text*> v_Text, QVector<Graph*> v_Graph){
+Graph::Graph(QVector<Node*>& v_Node, QVector<Text*>& v_Text, QVector<Graph*>& v_Graph){
 
 }
 
