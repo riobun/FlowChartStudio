@@ -20,7 +20,6 @@ SOURCES += \
     action.cpp \
     arrow.cpp \
     changeelementaction.cpp \
-    commands.cpp \
     diamond.cpp \
     editelementaction.cpp \
     flowchartscene.cpp \
@@ -38,7 +37,6 @@ HEADERS += \
     action.h \
     arrow.h \
     changeelementaction.h \
-    commands.h \
     diamond.h \
     editelementaction.h \
     elementProperty.h \
