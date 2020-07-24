@@ -11,6 +11,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "flowchartscene.h"
+#include "editelementaction.h"
+#include "groupaction.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -305,18 +307,28 @@ void MainWindow::Redo()
 
 void MainWindow::clickbdBtn()
 {
+    auto action = new GroupAction;
     foreach (auto node, *selectedNodes())
     {
-        node->SetFrameColor(bdColor);
+        *action << new EditElementAction(node, ElementShape::Rectangle,
+                                         ElementProperty::FrameColor,
+                                         new QColor(node->GetFrameColor()),
+                                         new QColor(bdColor));
     }
+    action->Do();
 }
 
 void MainWindow::clickFillBtn()
 {
+    auto action = new GroupAction;
     foreach (auto node, *selectedNodes())
     {
-        node->SetBackgroundColor(fillColor);
+        *action << new EditElementAction(node, ElementShape::Rectangle,
+                                         ElementProperty::BackgroundColor,
+                                         new QColor(node->GetBackgroundColor()),
+                                         new QColor(fillColor));
     }
+    action->Do();
 }
 
 void MainWindow::clickLineBtn()

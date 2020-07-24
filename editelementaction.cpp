@@ -6,6 +6,42 @@
 EditElementAction::EditElementAction(void* element, ElementShape shape, ElementProperty property, void* from, void* to)
     : shape(shape), property(property), from(from), to(to), element(element) {}
 
+EditElementAction::~EditElementAction()
+{
+    if (property == ElementProperty::Font)
+    {
+        delete (QFont*)from;
+        delete (QFont*)to;
+    }
+    else if (property == ElementProperty::Size)
+    {
+        delete (QSizeF*)from;
+        delete (QSizeF*)to;
+    }
+    else if (property == ElementProperty::String)
+    {
+        delete (QString*)from;
+        delete (QString*)to;
+    }
+    else if (property == ElementProperty::Location)
+    {
+        delete (QPointF*)from;
+        delete (QPointF*)to;
+    }
+    else if (property == ElementProperty::FontColor ||
+             property == ElementProperty::FrameColor ||
+             property == ElementProperty::BackgroundColor)
+    {
+        delete (QColor*)from;
+        delete (QColor*)to;
+    }
+    else if (property == ElementProperty::Visibility)
+    {
+        delete (bool*)from;
+        delete (bool*)to;
+    }
+}
+
 void EditElementAction::Do()
 {
     if(shape == ElementShape::Rectangle || shape==ElementShape::Diamond)
