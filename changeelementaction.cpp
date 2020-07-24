@@ -39,6 +39,7 @@ void ChangeElementAction::Do()
         else
         {
             node->Remove(scene);
+            MainWindow::instance()->graph->removeNode(node);
         }
     }
 }

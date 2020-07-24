@@ -18,6 +18,10 @@ public:
     {
         nodes.insert(node->GetID(), node);
     }
+    void removeNode(Node* node)
+    {
+        nodes.remove(node->GetID());
+    }
     Node* searchNode(QPointF point);
     QVector<Node*> searchNodes(Node* node);
 
