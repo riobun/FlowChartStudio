@@ -40,5 +40,8 @@
         <file>images/font.png</file>
         <file>images/taxtcolor.png</file>
         <file>images/arrowtype.png</file>
+        <file>images/dashline.png</file>
+        <file>images/dotline.png</file>
+        <file>images/normalline.png</file>
     </qresource>
 </RCC>
