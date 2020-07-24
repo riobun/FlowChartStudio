@@ -2,12 +2,14 @@
 #include "text.h"
 #include "node.h"
 #include <QPointF>
+#include "mainwindow.h"
 
 EditElementAction::EditElementAction(void* element, ElementShape shape, ElementProperty property, void* from, void* to)
     : shape(shape), property(property), from(from), to(to), element(element) {}
 
 EditElementAction::~EditElementAction()
 {
+    if (!from) return;
     if (property == ElementProperty::Font)
     {
         delete (QFont*)from;
@@ -101,5 +103,5 @@ void EditElementAction::Do()
 
 void EditElementAction::Undo()
 {
-    EditElementAction(element, shape, property, to, from).Do();
+    EditElementAction(element, shape, property, nullptr, from).Do();
 }

@@ -6,6 +6,9 @@
 #include "rectangle.h"
 #include <cmath>
 #include "mainwindow.h"
+#include "groupaction.h"
+#include "editelementaction.h"
+
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(isFocus)
@@ -54,7 +57,11 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         isFocus=true;
         lastWidth=node->GetWidth();
         lastHeight=node->GetHeight();
-        lastLocation=node->GetLocation();
+        foreach (auto node, *MainWindow::instance()->selectedNodes())
+        {
+            auto item = node->getNodeItem();
+            item->lastLocation=node->GetLocation();
+        }
         if(event->modifiers()==Qt::ShiftModifier)
         {
             isResized=true;
@@ -75,9 +82,14 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
             else
             {
+                auto action = new GroupAction;
                 foreach (auto node, *MainWindow::instance()->selectedNodes())
                 {
-                    emit node->getNodeItem()->NewLocation(node,lastLocation);
+                    *action << new EditElementAction(node, ElementShape::Rectangle,
+                                                    ElementProperty::Location,
+                                                    new QPointF(node->getNodeItem()->lastLocation),
+                                                    new QPointF(node->GetLocation()));
+                    //emit node->getNodeItem()->NewLocation(node,lastLocation);
                 }
             }
         }
