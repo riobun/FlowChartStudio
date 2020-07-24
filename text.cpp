@@ -15,6 +15,7 @@
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+    setTextInteractionFlags(Qt::TextEditable);
 }
 /*Text::Text(QPointF position1, QPointF position2,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {//两个鼠标位置表示对角线两个顶点
     location = (position1 + position2) / 2;
@@ -251,8 +252,10 @@ int Text::type() const
      setPlainText(content);
  }
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
-    if(textInteractionFlags()==Qt::NoTextInteraction)
+    if(textInteractionFlags()==Qt::NoTextInteraction){
         setTextInteractionFlags(Qt::TextEditorInteraction);
+        content=Qt::TextEditorInteraction;
+    }
     QGraphicsTextItem::mouseDoubleClickEvent(event);
 
 }
