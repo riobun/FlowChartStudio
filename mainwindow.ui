@@ -300,6 +300,10 @@
      <property name="title">
       <string>箭头类型</string>
      </property>
+     <property name="icon">
+      <iconset resource="resources.qrc">
+       <normaloff>:/images/arrowtype.png</normaloff>:/images/arrowtype.png</iconset>
+     </property>
      <addaction name="action_arrow1"/>
      <addaction name="action_arrow2"/>
      <addaction name="actiondain"/>
@@ -394,6 +398,10 @@
    </property>
   </action>
   <action name="undoAction">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/undo.png</normaloff>:/images/undo.png</iconset>
+   </property>
    <property name="text">
     <string>撤回</string>
    </property>
@@ -402,6 +410,10 @@
    </property>
   </action>
   <action name="redoAction">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/redo1.png</normaloff>:/images/redo1.png</iconset>
+   </property>
    <property name="text">
     <string>重做</string>
    </property>
@@ -410,26 +422,46 @@
    </property>
   </action>
   <action name="action1_9">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/jianqie.png</normaloff>:/images/jianqie.png</iconset>
+   </property>
    <property name="text">
     <string>剪切</string>
    </property>
   </action>
   <action name="action1_10">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/copy1.png</normaloff>:/images/copy1.png</iconset>
+   </property>
    <property name="text">
     <string>复制</string>
    </property>
   </action>
   <action name="action1_11">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/paste1.png</normaloff>:/images/paste1.png</iconset>
+   </property>
    <property name="text">
     <string>粘贴</string>
    </property>
   </action>
   <action name="action1_12">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/move.png</normaloff>:/images/move.png</iconset>
+   </property>
    <property name="text">
     <string>移动</string>
    </property>
   </action>
   <action name="action1_13">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
+   </property>
    <property name="text">
     <string>删除</string>
    </property>
@@ -449,11 +481,19 @@
    </property>
   </action>
   <action name="action_font">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/font.png</normaloff>:/images/font.png</iconset>
+   </property>
    <property name="text">
     <string>文字样式</string>
    </property>
   </action>
   <action name="action_fontColor">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/taxtcolor.png</normaloff>:/images/taxtcolor.png</iconset>
+   </property>
    <property name="text">
     <string>文字颜色</string>
    </property>
@@ -462,16 +502,28 @@
    </property>
   </action>
   <action name="action_bgColor">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/bgcolor.png</normaloff>:/images/bgcolor.png</iconset>
+   </property>
    <property name="text">
     <string>背景颜色</string>
    </property>
   </action>
   <action name="action_bdColor">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/bdcolor.png</normaloff>:/images/bdcolor.png</iconset>
+   </property>
    <property name="text">
     <string>边框颜色</string>
    </property>
   </action>
   <action name="action_arrowColor">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/arrowcolor.png</normaloff>:/images/arrowcolor.png</iconset>
+   </property>
    <property name="text">
     <string>箭头颜色</string>
    </property>

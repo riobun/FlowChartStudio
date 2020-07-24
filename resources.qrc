@@ -28,5 +28,17 @@
         <file>images/check.png</file>
         <file>images/run.png</file>
         <file>images/daochu.png</file>
+        <file>images/delete.png</file>
+        <file>images/jianqie.png</file>
+        <file>images/move.png</file>
+        <file>images/redo.png</file>
+        <file>images/copy1.png</file>
+        <file>images/paste1.png</file>
+        <file>images/redo1.png</file>
+        <file>images/undo.png</file>
+        <file>images/bgcolor.png</file>
+        <file>images/font.png</file>
+        <file>images/taxtcolor.png</file>
+        <file>images/arrowtype.png</file>
     </qresource>
 </RCC>
