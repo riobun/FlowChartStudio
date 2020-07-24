@@ -25,6 +25,7 @@ SOURCES += \
     flowchartscene.cpp \
     graph.cpp \
     graphelement.cpp \
+    groupaction.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     flowchartscene.h \
     graph.h \
     graphelement.h \
+    groupaction.h \
     idpool.h \
     mainwindow.h \
     node.h \
