@@ -84,7 +84,6 @@ private:
     QToolButton* fillColorToolBtn;
 
     ElementShape _nextAddedShape;
-    int _selectedId;
     QList<Action*> undoStack;
     QList<Action*> redoStack;
     QMap<int, Node*> _selectedNodes;
