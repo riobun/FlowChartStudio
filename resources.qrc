@@ -20,5 +20,13 @@
         <file>images/file.png</file>
         <file>images/filefolder.png</file>
         <file>images/project.png</file>
+        <file>images/new3.png</file>
+        <file>images/open.png</file>
+        <file>images/baocun.png</file>
+        <file>images/close.png</file>
+        <file>images/lingcunwei.png</file>
+        <file>images/check.png</file>
+        <file>images/run.png</file>
+        <file>images/daochu.png</file>
     </qresource>
 </RCC>

@@ -259,7 +259,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>26</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -349,26 +349,46 @@
    </property>
   </action>
   <action name="action1_2">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
+   </property>
    <property name="text">
     <string>打开</string>
    </property>
   </action>
   <action name="action1_3">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/baocun.png</normaloff>:/images/baocun.png</iconset>
+   </property>
    <property name="text">
     <string>保存</string>
    </property>
   </action>
   <action name="action1_4">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/lingcunwei.png</normaloff>:/images/lingcunwei.png</iconset>
+   </property>
    <property name="text">
     <string>另存为</string>
    </property>
   </action>
   <action name="action1_5">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/daochu.png</normaloff>:/images/daochu.png</iconset>
+   </property>
    <property name="text">
     <string>导出</string>
    </property>
   </action>
   <action name="action1_6">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
+   </property>
    <property name="text">
     <string>关闭</string>
    </property>
@@ -420,6 +440,10 @@
    </property>
   </action>
   <action name="action1_15">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/new3.png</normaloff>:/images/new3.png</iconset>
+   </property>
    <property name="text">
     <string>新建</string>
    </property>
@@ -478,26 +502,46 @@
    </property>
   </action>
   <action name="actionnew_pro">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/new3.png</normaloff>:/images/new3.png</iconset>
+   </property>
    <property name="text">
     <string>新建</string>
    </property>
   </action>
   <action name="actionopen_pro">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
+   </property>
    <property name="text">
     <string>打开</string>
    </property>
   </action>
   <action name="actionclose_pro">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
+   </property>
    <property name="text">
     <string>关闭</string>
    </property>
   </action>
   <action name="actioncheck_pro">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/check.png</normaloff>:/images/check.png</iconset>
+   </property>
    <property name="text">
     <string>检查</string>
    </property>
   </action>
   <action name="actionrun_pro">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/run.png</normaloff>:/images/run.png</iconset>
+   </property>
    <property name="text">
     <string>运行</string>
    </property>
