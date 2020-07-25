@@ -37,11 +37,7 @@ public:
     QColor get_text_color();
     Text* get_item();
     TextItem* getTextItem() const { return shape; }
-protected:
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+
 private:
 
     QPointF location;

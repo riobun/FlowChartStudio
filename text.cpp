@@ -79,7 +79,7 @@ void Text::add_char(int position, QString c) {
 
 
 void Text::reset_font(QFont new_font) {
-    emit shape->NewFont(this,font);
+
     font = new_font;
     setFont(font);
 
@@ -104,7 +104,7 @@ void Text::move_text(QPointF new_location) {
 }
 
 void Text::reset_color(QColor new_color) {
-    emit shape->NewColor(this,color);
+
     color = new_color;
     setDefaultTextColor(color);
 
@@ -116,7 +116,7 @@ void Text::reset_color(QColor new_color) {
     setRect(location.x() - width / 2, location.y() - height / 2, width, height);
 }*/
 void Text::change_content(QString new_c){
-    emit shape->NewContent(this,content);
+
     content=new_c;
     setPlainText(content);
 
@@ -142,82 +142,5 @@ Text* Text::get_item() {
 
 
 
-void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
-{
-        qDebug() << "Custom item moved.";
-        QGraphicsItem::mouseMoveEvent(event);
-        move_text(pos());
-        qDebug() << "moved" << pos();
-
-}
-
-void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
-    if(textInteractionFlags()==Qt::NoTextInteraction){
-       // setTextInteractionFlags(Qt::TextEditorInteraction);
-        QString dlgTitle="文本框对话框";
-        QString txtLable="请输入文本框中的文字";
-        QString defaultInput =content;
-        bool ok=false;
-        QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
-        if(ok&&!t.isEmpty()){
-            change_content(t);
-        }
-
-
-    }
-    QGraphicsTextItem::mouseDoubleClickEvent(event);
-
-}
-
-void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
-    QMenu menu;
-    auto deleteAction = menu.addAction("删除");
-    auto editAction = menu.addAction("编辑");
-    auto fontAction = menu.addAction("修改字体");
-    auto colorAction = menu.addAction("修改颜色");
-
-    deleteAction->setShortcut(QKeySequence::Delete);
-    auto selectedAction = menu.exec(event->screenPos());
-
-    if (selectedAction == deleteAction)
-    {
-        auto action = new ChangeElementAction(this, ElementShape::Text, false);
-        action->Do();
-    }
-    else if(selectedAction == editAction){
-        QString dlgTitle="文本框对话框";
-        QString txtLable="请输入文本框中的文字";
-        QString defaultInput =content;
-        bool ok=false;
-         QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
-        if(ok&&!t.isEmpty()){
-            change_content(t);
-        }
-    }
-    else if(selectedAction == fontAction){
-       //QFont iniFont=ui->plainTextEdit->font();
-
-       bool ok=false;
-       QFont f=QFontDialog::getFont(&ok,font);
-       if(ok){
-           reset_font(f);
-       }
-
-    }
-    else if(selectedAction == colorAction){
-
-        QColor c=QColorDialog::getColor(color,nullptr,"选择颜色");
-        if(c.isValid()){
-            reset_color(c);
-        }
-
-    }
-}
-
-
-void Text::mousePressEvent(QGraphicsSceneMouseEvent* event){
-    QGraphicsTextItem::mousePressEvent(event);
-    shape->Selected(this,true);
-}
 
 
