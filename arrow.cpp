@@ -94,6 +94,53 @@ void Arrow::setList(){
 //        return ;
     qreal arrowSize = 20;
     list.clear();
+
+    if(myEndItem->pos()==myStartItem->pos())
+    {
+        QPointF *pa=new QPointF((myStartItem->pos().x()+myStartItem->GetWidth()), myStartItem->pos().y());
+        QPointF *pb=new QPointF((myStartItem->pos().x()+myStartItem->GetWidth()), myStartItem->pos().y()-myStartItem->GetHeight()*3/2);
+        QPointF *pc=new QPointF(myStartItem->pos().x(), myStartItem->pos().y()-myStartItem->GetHeight()*3/2);
+    //    QLineF centerLine(myStartItem->pos(), myEndItem->pos());
+        QLineF centerLine(*pc, myEndItem->pos());
+        QPolygonF endPolygon = myEndItem->polygon();
+        //得到myEndItem图形所有顶点相对于中点的坐标组
+        QPointF p1 = endPolygon.first() + myEndItem->pos();
+        //pos()方法得到图形中点相对于窗口左上角的坐标
+        //得到myEndItem图形第一个顶点相对于窗口左上角的坐标
+        QPointF intersectPoint;
+        for (int i = 1; i < endPolygon.count(); ++i) {
+            QPointF p2 = endPolygon.at(i) + myEndItem->pos();
+            QLineF polyLine = QLineF(p1, p2);
+            QLineF::IntersectType intersectType =
+                polyLine.intersect(centerLine, &intersectPoint);
+            if (intersectType == QLineF::BoundedIntersection)
+                break;
+            p1 = p2;
+        }
+
+        QLineF *ql=new QLineF(intersectPoint,*pc);
+    //! [5] //! [6]
+
+        double angle = std::atan2(-ql->dy(), ql->dx());
+
+        QPointF arrowP1 = ql->p1() + QPointF(sin(angle + M_PI / 3) * arrowSize,
+                                        cos(angle + M_PI / 3) * arrowSize);
+        QPointF arrowP2 = ql->p1() + QPointF(sin(angle + M_PI - M_PI / 3) * arrowSize,
+                                        cos(angle + M_PI - M_PI / 3) * arrowSize);
+
+
+    //! [6] //! [7]
+        list.insert(0,myStartItem->pos());
+
+        list.insert(1,*pa);
+        list.insert(2,*pb);
+        list.insert(3,*pc);
+        list.insert(4, myEndItem->pos());
+        arrowHead.clear();
+        arrowHead << ql->p1() << arrowP1 << arrowP2;
+        return ;
+    }
+
     if(myStartItem->pos().y()>=myEndItem->pos().y()-myEndItem->GetHeight()/2-arrowSize&&myStartItem->pos().y()<=myEndItem->pos().y()+myEndItem->GetHeight()/2+arrowSize)
     {
         QPointF *pa=new QPointF((myEndItem->pos().x()+myStartItem->pos().x())/2, myStartItem->pos().y());
