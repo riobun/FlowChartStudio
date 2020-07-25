@@ -11,8 +11,10 @@
 #include<QColor>
 #include<QGraphicsItem>
 #include <QGraphicsScene>
-
+#include<textitem.h>
+class TextItem;
 class Text : public QGraphicsTextItem{
+
 public:
     Text(QPointF primary_location,QGraphicsItem* parent = 0);//由节点生成
     //Text(QPointF position1, QPointF position2,QGraphicsItem* parent = 0);//由图生成（鼠标位置决定大小）
@@ -29,29 +31,25 @@ public:
    // void resize_text(double d_width, double d_height);//参数：表示宽和高的位移
     void change_content(QString new_c);
 
-    QFont get_text_fond();
+    QFont get_text_font();
     QString get_text_content();
     QPointF get_text_location();
     QColor get_text_color();
     Text* get_item();
+    TextItem* getTextItem() const { return shape; }
 protected:
-    // Shift+左键：进行选择  Alt：准备缩放
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    // Alt+拖拽：进行缩放  移动
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    // 使item可使用qgraphicsitem_cast
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
-    int type() const;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
 private:
-
-    bool m_bResizing;
 
     QPointF location;
     QString content;
     QFont font;
     QColor color;
-
+    QList<QString> list;
+    TextItem* shape=new TextItem(this);
 };
 
 

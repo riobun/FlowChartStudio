@@ -20,12 +20,12 @@ SOURCES += \
     action.cpp \
     arrow.cpp \
     changeelementaction.cpp \
+    commands.cpp \
     diamond.cpp \
     editelementaction.cpp \
     flowchartscene.cpp \
     graph.cpp \
     graphelement.cpp \
-    groupaction.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
@@ -33,11 +33,13 @@ SOURCES += \
     nodeitem.cpp \
     rectangle.cpp\
     text.cpp \
+    textitem.cpp
 
 HEADERS += \
     action.h \
     arrow.h \
     changeelementaction.h \
+    commands.h \
     diamond.h \
     editelementaction.h \
     elementProperty.h \
@@ -45,14 +47,14 @@ HEADERS += \
     flowchartscene.h \
     graph.h \
     graphelement.h \
-    groupaction.h \
     idpool.h \
     mainwindow.h \
     node.h \
     nodeevents.h \
     nodeitem.h \
     rectangle.h\
-    text.h
+    text.h \
+    textitem.h
 
 FORMS += \
     mainwindow.ui
