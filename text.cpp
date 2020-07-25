@@ -11,12 +11,9 @@
 #include<QLineEdit>
 #include "changeelementaction.h"
 #include "mainwindow.h"
-#include<QFontDialog>
-#include<QColorDialog>
 
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
-    setZValue(120);
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     //setTextInteractionFlags(Qt::TextEditable);
@@ -38,7 +35,17 @@ Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(p
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
 }*/
 
-void Text::build_text(QColor c, QFont f) {
+void Text::build_text(QColor c, QFont f) {//创建文本框
+   /* setRect(location.x()-width/2,location.y()-height/2,width,height);
+    QBrush brush = this->brush();
+    brush.setColor(QColor(0x00, 0xff, 0x00, 0x00));//透明
+    setBrush(brush);
+    setVisible(true);
+
+     QPen pen = this->pen();
+    pen.setColor(QColor(0x00, 0xff, 0x00, 0x00));
+    setPen(pen);*/
+
 
     font = f;
     color = c;
@@ -53,7 +60,7 @@ void Text::putup_text(QGraphicsScene* scene) {
 }
 
 Text::~Text() {
-    delete shape;
+
 
 }
 
@@ -79,10 +86,8 @@ void Text::add_char(int position, QString c) {
 
 
 void Text::reset_font(QFont new_font) {
-    emit shape->NewFont(this,font);
     font = new_font;
     setFont(font);
-
 }
 
 /*Text::Text(Text old_t, QPointF primary_location, double primary_width, double primary_height,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {
@@ -96,18 +101,13 @@ void Text::reset_font(QFont new_font) {
 }*/
 
 void Text::move_text(QPointF new_location) {
-
-
     location = new_location;
     setPos(location);
-
 }
 
 void Text::reset_color(QColor new_color) {
-    emit shape->NewColor(this,color);
     color = new_color;
     setDefaultTextColor(color);
-
 }
 
 /*void Text::resize_text(double d_width, double d_height) {
@@ -115,13 +115,8 @@ void Text::reset_color(QColor new_color) {
     height += d_height;
     setRect(location.x() - width / 2, location.y() - height / 2, width, height);
 }*/
-void Text::change_content(QString new_c){
-    emit shape->NewContent(this,content);
-    content=new_c;
-    setPlainText(content);
 
-}
-QFont Text::get_text_font() {
+QFont Text::get_text_fond() {
     return font;
 }
 
@@ -142,82 +137,138 @@ Text* Text::get_item() {
 
 
 
-void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
-{
-        qDebug() << "Custom item moved.";
-        QGraphicsItem::mouseMoveEvent(event);
-        move_text(pos());
-        qDebug() << "moved" << pos();
 
+
+
+void Text::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        setSelected(true);
+        if (event->modifiers() == Qt::ShiftModifier) {
+            qDebug() << "Custom item left clicked with shift key.";
+            // 选中 item
+            setSelected(true);
+        }
+        else if (event->modifiers() == Qt::AltModifier) {
+           qDebug() << "Custom item left clicked with alt key.";
+            // 重置 item 大小
+            /*double radius = boundingRect().width() / 2.0;
+            QPointF topLeft = boundingRect().topLeft();
+            location = QPointF(topLeft.x() + pos().x() + radius, topLeft.y() + pos().y() + radius);
+            QPointF pos = event->scenePos();
+            qDebug() << boundingRect() << radius << this->pos() << pos << event->pos();
+            double dist = sqrt(pow(m_centerPointF.x() - pos.x(), 2) + pow(m_centerPointF.y() - pos.y(), 2));
+                        if (dist / radius > 0.8) {
+                            qDebug() << dist << radius << dist / radius;
+                            m_bResizing = true;
+                        }
+                        else {
+                            m_bResizing = false;
+                        }*/
+             }
+        else {
+            qDebug() << "Custom item left clicked.";
+            QGraphicsItem::mousePressEvent(event);
+            event->accept();
+        }
+    }
+    else if (event->button() == Qt::RightButton) {
+        qDebug() << "Custom item right clicked.";
+        event->ignore();
+
+        QMenu menu;
+        auto deleteAction = menu.addAction("删除");
+        auto editAction = menu.addAction("编辑");
+        deleteAction->setShortcut(QKeySequence::Delete);
+        auto selectedAction = menu.exec(event->screenPos());
+        if (selectedAction == deleteAction)
+        {
+            auto action = new ChangeElementAction(this, ElementShape::Text, false);
+            action->Do();
+        }else if(selectedAction == editAction){
+            QString dlgTitle="文本框对话框";
+            QString txtLable="请输入文本框中的文字";
+            QString defaultInput =content;
+            QLineEdit ::EchoMode echoMode=QLineEdit::Normal;
+            bool ok=false;
+            QString t=QInputDialog::getText(NULL,dlgTitle,txtLable,echoMode,defaultInput,&ok);
+            if(ok&&!t.isEmpty()){
+                change_content(t);
+            }
+        }
+
+
+
+    }
 }
 
+void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    if ((event->modifiers() == Qt::AltModifier) && m_bResizing) {
+       /* QPointF pos = event->scenePos();
+        if ((location.x() - pos.x()) > 0) {
+            width = (location.x() - pos.x())*2;
+        }
+        else {
+            width = (pos.x() - location.x())*2;
+        }
+        if ((location.y() - pos.y()) > 0) {
+            height = (location.y() - pos.y())*2;
+        }
+        else {
+            height = (pos.y() - location.y())*2;
+        }
+        setRect(location.x() - width / 2, location.y() - height / 2, width, height);
+        QPointF p=location;
+        p.setX(p.x() - width/ 2);
+        p.setY(p.y()-height/2);
+        text->setPos(p);*/
+    }
+    else if (event->modifiers() != Qt::AltModifier) {
+        qDebug() << "Custom item moved.";
+        QGraphicsItem::mouseMoveEvent(event);
+        location=pos();
+
+        setPos(location);
+        qDebug() << "moved" << pos();
+    }
+}
+
+void Text::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    if ((event->modifiers() == Qt::AltModifier) && m_bResizing) {
+        m_bResizing = false;
+    }
+    else {
+        QGraphicsItem::mouseReleaseEvent(event);
+    }
+}
+
+int Text::type() const
+{
+    return UserType + 1;
+}
+ void Text::change_content(QString new_c){
+     content=new_c;
+     setPlainText(content);
+ }
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
     if(textInteractionFlags()==Qt::NoTextInteraction){
        // setTextInteractionFlags(Qt::TextEditorInteraction);
         QString dlgTitle="文本框对话框";
         QString txtLable="请输入文本框中的文字";
         QString defaultInput =content;
+        QLineEdit ::EchoMode echoMode=QLineEdit::Normal;
         bool ok=false;
-        QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
+        QString t=QInputDialog::getText(NULL,dlgTitle,txtLable,echoMode,defaultInput,&ok);
         if(ok&&!t.isEmpty()){
             change_content(t);
         }
+
+
 
 
     }
     QGraphicsTextItem::mouseDoubleClickEvent(event);
 
 }
-
-void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
-    QMenu menu;
-    auto deleteAction = menu.addAction("删除");
-    auto editAction = menu.addAction("编辑");
-    auto fontAction = menu.addAction("修改字体");
-    auto colorAction = menu.addAction("修改颜色");
-
-    deleteAction->setShortcut(QKeySequence::Delete);
-    auto selectedAction = menu.exec(event->screenPos());
-
-    if (selectedAction == deleteAction)
-    {
-        auto action = new ChangeElementAction(this, ElementShape::Text, false);
-        action->Do();
-    }
-    else if(selectedAction == editAction){
-        QString dlgTitle="文本框对话框";
-        QString txtLable="请输入文本框中的文字";
-        QString defaultInput =content;
-        bool ok=false;
-         QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
-        if(ok&&!t.isEmpty()){
-            change_content(t);
-        }
-    }
-    else if(selectedAction == fontAction){
-       //QFont iniFont=ui->plainTextEdit->font();
-
-       bool ok=false;
-       QFont f=QFontDialog::getFont(&ok,font);
-       if(ok){
-           reset_font(f);
-       }
-
-    }
-    else if(selectedAction == colorAction){
-
-        QColor c=QColorDialog::getColor(color,nullptr,"选择颜色");
-        if(c.isValid()){
-            reset_color(c);
-        }
-
-    }
-}
-
-
-void Text::mousePressEvent(QGraphicsSceneMouseEvent* event){
-    QGraphicsTextItem::mousePressEvent(event);
-    shape->Selected(this,true);
-}
-
-
