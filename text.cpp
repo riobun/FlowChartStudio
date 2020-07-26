@@ -13,6 +13,7 @@
 #include "mainwindow.h"
 #include<QFontDialog>
 #include<QColorDialog>
+#include "nodeevents.h"
 
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
@@ -181,8 +182,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 
     if (selectedAction == deleteAction)
     {
-        auto action = new ChangeElementAction(this, ElementShape::Text, false);
-        action->Do();
+        NodeEvents::deleteElemets();
     }
     else if(selectedAction == editAction){
         QString dlgTitle="文本框对话框";

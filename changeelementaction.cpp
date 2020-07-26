@@ -73,5 +73,13 @@ void ChangeElementAction::onNodeMoved(Node* node, QPointF oldPosition)
 
 void ChangeElementAction::onTextSelected(Text* text, bool isSelected)
 {
-
+    auto selectedTexts = MainWindow::instance()->selectedTexts();
+    if (isSelected)
+    {
+        selectedTexts->append(text);
+    }
+    else
+    {
+        selectedTexts->removeAll(text);
+    }
 }

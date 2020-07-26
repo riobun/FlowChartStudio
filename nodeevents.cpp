@@ -15,12 +15,7 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     auto selectedAction = menu.exec(event->screenPos());
     if (selectedAction == deleteAction)
     {
-        auto action = new GroupAction;
-        foreach (auto node, *MainWindow::instance()->selectedNodes())
-        {
-            *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
-        }
-        action->Do();
+        deleteElemets();
     }
     else if (selectedAction == subGraphAction)
     {
@@ -33,6 +28,20 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
         QVector<Graph*> graphs;
         new Graph(nodes, texts, graphs);
     }
+}
+
+void NodeEvents::deleteElemets()
+{
+    auto action = new GroupAction;
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    {
+        *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
+    }
+    foreach (auto text, *MainWindow::instance()->selectedTexts())
+    {
+        *action << new ChangeElementAction(text, ElementShape::Text, false);
+    }
+    action->Do();
 }
 
 void NodeEvents::mousePressEvent(Node* node, QGraphicsSceneMouseEvent *event)
