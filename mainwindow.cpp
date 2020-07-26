@@ -146,6 +146,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->usesScrollButtons();
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
+    QWidget *tabFile0 = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(ui->graphicsView);
+    tabFile0->setLayout(layout);
+    ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
 
     _scene = new FlowChartScene();
     ui->graphicsView->setScene(scene());
@@ -163,9 +168,6 @@ MainWindow::MainWindow(QWidget *parent)
         QWidget *tabFile = new QWidget(this);
         QModelIndex currentIndex = ui->treeView->currentIndex();
         QStandardItem* currentItem = model->itemFromIndex(currentIndex);
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(ui->graphicsView);
-        tabFile->setLayout(layout);
         ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
 
     });
