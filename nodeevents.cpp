@@ -4,6 +4,7 @@
 #include "changeelementaction.h"
 #include "mainwindow.h"
 #include "groupaction.h"
+#include "arrow.h"
 
 
 void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *event)
@@ -40,6 +41,11 @@ void NodeEvents::deleteElemets()
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
         *action << new ChangeElementAction(text, ElementShape::Text, false);
+    }
+    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
+    {
+        arrow->removeArrow();
+        *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
     }
     action->Do();
 }

@@ -9,6 +9,7 @@
 class NodeItem;
 class Arrow: public QGraphicsPathItem,public GraphElement
 {
+
 public:
     enum { Type = UserType + 4 };
 
@@ -28,16 +29,21 @@ public:
     void removeArrow();
     void updatePosition();
     virtual void BindToText(QGraphicsScene* qgs) override;
+    NodeItem *myStartItem;
+    NodeItem *myEndItem;
+
+    using Selected = void (*)(Arrow* n,bool b);
+    Selected s;
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = nullptr) override;
-
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 
 private:
-    NodeItem *myStartItem;
-    NodeItem *myEndItem;
+
     QPolygonF arrowHead;
     QList<QLineF> lines;
     QColor myColor = Qt::black;

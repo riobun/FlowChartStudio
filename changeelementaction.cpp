@@ -4,6 +4,8 @@
 #include "node.h"
 #include "arrow.h"
 
+void onArrowSelected(Arrow* arrow, bool isSelected);
+
 ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated) :
     isCreated(isCreated), shape(shape), element(element) {}
 
@@ -47,9 +49,30 @@ void ChangeElementAction::Do()
             foreach (auto arrow, arrows)
             {
                 arrow->removeArrow();
+                auto action = new ChangeElementAction(arrow, ElementShape::Arrow, false);
+                action->Do();
             }
             node->Remove(scene);
             MainWindow::instance()->graph->removeNode(node);
+        }
+    }
+    else if (shape == ElementShape::Arrow)
+    {
+        auto arrow = static_cast<Arrow*>(element);
+        if (isCreated)
+        {
+            arrow->myStartItem->GetNode()->ConnectAsSource(arrow);
+            arrow->myEndItem->GetNode()->ConnectAsSource(arrow);
+            arrow->setZValue(-100.0);
+            MainWindow::instance()->scene()->addItem(arrow);
+            arrow->updatePosition();
+            MainWindow::instance()->graph->addArrow(arrow);
+            arrow->s = onArrowSelected;
+        }
+        else
+        {
+            MainWindow::instance()->graph->removeArrow(arrow);
+            MainWindow::instance()->scene()->removeItem(arrow);
         }
     }
 }
@@ -87,5 +110,18 @@ void ChangeElementAction::onTextSelected(Text* text, bool isSelected)
     else
     {
         selectedTexts->removeAll(text);
+    }
+}
+
+void onArrowSelected(Arrow* arrow, bool isSelected)
+{
+    auto selectedArrows = MainWindow::instance()->selectedArrows();
+    if (isSelected)
+    {
+        selectedArrows->insert(arrow->GetID(), arrow);
+    }
+    else
+    {
+        selectedArrows->remove(arrow->GetID());
     }
 }

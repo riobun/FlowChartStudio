@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "arrow.h"
 
 Graph::Graph(QVector<Node*>& v_Node, QVector<Text*>& v_Text, QVector<Graph*>& v_Graph){
 
@@ -19,7 +20,7 @@ void Graph::FoldSubGraph(){
     foreach(auto node, nodes){
         node->SetVisibility(false);
     }
-    foreach(auto arrow, Arrows){
+    foreach(auto arrow, arrows){
         //arrow->SetVisibility(false);
     }
     foreach(auto text, texts){
@@ -39,7 +40,7 @@ void Graph::unFoldSubGraph(){
     foreach(auto node, nodes){
         node->SetVisibility(true);
     }
-    foreach(auto arrow, Arrows){
+    foreach(auto arrow, arrows){
         //arrow->SetVisibility(true);
     }
     foreach(auto text, texts){
@@ -176,6 +177,16 @@ QVector<Text*> Graph::searchTexts(Node* node)
         }
     }
     return vec;
+}
+
+void Graph::addArrow(Arrow* arrow)
+{
+    arrows[arrow->GetID()] = arrow;
+}
+
+void Graph::removeArrow(Arrow* arrow)
+{
+    arrows.remove(arrow->GetID());
 }
 
 void Graph::SetVisibility(bool set){

@@ -138,11 +138,8 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (to)
         {
             auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem());
-            lineFrom->ConnectAsSource(arrow);
-            to->ConnectAsDestination(arrow);
-            arrow->setZValue(-100.0);
-            MainWindow::instance()->scene()->addItem(arrow);
-            arrow->updatePosition();
+            auto action = new ChangeElementAction(arrow, ElementShape::Arrow, true);
+            action->Do();
         }
         MainWindow::instance()->scene()->removeItem(line);
         delete line;

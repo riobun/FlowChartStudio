@@ -7,6 +7,11 @@
 #include <QGraphicsScene>
 #include <QtMath>
 #include<QMouseEvent>
+#include "nodeevents.h"
+#include <QMenu>
+#include "changeelementaction.h"
+#include "mainwindow.h"
+
 Arrow::Arrow(NodeItem *startItem, NodeItem *endItem, QGraphicsItem *parent)
     : QGraphicsPathItem(parent), myStartItem(startItem), myEndItem(endItem)
 {
@@ -17,6 +22,7 @@ Arrow::Arrow(NodeItem *startItem, NodeItem *endItem, QGraphicsItem *parent)
 //    setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     setType(1);
     //xy[11][11]=1;
+
 }
 //! [0]
 
@@ -354,7 +360,8 @@ void Arrow::removeArrow()
 {
     endItem()->RemoveAsDestination(this);
     startItem()->RemoveAsSource(this);
-    delete this;
+    new ChangeElementAction(this, ElementShape::Arrow, false);
+//    delete this;
 }
 //! [1]
 
@@ -387,3 +394,24 @@ void Arrow::BindToText(QGraphicsScene* qgs){
 //        return;
 
 //}
+
+void Arrow::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QMenu menu;
+    auto deleteAction = menu.addAction("删除");
+    deleteAction->setShortcut(QKeySequence::Delete);
+    auto selectedAction = menu.exec(event->screenPos());
+    if (selectedAction == deleteAction)
+    {
+        NodeEvents::deleteElemets();
+    }
+}
+
+QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemSelectedHasChanged)
+    {
+        s(this, QGraphicsItem::isSelected());
+    }
+    return value;
+}

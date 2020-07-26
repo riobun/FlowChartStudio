@@ -25,6 +25,8 @@ public:
     void removeText(Text* node);
     Text* searchText(QPointF point);
     QVector<Text*> searchTexts(Node* node);
+    void addArrow(Arrow* arrow);
+    void removeArrow(Arrow* arrow);
 
     void BindToText(QGraphicsScene *qgs) override {}
 private:
@@ -32,7 +34,7 @@ private:
     bool isExpended;
     Node* subGraphNode;
     QMap<int, Node*> nodes;
-    QMap<int, Arrow*> Arrows;
+    QMap<int, Arrow*> arrows;
     QVector<Text*> texts;
     QMap<int, Graph*> subGraph;
 };

@@ -31,6 +31,7 @@ public:
     void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
+    QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
 
     QColor bdColor = Qt::black;
     QColor fillColor = Qt::white;
@@ -88,6 +89,7 @@ private:
     QList<Action*> undoStack;
     QList<Action*> redoStack;
     QMap<int, Node*> _selectedNodes;
+    QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
 };
 #endif // MAINWINDOW_H
