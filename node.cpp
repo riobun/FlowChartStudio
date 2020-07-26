@@ -55,3 +55,17 @@ void Node::DisconnectAsDestination(Arrow *ar)
     destinationArrows.remove(ar->GetID());
 }
 
+QVector<Arrow*> Node::getArrows()
+{
+    QVector<Arrow*> vec;
+    foreach (auto arrow, sourceArrows)
+    {
+        vec.append(arrow);
+    }
+    foreach (auto arrow, destinationArrows)
+    {
+        vec.append(arrow);
+    }
+    return vec;
+}
+

@@ -31,6 +31,7 @@ public:
     void DisconnectAsDestination(Arrow* ar);
     virtual void Remove(QGraphicsScene* qgs)=0;
     virtual ~Node();
+    QVector<Arrow*> getArrows();
 
 
     NodeItem* getNodeItem() const { return shape; }

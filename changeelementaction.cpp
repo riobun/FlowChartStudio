@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "text.h"
 #include "node.h"
+#include "arrow.h"
 
 ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated) :
     isCreated(isCreated), shape(shape), element(element) {}
@@ -42,6 +43,11 @@ void ChangeElementAction::Do()
         }
         else
         {
+            auto arrows = node->getArrows();
+            foreach (auto arrow, arrows)
+            {
+                arrow->removeArrow();
+            }
             node->Remove(scene);
             MainWindow::instance()->graph->removeNode(node);
         }
