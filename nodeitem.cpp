@@ -8,6 +8,8 @@
 #include "mainwindow.h"
 #include "groupaction.h"
 #include "editelementaction.h"
+#include"text.h"
+#include"textitem.h"
 
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -26,6 +28,11 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             foreach (auto node, *MainWindow::instance()->selectedNodes())
             {
                 node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
+                Text* text=node->content;
+                if(text)
+                {
+                    text->move_text(text->get_text_location()+event->pos()-event->lastPos());
+                }
             }
             QGraphicsItem::mouseMoveEvent(event);
         }
@@ -34,7 +41,11 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-
+     QGraphicsItem::mouseDoubleClickEvent(event);
+     isDoubleClick=true;
+     node->BindToText(MainWindow::instance()->scene());
+     setSelected(false);
+     node->content->get_item()->SetSelected(true);
 }
 
 void NodeItem::keyPressEvent(QKeyEvent *event)
@@ -72,6 +83,7 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
+    isDoubleClick=false;
     if(isFocus)
     {
         if(isMoved)

@@ -37,10 +37,6 @@ void Rectangle::SetLocation(const QPointF &qp)
     polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
     polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
     shape->setPolygon(polygon);
-    if(content)
-    {
-
-    }
 }
 
 void Rectangle::SetWidth(double wd)
@@ -87,9 +83,12 @@ void Rectangle::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 
 void Rectangle::BindToText(QGraphicsScene* qgs)
 {
-    content=new Text(location);
-    content->putup_text(qgs);
-    content->build_text();
+    if(content==nullptr)
+    {
+        content=new Text(location);
+        content->putup_text(qgs);
+        content->build_text();
+    }
 }
 
 int Rectangle::GetType()

@@ -38,10 +38,6 @@ void Diamond::SetLocation(const QPointF &qp)
     polygon<<QPointF(location.x()-width/2,location.y())<<QPointF(location.x(),location.y()-height/2);
     polygon<<QPointF(location.x()+width/2,location.y())<<QPointF(location.x(),location.y()+height/2);
     shape->setPolygon(polygon);
-    if(content)
-    {
-        content->move_text(qp);
-    }
 }
 
 void Diamond::SetWidth(double wd)
@@ -86,9 +82,12 @@ void Diamond::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 
 void Diamond::BindToText(QGraphicsScene* qgs)
 {
-    content=new Text(location);
-    content->putup_text(qgs);
-    content->build_text();
+    if(content==nullptr)
+    {
+        content=new Text(location);
+        content->putup_text(qgs);
+        content->build_text();
+    }
 }
 
 int Diamond::GetType()

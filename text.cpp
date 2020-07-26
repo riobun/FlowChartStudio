@@ -20,6 +20,7 @@ Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(p
     setZValue(120);
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    change_content("文本");
     //setTextInteractionFlags(Qt::TextEditable);
 }
 /*Text::Text(QPointF position1, QPointF position2,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {//两个鼠标位置表示对角线两个顶点

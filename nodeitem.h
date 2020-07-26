@@ -56,6 +56,7 @@ private:
     double lastWidth,lastHeight;
     QPointF lastLocation;
     Node* node=nullptr;
+    bool isDoubleClick=false;
     int mytype=1;
 };
 

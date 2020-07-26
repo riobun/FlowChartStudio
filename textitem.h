@@ -8,7 +8,7 @@ class TextItem:public QObject,public QGraphicsPolygonItem
 {
 Q_OBJECT
 public:
-    explicit TextItem(QObject *parent = nullptr):QObject(parent) {};
+    explicit TextItem(QObject *parent = nullptr):QObject(parent) {setZValue(101);};
     TextItem(Text* text):text(text){};
     Text* GetText() {return text;}
     void SetSelected(bool b);
