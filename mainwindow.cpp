@@ -10,6 +10,7 @@
 #include <QString>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -136,9 +137,10 @@ MainWindow::MainWindow(QWidget *parent)
     model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
     QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目1");
     model->appendRow(itemProject1);
-
+    QStandardItem* itemFileFolder1 = new QStandardItem(QIcon(":/images/filefolder.png"),tr("Folder1"));
+    itemProject1->appendRow(itemFileFolder1);
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
-    itemProject1->appendRow(itemFile1);
+    itemFileFolder1->appendRow(itemFile1);
 
 
     //页面选项卡设计
@@ -165,10 +167,14 @@ MainWindow::MainWindow(QWidget *parent)
     //项目树结构和页面选项卡的连接 应该属于新建和打开文件这个动作中的一部分
     connect(ui->treeView,&QTreeView::clicked,[=](){
 
-        QWidget *tabFile = new QWidget(this);
         QModelIndex currentIndex = ui->treeView->currentIndex();
-        QStandardItem* currentItem = model->itemFromIndex(currentIndex);
-        ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
+        QStandardItem* currentItem = model->itemFromIndex(currentIndex);      
+        if(!currentItem->hasChildren())
+        {
+            QWidget *tabFile = new QWidget(this);
+            ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
+            ui->tabWidget->setCurrentWidget(tabFile);
+        }
 
     });
 }
