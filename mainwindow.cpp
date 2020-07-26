@@ -143,6 +143,10 @@ MainWindow::MainWindow(QWidget *parent)
     itemFileFolder1->appendRow(itemFile1);
 
 
+    _scene = new FlowChartScene();
+    ui->graphicsView->setScene(scene());
+    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+
     //页面选项卡设计
     ui->tabWidget->clear();
     ui->tabWidget->setTabsClosable(true);
@@ -154,9 +158,7 @@ MainWindow::MainWindow(QWidget *parent)
     tabFile0->setLayout(layout);
     ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
 
-    _scene = new FlowChartScene();
-    ui->graphicsView->setScene(scene());
-    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+
 
     _instance = this;
 
