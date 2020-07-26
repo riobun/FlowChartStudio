@@ -16,10 +16,14 @@ void ChangeElementAction::Do()
         if (isCreated)
         {
             text->putup_text(scene);
+            window->graph->addText(text);
+            auto item = text->get_item();
+            connect(item, &TextItem::Selected, this, &ChangeElementAction::onTextSelected);
             text->build_text( QColor(), QFont());
         }
         else
         {
+            window->graph->removeText(text);
             text->delete_text(scene);
         }
     }
@@ -63,6 +67,11 @@ void ChangeElementAction::onNodeSelected(Node* node, bool isSelected)
 }
 
 void ChangeElementAction::onNodeMoved(Node* node, QPointF oldPosition)
+{
+
+}
+
+void ChangeElementAction::onTextSelected(Text* text, bool isSelected)
 {
 
 }

@@ -20,6 +20,13 @@ void TextItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 }
 
+void TextItem::SetSelected(bool b)
+{
+    isSelected=b;
+    text->setSelected(b);
+    setSelected(b);
+}
+
 
 void TextItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {

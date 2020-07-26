@@ -136,8 +136,8 @@ QPointF Text::get_text_location() {
 QColor Text::get_text_color() {
     return color;
 }
-Text* Text::get_item() {
-    return this;
+TextItem* Text::get_item() {
+    return shape;
 }
 
 

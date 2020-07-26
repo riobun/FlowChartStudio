@@ -123,6 +123,11 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         {
             node->getNodeItem()->SetSelected(true);
         }
+        auto texts = MainWindow::instance()->graph->searchTexts(rect);
+        foreach (auto text, texts)
+        {
+            text->get_item()->SetSelected(true);
+        }
         rect->Remove(this);
         delete rect;
         rect = nullptr;

@@ -11,12 +11,8 @@ public:
     explicit TextItem(QObject *parent = nullptr):QObject(parent) {};
     TextItem(Text* text):text(text){};
     Text* GetText() {return text;}
-    void SetSelected(bool b)
-    {
-        isSelected=b;
+    void SetSelected(bool b);
 
-        setSelected(b);
-    }
 
 
 signals:

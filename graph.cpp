@@ -117,6 +117,67 @@ QVector<Node*> Graph::searchNodes(Node* node)
     return vec;
 }
 
+void Graph::addText(Text* text)
+{
+    texts.append(text);
+}
+
+void Graph::removeText(Text* text)
+{
+    texts.removeAll(text);
+}
+
+Text* Graph::searchText(QPointF point)
+{
+    foreach (auto text, texts)
+    {
+        auto size = QPointF(text->textWidth(), 0);
+        QPointF position = text->get_text_location();
+        if (point.rx() >= position.rx() - size.rx() && point.ry() >= position.ry() - size.ry() &&
+                point.rx() <= position.rx() + size.rx() && point.ry() <= position.ry() + size.ry())
+        {
+            return text;
+        }
+    }
+    return nullptr;
+}
+
+QVector<Text*> Graph::searchTexts(Node* node)
+{
+    auto size = QPointF(node->GetWidth(), node->GetHeight());
+    auto rect = QRectF(node->GetLocation() - size / 2, QSizeF(size.rx(), size.ry()));
+    QVector<Text*> vec;
+    foreach (auto text, texts)
+    {
+        auto sSize = QPointF(text->textWidth(), 0);
+        auto point = text->get_text_location() - sSize / 2;
+        if (rect.contains(point))
+        {
+            vec.append(text);
+            continue;
+        }
+        point = text->get_text_location() + QPointF(sSize.rx(), -sSize.ry());
+        if (rect.contains(point))
+        {
+            vec.append(text);
+            continue;
+        }
+        point = text->get_text_location() + QPointF(-sSize.rx(), sSize.ry());
+        if (rect.contains(point))
+        {
+            vec.append(text);
+            continue;
+        }
+        point = text->get_text_location() + sSize / 2;
+        if (rect.contains(point))
+        {
+            vec.append(text);
+            continue;
+        }
+    }
+    return vec;
+}
+
 void Graph::SetVisibility(bool set){
 
 }

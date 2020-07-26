@@ -12,7 +12,7 @@
 #include<QGraphicsItem>
 #include <QGraphicsScene>
 #include<textitem.h>
-class TextItem;
+
 class Text : public QGraphicsTextItem{
 
 public:
@@ -35,7 +35,7 @@ public:
     QString get_text_content();
     QPointF get_text_location();
     QColor get_text_color();
-    Text* get_item();
+    TextItem* get_item();
     TextItem* getTextItem() const { return shape; }
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
