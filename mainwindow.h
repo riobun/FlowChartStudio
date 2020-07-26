@@ -60,6 +60,7 @@ private slots:
     void on_addArrowButton_clicked();
     void on_addTextButton_clicked();
 
+    void removeSubTab(int index);
 private:
     void clickbdBtn();
     void clickFillBtn();

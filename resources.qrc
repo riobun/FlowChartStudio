@@ -43,5 +43,8 @@
         <file>images/dashline.png</file>
         <file>images/dotline.png</file>
         <file>images/normalline.png</file>
+        <file>images/right.png</file>
+        <file>images/subGraph.png</file>
+        <file>images/left.png</file>
     </qresource>
 </RCC>
