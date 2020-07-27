@@ -46,5 +46,8 @@
         <file>images/right.png</file>
         <file>images/subGraph.png</file>
         <file>images/left.png</file>
+        <file>images/left-old.png</file>
+        <file>images/right-old.png</file>
+        <file>images/subGraph-old.png</file>
     </qresource>
 </RCC>
