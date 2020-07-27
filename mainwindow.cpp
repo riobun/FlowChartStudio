@@ -151,6 +151,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->clear();
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->usesScrollButtons();
+    //ui->tabWidget->tabBar()->setTabButton(0,QTabBar::RightSide,NULL);
+
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
     QWidget *tabFile0 = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
@@ -158,27 +160,58 @@ MainWindow::MainWindow(QWidget *parent)
     tabFile0->setLayout(layout);
     ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
 
-
-
     _instance = this;
 
     connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
     connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
 
 
-    //项目树结构和页面选项卡的连接 应该属于新建和打开文件这个动作中的一部分
+    //项目树结构和页面选项卡的连接
     connect(ui->treeView,&QTreeView::clicked,[=](){
 
         QModelIndex currentIndex = ui->treeView->currentIndex();
-        QStandardItem* currentItem = model->itemFromIndex(currentIndex);      
+        QStandardItem* currentItem = model->itemFromIndex(currentIndex);
+
         if(!currentItem->hasChildren())
         {
-            QWidget *tabFile = new QWidget(this);
-            ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
-            ui->tabWidget->setCurrentWidget(tabFile);
+            int i;
+            for(i=0;i<ui->tabWidget->count();i++){
+                if(ui->tabWidget->tabText(i)==currentItem->text())
+                    break;
+            }
+            if(i>=ui->tabWidget->count()){
+
+                //创建新的VIEW和SCENE，并绑定
+                FlowChartScene* scene = new FlowChartScene();
+                QGraphicsView* graphicsView = new QGraphicsView();
+                graphicsView->setScene(scene);
+                scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+                scenes.insert(currentIndex,scene);
+
+                //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab和_scene
+                QWidget *tabFile = new QWidget(this);
+                QVBoxLayout *layout1 = new QVBoxLayout;
+                layout1->addWidget(graphicsView);
+                tabFile->setLayout(layout1);
+                ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
+                ui->tabWidget->setCurrentWidget(tabFile);
+                //_scene = scene;
+            }
+
         }
 
     });
+
+//    connect(ui->treeView,&QTreeView::clicked,[=](){
+//       qDebug()<<ui->treeView->currentIndex();
+//    });
+
+    //切换选项卡时scene的切换
+    connect(ui->tabWidget,&QTabWidget::currentChanged,[=](){
+       // _scene =
+    });
+
+
 }
 
 MainWindow::~MainWindow()
