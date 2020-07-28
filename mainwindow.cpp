@@ -28,9 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     //侧边栏
-    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph.png"));
-    ui->addFatherPortButton->setIcon(QIcon(":/images/right.png"));
-    ui->addSonPortButton->setIcon(QIcon(":/images/left.png"));
+    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
+    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
+    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
@@ -196,6 +196,7 @@ MainWindow::MainWindow(QWidget *parent)
                 ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
                 ui->tabWidget->setCurrentWidget(tabFile);
                 //_scene = scene;
+
             }
 
         }
