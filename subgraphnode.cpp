@@ -1,4 +1,5 @@
 #include "subgraphnode.h"
+#include <math.h>
 
 SubgraphNode::SubgraphNode()
 {

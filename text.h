@@ -16,7 +16,7 @@
 
 class TextItem;
 class Text : public QGraphicsTextItem{
-
+Q_OBJECT
 public:
     Text(QPointF primary_location,QGraphicsItem* parent = 0);//由节点生成
     //Text(QPointF position1, QPointF position2,QGraphicsItem* parent = 0);//由图生成（鼠标位置决定大小）
@@ -44,6 +44,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
 
     QPointF location;
@@ -53,6 +54,9 @@ private:
     QString logic=NULL;
     QString all=NULL;
     TextItem* shape=new TextItem(this);
+
+signals:
+    void Selected(Text*t,bool b);
 };
 
 

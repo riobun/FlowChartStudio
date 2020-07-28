@@ -13,6 +13,7 @@
 #include "mainwindow.h"
 #include<QFontDialog>
 #include<QColorDialog>
+#include "nodeevents.h"
 
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
@@ -178,6 +179,10 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     auto logicAction=menu.addAction("组合逻辑");
     auto fontAction = menu.addAction("修改字体");
     auto colorAction = menu.addAction("修改颜色");
+    auto cutAction = menu.addAction("剪切");
+    cutAction->setShortcut(QKeySequence::Cut);
+    auto copyAction = menu.addAction("复制");
+    copyAction->setShortcut(QKeySequence::Copy);
 
 
     deleteAction->setShortcut(QKeySequence::Delete);
@@ -227,6 +232,21 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
         }
 
     }
+    else if (selectedAction == cutAction) {
+            NodeEvents::cutElements();
+    }
+    else if (selectedAction == copyAction) {
+        NodeEvents::copyElements();
+    }
+}
+
+QVariant Text::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemSelectedHasChanged)
+    {
+        emit Selected(this, QGraphicsItem::isSelected());
+    }
+    return value;
 }
 
 
