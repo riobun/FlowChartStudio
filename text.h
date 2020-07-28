@@ -12,7 +12,9 @@
 #include<QGraphicsItem>
 #include <QGraphicsScene>
 #include<textitem.h>
+#include<textdialog.h>
 
+class TextItem;
 class Text : public QGraphicsTextItem{
 
 public:
@@ -35,7 +37,7 @@ public:
     QString get_text_content();
     QPointF get_text_location();
     QColor get_text_color();
-    TextItem* get_item();
+    Text* get_item();
     TextItem* getTextItem() const { return shape; }
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -48,7 +50,8 @@ private:
     QString content;
     QFont font;
     QColor color;
-    QList<QString> list;
+    QString logic=NULL;
+    QString all=NULL;
     TextItem* shape=new TextItem(this);
 };
 

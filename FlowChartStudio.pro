@@ -33,7 +33,8 @@ SOURCES += \
     nodeitem.cpp \
     rectangle.cpp\
     text.cpp \
-    textitem.cpp
+    textitem.cpp\
+    textdialog.cpp
 
 HEADERS += \
     action.h \
@@ -53,8 +54,9 @@ HEADERS += \
     nodeevents.h \
     nodeitem.h \
     rectangle.h\
-    text.h\
-    textitem.h
+    text.h \
+    textitem.h\
+    textdialog.h
 
 FORMS += \
     mainwindow.ui

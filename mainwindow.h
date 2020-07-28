@@ -9,6 +9,7 @@
 #include "action.h"
 #include "node.h"
 #include "graph.h"
+#include "flowchartscene.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -37,6 +38,7 @@ public:
     QColor fillColor = Qt::white;
     QColor lineColor = Qt::black;
     Graph* graph = new Graph;
+    Graph* cutGraph = new Graph;
 
 public slots:
     void Undo();
@@ -92,5 +94,7 @@ private:
     QMap<int, Node*> _selectedNodes;
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
+    QMap<QModelIndex,FlowChartScene* > scenes;
+
 };
 #endif // MAINWINDOW_H

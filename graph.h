@@ -27,6 +27,10 @@ public:
     QVector<Text*> searchTexts(Node* node);
     void addArrow(Arrow* arrow);
     void removeArrow(Arrow* arrow);
+    void clear();
+    QMap<int, Node*>& getNodes() { return nodes; }
+    QMap<int, Arrow*>& getArrows() { return arrows; }
+    QVector<Text*>& getTexts() { return texts; }
 
     void BindToText(QGraphicsScene *qgs) override {}
 private:

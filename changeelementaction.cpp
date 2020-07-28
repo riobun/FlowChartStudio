@@ -21,12 +21,13 @@ void ChangeElementAction::Do()
             text->putup_text(scene);
             window->graph->addText(text);
             auto item = text->get_item();
-            connect(item, &TextItem::Selected, this, &ChangeElementAction::onTextSelected);
+            connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
             text->build_text( QColor(), QFont());
         }
         else
         {
             window->graph->removeText(text);
+            window->selectedTexts()->removeAll(text);
             text->delete_text(scene);
         }
     }
@@ -51,9 +52,10 @@ void ChangeElementAction::Do()
                 arrow->removeArrow();
                 auto action = new ChangeElementAction(arrow, ElementShape::Arrow, false);
                 action->Do();
-            }
+               }
             node->Remove(scene);
             MainWindow::instance()->graph->removeNode(node);
+            MainWindow::instance()->selectedNodes()->remove(node->GetID());
         }
     }
     else if (shape == ElementShape::Arrow)
@@ -73,6 +75,7 @@ void ChangeElementAction::Do()
         {
             MainWindow::instance()->graph->removeArrow(arrow);
             MainWindow::instance()->scene()->removeItem(arrow);
+            MainWindow::instance()->selectedArrows()->remove(arrow->GetID());
         }
     }
 }

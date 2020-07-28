@@ -13,14 +13,12 @@
 #include "mainwindow.h"
 #include<QFontDialog>
 #include<QColorDialog>
-#include "nodeevents.h"
 
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
     setZValue(120);
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    change_content("文本");
     //setTextInteractionFlags(Qt::TextEditable);
 }
 /*Text::Text(QPointF position1, QPointF position2,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {//两个鼠标位置表示对角线两个顶点
@@ -118,9 +116,11 @@ void Text::reset_color(QColor new_color) {
     setRect(location.x() - width / 2, location.y() - height / 2, width, height);
 }*/
 void Text::change_content(QString new_c){
-    emit shape->NewContent(this,content);
+    emit shape->NewContent(this,all);
     content=new_c;
-    setPlainText(content);
+    all=content;
+    all.append(logic);
+    setPlainText(all);
 
 }
 QFont Text::get_text_font() {
@@ -138,8 +138,8 @@ QPointF Text::get_text_location() {
 QColor Text::get_text_color() {
     return color;
 }
-TextItem* Text::get_item() {
-    return shape;
+Text* Text::get_item() {
+    return this;
 }
 
 
@@ -175,15 +175,18 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     auto editAction = menu.addAction("编辑");
+    auto logicAction=menu.addAction("组合逻辑");
     auto fontAction = menu.addAction("修改字体");
     auto colorAction = menu.addAction("修改颜色");
+
 
     deleteAction->setShortcut(QKeySequence::Delete);
     auto selectedAction = menu.exec(event->screenPos());
 
     if (selectedAction == deleteAction)
     {
-        NodeEvents::deleteElemets();
+        auto action = new ChangeElementAction(this, ElementShape::Text, false);
+        action->Do();
     }
     else if(selectedAction == editAction){
         QString dlgTitle="文本框对话框";
@@ -213,6 +216,17 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
         }
 
     }
+    else if(selectedAction==logicAction){
+
+        DetailsDialog dialog(content);
+
+        if (dialog.exec() == QDialog::Accepted) {
+
+            logic=dialog.senderLogic();
+            change_content(dialog.senderContent());
+        }
+
+    }
 }
 
 
@@ -220,5 +234,6 @@ void Text::mousePressEvent(QGraphicsSceneMouseEvent* event){
     QGraphicsTextItem::mousePressEvent(event);
     shape->Selected(this,true);
 }
+
 
 

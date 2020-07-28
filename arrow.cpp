@@ -308,7 +308,19 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
                 painter->setBrush(*brush);
                 painter->setPen(QPen(myColor,1, Qt::DashLine));
                 QPainterPath myPath = path();
-                if((myEndItem->pos().x()<myStartItem->pos().x()&&myEndItem->pos().y()<myStartItem->pos().y())||(myEndItem->pos().x()>myStartItem->pos().x()&&myEndItem->pos().y()>myStartItem->pos().y())){
+                QPainterPath myPathin;
+                QPainterPath myPathout;
+                if(myEndItem->pos()==myStartItem->pos()){
+                QRectF *rectin=new QRectF
+               (myStartItem->pos().x()+12,myStartItem->pos().y()-myStartItem->GetHeight()*3/2+12,myStartItem->GetWidth()-24,myStartItem->GetHeight()*3/2-24);
+                                    myPathin.addRect(*rectin);
+                                    painter->drawPath(myPathin);
+               QRectF *rectout=new QRectF
+                (myStartItem->pos().x()-12,myStartItem->pos().y()-myStartItem->GetHeight()*3/2-12,myStartItem->GetWidth()+24,myStartItem->GetHeight()*3/2+24);
+                                    myPathout.addRect(*rectout);
+                                    painter->drawPath(myPathout);
+                              }
+                else if((myEndItem->pos().x()<myStartItem->pos().x()&&myEndItem->pos().y()<myStartItem->pos().y())||(myEndItem->pos().x()>myStartItem->pos().x()&&myEndItem->pos().y()>myStartItem->pos().y())){
         //        myPath.translate(0, 4.0);
                 myPath.translate(12.0, -12.0);
                 //线向上移动

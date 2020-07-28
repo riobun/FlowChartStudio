@@ -25,15 +25,8 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
         else
         {
-            foreach (auto node, *MainWindow::instance()->selectedNodes())
-            {
-                node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
-                Text* text=node->content;
-                if(text)
-                {
-                    text->move_text(text->get_text_location()+event->pos()-event->lastPos());
-                }
-            }
+            NodeEvents::mouseMoveEvent(event);
+
             QGraphicsItem::mouseMoveEvent(event);
         }
     }
