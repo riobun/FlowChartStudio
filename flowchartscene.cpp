@@ -8,6 +8,8 @@
 #include "changeelementaction.h"
 #include "diamond.h"
 #include "arrow.h"
+#include <QMenu>
+#include "groupaction.h"
 
 
 FlowChartScene::FlowChartScene()
@@ -144,5 +146,49 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         MainWindow::instance()->scene()->removeItem(line);
         delete line;
         line = nullptr;
+    }
+}
+
+void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QGraphicsScene::contextMenuEvent(event);
+    if (!event->isAccepted())
+    {
+        QMenu menu;
+        auto pasteAction = menu.addAction("粘贴");
+        pasteAction->setShortcut(QKeySequence::Paste);
+        auto selectedAction = menu.exec(event->screenPos());
+        if (selectedAction == pasteAction)
+        {
+            auto action = new GroupAction();
+            auto graph = MainWindow::instance()->cutGraph;
+            foreach (auto node, graph->getNodes())
+            {
+                Node* newNode;
+                ElementShape shape;
+                if (dynamic_cast<Rectangle*>(node))
+                {
+                    newNode = new Rectangle(node->GetLocation(), node->GetWidth(), node->GetHeight());
+                    shape = ElementShape::Rectangle;
+                }
+                else if (dynamic_cast<Diamond*>(node))
+                {
+                    newNode = new Diamond(node->GetLocation(), node->GetWidth(), node->GetHeight());
+                    shape = ElementShape::Diamond;
+                }
+                *action << new ChangeElementAction(newNode, shape, true);
+            }
+            foreach (auto text, graph->getTexts())
+            {
+                auto newText = new Text(text->get_text_location());
+                *action << new ChangeElementAction(newText, ElementShape::Text, true);
+            }
+            foreach (auto arrow, graph->getArrows())
+            {
+
+            }
+            action->Do();
+            graph->clear();
+        }
     }
 }

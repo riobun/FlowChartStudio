@@ -192,3 +192,10 @@ void Graph::removeArrow(Arrow* arrow)
 void Graph::SetVisibility(bool set){
 
 }
+
+void Graph::clear()
+{
+    nodes.clear();
+    texts.clear();
+    arrows.clear();
+}

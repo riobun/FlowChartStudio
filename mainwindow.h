@@ -38,6 +38,7 @@ public:
     QColor fillColor = Qt::white;
     QColor lineColor = Qt::black;
     Graph* graph = new Graph;
+    Graph* cutGraph = new Graph;
 
 public slots:
     void Undo();
