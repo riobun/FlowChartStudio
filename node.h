@@ -44,6 +44,7 @@ protected:
     double width,height;
     QColor backgroundColor=Qt::white,frameColor=Qt::black;
     NodeItem* shape=new NodeItem(this);
+    bool isRemoved=false;
 private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;

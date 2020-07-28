@@ -37,21 +37,25 @@ QPointF Node::GetLocation()
 
 void Node::ConnectAsSource(Arrow *ar)
 {
+    if(isRemoved) return;
     sourceArrows[ar->GetID()]=ar;
 }
 
 void Node::ConnectAsDestination(Arrow *ar)
 {
+    if(isRemoved) return;
     destinationArrows[ar->GetID()]=ar;
 }
 
 void Node::DisconnectAsSource(Arrow *ar)
 {
+    if(isRemoved) return;
     sourceArrows.remove(ar->GetID());
 }
 
 void Node::DisconnectAsDestination(Arrow *ar)
 {
+     if(isRemoved) return;
     destinationArrows.remove(ar->GetID());
 }
 
@@ -120,9 +124,18 @@ void Node::SetFrameColor(const QColor &qc)
 
 void Node::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
+    isRemoved=true;
     qgs->removeItem(shape);
     if(content) content->delete_text(qgs);
-
+     foreach (auto arrow, sourceArrows)
+     {
+        arrow->removeArrow();
+     }
+     foreach (auto arrow, destinationArrows)
+     {
+         arrow->removeArrow();
+     }
+     isRemoved=false;
 }
 
 void Node::BindToText(QGraphicsScene* qgs)
@@ -132,5 +145,6 @@ void Node::BindToText(QGraphicsScene* qgs)
         content=new Text(location);
         content->putup_text(qgs);
         content->build_text();
+        content->change_content("文本");
     }
 }
