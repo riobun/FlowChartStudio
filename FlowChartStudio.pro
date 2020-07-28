@@ -26,12 +26,15 @@ SOURCES += \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
+    inputnode.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
     nodeevents.cpp \
     nodeitem.cpp \
+    outputnode.cpp \
     rectangle.cpp\
+    subgraphnode.cpp \
     text.cpp \
     textitem.cpp\
     textdialog.cpp
@@ -49,11 +52,14 @@ HEADERS += \
     graphelement.h \
     groupaction.h \
     idpool.h \
+    inputnode.h \
     mainwindow.h \
     node.h \
     nodeevents.h \
     nodeitem.h \
+    outputnode.h \
     rectangle.h\
+    subgraphnode.h \
     text.h \
     textitem.h\
     textdialog.h

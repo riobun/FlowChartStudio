@@ -13,23 +13,25 @@ class Node:public GraphElement
 public:
     Node();
     Node(QPointF lc,double wd,double h);
-    virtual void SetVisibility(bool vis)=0;
-    virtual void Paint(QGraphicsScene* qgs)=0;//在创建Node实例之后需要调用一次Paint()才会显示
+    virtual void SetVisibility(bool vis);
+    virtual void Paint(QGraphicsScene* qgs);//在创建Node实例之后需要调用一次Paint()才会显示
     double GetWidth();
-    virtual void SetWidth(double wd)=0;
+    virtual void SetWidth(double wd);
     double GetHeight();
-    virtual void SetHeight(double h)=0;
+    virtual void SetHeight(double h);
     QPointF GetLocation();
-    virtual void SetLocation(const QPointF& qp)=0;
+    virtual void SetLocation(const QPointF& qp);
     QColor GetBackgroundColor();
-    virtual void SetBackgroundColor(const QColor& qc)=0;
+    virtual void SetBackgroundColor(const QColor& qc);
     QColor GetFrameColor();
-    virtual void SetFrameColor(const QColor& qc)=0;
+    virtual void SetFrameColor(const QColor& qc);
     void ConnectAsSource(Arrow* ar);
     void ConnectAsDestination(Arrow* ar);
     void DisconnectAsSource(Arrow* ar);
     void DisconnectAsDestination(Arrow* ar);
-    virtual void Remove(QGraphicsScene* qgs)=0;
+    virtual void Remove(QGraphicsScene* qgs);
+    virtual void SetShape()=0;
+    virtual void BindToText(QGraphicsScene* qgs) override;
     virtual ~Node();
     QVector<Arrow*> getArrows();
 
