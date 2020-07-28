@@ -12,9 +12,11 @@
 #include<QGraphicsItem>
 #include <QGraphicsScene>
 #include<textitem.h>
+#include<textdialog.h>
 
+class TextItem;
 class Text : public QGraphicsTextItem{
-Q_OBJECT
+
 public:
     Text(QPointF primary_location,QGraphicsItem* parent = 0);//由节点生成
     //Text(QPointF position1, QPointF position2,QGraphicsItem* parent = 0);//由图生成（鼠标位置决定大小）
@@ -35,26 +37,22 @@ public:
     QString get_text_content();
     QPointF get_text_location();
     QColor get_text_color();
-    TextItem* get_item();
+    Text* get_item();
     TextItem* getTextItem() const { return shape; }
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 private:
 
     QPointF location;
     QString content;
     QFont font;
     QColor color;
-    QList<QString> list;
+    QString logic=NULL;
+    QString all=NULL;
     TextItem* shape=new TextItem(this);
-    bool startMove = false;
-signals:
-    void Selected(Text*t,bool b);
 };
 
 
