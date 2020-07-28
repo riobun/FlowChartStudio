@@ -18,7 +18,7 @@
 Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
     location = primary_location;
     setZValue(120);
-    setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+    setFlags(QGraphicsItem::ItemIsSelectable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     change_content("文本");
     //setTextInteractionFlags(Qt::TextEditable);
@@ -146,11 +146,11 @@ TextItem* Text::get_item() {
 
 void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-        qDebug() << "Custom item moved.";
-        QGraphicsItem::mouseMoveEvent(event);
-        move_text(pos());
-        qDebug() << "moved" << pos();
-
+    if (startMove)
+    {
+        NodeEvents::mouseMoveEvent(event);
+    }
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
@@ -177,6 +177,10 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     auto editAction = menu.addAction("编辑");
     auto fontAction = menu.addAction("修改字体");
     auto colorAction = menu.addAction("修改颜色");
+    auto cutAction = menu.addAction("剪切");
+    cutAction->setShortcut(QKeySequence::Cut);
+    auto copyAction = menu.addAction("复制");
+    copyAction->setShortcut(QKeySequence::Copy);
 
     deleteAction->setShortcut(QKeySequence::Delete);
     auto selectedAction = menu.exec(event->screenPos());
@@ -213,12 +217,31 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
         }
 
     }
+    else if (selectedAction == cutAction) {
+        NodeEvents::cutElements();
+    }
+    else if (selectedAction == copyAction) {
+        NodeEvents::copyElements();
+    }
+}
+
+QVariant Text::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == QGraphicsItem::ItemSelectedHasChanged)
+    {
+        emit Selected(this, QGraphicsItem::isSelected());
+    }
+    return value;
 }
 
 
 void Text::mousePressEvent(QGraphicsSceneMouseEvent* event){
     QGraphicsTextItem::mousePressEvent(event);
-    shape->Selected(this,true);
+    startMove = true;
 }
 
-
+void Text::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsItem::mouseReleaseEvent(event);
+    startMove = false;;
+}

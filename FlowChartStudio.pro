@@ -53,7 +53,7 @@ HEADERS += \
     nodeevents.h \
     nodeitem.h \
     rectangle.h\
-    text.h\
+    text.h \
     textitem.h
 
 FORMS += \
