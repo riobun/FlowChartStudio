@@ -10,6 +10,7 @@ class FlowChartScene : public QGraphicsScene
 public:
     FlowChartScene();
 
+    static void pasteElements();
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

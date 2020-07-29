@@ -44,6 +44,9 @@ public:
 public slots:
     void Undo();
     void Redo();
+    void Cut();
+    void Copy();
+    void Paste();
 
 private slots:
     void textColorChanged();

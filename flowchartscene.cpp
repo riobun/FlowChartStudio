@@ -160,35 +160,40 @@ void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         auto selectedAction = menu.exec(event->screenPos());
         if (selectedAction == pasteAction)
         {
-            auto action = new GroupAction();
-            auto graph = MainWindow::instance()->cutGraph;
-            foreach (auto node, graph->getNodes())
-            {
-                Node* newNode;
-                ElementShape shape;
-                if (dynamic_cast<Rectangle*>(node))
-                {
-                    newNode = new Rectangle(node->GetLocation(), node->GetWidth(), node->GetHeight());
-                    shape = ElementShape::Rectangle;
-                }
-                else if (dynamic_cast<Diamond*>(node))
-                {
-                    newNode = new Diamond(node->GetLocation(), node->GetWidth(), node->GetHeight());
-                    shape = ElementShape::Diamond;
-                }
-                *action << new ChangeElementAction(newNode, shape, true);
-            }
-            foreach (auto text, graph->getTexts())
-            {
-                auto newText = new Text(text->get_text_location());
-                *action << new ChangeElementAction(newText, ElementShape::Text, true);
-            }
-            foreach (auto arrow, graph->getArrows())
-            {
-
-            }
-            action->Do();
-            graph->clear();
+            pasteElements();
         }
     }
+}
+
+void FlowChartScene::pasteElements()
+{
+    auto action = new GroupAction();
+    auto graph = MainWindow::instance()->cutGraph;
+    foreach (auto node, graph->getNodes())
+    {
+        Node* newNode;
+        ElementShape shape;
+        if (dynamic_cast<Rectangle*>(node))
+        {
+            newNode = new Rectangle(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            shape = ElementShape::Rectangle;
+        }
+        else if (dynamic_cast<Diamond*>(node))
+        {
+            newNode = new Diamond(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            shape = ElementShape::Diamond;
+        }
+        *action << new ChangeElementAction(newNode, shape, true);
+    }
+    foreach (auto text, graph->getTexts())
+    {
+        auto newText = new Text(text->get_text_location());
+        *action << new ChangeElementAction(newText, ElementShape::Text, true);
+    }
+    foreach (auto arrow, graph->getArrows())
+    {
+
+    }
+    action->Do();
+    graph->clear();
 }

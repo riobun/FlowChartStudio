@@ -18,6 +18,7 @@
 #include "flowchartscene.h"
 #include "editelementaction.h"
 #include "groupaction.h"
+#include "nodeevents.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -142,11 +143,11 @@ MainWindow::MainWindow(QWidget *parent)
     itemProject1->appendRow(itemFileFolder1);
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
     itemFileFolder1->appendRow(itemFile1);
-/*
+
     _scene = new FlowChartScene();
     ui->graphicsView->setScene(scene());
     _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
-*/
+
     //页面选项卡设计
     ui->tabWidget->clear();
     ui->tabWidget->setTabsClosable(true);
@@ -163,6 +164,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
     connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
+    connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
+    connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
+    connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
 
 
     //项目树结构和页面选项卡的连接
@@ -344,6 +348,10 @@ void MainWindow::on_addTextButton_clicked()
 {
     _nextAddedShape = ElementShape::Text;
 }
+
+void MainWindow::Cut() { NodeEvents::cutElements(); }
+void MainWindow::Copy() { NodeEvents::copyElements(); }
+void MainWindow::Paste() { FlowChartScene::pasteElements(); }
 
 void MainWindow::Undo()
 {

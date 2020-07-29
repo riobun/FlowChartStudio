@@ -325,7 +325,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -345,9 +345,9 @@
     </property>
     <addaction name="undoAction"/>
     <addaction name="redoAction"/>
-    <addaction name="action1_9"/>
-    <addaction name="action1_10"/>
-    <addaction name="action1_11"/>
+    <addaction name="cutAction"/>
+    <addaction name="copyAction"/>
+    <addaction name="pasteAction"/>
     <addaction name="action1_12"/>
     <addaction name="action1_13"/>
    </widget>
@@ -487,7 +487,7 @@
     <string>Ctrl+Y</string>
    </property>
   </action>
-  <action name="action1_9">
+  <action name="cutAction">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/jianqie.png</normaloff>:/images/jianqie.png</iconset>
@@ -495,8 +495,11 @@
    <property name="text">
     <string>剪切</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
-  <action name="action1_10">
+  <action name="copyAction">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/copy1.png</normaloff>:/images/copy1.png</iconset>
@@ -504,14 +507,20 @@
    <property name="text">
     <string>复制</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
   </action>
-  <action name="action1_11">
+  <action name="pasteAction">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/paste1.png</normaloff>:/images/paste1.png</iconset>
    </property>
    <property name="text">
     <string>粘贴</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="action1_12">
