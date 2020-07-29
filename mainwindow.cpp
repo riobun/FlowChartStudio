@@ -145,7 +145,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     _scene = new FlowChartScene();
-    QGraphicsView* graphicsView = new QGraphicsView();
     ui->graphicsView->setScene(scene());
     _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
 
@@ -194,10 +193,13 @@ MainWindow::MainWindow(QWidget *parent)
     //切换选项卡时scene的切换
     connect(ui->tabWidget,&QTabWidget::currentChanged,[=](){
 
-      QLayoutItem* item = ui->tabWidget->currentWidget()->layout()->itemAt(0);
-      QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
+        if(ui->tabWidget->count() != 0){
+            QLayoutItem* item = ui->tabWidget->currentWidget()->layout()->itemAt(0);
+            QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
 
-        _scene = graphicView->scene();
+            _scene = graphicView->scene();
+        }
+
     });
 
 
