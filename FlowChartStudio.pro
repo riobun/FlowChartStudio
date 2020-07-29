@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     action.cpp \
     arrow.cpp \
+    arrownode.cpp \
     changeelementaction.cpp \
     diamond.cpp \
     editelementaction.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
 HEADERS += \
     action.h \
     arrow.h \
+    arrownode.h \
     changeelementaction.h \
     diamond.h \
     editelementaction.h \

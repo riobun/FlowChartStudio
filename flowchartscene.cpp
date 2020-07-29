@@ -160,7 +160,7 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         auto to = MainWindow::instance()->graph->searchNode(event->scenePos());
         if (to)
         {
-            auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem());
+            auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem(),1);
             auto action = new ChangeElementAction(arrow, ElementShape::Arrow, true);
             action->Do();
         }
@@ -231,7 +231,7 @@ void FlowChartScene::pasteElements()
     foreach (auto arrow, graph->getArrows())
     {
         auto newArrow = new Arrow(nodes[arrow->startItem()->GetNode()]->getNodeItem(),
-                nodes[arrow->endItem()->GetNode()]->getNodeItem());
+                nodes[arrow->endItem()->GetNode()]->getNodeItem(),1);
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
     }
     action->Do();

@@ -67,12 +67,15 @@ private slots:
     void on_addTextButton_clicked();
 
     void removeSubTab(int index);
+    void modifyTabText(QStandardItem* item);
 
     void on_addSubgraghButton_clicked();
 
     void on_addFatherPortButton_clicked();
 
     void on_addSonPortButton_clicked();
+
+
 
 private:
     void clickbdBtn();
@@ -83,6 +86,7 @@ private:
 
 private:
     Ui::MainWindow *ui;
+    int rename_index;
 
     static MainWindow* _instance;
 
