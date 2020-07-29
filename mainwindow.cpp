@@ -11,6 +11,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QList>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -144,6 +145,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     _scene = new FlowChartScene();
+    QGraphicsView* graphicsView = new QGraphicsView();
     ui->graphicsView->setScene(scene());
     _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
 
@@ -151,7 +153,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->clear();
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->usesScrollButtons();
-    //ui->tabWidget->tabBar()->setTabButton(0,QTabBar::RightSide,NULL);
 
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
     QWidget *tabFile0 = new QWidget(this);
@@ -181,26 +182,9 @@ MainWindow::MainWindow(QWidget *parent)
             }
             if(i>=ui->tabWidget->count()){
 
-                //创建新的VIEW和SCENE，并绑定
-                FlowChartScene* scene = new FlowChartScene();
-                QGraphicsView* graphicsView = new QGraphicsView();
-                graphicsView->setScene(scene);
-                scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
-                scenes.insert(currentIndex,scene);
-
-                //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab和_scene
-                QWidget *tabFile = new QWidget(this);
-                QVBoxLayout *layout1 = new QVBoxLayout;
-                layout1->addWidget(graphicsView);
-                tabFile->setLayout(layout1);
-                ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
-                ui->tabWidget->setCurrentWidget(tabFile);
-                //_scene = scene;
-
+               addNewTab(currentItem);
             }
-
         }
-
     });
 
 //    connect(ui->treeView,&QTreeView::clicked,[=](){
@@ -209,7 +193,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //切换选项卡时scene的切换
     connect(ui->tabWidget,&QTabWidget::currentChanged,[=](){
-       // _scene =
+
+      QLayoutItem* item = ui->tabWidget->currentWidget()->layout()->itemAt(0);
+      QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
+
+        _scene = graphicView->scene();
     });
 
 
@@ -410,5 +398,47 @@ void MainWindow::clickLineBtn()
 }
 
 void MainWindow::removeSubTab(int index){
-    ui->tabWidget->removeTab(index);
+    if(ui->tabWidget->count() == 1) {
+        ui->tabWidget->removeTab(index);
+
+        addNewTab();
+    }
+    else {
+        ui->tabWidget->removeTab(index);
+    }
+
+}
+
+void MainWindow::addNewTab(QStandardItem* currentItem){
+    //创建新的VIEW和SCENE，并绑定
+    FlowChartScene* scene = new FlowChartScene();
+    QGraphicsView* graphicsView = new QGraphicsView();
+    graphicsView->setScene(scene);
+    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+
+
+    //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
+    QWidget *tabFile = new QWidget(this);
+    QVBoxLayout *layout1 = new QVBoxLayout;
+    layout1->addWidget(graphicsView);
+    tabFile->setLayout(layout1);
+    ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
+    ui->tabWidget->setCurrentWidget(tabFile);
+}
+
+void MainWindow::addNewTab(){
+    //创建新的VIEW和SCENE，并绑定
+    FlowChartScene* scene = new FlowChartScene();
+    QGraphicsView* graphicsView = new QGraphicsView();
+    graphicsView->setScene(scene);
+    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+
+
+    //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
+    QWidget *tabFile = new QWidget(this);
+    QVBoxLayout *layout1 = new QVBoxLayout;
+    layout1->addWidget(graphicsView);
+    tabFile->setLayout(layout1);
+    ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),"0");
+    ui->tabWidget->setCurrentWidget(tabFile);
 }

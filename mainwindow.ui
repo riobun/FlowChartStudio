@@ -299,7 +299,7 @@
       <x>140</x>
       <y>10</y>
       <width>821</width>
-      <height>771</height>
+      <height>791</height>
      </rect>
     </property>
     <widget class="QWidget" name="tab">
@@ -312,7 +312,7 @@
         <x>0</x>
         <y>-10</y>
         <width>831</width>
-        <height>761</height>
+        <height>781</height>
        </rect>
       </property>
      </widget>
@@ -325,7 +325,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>26</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">

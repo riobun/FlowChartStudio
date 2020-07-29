@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <QToolButton>
 #include <QVector>
+#include <QStandardItemModel>
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
@@ -63,10 +64,13 @@ private slots:
     void on_addTextButton_clicked();
 
     void removeSubTab(int index);
+
 private:
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();
+    void addNewTab(QStandardItem* currentItem);
+    void addNewTab();
 
 private:
     Ui::MainWindow *ui;
