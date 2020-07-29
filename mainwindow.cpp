@@ -455,3 +455,20 @@ void MainWindow::addNewTab(){
 
     scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
 }
+
+void MainWindow::on_addSubgraghButton_clicked()
+{
+    _nextAddedShape = ElementShape::SubGraph;
+}
+
+void MainWindow::on_addFatherPortButton_clicked()
+{
+    _nextAddedShape = ElementShape::Input;
+}
+
+
+
+void MainWindow::on_addSonPortButton_clicked()
+{
+    _nextAddedShape = ElementShape::Output;
+}

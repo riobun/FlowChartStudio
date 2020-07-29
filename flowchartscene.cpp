@@ -10,6 +10,9 @@
 #include "arrow.h"
 #include <QMenu>
 #include "groupaction.h"
+#include "subgraphnode.h"
+#include "inputnode.h"
+#include "outputnode.h"
 
 
 FlowChartScene::FlowChartScene()
@@ -70,6 +73,24 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
             window->setNextAddedShape(ElementShape::Unknown);
             return;
+        }
+        else if (shape == ElementShape::SubGraph)
+        {
+            auto subgraph = new SubgraphNode(point, 100.0);
+            auto action = new ChangeElementAction(subgraph, ElementShape::SubGraph, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::Input)
+        {
+            auto input = new InputNode(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(input, ElementShape::Input, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::Output)
+        {
+            auto output = new OutputNode(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(output, ElementShape::Output, true);
+            action->Do();
         }
         window->setNextAddedShape(ElementShape::Unknown);
     }
@@ -183,16 +204,32 @@ void FlowChartScene::pasteElements()
             newNode = new Diamond(node->GetLocation(), node->GetWidth(), node->GetHeight());
             shape = ElementShape::Diamond;
         }
+        else if (dynamic_cast<SubgraphNode*>(node))
+        {
+            newNode = new SubgraphNode(node->GetLocation(), node->GetWidth());
+            shape = ElementShape::SubGraph;
+        }
+        else if (dynamic_cast<InputNode*>(node))
+        {
+            newNode = new InputNode(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            shape = ElementShape::Input;
+        }
+        else if (dynamic_cast<OutputNode*>(node))
+        {
+            newNode = new OutputNode(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            shape = ElementShape::Output;
+        }
         *action << new ChangeElementAction(newNode, shape, true);
+        foreach (auto arrow, node->getSourceArrows())
+        {
+            auto newArrow = new Arrow(node->getNodeItem(), arrow->startItem());
+            *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
+        }
     }
     foreach (auto text, graph->getTexts())
     {
         auto newText = new Text(text->get_text_location());
         *action << new ChangeElementAction(newText, ElementShape::Text, true);
-    }
-    foreach (auto arrow, graph->getArrows())
-    {
-
     }
     action->Do();
     graph->clear();

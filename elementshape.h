@@ -9,6 +9,8 @@ enum class ElementShape
     Arrow,
     SubGraph,
     Text,
+    Input,
+    Output,
 };
 
 #endif // SHAPE_H

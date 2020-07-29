@@ -68,6 +68,12 @@ private slots:
 
     void removeSubTab(int index);
 
+    void on_addSubgraghButton_clicked();
+
+    void on_addFatherPortButton_clicked();
+
+    void on_addSonPortButton_clicked();
+
 private:
     void clickbdBtn();
     void clickFillBtn();

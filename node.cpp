@@ -148,3 +148,13 @@ void Node::BindToText(QGraphicsScene* qgs)
         content->change_content("文本");
     }
 }
+
+QVector<Arrow*> Node::getSourceArrows()
+{
+    QVector<Arrow*> vec;
+    foreach (auto arrow, sourceArrows)
+    {
+        vec.append(arrow);
+    }
+    return vec;
+}

@@ -31,7 +31,9 @@ void ChangeElementAction::Do()
             text->delete_text(scene);
         }
     }
-    else if (shape == ElementShape::Diamond || shape == ElementShape::Rectangle)
+    else if (shape == ElementShape::Diamond || shape == ElementShape::Rectangle ||
+             shape == ElementShape::SubGraph || shape == ElementShape::Input ||
+             shape == ElementShape::Output)
     {
         auto node = static_cast<Node*>(element);
         if (isCreated)

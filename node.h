@@ -34,6 +34,7 @@ public:
     virtual void BindToText(QGraphicsScene* qgs) override;
     virtual ~Node();
     QVector<Arrow*> getArrows();
+    QVector<Arrow*> getSourceArrows();
 
 
     NodeItem* getNodeItem() const { return shape; }
