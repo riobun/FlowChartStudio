@@ -23,6 +23,7 @@
 
 MainWindow* MainWindow::_instance;
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -186,6 +187,24 @@ MainWindow::MainWindow(QWidget *parent)
 
                addNewTab(currentItem);
             }
+        }
+    });
+
+    connect(ui->treeView,&QTreeView::doubleClicked,[=](){
+
+        QModelIndex currentIndex = ui->treeView->currentIndex();
+        QStandardItem* currentItem = model->itemFromIndex(currentIndex);
+
+//        qDebug()<<ui->tabWidget->count();
+        if(!currentItem->hasChildren())
+        {
+
+            for(rename_index=0;rename_index<ui->tabWidget->count();rename_index++){
+                if(ui->tabWidget->tabText(rename_index)==currentItem->text())
+                    break;
+            }
+
+            connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
         }
     });
 
@@ -471,4 +490,9 @@ void MainWindow::on_addFatherPortButton_clicked()
 void MainWindow::on_addSonPortButton_clicked()
 {
     _nextAddedShape = ElementShape::Output;
+}
+
+void MainWindow::modifyTabText(QStandardItem* item){
+
+    ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
 }
