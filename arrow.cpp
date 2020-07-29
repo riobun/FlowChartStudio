@@ -372,7 +372,7 @@ void Arrow::removeArrow()
 {
     endItem()->RemoveAsDestination(this);
     startItem()->RemoveAsSource(this);
-    new ChangeElementAction(this, ElementShape::Arrow, false);
+//    new ChangeElementAction(this, ElementShape::Arrow, false);
 //    delete this;
 }
 //! [1]

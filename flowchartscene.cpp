@@ -190,6 +190,7 @@ void FlowChartScene::pasteElements()
 {
     auto action = new GroupAction();
     auto graph = MainWindow::instance()->cutGraph;
+    QMap<Node*, Node*> nodes;
     foreach (auto node, graph->getNodes())
     {
         Node* newNode;
@@ -220,16 +221,18 @@ void FlowChartScene::pasteElements()
             shape = ElementShape::Output;
         }
         *action << new ChangeElementAction(newNode, shape, true);
-        foreach (auto arrow, node->getSourceArrows())
-        {
-            auto newArrow = new Arrow(node->getNodeItem(), arrow->startItem());
-            *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
-        }
+        nodes.insert(node, newNode);
     }
     foreach (auto text, graph->getTexts())
     {
         auto newText = new Text(text->get_text_location());
         *action << new ChangeElementAction(newText, ElementShape::Text, true);
+    }
+    foreach (auto arrow, graph->getArrows())
+    {
+        auto newArrow = new Arrow(nodes[arrow->startItem()->GetNode()]->getNodeItem(),
+                nodes[arrow->endItem()->GetNode()]->getNodeItem());
+        *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
     }
     action->Do();
     graph->clear();

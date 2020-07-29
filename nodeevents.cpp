@@ -70,6 +70,13 @@ void NodeEvents::cutElements()
     auto action = new GroupAction();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        foreach (auto arrow, node->getSourceArrows())
+        {
+            graph->addArrow(arrow);
+        }
+    }
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    {
         graph->addNode(node);
         *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
     }
@@ -77,12 +84,6 @@ void NodeEvents::cutElements()
     {
         graph->addText(text);
         *action << new ChangeElementAction(text, ElementShape::Text, false);
-    }
-    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
-    {
-        graph->addArrow(arrow);
-        arrow->removeArrow();
-        *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
     }
     action->Do();
 }
@@ -93,15 +94,18 @@ void NodeEvents::copyElements()
     graph->clear();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        foreach (auto arrow, node->getSourceArrows())
+        {
+            graph->addArrow(arrow);
+        }
+    }
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    {
         graph->addNode(node);
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
         graph->addText(text);
-    }
-    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
-    {
-        graph->addArrow(arrow);
     }
 }
 
