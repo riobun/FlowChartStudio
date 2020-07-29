@@ -1,6 +1,6 @@
 #include "arrow.h"
 #include "nodeitem.h"
-#include "node.h"
+//#include "node.h"
 #include "graphelement.h"
 #include <QPainter>
 #include <QPen>
@@ -11,9 +11,14 @@
 #include <QMenu>
 #include "changeelementaction.h"
 #include "mainwindow.h"
+#include "diamond.h"
+#include "rectangle.h"
+#include "arrownode.h"
+#include "groupaction.h"
+#include "changeelementaction.h"
 
-Arrow::Arrow(NodeItem *startItem, NodeItem *endItem, QGraphicsItem *parent)
-    : QGraphicsPathItem(parent), myStartItem(startItem), myEndItem(endItem)
+Arrow::Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd, QGraphicsItem *parent)
+    : QGraphicsPathItem(parent), myStartItem(startItem),myEndItem(endItem),HaveEnd(haveEnd)
 {
 //    apath=new QPainterPath(startItem->pos());
     startItem->GetNode()->ConnectAsSource(this);
@@ -58,6 +63,7 @@ void Arrow::updatePosition()
     if(list.length()>0){
     list.replace(0,myStartItem->pos());
     list.replace(list.length()-1,myEndItem->pos());}
+
 //    apath->lineTo(line.dx(),line.dy());
 //    setLine(line);
 //     update();
@@ -279,8 +285,8 @@ void Arrow::setList(){
 void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
                   QWidget *)
 {
-
-    setList();
+    if(!isMoved){
+    setList();}
     apath=new QPainterPath(list.at(0));
     QPen myPen = pen();
     myPen.setColor(myColor);
@@ -289,8 +295,13 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->setPen(myPen);
    // painter->setBrush(myColor);
 //! [4] //! [5]
-
+    painter->setBrush(Qt::black);
 // painter->drawLine(line());
+//    for(int i=1;i<=arrownode.length()-1;i++){
+//        painter->drawEllipse(arrownode.at(i),4,4);
+//    }
+    QBrush* brush=new QBrush();
+    painter->setBrush(*brush);
     for(int i=1;i<=list.length()-1;i++){
         apath->lineTo(list.at(i));
     }
@@ -302,7 +313,8 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->drawPath(path());
     painter->setPen(QPen(myColor, asize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->setBrush(myColor);
-    painter->drawPolygon(arrowHead);
+    if(HaveEnd){
+    painter->drawPolygon(arrowHead);}
     if (isSelected()) {
                 QBrush* brush=new QBrush();
                 painter->setBrush(*brush);
@@ -351,29 +363,16 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
             }
 }
 
-//void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){
-//    if (!isSelected())
-//        return;
 
-//}
-//! [7]
-//new function
-//QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)//当图形移动时，调用arrow的updatePosition函数，让箭头跟着图形移动
-//{
-//    if (change == QGraphicsItem::ItemPositionChange) {
-//        for (Arrow *arrow : qAsConst(arrows))
-//            arrow->updatePosition();
-//    }
 
-//    return value;
-//}
 
 void Arrow::removeArrow()
 {
     endItem()->RemoveAsDestination(this);
     startItem()->RemoveAsSource(this);
-//    new ChangeElementAction(this, ElementShape::Arrow, false);
-//    delete this;
+    new ChangeElementAction(this, ElementShape::Arrow, false);
+    if(content) content->delete_text(scene());
+
 }
 //! [1]
 
@@ -396,10 +395,11 @@ void Arrow::removeArrow()
 //}
 
 void Arrow::BindToText(QGraphicsScene* qgs){
+    if(content==nullptr){
     content=new Text((QPoint((myStartItem->pos().x()+myEndItem->pos().x())/2,
                      (myStartItem->pos().y()+myEndItem->pos().y())/2)));
     content->putup_text(qgs);
-    content->build_text();
+    content->build_text();}
 };
 //void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){
 //    if (!isSelected())
@@ -412,11 +412,19 @@ void Arrow::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
+    auto addTextAction = menu.addAction("添加文本框");
     auto selectedAction = menu.exec(event->screenPos());
     if (selectedAction == deleteAction)
     {
         NodeEvents::deleteElemets();
     }
+    else if(selectedAction == addTextAction){
+
+             BindToText(MainWindow::instance()->scene());
+             setSelected(false);
+             content->get_item()->setSelected(true);
+    }
+
 }
 
 QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)
@@ -425,5 +433,99 @@ QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)
     {
         s(this, QGraphicsItem::isSelected());
     }
+    else if(change==QGraphicsItem::ItemPositionChange)
+    {
+         updatePosition();
+         content=nullptr;
+         BindToText(MainWindow::instance()->scene());
+         setSelected(false);
+         content->get_item()->setSelected(true);
+    }
     return value;
+}
+
+void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+     QGraphicsItem::mouseDoubleClickEvent(event);
+     isDoubleClick=true;
+     auto point = event->scenePos();
+     auto arrownode = new class Arrownode(point, 5.0, 5.0);
+     auto action = new ChangeElementAction(arrownode, ElementShape::Arrownode, true);
+     action->Do();
+     auto arrows = myStartItem->GetNode()->getArrows();
+//     foreach (auto arrow, arrows)
+//     {
+//         arrow->removeArrow();
+//         //auto action = new ChangeElementAction(arrow, ElementShape::Arrow, false);
+//         //MainWindow::instance()->graph->removeArrow(arrow);
+//        MainWindow::instance()->scene()->removeItem(arrow);
+//     }
+//     解决方法：
+     this->removeArrow();
+     MainWindow::instance()->scene()->removeItem(this);
+
+     //auto arrow1 = new Arrow(myEndItem,myStartItem);
+     auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
+     auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
+     if(myEndItem->GetWidth()>5){
+     arrow3->HaveEnd=1;}
+     else{
+     arrow3->HaveEnd=0;}
+     //思考，我们加入箭头构造的判定条件如果满足就不生成黑色三角形
+     auto action2 = new ChangeElementAction(arrow2, ElementShape::Arrow, true);
+     action2->Do();
+     auto action3 = new ChangeElementAction(arrow3, ElementShape::Arrow, true);
+     action3->Do();
+     this->update();
+}
+void Arrow::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+   /* if(event->button()==Qt::MouseButton::LeftButton)
+    {
+        if(isDoubleClick){
+            isMoved=true;
+            QPointF pos = event->pos();
+            qreal arrowSize = 20;
+//            list.clear();
+            if((myStartItem->pos().x()==myEndItem->pos().x()&&myStartItem->pos().y()!=myEndItem->pos().y())
+                    ||(myStartItem->pos().y()==myEndItem->pos().y()&&myStartItem->pos().x()!=myEndItem->pos().x())){
+
+                if (event->scenePos().x() == myStartItem->pos().x() && event->scenePos().x() == myEndItem->pos().x()){
+                list.insert(1,pos);}
+
+            }//1直线
+            else if((myStartItem->pos().y()>=myEndItem->pos().y()-myEndItem->GetHeight()/2-arrowSize&&myStartItem->pos().y()<=myEndItem->pos().y()+myEndItem->GetHeight()/2+arrowSize)
+                    ||(myEndItem->pos().x()>=myStartItem->pos().x()-myStartItem->GetWidth()/2&&myEndItem->pos().x()<=myStartItem->pos().x()+myStartItem->GetWidth()/2)){
+
+              if(event->scenePos().y() == myStartItem->pos().y()){
+              list.insert(1,pos);}
+
+              if (event->scenePos().y() == myStartItem->pos().y()&& event->scenePos().x() == myEndItem->pos().x()){
+              list.replace(1,pos);}
+
+              else{
+              list.insert(2,pos);}
+            }//2折
+            else if((myStartItem->pos().y()<myEndItem->pos().y()-myEndItem->GetHeight()/2-arrowSize||myStartItem->pos().y()>myEndItem->pos().y()+myEndItem->GetHeight()/2+arrowSize)
+                    &&(myEndItem->pos().x()<myStartItem->pos().x()-myStartItem->GetWidth()/2||myEndItem->pos().x()>myStartItem->pos().x()+myStartItem->GetWidth()/2)){
+
+                if (event->scenePos().x() == myStartItem->pos().x()|| event->scenePos().y() == myStartItem->pos().y()){
+                list.insert(1,pos);}
+
+                if (event->scenePos().x()==list.at(1).x()&& event->scenePos().y()== list.at(1).y()){
+                list.replace(1,pos);}
+
+                if (event->scenePos().x() == (myEndItem->pos().x() + myStartItem->pos().x()) / 2||event->scenePos().y() == ((myEndItem->pos().y() + myStartItem->pos().y()) / 2)){
+                list.insert(2,pos);}
+
+                if (event->scenePos().x() == list.at(2).x() && event->scenePos().y() == list.at(2).y()){
+                list.replace(2,pos);}
+                if (event->scenePos().x() == myEndItem->pos().x()|| event->scenePos().y() == myEndItem->pos().y()){
+                list.insert(3,pos);}
+            }//3折
+        }
+
+    }*/
+}
+void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *event){
+     isFocus=true;
 }

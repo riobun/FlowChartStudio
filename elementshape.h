@@ -11,6 +11,7 @@ enum class ElementShape
     Text,
     Input,
     Output,
+    Arrownode,
 };
 
 #endif // SHAPE_H
