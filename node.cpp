@@ -4,12 +4,12 @@
 Node::Node(){}
 Node::Node(QPointF lc,double w,double h):location(lc),width(w),height(h)
 {
-
+   //shape=new NodeItem(this);
 }
 
 Node::~Node()
 {
-
+    delete content;
 }
 double Node::GetWidth()
 {
@@ -146,6 +146,7 @@ void Node::BindToText(QGraphicsScene* qgs)
         content->putup_text(qgs);
         content->build_text();
         content->change_content("文本");
+        content->setZValue(shape->zValue());
     }
 }
 
@@ -157,4 +158,11 @@ QVector<Arrow*> Node::getSourceArrows()
         vec.append(arrow);
     }
     return vec;
+}
+
+void Node::ChangeZValue(bool isSelected)
+{
+    if(isSelected) shape->setZValue(100);
+    else shape->setZValue(1);
+    if(content) content->setZValue(shape->zValue());
 }

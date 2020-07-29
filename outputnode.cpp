@@ -22,6 +22,11 @@ void OutputNode::SetShape()
     polygon<<QPointF(location.x(),location.y()+height/2)<<QPointF(location.x()+width/2,location.y()+height/2);
     shape->setPolygon(polygon);
 }
+void OutputNode::BindToText(QGraphicsScene *qgs)
+{
+    Node::BindToText(qgs);
+    content->change_content("out");
+}
 int OutputNode::GetType()
 {
     return 4;

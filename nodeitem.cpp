@@ -156,3 +156,10 @@ void NodeItem::RemoveAsSource(Arrow* ar){
 void NodeItem::RemoveAsDestination(Arrow* ar){
     //node->DisconnectAsSource(ar);
 }
+
+void NodeItem::SetSelected(bool b)
+{
+    isSelected=b;
+    node->ChangeZValue(b);
+    setSelected(b);
+}

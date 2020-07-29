@@ -9,6 +9,7 @@ public:
     InputNode(QPointF lc,double wd,double h);
     virtual void SetShape() override;
     virtual int GetType() override;
+    virtual void BindToText(QGraphicsScene *qgs) override;
     ~InputNode();
 };
 

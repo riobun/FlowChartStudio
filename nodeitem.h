@@ -14,19 +14,7 @@ public:
     explicit NodeItem(QObject *parent = nullptr):QObject(parent) {};
     NodeItem(Node* node):node(node){};
     Node* GetNode() {return node;}
-    void SetSelected(bool b)
-    {
-        isSelected=b;
-        if(b)
-        {
-            setZValue(100);
-        }
-        else
-        {
-            setZValue(1);
-        }
-        setSelected(b);
-    }
+    void SetSelected(bool b);
 
     QPolygonF polygon() const;
     QPointF pos();

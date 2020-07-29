@@ -23,7 +23,12 @@ void InputNode::SetShape()
     polygon<<QPointF(location.x(),location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
     shape->setPolygon(polygon);
 }
+void InputNode::BindToText(QGraphicsScene *qgs)
+{
+    Node::BindToText(qgs);
+    content->change_content("in");
+}
 int InputNode::GetType()
 {
-    return 1;
+    return 3;
 }
