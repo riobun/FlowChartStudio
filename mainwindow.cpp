@@ -142,12 +142,11 @@ MainWindow::MainWindow(QWidget *parent)
     itemProject1->appendRow(itemFileFolder1);
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
     itemFileFolder1->appendRow(itemFile1);
-
-
+/*
     _scene = new FlowChartScene();
     ui->graphicsView->setScene(scene());
     _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
-
+*/
     //页面选项卡设计
     ui->tabWidget->clear();
     ui->tabWidget->setTabsClosable(true);
@@ -415,9 +414,8 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     //创建新的VIEW和SCENE，并绑定
     FlowChartScene* scene = new FlowChartScene();
     QGraphicsView* graphicsView = new QGraphicsView();
-    graphicsView->setScene(scene);
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
 
+    graphicsView->setScene(scene);
 
     //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
     QWidget *tabFile = new QWidget(this);
@@ -426,15 +424,17 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     tabFile->setLayout(layout1);
     ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
     ui->tabWidget->setCurrentWidget(tabFile);
+
+
+    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
 }
 
 void MainWindow::addNewTab(){
     //创建新的VIEW和SCENE，并绑定
     FlowChartScene* scene = new FlowChartScene();
     QGraphicsView* graphicsView = new QGraphicsView();
-    graphicsView->setScene(scene);
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
 
+    graphicsView->setScene(scene);
 
     //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
     QWidget *tabFile = new QWidget(this);
@@ -443,4 +443,7 @@ void MainWindow::addNewTab(){
     tabFile->setLayout(layout1);
     ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),"0");
     ui->tabWidget->setCurrentWidget(tabFile);
+
+
+    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
 }
