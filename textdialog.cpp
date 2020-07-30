@@ -2,7 +2,7 @@
 #include<QMessageBox>
 #include<QGridLayout>
 
-DetailsDialog::DetailsDialog(QString sc,const QString &title, QWidget *parent)
+DetailsDialog::DetailsDialog(QString sc,QString logiccon,const QString &title, QWidget *parent)
     : QDialog(parent)
 {
     nameLabel = new QLabel(tr("组合逻辑:"));
@@ -27,7 +27,7 @@ DetailsDialog::DetailsDialog(QString sc,const QString &title, QWidget *parent)
     relationC->addItems(rsl);
     QMap<QString,int>rm;
     rm.insert("None",0);
-    rm.insert("ADD",1);
+    rm.insert("AND",1);
     rm.insert("OR",2);
     foreach(const QString &rsl,rm.keys(rsl))
         relationC->addItem(rsl,rm.value(rsl));
@@ -65,7 +65,7 @@ DetailsDialog::DetailsDialog(QString sc,const QString &title, QWidget *parent)
     setWindowTitle(title);
     con=sc;
     contentEdit->setText(con);
-
+    logicEdit->setText(logiccon);
 }
 
 void DetailsDialog::changcon(QString sc){
@@ -111,21 +111,16 @@ void DetailsDialog::pressbutton(){
     //int a=relationC->currentIndex();
     //int b=notC->currentIndex();
     if(a==1){
-        s.append("ADD ");
+        s.append("AND ");
     }
     else if(a==2){
         s.append("OR ");
-    }
-    else if(a!=0){
-        s.append("erro");
     }
 
     if(b==1){
         s.append("NOT ");
     }
-    else if(b!=0){
-        s.append("erro");
-    }
+
 
     s.append(nameEdit->text());
     //s.chop(1);
