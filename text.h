@@ -35,6 +35,7 @@ public:
 
     QFont get_text_font();
     QString get_text_content();
+    QString get_text_all();
     QPointF get_text_location();
     QColor get_text_color();
     Text* get_item();
