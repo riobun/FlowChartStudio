@@ -58,6 +58,9 @@ Text::~Text() {
 
 }
 
+QString Text::get_text_all(){
+    return all;
+}
 
 void Text::delete_text(QGraphicsScene* scene) {
     scene->removeItem(this);
@@ -117,11 +120,11 @@ void Text::reset_color(QColor new_color) {
     setRect(location.x() - width / 2, location.y() - height / 2, width, height);
 }*/
 void Text::change_content(QString new_c){
-    emit shape->NewContent(this,all);
+    emit shape->NewContent(this,content);
     content=new_c;
     all=content;
     all.append(logic);
-    setPlainText(all);
+    setPlainText(content);
 
 }
 QFont Text::get_text_font() {
@@ -223,7 +226,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     }
     else if(selectedAction==logicAction){
 
-        DetailsDialog dialog(content);
+        DetailsDialog dialog(content,logic);
 
         if (dialog.exec() == QDialog::Accepted) {
 
