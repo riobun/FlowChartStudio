@@ -18,7 +18,7 @@ class DetailsDialog : public QDialog
     Q_OBJECT
 
 public:
-    DetailsDialog(QString sc,const QString &title="文本编辑框", QWidget *parent=0);
+    DetailsDialog(QString sc,QString logiccon,const QString &title="文本编辑框", QWidget *parent=0);
     void changcon(QString sc);
 public slots:
     void verify() ;
