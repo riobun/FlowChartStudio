@@ -136,8 +136,11 @@ MainWindow::MainWindow(QWidget *parent)
         QFontDialog::getFont(&flag,QFont("宋体",20));
     });
     //箭头
-    connect(ui->action_arrowColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_arrowColor,&QAction::triggered,[=](){
+        lineColor = QColorDialog::getColor(QColor(Qt::black));
+        clickLineBtn();
+        fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                         ":/images/floodfill.png", lineColor));
     });
     //节点
     connect(ui->action_bgColor,&QAction::triggered,[=](){
@@ -359,6 +362,10 @@ void MainWindow::arrowColorChanged()
                                      qvariant_cast<QColor>(arrowColorAction->data())));
     arrowColorButtonTriggered();
     lineColor = qvariant_cast<QColor>(arrowColorAction->data());
+    if (selectedArrows()->size() > 0)
+    {
+        clickLineBtn();
+    }
 }
 
 void MainWindow::arrowColorButtonTriggered()
@@ -434,7 +441,7 @@ void MainWindow::clickFillBtn()
         *action << new EditElementAction(node, ElementShape::Rectangle,
                                          ElementProperty::BackgroundColor,
                                          new QColor(node->GetBackgroundColor()),
-                                         new QColor(lineColor));
+                                         new QColor(fillColor));
     }
     action->Do();
 }
@@ -447,7 +454,7 @@ void MainWindow::clickLineBtn()
         *action << new EditElementAction(arrow, ElementShape::Arrow,
                                          ElementProperty::FrameColor,
                                          new QColor(arrow->getColor()),
-                                         new QColor(fillColor));
+                                         new QColor(lineColor));
     }
     action->Do();
 }
