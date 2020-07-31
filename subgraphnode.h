@@ -2,6 +2,11 @@
 #define SUBGRAPHNODE_H
 #include "node.h"
 #include "QGraphicsLineItem"
+
+#include "mainwindow.h"
+
+extern MainWindow* point_w;
+
 class SubgraphNode:public Node
 {
 public:
