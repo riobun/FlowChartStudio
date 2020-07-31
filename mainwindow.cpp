@@ -43,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
         textEdit->setGeometry(QRect(150,120,700,600));
         textEdit->setHidden(true); //隐藏文本编辑
     //*****************************************************
-    //侧边栏
-    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
-    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
-    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
+//    //侧边栏
+//    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
+//    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
+//    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
