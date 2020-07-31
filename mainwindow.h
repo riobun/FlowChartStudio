@@ -11,7 +11,11 @@
 #include "node.h"
 #include "graph.h"
 #include "flowchartscene.h"
-
+//*************************************************
+#include <QMenu>
+#include <QAction>
+#include <QTextEdit>
+//*********************************************
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -76,7 +80,15 @@ private slots:
     void on_addSonPortButton_clicked();
 
 
+//*****************************************************
+    void on_action1_triggered();
 
+    void on_action1_2_triggered();
+
+    void on_action1_3_triggered();
+
+    void on_action1_4_triggered();
+    //*****************************************************
 private:
     void clickbdBtn();
     void clickFillBtn();
@@ -95,7 +107,9 @@ private:
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
-
+    //**********************************
+    QTextEdit *textEdit;
+      //***********************
     QAction *textAction;
     QAction *fillAction;
     QAction *bdAction;
