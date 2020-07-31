@@ -11,6 +11,7 @@
 #include "node.h"
 #include "graph.h"
 #include "flowchartscene.h"
+#include <QMap>
 //*************************************************
 #include <QMenu>
 #include <QAction>
@@ -38,11 +39,11 @@ public:
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
+    Graph* graph();
 
     QColor bdColor = Qt::black;
     QColor fillColor = Qt::white;
     QColor lineColor = Qt::black;
-    Graph* graph = new Graph;
     Graph* cutGraph = new Graph;
 
 public slots:
@@ -126,6 +127,7 @@ private:
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
     QMap<QModelIndex,FlowChartScene* > scenes;
+    QMap<QGraphicsScene*, Graph*> graphs;
 
 };
 #endif // MAINWINDOW_H

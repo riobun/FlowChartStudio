@@ -33,6 +33,7 @@ public:
     QVector<Text*>& getTexts() { return texts; }
 
     void BindToText(QGraphicsScene *qgs) override {}
+    Node* node;
 private:
     void SetVisibility(bool set);
     bool isExpended;

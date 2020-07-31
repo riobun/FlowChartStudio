@@ -20,6 +20,11 @@ FlowChartScene::FlowChartScene()
 
 }
 
+FlowChartScene::~FlowChartScene()
+{
+    delete graph;
+}
+
 void FlowChartScene::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control)
@@ -63,7 +68,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
         else if (shape == ElementShape::Arrow)
         {
-            lineFrom = window->graph->searchNode(point);
+            lineFrom = window->graph()->searchNode(point);
             if (lineFrom)
             {
                 fromLinePosition = lineFrom->GetLocation();
@@ -141,12 +146,12 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
     {
-        auto nodes = MainWindow::instance()->graph->searchNodes(rect);
+        auto nodes = MainWindow::instance()->graph()->searchNodes(rect);
         foreach (auto node, nodes)
         {
             node->getNodeItem()->SetSelected(true);
         }
-        auto texts = MainWindow::instance()->graph->searchTexts(rect);
+        auto texts = MainWindow::instance()->graph()->searchTexts(rect);
         foreach (auto text, texts)
         {
             text->getTextItem()->SetSelected(true);
@@ -157,7 +162,7 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     if (line)
     {
-        auto to = MainWindow::instance()->graph->searchNode(event->scenePos());
+        auto to = MainWindow::instance()->graph()->searchNode(event->scenePos());
         if (to)
         {
             auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem(),1);
@@ -181,15 +186,18 @@ void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         auto selectedAction = menu.exec(event->screenPos());
         if (selectedAction == pasteAction)
         {
-            pasteElements();
+            pasteElements(event);
         }
     }
 }
 
-void FlowChartScene::pasteElements()
+void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
 {
     auto action = new GroupAction();
     auto graph = MainWindow::instance()->cutGraph;
+    QPointF offset;
+    if (event) offset = event->scenePos() - graph->node->GetLocation();
+    else offset = QPointF();
     QMap<Node*, Node*> nodes;
     foreach (auto node, graph->getNodes())
     {
@@ -197,27 +205,27 @@ void FlowChartScene::pasteElements()
         ElementShape shape;
         if (dynamic_cast<Rectangle*>(node))
         {
-            newNode = new Rectangle(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            newNode = new Rectangle(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Rectangle;
         }
         else if (dynamic_cast<Diamond*>(node))
         {
-            newNode = new Diamond(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            newNode = new Diamond(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Diamond;
         }
         else if (dynamic_cast<SubgraphNode*>(node))
         {
-            newNode = new SubgraphNode(node->GetLocation(), node->GetWidth());
+            newNode = new SubgraphNode(node->GetLocation() + offset, node->GetWidth());
             shape = ElementShape::SubGraph;
         }
         else if (dynamic_cast<InputNode*>(node))
         {
-            newNode = new InputNode(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            newNode = new InputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Input;
         }
         else if (dynamic_cast<OutputNode*>(node))
         {
-            newNode = new OutputNode(node->GetLocation(), node->GetWidth(), node->GetHeight());
+            newNode = new OutputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Output;
         }
         *action << new ChangeElementAction(newNode, shape, true);
@@ -230,8 +238,21 @@ void FlowChartScene::pasteElements()
     }
     foreach (auto arrow, graph->getArrows())
     {
-        auto newArrow = new Arrow(nodes[arrow->startItem()->GetNode()]->getNodeItem(),
-                nodes[arrow->endItem()->GetNode()]->getNodeItem(),1);
+        auto graph = MainWindow::instance()->graph();
+        auto fromNode = nodes[arrow->startItem()->GetNode()];
+        if (!fromNode)
+        {
+            fromNode = arrow->startItem()->GetNode();
+            if (!graph->getNodes().contains(fromNode->GetID())) continue;
+        }
+        auto toNode = nodes[arrow->endItem()->GetNode()];
+        if (!toNode)
+        {
+            toNode = arrow->endItem()->GetNode();
+            if (!graph->getNodes().contains(toNode->GetID())) continue;
+        }
+
+        auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), 1);
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
     }
     action->Do();

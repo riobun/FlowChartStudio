@@ -468,7 +468,6 @@ void MainWindow::removeSubTab(int index){
     else {
         ui->tabWidget->removeTab(index);
     }
-
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
@@ -670,4 +669,9 @@ void MainWindow::on_action1_4_triggered()//另存为
            Flag_IsNew = 0;
            file.close();
        }
+}
+
+Graph* MainWindow::graph()
+{
+    return static_cast<FlowChartScene*>(scene())->graph;
 }

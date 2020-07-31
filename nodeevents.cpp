@@ -35,11 +35,11 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     }
     else if (selectedAction == copyAction)
     {
-        copyElements();
+        copyElements(node);
     }
     else if (selectedAction == cutAction)
     {
-        cutElements();
+        cutElements(node);
     }
 }
 
@@ -62,14 +62,16 @@ void NodeEvents::deleteElemets()
     action->Do();
 }
 
-void NodeEvents::cutElements()
+void NodeEvents::cutElements(Node* node)
 {
     auto graph = MainWindow::instance()->cutGraph;
     auto scene = MainWindow::instance()->scene();
     graph->clear();
+    graph->node = node;
     auto action = new GroupAction();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         foreach (auto arrow, node->getSourceArrows())
         {
             graph->addArrow(arrow);
@@ -88,12 +90,14 @@ void NodeEvents::cutElements()
     action->Do();
 }
 
-void NodeEvents::copyElements()
+void NodeEvents::copyElements(Node* node)
 {
     auto graph = MainWindow::instance()->cutGraph;
     graph->clear();
+    graph->node = node;
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         foreach (auto arrow, node->getSourceArrows())
         {
             graph->addArrow(arrow);
