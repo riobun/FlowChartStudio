@@ -12,6 +12,13 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QList>
+//**********************************************************
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QFile>
+#include <QFileDevice>
+#include <QTextStream>
+#include <QtEvents> //************************************
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -29,7 +36,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //*****************************************************
+        textEdit = new QTextEdit(this);
 
+        textEdit->setGeometry(QRect(150,120,700,600));
+        textEdit->setHidden(true); //隐藏文本编辑
+    //*****************************************************
     //侧边栏
     ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
     ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
@@ -495,4 +507,145 @@ void MainWindow::on_addSonPortButton_clicked()
 void MainWindow::modifyTabText(QStandardItem* item){
 
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
+}
+
+//****************************************************************
+int Flag_isOpen = 0;       //标记：判断是否打开或创建了一个文件
+int Flag_IsNew = 0;        //标记：如果新建了文件就为1，初始值为0
+QString Last_FileName;     //最后一次保存的文件的名字
+QString Last_FileContent;  //最后一次保存文件的内容
+void MainWindow::on_action1_triggered()//新建
+{
+
+    textEdit->clear();              //清除原先文件内容
+    textEdit->setHidden(false);     //显示文本框
+    Flag_IsNew = 1;                 //新文件标记位设为1
+    Flag_isOpen = 1;                //新文件创建 标记位设为1
+}
+
+void MainWindow::on_action1_2_triggered()//打开
+{
+    QString fileName;
+        fileName = QFileDialog::getOpenFileName(this,tr("Open File"),tr(""),tr("Text File (*.txt)"));
+        if(fileName == "")
+        {
+            return;
+        }
+        else
+        {
+           QFile file(fileName);
+           if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+           {
+               QMessageBox::warning(this,tr("错误"),tr("打开文件失败"));
+               return;
+           }
+           else
+           {
+               if(!file.isReadable())
+               {
+                   QMessageBox::warning(this,tr("错误"),tr("该文件不可读"));
+               }
+               else
+               {
+                   QTextStream textStream(&file);       //读取文件，使用QTextStream
+                   while(!textStream.atEnd())
+                   {
+                       textEdit->setPlainText(textStream.readAll());
+                   }
+                   textEdit->show();
+                   file.close();
+                   Flag_isOpen = 1;
+                   Last_FileName = fileName;
+               }
+           }
+        }
+}
+
+void MainWindow::on_action1_3_triggered()//保存
+{
+    if(Flag_IsNew)                  //如果新文件标记位为1，则弹出保存文件对话框
+       {
+           if(textEdit->toPlainText() == "")
+           {
+               QMessageBox::warning(this,tr("警告"),tr("内容不能为空!"),QMessageBox::Ok);
+           }
+           else
+           {
+               QFileDialog fileDialog;
+               QString str = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.txt)"));
+               if(str == "")
+               {
+                   return;
+               }
+               QFile filename(str);
+               if(!filename.open(QIODevice::WriteOnly | QIODevice::Text))
+               {
+                   QMessageBox::warning(this,tr("错误"),tr("打开文件失败"),QMessageBox::Ok);
+                   return;
+               }
+               else
+               {
+                   QTextStream textStream(&filename);
+                   QString str = textEdit->toPlainText();
+                   textStream<<str;
+                   Last_FileContent = str;
+               }
+               QMessageBox::information(this,"保存文件","保存文件成功",QMessageBox::Ok);
+               filename.close();
+               Flag_IsNew = 0;     //新文件标记位记为0
+               Last_FileName = str;//保存文件内容
+           }
+       }
+       else                        //否则，新文件标记位是0，代表是旧文件，默认直接保存覆盖源文件
+       {
+           if(Flag_isOpen)         //判断是否创建或打开了一个文件
+           {
+               QFile file(Last_FileName);
+               if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+               {
+                   QMessageBox::warning(this,tr("警告"),tr("打开文件失败"));
+                   return;
+               }
+               else
+               {
+                   QTextStream textStream(&file);
+                   QString str = textEdit->toPlainText();
+                   textStream<<str;
+                   Last_FileContent = str;
+                   file.close();
+               }
+           }
+           else
+           {
+               QMessageBox::warning(this,tr("警告"),tr("请先创建或者打开文件"));
+               return;
+           }
+       }
+}
+
+void MainWindow::on_action1_4_triggered()//另存为
+{
+    QFileDialog fileDialog;
+       QString fileName = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.txt)"));
+       if(fileName == "")
+       {
+           return;
+       }
+       QFile file(fileName);
+       if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+       {
+           QMessageBox::warning(this,tr("错误"),tr("打开文件失败"));
+           return;
+       }
+       else
+       {
+           QTextStream textStream(&file);
+           QString str = textEdit->toPlainText();
+           textStream<<str;
+           QMessageBox::warning(this,tr("提示"),tr("保存文件成功"));
+           Last_FileContent = str;
+           Last_FileName = fileName;
+           Flag_IsNew = 0;
+           file.close();
+       }
 }
