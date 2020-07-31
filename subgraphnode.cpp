@@ -66,5 +66,5 @@ int SubgraphNode::GetType()
 
 void SubgraphNode::OpenSubGraph()
 {
-
+    point_w->addNewTab();
 }
