@@ -3,6 +3,7 @@
 #include "node.h"
 #include <QPointF>
 #include "mainwindow.h"
+#include "arrow.h"
 
 EditElementAction::EditElementAction(void* element, ElementShape shape, ElementProperty property, void* from, void* to)
     : shape(shape), property(property), from(from), to(to), element(element) {}
@@ -73,8 +74,8 @@ void EditElementAction::Do()
            }
       }
       else if(shape==  ElementShape::Text)
-          {
-           auto text = static_cast<Text*>(element);
+      {
+          auto text = static_cast<Text*>(element);
 
           if(property == ElementProperty::Location)
           {
@@ -97,8 +98,16 @@ void EditElementAction::Do()
               auto toFont = static_cast<QFont*>(to);
               text->reset_font(*toFont);
           }
-
-          }
+      }
+    else if (shape == ElementShape::Arrow)
+    {
+        auto arrow = static_cast<Arrow*>(element);
+        if (property == ElementProperty::FrameColor)
+        {
+            auto toColor = static_cast<QColor*>(to);
+            arrow->setArrowColor(*toColor);
+        }
+    }
 }
 
 void EditElementAction::Undo()

@@ -21,7 +21,8 @@ public:
     int type() const override { return Type; }
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    void setColor(const QColor &color) { myColor = color; }
+    void setArrowColor(const QColor &color);
+    QColor getColor() { return myColor; }
     void setType(int flag);
     void setSize(int size);
     void setId(int size);

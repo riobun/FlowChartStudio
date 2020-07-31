@@ -26,6 +26,7 @@
 #include "editelementaction.h"
 #include "groupaction.h"
 #include "nodeevents.h"
+#include "arrow.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -433,14 +434,22 @@ void MainWindow::clickFillBtn()
         *action << new EditElementAction(node, ElementShape::Rectangle,
                                          ElementProperty::BackgroundColor,
                                          new QColor(node->GetBackgroundColor()),
-                                         new QColor(fillColor));
+                                         new QColor(lineColor));
     }
     action->Do();
 }
 
 void MainWindow::clickLineBtn()
 {
-
+    auto action = new GroupAction;
+    foreach (auto arrow, *selectedArrows())
+    {
+        *action << new EditElementAction(arrow, ElementShape::Arrow,
+                                         ElementProperty::FrameColor,
+                                         new QColor(arrow->getColor()),
+                                         new QColor(fillColor));
+    }
+    action->Do();
 }
 
 void MainWindow::removeSubTab(int index){

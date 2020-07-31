@@ -69,6 +69,7 @@ void ChangeElementAction::Do()
             arrow->myEndItem->GetNode()->ConnectAsSource(arrow);
             arrow->setZValue(-100.0);
             MainWindow::instance()->scene()->addItem(arrow);
+            arrow->setArrowColor(MainWindow::instance()->lineColor);
             arrow->updatePosition();
             MainWindow::instance()->graph->addArrow(arrow);
             arrow->s = onArrowSelected;

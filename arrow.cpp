@@ -529,3 +529,12 @@ void Arrow::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *event){
      isFocus=true;
 }
+
+void Arrow::setArrowColor(const QColor &color)
+{
+    myColor = color;
+    auto brush = Arrow::brush();
+    brush.setColor(color);
+    brush.setStyle(Qt::BrushStyle::SolidPattern);
+    setBrush(brush);
+}
