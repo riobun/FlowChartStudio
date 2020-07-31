@@ -15,7 +15,7 @@ public:
     virtual void ChangeZValue(bool isSelected) override;
     ~SubgraphNode();
     
-    void OpenSubGraph(){}
+    void OpenSubGraph();
     
 private:
     QVector<QGraphicsLineItem*> subShape;

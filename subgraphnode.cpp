@@ -63,3 +63,8 @@ int SubgraphNode::GetType()
 {
     return 5;
 }
+
+void SubgraphNode::OpenSubGraph()
+{
+
+}

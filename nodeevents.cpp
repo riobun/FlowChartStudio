@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "groupaction.h"
 #include "arrow.h"
+#include "subgraphnode.h"
 
 
 void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *event)
@@ -12,7 +13,11 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
-    auto subGraphAction = menu.addAction("打开子图");
+    QAction* subGraphAction;
+    if (dynamic_cast<SubgraphNode*>(node))
+    {
+        subGraphAction = menu.addAction("打开子图");
+    }
     auto cutAction = menu.addAction("剪切");
     cutAction->setShortcut(QKeySequence::Cut);
     auto copyAction = menu.addAction("复制");
@@ -22,16 +27,10 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     {
         deleteElemets();
     }
-    else if (selectedAction == subGraphAction)
+    else if (selectedAction && selectedAction == subGraphAction)
     {
-        QVector<Node*> nodes;
-        foreach (auto node, *MainWindow::instance()->selectedNodes())
-        {
-            nodes.append(node);
-        }
-        QVector<Text*> texts;
-        QVector<Graph*> graphs;
-        new Graph(nodes, texts, graphs);
+        auto sgnode = static_cast<SubgraphNode*>(node);
+        sgnode->OpenSubGraph();
     }
     else if (selectedAction == copyAction)
     {
