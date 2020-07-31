@@ -16,6 +16,7 @@
 #include "arrownode.h"
 #include "groupaction.h"
 #include "changeelementaction.h"
+#include "editelementaction.h"
 
 Arrow::Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd, QGraphicsItem *parent)
     : QGraphicsPathItem(parent), myStartItem(startItem),myEndItem(endItem),HaveEnd(haveEnd)
@@ -62,7 +63,9 @@ void Arrow::updatePosition()
 //    QLineF line(mapFromItem(myStartItem, 0, 0), mapFromItem(myEndItem, 0, 0));
     if(list.length()>0){
     list.replace(0,myStartItem->pos());
-    list.replace(list.length()-1,myEndItem->pos());}
+    list.replace(list.length()-1,myEndItem->pos());
+    ischange=true;
+    }
 
 //    apath->lineTo(line.dx(),line.dy());
 //    setLine(line);
@@ -155,9 +158,15 @@ void Arrow::setList(){
 
     if(myStartItem->pos().y()>=myEndItem->pos().y()-myEndItem->GetHeight()/2-arrowSize&&myStartItem->pos().y()<=myEndItem->pos().y()+myEndItem->GetHeight()/2+arrowSize)
     {
-        QPointF *pa=new QPointF((myEndItem->pos().x()+myStartItem->pos().x())/2, myStartItem->pos().y());
-        QPointF *pb=new QPointF((myEndItem->pos().x()+myStartItem->pos().x())/2, myEndItem->pos().y());
-
+        QPointF *pa;
+        QPointF *pb;
+        if(myStartItem->pos().x()<myEndItem->pos().x()){
+        pa=new QPointF(((myEndItem->pos().x()-myEndItem->GetWidth()/2)+(myStartItem->pos().x()+myStartItem->GetWidth()/2))/2, myStartItem->pos().y());
+        pb=new QPointF(((myEndItem->pos().x()-myEndItem->GetWidth()/2)+(myStartItem->pos().x()+myStartItem->GetWidth()/2))/2, myEndItem->pos().y());
+      }else{
+            pa=new QPointF(((myEndItem->pos().x()+myEndItem->GetWidth()/2)+(myStartItem->pos().x()-myStartItem->GetWidth()/2))/2, myStartItem->pos().y());
+            pb=new QPointF(((myEndItem->pos().x()+myEndItem->GetWidth()/2)+(myStartItem->pos().x()-myStartItem->GetWidth()/2))/2, myEndItem->pos().y());
+        }
     //    QLineF centerLine(myStartItem->pos(), myEndItem->pos());
         QLineF centerLine(*pb, myEndItem->pos());
         QPolygonF endPolygon = myEndItem->polygon();
@@ -198,9 +207,15 @@ void Arrow::setList(){
         return ;
     }else if(myEndItem->pos().x()>=myStartItem->pos().x()-myStartItem->GetWidth()/2&&myEndItem->pos().x()<=myStartItem->pos().x()+myStartItem->GetWidth()/2)
     {
-        QPointF *pa=new QPointF(myStartItem->pos().x(),(myEndItem->pos().y()+myStartItem->pos().y())/2);
-        QPointF *pb=new QPointF(myEndItem->pos().x(),(myEndItem->pos().y()+myStartItem->pos().y())/2);
-
+        QPointF *pa;
+        QPointF *pb;
+            if(myStartItem->pos().y()<myEndItem->pos().y()){
+            pa=new QPointF(myStartItem->pos().x(),((myEndItem->pos().y()-myEndItem->GetHeight()/2)+(myStartItem->pos().y()+myStartItem->GetHeight()/2))/2);
+            pb=new QPointF(myEndItem->pos().x(),((myEndItem->pos().y()-myEndItem->GetHeight()/2)+(myStartItem->pos().y()+myStartItem->GetHeight()/2))/2);
+          }else{
+                pa=new QPointF(myStartItem->pos().x(),((myEndItem->pos().y()+myEndItem->GetHeight()/2)+(myStartItem->pos().y()-myStartItem->GetHeight()/2))/2);
+                pb=new QPointF(myEndItem->pos().x(),((myEndItem->pos().y()+myEndItem->GetHeight()/2)+(myStartItem->pos().y()-myStartItem->GetHeight()/2))/2);
+            }
     //    QLineF centerLine(myStartItem->pos(), myEndItem->pos());
         QLineF centerLine(*pb, myEndItem->pos());
         QPolygonF endPolygon = myEndItem->polygon();
@@ -319,7 +334,11 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
                 QBrush* brush=new QBrush();
                 painter->setBrush(*brush);
                 painter->setPen(QPen(myColor,1, Qt::DashLine));
-                QPainterPath myPath = path();
+                QPainterPath Path = path();
+                if(root.isEmpty()){
+                root=Path;
+                }
+                QPainterPath myPath=root;
                 QPainterPath myPathin;
                 QPainterPath myPathout;
                 if(myEndItem->pos()==myStartItem->pos()){
@@ -450,8 +469,22 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      isDoubleClick=true;
      auto point = event->scenePos();
      auto arrownode = new class Arrownode(point, 5.0, 5.0);
+//     arrownode->SetBackgroundColor(this->getColor());
+//     arrownode->SetFrameColor(this->getColor());
      auto action = new ChangeElementAction(arrownode, ElementShape::Arrownode, true);
+     auto actioncolor1 =
+     new EditElementAction(arrownode, ElementShape::Rectangle,
+                                                      ElementProperty::FrameColor,
+                                                      new QColor(arrownode->GetFrameColor()),
+                                                      new QColor(this->getColor()));
+     auto actioncolor2=
+     new EditElementAction(arrownode, ElementShape::Rectangle,
+                                                      ElementProperty::BackgroundColor,
+                                                      new QColor(arrownode->GetBackgroundColor()),
+                                                      new QColor(this->getColor()));
      action->Do();
+     actioncolor1->Do();
+     actioncolor2->Do();
      auto arrows = myStartItem->GetNode()->getArrows();
 //     foreach (auto arrow, arrows)
 //     {
@@ -461,12 +494,15 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //        MainWindow::instance()->scene()->removeItem(arrow);
 //     }
 //     解决方法：
+     QPainterPath p = this->root;
      this->removeArrow();
      MainWindow::instance()->scene()->removeItem(this);
 
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
      auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
+     arrow2->root=p;
+     arrow3->root=p;
      if(myEndItem->GetWidth()>5){
      arrow3->HaveEnd=1;}
      else{

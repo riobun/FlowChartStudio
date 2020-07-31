@@ -13,6 +13,8 @@ class Arrow: public QGraphicsPathItem,public GraphElement
 {
 
 public:
+    QPainterPath root;
+    bool ischange=false;
     enum { Type = UserType + 4 };
 
     Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd,
@@ -62,6 +64,7 @@ private:
     bool isMoved=false;
     Node *Arrownode;
     int HaveEnd;
+
 };
 
 #endif // NEWARROW_H
