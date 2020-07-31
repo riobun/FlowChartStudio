@@ -54,6 +54,7 @@ public slots:
     void Cut();
     void Copy();
     void Paste();
+    void SelectAll();
 
 private slots:
     void textColorChanged();

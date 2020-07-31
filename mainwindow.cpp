@@ -192,6 +192,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
     connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
     connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
+    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
 
 
     //项目树结构和页面选项卡的连接
@@ -404,6 +405,7 @@ void MainWindow::on_addTextButton_clicked()
 void MainWindow::Cut() { NodeEvents::cutElements(); }
 void MainWindow::Copy() { NodeEvents::copyElements(); }
 void MainWindow::Paste() { FlowChartScene::pasteElements(); }
+void MainWindow::SelectAll() { NodeEvents::selectAll(); }
 
 void MainWindow::Undo()
 {

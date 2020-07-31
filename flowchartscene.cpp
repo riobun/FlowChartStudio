@@ -13,6 +13,7 @@
 #include "subgraphnode.h"
 #include "inputnode.h"
 #include "outputnode.h"
+#include "nodeevents.h"
 
 
 FlowChartScene::FlowChartScene()
@@ -183,10 +184,16 @@ void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         QMenu menu;
         auto pasteAction = menu.addAction("粘贴");
         pasteAction->setShortcut(QKeySequence::Paste);
+        auto selectAllAction = menu.addAction("全选");
+        selectAllAction->setShortcut(QKeySequence::SelectAll);
         auto selectedAction = menu.exec(event->screenPos());
         if (selectedAction == pasteAction)
         {
             pasteElements(event);
+        }
+        else if (selectedAction == selectAllAction)
+        {
+            NodeEvents::selectAll();
         }
     }
 }

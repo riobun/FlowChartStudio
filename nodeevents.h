@@ -16,6 +16,8 @@ public:
     static void cutElements(Node* node = nullptr);
     static void copyElements(Node* node = nullptr);
     static void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    static void selectAll();
+    static void scaleNodes(Node* node, QGraphicsSceneMouseEvent *event);
 };
 
 #endif // NODEEVENTS_H

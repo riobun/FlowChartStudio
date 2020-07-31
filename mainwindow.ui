@@ -350,6 +350,7 @@
     <addaction name="pasteAction"/>
     <addaction name="action1_12"/>
     <addaction name="action1_13"/>
+    <addaction name="selectAllAction"/>
    </widget>
    <widget class="QMenu" name="nodeMenu">
     <property name="title">
@@ -683,6 +684,14 @@
    </property>
    <property name="text">
     <string>运行</string>
+   </property>
+  </action>
+  <action name="selectAllAction">
+   <property name="text">
+    <string>全选</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>

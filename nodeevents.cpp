@@ -138,3 +138,28 @@ void NodeEvents::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
         text->move_text((text->get_text_location()+event->pos()-event->lastPos()));
     }
 }
+
+void NodeEvents::selectAll()
+{
+    auto graph = MainWindow::instance()->graph();
+    foreach (auto node, graph->getNodes())
+    {
+        node->getNodeItem()->SetSelected(true);
+    }
+}
+
+void NodeEvents::scaleNodes(Node* node, QGraphicsSceneMouseEvent *event)
+{
+    QPointF pos = event->pos();
+    double nw=sqrt(pow(node->GetLocation().x() - pos.x(), 2)),nh=sqrt(pow(node->GetLocation().y() - pos.y(), 2));
+    double cw = nw * 2 - node->GetWidth(), ch = nh * 2 - node->GetHeight();
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    {
+        node->SetHeight(node->GetHeight() + ch);
+        node->SetWidth(node->GetWidth() + cw);
+        foreach (auto arrow, node->getArrows())
+        {
+            arrow->update();
+        }
+    }
+}
