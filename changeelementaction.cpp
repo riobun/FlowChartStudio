@@ -20,9 +20,8 @@ void ChangeElementAction::Do()
         {
             text->putup_text(scene);
             window->graph()->addText(text);
-            auto item = text->get_item();
             connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
-            text->build_text( QColor(), QFont());
+            text->build_text(MainWindow::instance()->textColor, QFont());
         }
         else
         {
