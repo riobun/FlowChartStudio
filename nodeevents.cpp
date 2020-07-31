@@ -12,7 +12,7 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
-    auto subGraphAction = menu.addAction("生成子图");
+    auto subGraphAction = menu.addAction("打开子图");
     auto cutAction = menu.addAction("剪切");
     cutAction->setShortcut(QKeySequence::Cut);
     auto copyAction = menu.addAction("复制");
