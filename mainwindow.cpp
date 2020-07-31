@@ -139,11 +139,13 @@ MainWindow::MainWindow(QWidget *parent)
         QColorDialog::getColor(QColor(Qt::black));
     });
     //节点
-    connect(ui->action_bgColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_bgColor,&QAction::triggered,[=](){
+        fillColor = QColorDialog::getColor(QColor(Qt::black));
+        clickFillBtn();
     });
-    connect(ui->action_bdColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_bdColor,&QAction::triggered,[=](){
+        bdColor = QColorDialog::getColor(QColor(Qt::black));
+        clickbdBtn();
     });
 
     //项目树形结构
