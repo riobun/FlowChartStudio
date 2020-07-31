@@ -10,6 +10,7 @@
 #include "editelementaction.h"
 #include"text.h"
 #include"textitem.h"
+#include "arrow.h"
 
 void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -22,6 +23,10 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
               double nw=sqrt(pow(node->GetLocation().x() - pos.x(), 2)),nh=sqrt(pow(node->GetLocation().y() - pos.y(), 2));
               node->SetHeight(nh*2);
               node->SetWidth(nw*2);
+              foreach (auto arrow, node->getArrows())
+              {
+                  arrow->update();
+              }
         }
         else
         {
