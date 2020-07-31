@@ -142,10 +142,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_bgColor,&QAction::triggered,[=](){
         fillColor = QColorDialog::getColor(QColor(Qt::black));
         clickFillBtn();
+        fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                         ":/images/floodfill.png", fillColor));
     });
     connect(ui->action_bdColor,&QAction::triggered,[=](){
         bdColor = QColorDialog::getColor(QColor(Qt::black));
         clickbdBtn();
+        bdColorToolBtn->setIcon(createColorToolButtonIcon(
+                                         ":/images/bdcolor.png", bdColor));
     });
 
     //项目树形结构
