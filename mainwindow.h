@@ -39,6 +39,7 @@ public:
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
+    void addNewTab();
     Graph* graph();
 
     QColor bdColor = Qt::black;
@@ -95,7 +96,7 @@ private:
     void clickFillBtn();
     void clickLineBtn();
     void addNewTab(QStandardItem* currentItem);
-    void addNewTab();
+
 
 private:
     Ui::MainWindow *ui;
