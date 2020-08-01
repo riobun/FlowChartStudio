@@ -45,6 +45,7 @@ public:
     QColor bdColor = Qt::black;
     QColor fillColor = Qt::white;
     QColor lineColor = Qt::black;
+    QColor textColor = Qt::black;
     Graph* cutGraph = new Graph;
 
 public slots:
@@ -53,6 +54,7 @@ public slots:
     void Cut();
     void Copy();
     void Paste();
+    void SelectAll();
 
 private slots:
     void textColorChanged();
@@ -95,6 +97,7 @@ private:
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();
+    void clickTextColorButton();
     void addNewTab(QStandardItem* currentItem);
 
 

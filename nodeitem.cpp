@@ -19,14 +19,15 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         isMoved=true;
         if(event->modifiers()==Qt::ShiftModifier&&isResized)
         {
-              QPointF pos = event->pos();
+              /*QPointF pos = event->pos();
               double nw=sqrt(pow(node->GetLocation().x() - pos.x(), 2)),nh=sqrt(pow(node->GetLocation().y() - pos.y(), 2));
               node->SetHeight(nh*2);
               node->SetWidth(nw*2);
               foreach (auto arrow, node->getArrows())
               {
                   arrow->update();
-              }
+              }*/
+            NodeEvents::scaleNodes(node, event);
         }
         else
         {
@@ -119,7 +120,6 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value)
     if (change == QGraphicsItem::ItemSelectedHasChanged)
     {
         SetSelected(QGraphicsItem::isSelected());
-        emit Selected(node, QGraphicsItem::isSelected());
     }
     return value;
 }
@@ -168,4 +168,5 @@ void NodeItem::SetSelected(bool b)
     isSelected=b;
     node->ChangeZValue(b);
     setSelected(b);
+    emit Selected(node, QGraphicsItem::isSelected());
 }

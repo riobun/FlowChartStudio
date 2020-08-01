@@ -150,10 +150,10 @@ Text* Text::get_item() {
 
 void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-        qDebug() << "Custom item moved.";
+        //qDebug() << "Custom item moved.";
         QGraphicsItem::mouseMoveEvent(event);
         move_text(pos());
-        qDebug() << "moved" << pos();
+        //qDebug() << "moved" << pos();
 
 }
 

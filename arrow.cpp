@@ -333,56 +333,80 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     if (isSelected()) {
                 QBrush* brush=new QBrush();
                 painter->setBrush(*brush);
-                painter->setPen(QPen(myColor,1, Qt::DashLine));
+                painter->setPen(QPen(QColor(139,69,19),4, Qt::DashLine));
                 QPainterPath Path = path();
-                if(root.isEmpty()){
-                root=Path;
-                }
-                QPainterPath myPath=root;
-                QPainterPath myPathin;
-                QPainterPath myPathout;
-                if(myEndItem->pos()==myStartItem->pos()){
-                QRectF *rectin=new QRectF
-               (myStartItem->pos().x()+12,myStartItem->pos().y()-myStartItem->GetHeight()*3/2+12,myStartItem->GetWidth()-24,myStartItem->GetHeight()*3/2-24);
-                                    myPathin.addRect(*rectin);
-                                    painter->drawPath(myPathin);
-               QRectF *rectout=new QRectF
-                (myStartItem->pos().x()-12,myStartItem->pos().y()-myStartItem->GetHeight()*3/2-12,myStartItem->GetWidth()+24,myStartItem->GetHeight()*3/2+24);
-                                    myPathout.addRect(*rectout);
-                                    painter->drawPath(myPathout);
-                              }
-                else if((myEndItem->pos().x()<myStartItem->pos().x()&&myEndItem->pos().y()<myStartItem->pos().y())||(myEndItem->pos().x()>myStartItem->pos().x()&&myEndItem->pos().y()>myStartItem->pos().y())){
-        //        myPath.translate(0, 4.0);
-                myPath.translate(12.0, -12.0);
-                //线向上移动
-                painter->drawPath(myPath);
-        //        myPath.translate(0,-8.0);
-                myPath.translate(-24.0, 24.0);
-                //线向下移动
-                painter->drawPath(myPath);
-                }else if((myEndItem->pos().x()>myStartItem->pos().x()&&myEndItem->pos().y()<myStartItem->pos().y())||(myEndItem->pos().x()<myStartItem->pos().x()&&myEndItem->pos().y()>myStartItem->pos().y())){
-                    //        myPath.translate(0, 4.0);
-                            myPath.translate(-12.0, -12.0);
-                            //线向上移动
-                            painter->drawPath(myPath);
-                    //        myPath.translate(0,-8.0);
-                            myPath.translate(24.0, 24.0);
-                            //线向下移动
-                            painter->drawPath(myPath);
-                }else{
-                    //        myPath.translate(0, 4.0);
-                            myPath.translate(12.0, -12.0);
-                            //线向上移动
-                            painter->drawPath(myPath);
-                    //        myPath.translate(0,-8.0);
-                            myPath.translate(-24.0, 24.0);
-                            //线向下移动
-                            painter->drawPath(myPath);
-                }
+                QPainterPath allPath;
+
+//                int max=0;
+//                int k=this->arrowlist.length()-1;
+//                for(int i=0;i<arrowlist.length();i++){
+//                    if(arrowlist[i]->arrowlist.length()>max){
+//                        max=arrowlist[i]->arrowlist.length();
+//                        k=i;
+//                    }
+//                }
+//                this->arrowlist=arrowlist[k]->arrowlist;
+//                if(arrowlist.last()!=this){
+//                arrowlist.append(this);}
+//                else{arrowlist.replace(arrowlist.length()-1,this);}
+//                if(arrowlist.isEmpty()||arrowlist.last()!=this){
+//                                arrowlist.append(this);}
+//                                else{arrowlist.replace(arrowlist.length()-1,this);}
+                if(arrowlist.isEmpty()){
+                arrowlist.append(this);}
+                for(int i=0;i<arrowlist.length();i++){
+                    allPath.addPath(arrowlist[i]->path());
+                    QPainterPath myPath=arrowlist[i]->path();
+                    painter->drawPath(myPath);
+//                    QPainterPath myPathin;
+//                    QPainterPath myPathout;
+//                    NodeItem *EndItem=arrowlist[i]->myEndItem;
+//                    NodeItem *StartItem=arrowlist[i]->myStartItem;
+//                    if(EndItem->pos()==StartItem->pos()){
+//                    QRectF *rectin=new QRectF
+//                   (StartItem->pos().x()+12,StartItem->pos().y()-StartItem->GetHeight()*3/2+12,StartItem->GetWidth()-24,StartItem->GetHeight()*3/2-24);
+//                                        myPathin.addRect(*rectin);
+//                                        painter->drawPath(myPathin);
+//                   QRectF *rectout=new QRectF
+//                    (StartItem->pos().x()-12,StartItem->pos().y()-StartItem->GetHeight()*3/2-12,StartItem->GetWidth()+24,StartItem->GetHeight()*3/2+24);
+//                                        myPathout.addRect(*rectout);
+//                                        painter->drawPath(myPathout);
+//                                  }
+//                    else if((EndItem->pos().x()<StartItem->pos().x()&&EndItem->pos().y()<StartItem->pos().y())||(EndItem->pos().x()>StartItem->pos().x()&&EndItem->pos().y()>StartItem->pos().y())){
+//            //        myPath.translate(0, 4.0);
+//                    myPath.translate(12.0, -12.0);
+//                    //线向上移动
+//                    painter->drawPath(myPath);
+//            //        myPath.translate(0,-8.0);
+//                    myPath.translate(-24.0, 24.0);
+//                    //线向下移动
+//                    painter->drawPath(myPath);
+//                    }else if((EndItem->pos().x()>StartItem->pos().x()&&EndItem->pos().y()<StartItem->pos().y())||(EndItem->pos().x()<StartItem->pos().x()&&EndItem->pos().y()>StartItem->pos().y())){
+//                        //        myPath.translate(0, 4.0);
+//                                myPath.translate(-12.0, -12.0);
+//                                //线向上移动
+//                                painter->drawPath(myPath);
+//                        //        myPath.translate(0,-8.0);
+//                                myPath.translate(24.0, 24.0);
+//                                //线向下移动
+//                                painter->drawPath(myPath);
+//                    }else{
+//                        //        myPath.translate(0, 4.0);
+//                                myPath.translate(12.0, -12.0);
+//                                //线向上移动
+//                                painter->drawPath(myPath);
+//                        //        myPath.translate(0,-8.0);
+//                                myPath.translate(-24.0, 24.0);
+//                                //线向下移动
+//                                painter->drawPath(myPath);
+//                    }
+                //}
+
+
             }
 }
 
-
+}
 
 
 void Arrow::removeArrow()
@@ -501,8 +525,19 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
      auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
-     arrow2->root=p;
-     arrow3->root=p;
+     arrow2->arrowlist.append(this->arrowlist);
+     arrow3->arrowlist.append(this->arrowlist);
+     arrow2->arrowlist.removeOne(this);
+     arrow3->arrowlist.removeOne(this);
+     arrow2->arrowlist.append(arrow3);
+     arrow2->arrowlist.append(arrow2);
+     arrow3->arrowlist.append(arrow2);
+     arrow3->arrowlist.append(arrow3);
+     for(int i=0;i<arrow2->arrowlist.length()-1;i++){
+         arrow2->arrowlist[i]->arrowlist=arrow2->arrowlist;
+     }
+     arrow2->Arrownode=arrownode;
+     arrow3->Arrownode=arrownode;
      if(myEndItem->GetWidth()>5){
      arrow3->HaveEnd=1;}
      else{
@@ -569,8 +604,23 @@ void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *event){
 void Arrow::setArrowColor(const QColor &color)
 {
     myColor = color;
+    for(Arrow* ar: arrowlist){
+    ar->myColor=color;
     auto brush = Arrow::brush();
     brush.setColor(color);
     brush.setStyle(Qt::BrushStyle::SolidPattern);
-    setBrush(brush);
+    ar->setBrush(brush);
+    auto actioncolor1 =
+    new EditElementAction(ar->Arrownode, ElementShape::Rectangle,
+                                                     ElementProperty::FrameColor,
+                                                     new QColor(ar->Arrownode->GetFrameColor()),
+                                                     new QColor(color));
+    auto actioncolor2=
+    new EditElementAction(ar->Arrownode, ElementShape::Rectangle,
+                                                     ElementProperty::BackgroundColor,
+                                                     new QColor(ar->Arrownode->GetBackgroundColor()),
+                                                     new QColor(color));
+    actioncolor1->Do();
+    actioncolor2->Do();
+    }
 }

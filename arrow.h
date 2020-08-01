@@ -15,6 +15,7 @@ class Arrow: public QGraphicsPathItem,public GraphElement
 public:
     QPainterPath root;
     bool ischange=false;
+    QList<Arrow*> arrowlist;
     enum { Type = UserType + 4 };
 
     Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd,

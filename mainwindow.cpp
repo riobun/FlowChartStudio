@@ -43,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
         textEdit->setGeometry(QRect(150,120,700,600));
         textEdit->setHidden(true); //隐藏文本编辑
     //*****************************************************
-    //侧边栏
-    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
-    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
-    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
+//    //侧边栏
+//    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
+//    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
+//    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
@@ -84,8 +84,8 @@ MainWindow::MainWindow(QWidget *parent)
     textAction = fontColorToolBtn->menu()->defaultAction();
     fontColorToolBtn->setIcon(createColorToolButtonIcon(":/images/textpointer.png", Qt::black));
     fontColorToolBtn->setAutoFillBackground(true);
+    connect(fontColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickTextColorButton);
     ui->toolBar->addWidget(fontColorToolBtn);
-
     ui->toolBar->addSeparator();
 
     //填充颜色
@@ -96,7 +96,6 @@ MainWindow::MainWindow(QWidget *parent)
     fillColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/floodfill.png", Qt::white));
     connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
-
     ui->toolBar->addWidget(fillColorToolBtn);
 
     //边框颜色
@@ -128,8 +127,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //菜单栏信号
     //文本框
-    connect(ui->action_fontColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_fontColor,&QAction::triggered,[=](){
+        textColor = QColorDialog::getColor(QColor(Qt::black));
+        clickTextColorButton();
+        fontColorToolBtn->setIcon(createColorToolButtonIcon(
+                                      ":/images/textpointer.png", textColor));
     });
     connect(ui->action_font,&QAction::triggered,[](){
         bool flag;
@@ -190,6 +192,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
     connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
     connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
+    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
 
 
     //项目树结构和页面选项卡的连接
@@ -307,6 +310,11 @@ void MainWindow::textColorChanged()
                                      ":/images/textpointer.png",
                                      qvariant_cast<QColor>(textAction->data())));
     textButtonTriggered();
+    textColor = qvariant_cast<QColor>(textAction->data());
+    if (selectedTexts()->size() > 0)
+    {
+        clickTextColorButton();
+    }
 }
 
 void MainWindow::textButtonTriggered()
@@ -397,6 +405,7 @@ void MainWindow::on_addTextButton_clicked()
 void MainWindow::Cut() { NodeEvents::cutElements(); }
 void MainWindow::Copy() { NodeEvents::copyElements(); }
 void MainWindow::Paste() { FlowChartScene::pasteElements(); }
+void MainWindow::SelectAll() { NodeEvents::selectAll(); }
 
 void MainWindow::Undo()
 {
@@ -455,6 +464,19 @@ void MainWindow::clickLineBtn()
                                          ElementProperty::FrameColor,
                                          new QColor(arrow->getColor()),
                                          new QColor(lineColor));
+    }
+    action->Do();
+}
+
+void MainWindow::clickTextColorButton()
+{
+    auto action = new GroupAction;
+    foreach (auto text, *selectedTexts())
+    {
+        *action << new EditElementAction(text, ElementShape::Text,
+                                         ElementProperty::FontColor,
+                                         new QColor(text->get_text_color()),
+                                         new QColor(textColor));
     }
     action->Do();
 }

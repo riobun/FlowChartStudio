@@ -52,5 +52,13 @@
         <file>images/Right_new.png</file>
         <file>images/subGraph_new.png</file>
         <file>images/Left_new.png</file>
+        <file>images/all.png</file>
+        <file>images/in.png</file>
+        <file>images/out.png</file>
+        <file>images/subgraph3.0.png</file>
+        <file>images/in1.png</file>
+        <file>images/out1.png</file>
+        <file>images/in2.png</file>
+        <file>images/out2.png</file>
     </qresource>
 </RCC>
