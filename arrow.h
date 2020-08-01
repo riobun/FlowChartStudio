@@ -59,7 +59,7 @@ private:
     int asize=2;
     QList<QPointF> list;// 箭头结点
     QPainterPath *apath;//箭头路径
-    QList<QPointF> arrownode;//箭头结点
+//    QList<QPointF> arrownode;//箭头结点
     bool isDoubleClick=false;
     bool isFocus=false;
     bool isMoved=false;

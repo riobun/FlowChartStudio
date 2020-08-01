@@ -535,6 +535,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow3->arrowlist.append(arrow3);
      for(int i=0;i<arrow2->arrowlist.length()-1;i++){
          arrow2->arrowlist[i]->arrowlist=arrow2->arrowlist;
+//         arrow2->arrowlist[i]->Arrownode=arrownode;
      }
      arrow2->Arrownode=arrownode;
      arrow3->Arrownode=arrownode;
@@ -610,7 +611,7 @@ void Arrow::setArrowColor(const QColor &color)
     brush.setColor(color);
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     ar->setBrush(brush);
-    if(ar->Arrownode){
+    if(arrowlist.length()>1){
     auto actioncolor1 =
     new EditElementAction(ar->Arrownode, ElementShape::Rectangle,
                                                      ElementProperty::FrameColor,
