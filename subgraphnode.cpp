@@ -22,6 +22,8 @@ SubgraphNode:: SubgraphNode(QPointF lc,double wd):Node(lc,wd,wd)
 SubgraphNode::~SubgraphNode()
 {
     delete shape;
+    delete subShape[0];
+    delete subShape[1];
 }
 
 void SubgraphNode::Paint(QGraphicsScene *qgs)
