@@ -55,7 +55,7 @@ void Arrownode::SetBackgroundColor(const QColor &qc)
 {
     backgroundColor=qc;
     QBrush brush=shape->brush();
-    brush.setColor(Qt::black);
+    brush.setColor(qc);
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     shape->setBrush(brush);
 }

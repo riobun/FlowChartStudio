@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "groupaction.h"
 #include "arrow.h"
+#include "subgraphnode.h"
 
 
 void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *event)
@@ -12,7 +13,11 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
-    auto subGraphAction = menu.addAction("生成子图");
+    QAction* subGraphAction;
+    if (dynamic_cast<SubgraphNode*>(node))
+    {
+        subGraphAction = menu.addAction("打开子图");
+    }
     auto cutAction = menu.addAction("剪切");
     cutAction->setShortcut(QKeySequence::Cut);
     auto copyAction = menu.addAction("复制");
@@ -22,24 +27,18 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     {
         deleteElemets();
     }
-    else if (selectedAction == subGraphAction)
+    else if (selectedAction && selectedAction == subGraphAction)
     {
-        QVector<Node*> nodes;
-        foreach (auto node, *MainWindow::instance()->selectedNodes())
-        {
-            nodes.append(node);
-        }
-        QVector<Text*> texts;
-        QVector<Graph*> graphs;
-        new Graph(nodes, texts, graphs);
+        auto sgnode = static_cast<SubgraphNode*>(node);
+        sgnode->OpenSubGraph();
     }
     else if (selectedAction == copyAction)
     {
-        copyElements();
+        copyElements(node);
     }
     else if (selectedAction == cutAction)
     {
-        cutElements();
+        cutElements(node);
     }
 }
 
@@ -62,14 +61,16 @@ void NodeEvents::deleteElemets()
     action->Do();
 }
 
-void NodeEvents::cutElements()
+void NodeEvents::cutElements(Node* node)
 {
     auto graph = MainWindow::instance()->cutGraph;
     auto scene = MainWindow::instance()->scene();
     graph->clear();
+    graph->node = node;
     auto action = new GroupAction();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         foreach (auto arrow, node->getSourceArrows())
         {
             graph->addArrow(arrow);
@@ -88,12 +89,14 @@ void NodeEvents::cutElements()
     action->Do();
 }
 
-void NodeEvents::copyElements()
+void NodeEvents::copyElements(Node* node)
 {
     auto graph = MainWindow::instance()->cutGraph;
     graph->clear();
+    graph->node = node;
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         foreach (auto arrow, node->getSourceArrows())
         {
             graph->addArrow(arrow);
@@ -133,5 +136,30 @@ void NodeEvents::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
         text->move_text((text->get_text_location()+event->pos()-event->lastPos()));
+    }
+}
+
+void NodeEvents::selectAll()
+{
+    auto graph = MainWindow::instance()->graph();
+    foreach (auto node, graph->getNodes())
+    {
+        node->getNodeItem()->SetSelected(true);
+    }
+}
+
+void NodeEvents::scaleNodes(Node* node, QGraphicsSceneMouseEvent *event)
+{
+    QPointF pos = event->pos();
+    double nw=sqrt(pow(node->GetLocation().x() - pos.x(), 2)),nh=sqrt(pow(node->GetLocation().y() - pos.y(), 2));
+    double cw = nw * 2 - node->GetWidth(), ch = nh * 2 - node->GetHeight();
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    {
+        node->SetHeight(node->GetHeight() + ch);
+        node->SetWidth(node->GetWidth() + cw);
+        foreach (auto arrow, node->getArrows())
+        {
+            arrow->update();
+        }
     }
 }

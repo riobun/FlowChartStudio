@@ -1,10 +1,12 @@
 #include "textdialog.h"
 #include<QMessageBox>
 #include<QGridLayout>
+#include <QCompleter>
 
 DetailsDialog::DetailsDialog(QString sc,QString logiccon,const QString &title, QWidget *parent)
     : QDialog(parent)
 {
+
     nameLabel = new QLabel(tr("组合逻辑:"));
     contentLabel = new QLabel(tr("描述:"));
     contentLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -21,6 +23,14 @@ DetailsDialog::DetailsDialog(QString sc,QString logiccon,const QString &title, Q
     relationC=new QComboBox;
     notC=new QComboBox;
     connect(addB, &QPushButton::clicked, this, &DetailsDialog::pressbutton);
+
+    m_Model = new QStandardItemModel(0, 1, this);
+    m_completer = new QCompleter(textlogiclist, this);
+
+    nameEdit->setCompleter(m_completer);
+
+    connect(m_completer, SIGNAL(activated(const QString&)), this, SLOT(onEmailChoosed(const QString&)));
+    connect(nameEdit, SIGNAL(textChanged(const QString&)), this, SLOT(onTextChanged(const QString&)));
 
     /* QStringList rsl;
     rsl<<"None"<<"ADD"<<"OR";
@@ -42,7 +52,7 @@ DetailsDialog::DetailsDialog(QString sc,QString logiccon,const QString &title, Q
         notC->addItem(nsl,nm.value(nsl));*/
 
     relationC->addItem("None");
-    relationC->addItem("ADD");
+    relationC->addItem("AND");
     relationC->addItem("OR");
     notC->addItem("None");
     notC->addItem("NOT");
@@ -126,6 +136,7 @@ void DetailsDialog::pressbutton(){
     //s.chop(1);
     s.append(" ");
     logicEdit->setText(s);
+    textlogiclist.append(nameEdit->text());
 }
 
 
@@ -136,6 +147,27 @@ void DetailsDialog::rc_onchange(int ac){
 void DetailsDialog::nc_onchange(int bc){
     b=bc;
 }
+
+void DetailsDialog::onEmailChoosed(const QString& email)
+{
+    nameEdit->clear();    // 清除已存在的文本更新内容
+    nameEdit->setText(email);
+}
+
+void DetailsDialog::onTextChanged(const QString& str)
+{
+
+    QStringList strlist;
+    strlist << "@163.com" << "@qq.com" << "@gmail.com" << "@hotmail.com" << "@126.com";
+
+    m_Model->removeRows(0, m_Model->rowCount());   // 先清楚已经存在的数据，不然的话每次文本变更都会插入数据，最后出现重复数据
+    for (int i = 0; i < strlist.size(); ++i)
+    {
+        m_Model->insertRow(0);
+        m_Model->setData(m_Model->index(0, 0), str + strlist.at(i));
+    }
+}
+
 
 /*void DetailsDialog::setupItemsTable()
 {

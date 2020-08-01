@@ -117,7 +117,26 @@ QVector<Node*> Graph::searchNodes(Node* node)
     }
     return vec;
 }
+QVector<Arrow*> Graph::searchArrows(Node* node)
+{
 
+    QVector<Arrow*> vec;
+    foreach (auto arrow, arrows)
+    {
+        if( node->getNodeItem()->contains(arrow->startItem()->pos())||
+                node->getNodeItem()->contains(arrow->endItem()->pos())||
+                  node->getNodeItem()->contains(
+                    QPointF((arrow->endItem()->pos().x()+arrow->endItem()->pos().x())/2
+                            ,(arrow->endItem()->pos().y()+arrow->endItem()->pos().y())/2)))
+        {
+                vec.append(arrow);
+                continue;
+    }
+
+
+    }
+    return vec;
+}
 void Graph::addText(Text* text)
 {
     texts.append(text);

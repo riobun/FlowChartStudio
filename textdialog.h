@@ -11,8 +11,8 @@
 #include<QPushButton>
 #include <QComboBox>
 #include<text.h>
-
-
+#include <QStandardItemModel>
+#include<textlogic.h>
 class DetailsDialog : public QDialog
 {
     Q_OBJECT
@@ -25,6 +25,8 @@ public slots:
     void pressbutton();
     void rc_onchange(int ac);
     void nc_onchange(int bc);
+    void onEmailChoosed(const QString& email);
+    void onTextChanged(const QString& str);
 public:
     //QList<QPair<QString, QString> > orderItems();
     QString senderName() const;
@@ -46,8 +48,8 @@ private:
     QString con;
     //QString relationitem;
     //int size;
-
-
+    QStandardItemModel* m_Model ;
+    QCompleter*  m_completer;
 };
 
 #endif // TEXTDIALOG_H

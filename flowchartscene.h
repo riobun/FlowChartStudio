@@ -3,14 +3,17 @@
 
 #include <QGraphicsScene>
 #include "rectangle.h"
+#include "graph.h"
 
 
 class FlowChartScene : public QGraphicsScene
 {
 public:
     FlowChartScene();
+    ~FlowChartScene();
 
-    static void pasteElements();
+    static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);
+    Graph* graph = new Graph;
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

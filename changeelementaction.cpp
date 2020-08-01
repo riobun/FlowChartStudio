@@ -19,14 +19,13 @@ void ChangeElementAction::Do()
         if (isCreated)
         {
             text->putup_text(scene);
-            window->graph->addText(text);
-            auto item = text->get_item();
+            window->graph()->addText(text);
             connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
-            text->build_text( QColor(), QFont());
+            text->build_text(MainWindow::instance()->textColor, QFont());
         }
         else
         {
-            window->graph->removeText(text);
+            window->graph()->removeText(text);
             window->selectedTexts()->removeAll(text);
             text->delete_text(scene);
         }
@@ -44,7 +43,7 @@ void ChangeElementAction::Do()
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             connect(item, &NodeItem::NewLocation, this, &ChangeElementAction::onNodeMoved);
             node->Paint(scene);
-            MainWindow::instance()->graph->addNode(node);
+            MainWindow::instance()->graph()->addNode(node);
         }
         else
         {
@@ -56,7 +55,7 @@ void ChangeElementAction::Do()
                 action->Do();
                }
             node->Remove(scene);
-            MainWindow::instance()->graph->removeNode(node);
+            MainWindow::instance()->graph()->removeNode(node);
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
         }
     }
@@ -68,14 +67,16 @@ void ChangeElementAction::Do()
             arrow->myStartItem->GetNode()->ConnectAsSource(arrow);
             arrow->myEndItem->GetNode()->ConnectAsSource(arrow);
             arrow->setZValue(-100.0);
+            arrow->s = onArrowSelected;
             MainWindow::instance()->scene()->addItem(arrow);
+            arrow->setArrowColor(MainWindow::instance()->lineColor);
             arrow->updatePosition();
-            MainWindow::instance()->graph->addArrow(arrow);
+            MainWindow::instance()->graph()->addArrow(arrow);
             arrow->s = onArrowSelected;
         }
         else
         {
-            MainWindow::instance()->graph->removeArrow(arrow);
+            MainWindow::instance()->graph()->removeArrow(arrow);
             MainWindow::instance()->scene()->removeItem(arrow);
             MainWindow::instance()->selectedArrows()->remove(arrow->GetID());
         }

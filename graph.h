@@ -24,6 +24,7 @@ public:
     void addText(Text* node);
     void removeText(Text* node);
     Text* searchText(QPointF point);
+    QVector<Arrow*> searchArrows(Node* node);
     QVector<Text*> searchTexts(Node* node);
     void addArrow(Arrow* arrow);
     void removeArrow(Arrow* arrow);
@@ -33,6 +34,7 @@ public:
     QVector<Text*>& getTexts() { return texts; }
 
     void BindToText(QGraphicsScene *qgs) override {}
+    Node* node;
 private:
     void SetVisibility(bool set);
     bool isExpended;

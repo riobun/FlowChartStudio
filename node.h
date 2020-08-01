@@ -49,6 +49,7 @@ protected:
 private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;
+
 };
 
 #endif // NODE_H

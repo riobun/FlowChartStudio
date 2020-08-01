@@ -12,6 +12,13 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QList>
+//**********************************************************
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QFile>
+#include <QFileDevice>
+#include <QTextStream>
+#include <QtEvents> //************************************
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -19,6 +26,7 @@
 #include "editelementaction.h"
 #include "groupaction.h"
 #include "nodeevents.h"
+#include "arrow.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -29,11 +37,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //*****************************************************
+        textEdit = new QTextEdit(this);
 
-    //侧边栏
-    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
-    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
-    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
+        textEdit->setGeometry(QRect(150,120,700,600));
+        textEdit->setHidden(true); //隐藏文本编辑
+    //*****************************************************
+//    //侧边栏
+//    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
+//    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
+//    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
@@ -71,8 +84,8 @@ MainWindow::MainWindow(QWidget *parent)
     textAction = fontColorToolBtn->menu()->defaultAction();
     fontColorToolBtn->setIcon(createColorToolButtonIcon(":/images/textpointer.png", Qt::black));
     fontColorToolBtn->setAutoFillBackground(true);
+    connect(fontColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickTextColorButton);
     ui->toolBar->addWidget(fontColorToolBtn);
-
     ui->toolBar->addSeparator();
 
     //填充颜色
@@ -83,7 +96,6 @@ MainWindow::MainWindow(QWidget *parent)
     fillColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/floodfill.png", Qt::white));
     connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
-
     ui->toolBar->addWidget(fillColorToolBtn);
 
     //边框颜色
@@ -115,23 +127,35 @@ MainWindow::MainWindow(QWidget *parent)
 
     //菜单栏信号
     //文本框
-    connect(ui->action_fontColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_fontColor,&QAction::triggered,[=](){
+        textColor = QColorDialog::getColor(QColor(Qt::black));
+        clickTextColorButton();
+        fontColorToolBtn->setIcon(createColorToolButtonIcon(
+                                      ":/images/textpointer.png", textColor));
     });
     connect(ui->action_font,&QAction::triggered,[](){
         bool flag;
         QFontDialog::getFont(&flag,QFont("宋体",20));
     });
     //箭头
-    connect(ui->action_arrowColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_arrowColor,&QAction::triggered,[=](){
+        lineColor = QColorDialog::getColor(QColor(Qt::black));
+        clickLineBtn();
+        fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                         ":/images/floodfill.png", lineColor));
     });
     //节点
-    connect(ui->action_bgColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_bgColor,&QAction::triggered,[=](){
+        fillColor = QColorDialog::getColor(QColor(Qt::black));
+        clickFillBtn();
+        fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                         ":/images/floodfill.png", fillColor));
     });
-    connect(ui->action_bdColor,&QAction::triggered,[](){
-        QColorDialog::getColor(QColor(Qt::black));
+    connect(ui->action_bdColor,&QAction::triggered,[=](){
+        bdColor = QColorDialog::getColor(QColor(Qt::black));
+        clickbdBtn();
+        bdColorToolBtn->setIcon(createColorToolButtonIcon(
+                                         ":/images/bdcolor.png", bdColor));
     });
 
     //项目树形结构
@@ -168,6 +192,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
     connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
     connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
+    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
 
 
     //项目树结构和页面选项卡的连接
@@ -285,6 +310,11 @@ void MainWindow::textColorChanged()
                                      ":/images/textpointer.png",
                                      qvariant_cast<QColor>(textAction->data())));
     textButtonTriggered();
+    textColor = qvariant_cast<QColor>(textAction->data());
+    if (selectedTexts()->size() > 0)
+    {
+        clickTextColorButton();
+    }
 }
 
 void MainWindow::textButtonTriggered()
@@ -340,6 +370,10 @@ void MainWindow::arrowColorChanged()
                                      qvariant_cast<QColor>(arrowColorAction->data())));
     arrowColorButtonTriggered();
     lineColor = qvariant_cast<QColor>(arrowColorAction->data());
+    if (selectedArrows()->size() > 0)
+    {
+        clickLineBtn();
+    }
 }
 
 void MainWindow::arrowColorButtonTriggered()
@@ -371,6 +405,7 @@ void MainWindow::on_addTextButton_clicked()
 void MainWindow::Cut() { NodeEvents::cutElements(); }
 void MainWindow::Copy() { NodeEvents::copyElements(); }
 void MainWindow::Paste() { FlowChartScene::pasteElements(); }
+void MainWindow::SelectAll() { NodeEvents::selectAll(); }
 
 void MainWindow::Undo()
 {
@@ -422,7 +457,28 @@ void MainWindow::clickFillBtn()
 
 void MainWindow::clickLineBtn()
 {
+    auto action = new GroupAction;
+    foreach (auto arrow, *selectedArrows())
+    {
+        *action << new EditElementAction(arrow, ElementShape::Arrow,
+                                         ElementProperty::FrameColor,
+                                         new QColor(arrow->getColor()),
+                                         new QColor(lineColor));
+    }
+    action->Do();
+}
 
+void MainWindow::clickTextColorButton()
+{
+    auto action = new GroupAction;
+    foreach (auto text, *selectedTexts())
+    {
+        *action << new EditElementAction(text, ElementShape::Text,
+                                         ElementProperty::FontColor,
+                                         new QColor(text->get_text_color()),
+                                         new QColor(textColor));
+    }
+    action->Do();
 }
 
 void MainWindow::removeSubTab(int index){
@@ -434,7 +490,6 @@ void MainWindow::removeSubTab(int index){
     else {
         ui->tabWidget->removeTab(index);
     }
-
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
@@ -495,4 +550,150 @@ void MainWindow::on_addSonPortButton_clicked()
 void MainWindow::modifyTabText(QStandardItem* item){
 
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
+}
+
+//****************************************************************
+int Flag_isOpen = 0;       //标记：判断是否打开或创建了一个文件
+int Flag_IsNew = 0;        //标记：如果新建了文件就为1，初始值为0
+QString Last_FileName;     //最后一次保存的文件的名字
+QString Last_FileContent;  //最后一次保存文件的内容
+void MainWindow::on_action1_triggered()//新建
+{
+
+    textEdit->clear();              //清除原先文件内容
+    textEdit->setHidden(false);     //显示文本框
+    Flag_IsNew = 1;                 //新文件标记位设为1
+    Flag_isOpen = 1;                //新文件创建 标记位设为1
+}
+
+void MainWindow::on_action1_2_triggered()//打开
+{
+    QString fileName;
+        fileName = QFileDialog::getOpenFileName(this,tr("Open File"),tr(""),tr("Text File (*.txt)"));
+        if(fileName == "")
+        {
+            return;
+        }
+        else
+        {
+           QFile file(fileName);
+           if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+           {
+               QMessageBox::warning(this,tr("错误"),tr("打开文件失败"));
+               return;
+           }
+           else
+           {
+               if(!file.isReadable())
+               {
+                   QMessageBox::warning(this,tr("错误"),tr("该文件不可读"));
+               }
+               else
+               {
+                   QTextStream textStream(&file);       //读取文件，使用QTextStream
+                   while(!textStream.atEnd())
+                   {
+                       textEdit->setPlainText(textStream.readAll());
+                   }
+                   textEdit->show();
+                   file.close();
+                   Flag_isOpen = 1;
+                   Last_FileName = fileName;
+               }
+           }
+        }
+}
+
+void MainWindow::on_action1_3_triggered()//保存
+{
+    if(Flag_IsNew)                  //如果新文件标记位为1，则弹出保存文件对话框
+       {
+           if(textEdit->toPlainText() == "")
+           {
+               QMessageBox::warning(this,tr("警告"),tr("内容不能为空!"),QMessageBox::Ok);
+           }
+           else
+           {
+               QFileDialog fileDialog;
+               QString str = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.txt)"));
+               if(str == "")
+               {
+                   return;
+               }
+               QFile filename(str);
+               if(!filename.open(QIODevice::WriteOnly | QIODevice::Text))
+               {
+                   QMessageBox::warning(this,tr("错误"),tr("打开文件失败"),QMessageBox::Ok);
+                   return;
+               }
+               else
+               {
+                   QTextStream textStream(&filename);
+                   QString str = textEdit->toPlainText();
+                   textStream<<str;
+                   Last_FileContent = str;
+               }
+               QMessageBox::information(this,"保存文件","保存文件成功",QMessageBox::Ok);
+               filename.close();
+               Flag_IsNew = 0;     //新文件标记位记为0
+               Last_FileName = str;//保存文件内容
+           }
+       }
+       else                        //否则，新文件标记位是0，代表是旧文件，默认直接保存覆盖源文件
+       {
+           if(Flag_isOpen)         //判断是否创建或打开了一个文件
+           {
+               QFile file(Last_FileName);
+               if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+               {
+                   QMessageBox::warning(this,tr("警告"),tr("打开文件失败"));
+                   return;
+               }
+               else
+               {
+                   QTextStream textStream(&file);
+                   QString str = textEdit->toPlainText();
+                   textStream<<str;
+                   Last_FileContent = str;
+                   file.close();
+               }
+           }
+           else
+           {
+               QMessageBox::warning(this,tr("警告"),tr("请先创建或者打开文件"));
+               return;
+           }
+       }
+}
+
+void MainWindow::on_action1_4_triggered()//另存为
+{
+    QFileDialog fileDialog;
+       QString fileName = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.txt)"));
+       if(fileName == "")
+       {
+           return;
+       }
+       QFile file(fileName);
+       if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+       {
+           QMessageBox::warning(this,tr("错误"),tr("打开文件失败"));
+           return;
+       }
+       else
+       {
+           QTextStream textStream(&file);
+           QString str = textEdit->toPlainText();
+           textStream<<str;
+           QMessageBox::warning(this,tr("提示"),tr("保存文件成功"));
+           Last_FileContent = str;
+           Last_FileName = fileName;
+           Flag_IsNew = 0;
+           file.close();
+       }
+}
+
+Graph* MainWindow::graph()
+{
+    return static_cast<FlowChartScene*>(scene())->graph;
 }

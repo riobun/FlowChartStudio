@@ -2,6 +2,11 @@
 #define SUBGRAPHNODE_H
 #include "node.h"
 #include "QGraphicsLineItem"
+
+#include "mainwindow.h"
+
+extern MainWindow* point_w;
+
 class SubgraphNode:public Node
 {
 public:
@@ -14,6 +19,9 @@ public:
     virtual void Remove(QGraphicsScene *qgs) override;
     virtual void ChangeZValue(bool isSelected) override;
     ~SubgraphNode();
+    
+    void OpenSubGraph();
+    
 private:
     QVector<QGraphicsLineItem*> subShape;
 };

@@ -11,7 +11,12 @@
 #include "node.h"
 #include "graph.h"
 #include "flowchartscene.h"
-
+#include <QMap>
+//*************************************************
+#include <QMenu>
+#include <QAction>
+#include <QTextEdit>
+//*********************************************
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,11 +39,13 @@ public:
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
+    void addNewTab();
+    Graph* graph();
 
     QColor bdColor = Qt::black;
     QColor fillColor = Qt::white;
     QColor lineColor = Qt::black;
-    Graph* graph = new Graph;
+    QColor textColor = Qt::black;
     Graph* cutGraph = new Graph;
 
 public slots:
@@ -47,6 +54,7 @@ public slots:
     void Cut();
     void Copy();
     void Paste();
+    void SelectAll();
 
 private slots:
     void textColorChanged();
@@ -76,13 +84,22 @@ private slots:
     void on_addSonPortButton_clicked();
 
 
+//*****************************************************
+    void on_action1_triggered();
 
+    void on_action1_2_triggered();
+
+    void on_action1_3_triggered();
+
+    void on_action1_4_triggered();
+    //*****************************************************
 private:
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();
+    void clickTextColorButton();
     void addNewTab(QStandardItem* currentItem);
-    void addNewTab();
+
 
 private:
     Ui::MainWindow *ui;
@@ -95,7 +112,9 @@ private:
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
-
+    //**********************************
+    QTextEdit *textEdit;
+      //***********************
     QAction *textAction;
     QAction *fillAction;
     QAction *bdAction;
@@ -112,6 +131,7 @@ private:
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
     QMap<QModelIndex,FlowChartScene* > scenes;
+    QMap<QGraphicsScene*, Graph*> graphs;
 
 };
 #endif // MAINWINDOW_H

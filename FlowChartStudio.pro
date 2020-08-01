@@ -64,7 +64,8 @@ HEADERS += \
     subgraphnode.h \
     text.h \
     textitem.h\
-    textdialog.h
+    textdialog.h\
+    textlogic.h
 
 FORMS += \
     mainwindow.ui
