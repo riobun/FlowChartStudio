@@ -15,8 +15,10 @@
 #include<QColorDialog>
 #include "nodeevents.h"
 
-Text::Text(QPointF primary_location,QGraphicsItem* parent ): QGraphicsTextItem(parent) {
+Text::Text(QPointF primary_location,QGraphicsItem* parent,QString parentID,bool IDchanged ): QGraphicsTextItem(parent) {
     location = primary_location;
+    ID=parentID;
+    IDchange=IDchanged;
     setZValue(120);
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
@@ -122,9 +124,16 @@ void Text::reset_color(QColor new_color) {
 void Text::change_content(QString new_c){
     emit shape->NewContent(this,content);
     content=new_c;
-    all=content;
-    all.append(logic);
-    setPlainText(content);
+    if(IDchange){
+    all=ID;
+    all.append(":ID");
+    all.append("\n");
+    all.append(content);
+    }
+    else{
+        all=content;
+    }
+    setPlainText(all);
 
 }
 QFont Text::get_text_font() {
@@ -150,10 +159,10 @@ Text* Text::get_item() {
 
 void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-        //qDebug() << "Custom item moved.";
+        qDebug() << "Custom item moved.";
         QGraphicsItem::mouseMoveEvent(event);
         move_text(pos());
-        //qDebug() << "moved" << pos();
+        qDebug() << "moved" << pos();
 
 }
 
