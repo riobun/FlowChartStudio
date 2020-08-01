@@ -610,6 +610,7 @@ void Arrow::setArrowColor(const QColor &color)
     brush.setColor(color);
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     ar->setBrush(brush);
+    if(ar->Arrownode){
     auto actioncolor1 =
     new EditElementAction(ar->Arrownode, ElementShape::Rectangle,
                                                      ElementProperty::FrameColor,
@@ -621,6 +622,6 @@ void Arrow::setArrowColor(const QColor &color)
                                                      new QColor(ar->Arrownode->GetBackgroundColor()),
                                                      new QColor(color));
     actioncolor1->Do();
-    actioncolor2->Do();
+    actioncolor2->Do();}
     }
 }
