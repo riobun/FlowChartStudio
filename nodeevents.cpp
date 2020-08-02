@@ -78,6 +78,7 @@ void NodeEvents::cutElements(Node* node)
     }*/
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         graph->addNode(node);
         *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
     }
@@ -109,6 +110,7 @@ void NodeEvents::copyElements(Node* node)
     }*/
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         graph->addNode(node);
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
