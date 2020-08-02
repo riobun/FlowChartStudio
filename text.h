@@ -18,7 +18,7 @@ class TextItem;
 class Text : public QGraphicsTextItem{
 Q_OBJECT
 public:
-    Text(QPointF primary_location,QGraphicsItem* parent = 0);//由节点生成
+    Text(QPointF primary_location,QGraphicsItem* parent = 0,QString parentID = NULL,bool IDchanged=false);//由节点生成
     //Text(QPointF position1, QPointF position2,QGraphicsItem* parent = 0);//由图生成（鼠标位置决定大小）
     ~Text();
     void build_text(QColor c=Qt::black, QFont f=QFont());//初始化并在界面中显示
@@ -55,7 +55,8 @@ private:
     QString logic=NULL;
     QString all=NULL;
     TextItem* shape=new TextItem(this);
-
+    QString ID;
+    bool IDchange=false;
 signals:
     void Selected(Text*t,bool b);
 };

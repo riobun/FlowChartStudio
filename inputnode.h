@@ -9,8 +9,13 @@ public:
     InputNode(QPointF lc,double wd,double h);
     virtual void SetShape() override;
     virtual int GetType() override;
-    virtual void BindToText(QGraphicsScene *qgs) override;
+    virtual void Paint(QGraphicsScene *qgs) override;
+    virtual void Remove(QGraphicsScene *qgs) override;
+    virtual void ChangeZValue(bool isSelected) override;
+    virtual void SetFrameColor(const QColor &qc) override;
     ~InputNode();
+protected:
+     QVector<QGraphicsLineItem*> subShape;
 };
 
 #endif // INPUTNODE_H

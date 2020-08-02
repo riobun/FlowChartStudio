@@ -81,6 +81,7 @@ void Node::Paint(QGraphicsScene* qgs)
     SetBackgroundColor(backgroundColor);
     SetFrameColor(frameColor);
     qgs->addItem(shape);
+    if(content) qgs->addItem(content);
 }
 
 void Node::SetVisibility(bool vis)
@@ -145,7 +146,10 @@ void Node::BindToText(QGraphicsScene* qgs)
         content=new Text(location);
         content->putup_text(qgs);
         content->build_text();
-        content->change_content("文本");
+        QString temp="0x";
+        temp+= QString::number(GetID(),16);
+        temp+=":文本";
+        content->change_content(temp);
         content->setZValue(shape->zValue());
     }
 }

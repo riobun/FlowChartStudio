@@ -157,6 +157,11 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         {
             text->getTextItem()->SetSelected(true);
         }
+        auto arrows = MainWindow::instance()->graph()->searchArrows(rect);
+        foreach (auto arrow,arrows)
+        {
+            arrow->setSelected(true);
+        }
         rect->Remove(this);
         delete rect;
         rect = nullptr;

@@ -213,7 +213,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/images/text.png</normaloff>:/images/text.png</iconset>
+          <normaloff>:/images/subgraph3.0.png</normaloff>:/images/subgraph3.0.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -230,7 +230,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/images/text.png</normaloff>:/images/text.png</iconset>
+          <normaloff>:/images/in2.png</normaloff>:/images/in2.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -247,7 +247,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/images/text.png</normaloff>:/images/text.png</iconset>
+          <normaloff>:/images/out2.png</normaloff>:/images/out2.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -325,7 +325,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>26</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -687,6 +687,10 @@
    </property>
   </action>
   <action name="selectAllAction">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/all.png</normaloff>:/images/all.png</iconset>
+   </property>
    <property name="text">
     <string>全选</string>
    </property>

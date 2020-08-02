@@ -15,6 +15,7 @@ class Arrow: public QGraphicsPathItem,public GraphElement
 public:
     QPainterPath root;
     bool ischange=false;
+    QList<Arrow*> arrowlist;
     enum { Type = UserType + 4 };
 
     Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd,
@@ -58,7 +59,7 @@ private:
     int asize=2;
     QList<QPointF> list;// 箭头结点
     QPainterPath *apath;//箭头路径
-    QList<QPointF> arrownode;//箭头结点
+//    QList<QPointF> arrownode;//箭头结点
     bool isDoubleClick=false;
     bool isFocus=false;
     bool isMoved=false;

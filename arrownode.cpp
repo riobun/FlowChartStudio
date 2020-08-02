@@ -43,20 +43,12 @@ void Arrownode::SetLocation(const QPointF &qp)
 
 void Arrownode::SetWidth(double wd)
 {
-//    width=wd;
-//    QPolygonF polygon;
-//    polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
-//    polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
-//    shape->setPolygon(polygon);
+
 }
 
 void Arrownode::SetHeight(double h)
 {
-//    height=h;
-//    QPolygonF polygon;
-//    polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
-//    polygon<<QPointF(location.x()+width/2,location.y()+height/2)<<QPointF(location.x()-width/2,location.y()+height/2);
-//    shape->setPolygon(polygon);
+
 }
 
 void Arrownode::SetBackgroundColor(const QColor &qc)
