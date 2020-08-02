@@ -43,10 +43,14 @@ MainWindow::MainWindow(QWidget *parent)
         textEdit->setGeometry(QRect(150,120,700,600));
         textEdit->setHidden(true); //隐藏文本编辑
     //*****************************************************
-//    //侧边栏
-//    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
-//    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
-//    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
+
+
+    //状态栏
+    QLabel * status_label = new QLabel("提示信息",this);
+    ui->statusbar->addWidget(status_label);
+
+    QLabel * status_label_right = new QLabel("右侧提示信息",this);
+    ui->statusbar->addPermanentWidget(status_label_right);
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
