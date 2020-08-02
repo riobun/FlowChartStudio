@@ -146,6 +146,10 @@ void NodeEvents::selectAll()
     {
         node->getNodeItem()->SetSelected(true);
     }
+    foreach (auto arrow, graph->getArrows())
+    {
+        arrow->setSelected(true);
+    }
 }
 
 void NodeEvents::scaleNodes(Node* node, QGraphicsSceneMouseEvent *event)
