@@ -150,6 +150,10 @@ void NodeEvents::selectAll()
     {
         arrow->setSelected(true);
     }
+    foreach (auto text, graph->getTexts())
+    {
+        text->setSelected(true);
+    }
 }
 
 void NodeEvents::scaleNodes(Node* node, QGraphicsSceneMouseEvent *event)
