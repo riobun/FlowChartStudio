@@ -33,6 +33,7 @@ public:
     NodeItem *startItem() const { return myStartItem; }
     NodeItem *endItem() const { return myEndItem; }
     void removeArrow();
+    void removemyself();
     void updatePosition();
     virtual void BindToText(QGraphicsScene* qgs) override;
     NodeItem *myStartItem;
@@ -63,7 +64,7 @@ private:
     bool isDoubleClick=false;
     bool isFocus=false;
     bool isMoved=false;
-    Node *Arrownode;
+    Node *Arrownode=nullptr;
     int HaveEnd;
 
 };

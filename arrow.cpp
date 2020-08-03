@@ -411,12 +411,42 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
 void Arrow::removeArrow()
 {
-    endItem()->RemoveAsDestination(this);
-    startItem()->RemoveAsSource(this);
-    new ChangeElementAction(this, ElementShape::Arrow, false);
-    if(content) content->delete_text(scene());
-
+    for(Arrow *ar : arrowlist){
+    auto window = MainWindow::instance();
+    auto scene = window->scene();
+    ar->endItem()->RemoveAsDestination(ar);
+    ar->startItem()->RemoveAsSource(ar);
+    new ChangeElementAction(ar, ElementShape::Arrow, false);
+    scene->removeItem(ar);
+    if(content) ar->content->delete_text(scene);
+    if(ar->Arrownode!=nullptr){
+        ar->Arrownode->Remove(scene);
+    }
+//   endItem()->RemoveAsDestination(this);
+//   startItem()->RemoveAsSource(this);
+//   new ChangeElementAction(this, ElementShape::Arrow, false);
+//   if(content) content->delete_text(scene());
 }
+}
+void Arrow::removemyself()
+{
+//    for(Arrow *ar : arrowlist){
+//    ar->endItem()->RemoveAsDestination(ar);
+//    ar->startItem()->RemoveAsSource(ar);
+//    new ChangeElementAction(ar, ElementShape::Arrow, false);
+//    ar->scene()->removeItem(ar);
+//    if(content) ar->content->delete_text(scene());
+//    if(ar->Arrownode){
+//        ar->Arrownode->Remove(ar->Arrownode->getNodeItem()->scene());
+//    }
+    auto window = MainWindow::instance();
+    auto scene = window->scene();
+   endItem()->RemoveAsDestination(this);
+   startItem()->RemoveAsSource(this);
+   new ChangeElementAction(this, ElementShape::Arrow, false);
+   if(content) content->delete_text(scene);
+}
+
 //! [1]
 
 //! [2]
@@ -519,7 +549,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //     }
 //     解决方法：
      QPainterPath p = this->root;
-     this->removeArrow();
+     this->removemyself();
      MainWindow::instance()->scene()->removeItem(this);
 
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
@@ -538,7 +568,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //         arrow2->arrowlist[i]->Arrownode=arrownode;
      }
      arrow2->Arrownode=arrownode;
-     arrow3->Arrownode=arrownode;
+//     arrow3->Arrownode=arrownode;
      if(myEndItem->GetWidth()>5){
      arrow3->HaveEnd=1;}
      else{
@@ -611,7 +641,7 @@ void Arrow::setArrowColor(const QColor &color)
     brush.setColor(color);
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     ar->setBrush(brush);
-    if(arrowlist.length()>1){
+    if(ar->Arrownode!=nullptr){
     auto actioncolor1 =
     new EditElementAction(ar->Arrownode, ElementShape::Rectangle,
                                                      ElementProperty::FrameColor,
