@@ -49,4 +49,8 @@ QString GraphElement::getIdNum(int num)
     }
     return "0x"+res;
 }//得到ID的16进制表示的字符串
-
+void GraphElement::deleteID()
+{
+   k1[this->Id-1]=0;
+   return ;
+}
