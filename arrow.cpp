@@ -486,6 +486,10 @@ void Arrow::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
     auto addTextAction = menu.addAction("添加文本框");
+    auto cutAction = menu.addAction("剪切");
+    cutAction->setShortcut(QKeySequence::Cut);
+    auto copyAction = menu.addAction("复制");
+    copyAction->setShortcut(QKeySequence::Copy);
     auto selectedAction = menu.exec(event->screenPos());
     if (selectedAction == deleteAction)
     {
@@ -497,7 +501,14 @@ void Arrow::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
              setSelected(false);
              content->get_item()->setSelected(true);
     }
-
+    else if (selectedAction == cutAction)
+    {
+        NodeEvents::cutElements();
+    }
+    else if (selectedAction == copyAction)
+    {
+        NodeEvents::copyElements();
+    }
 }
 
 QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)

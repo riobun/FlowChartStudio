@@ -18,11 +18,12 @@ public:
     virtual void Paint(QGraphicsScene *qgs) override;
     virtual void Remove(QGraphicsScene *qgs) override;
     virtual void ChangeZValue(bool isSelected) override;
+    virtual void SetFrameColor(const QColor &qc) override;
     ~SubgraphNode();
     
     void OpenSubGraph();
     
-private:
+protected:
     QVector<QGraphicsLineItem*> subShape;
 };
 

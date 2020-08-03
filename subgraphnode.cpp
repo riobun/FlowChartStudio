@@ -22,16 +22,13 @@ SubgraphNode:: SubgraphNode(QPointF lc,double wd):Node(lc,wd,wd)
 SubgraphNode::~SubgraphNode()
 {
     delete shape;
+    delete subShape[0];
+    delete subShape[1];
 }
 
 void SubgraphNode::Paint(QGraphicsScene *qgs)
 {
-    SetShape();
-    shape->setVisible(true);
-    shape->setFlags(QGraphicsItem::ItemIsSelectable);
-    SetBackgroundColor(backgroundColor);
-    SetFrameColor(frameColor);
-    qgs->addItem(shape);
+    Node::Paint(qgs);
     qgs->addItem(subShape[0]);
     qgs->addItem(subShape[1]);
 }
@@ -59,12 +56,23 @@ void SubgraphNode::ChangeZValue(bool isSelected)
     subShape[0]->setZValue(shape->zValue());
     subShape[1]->setZValue(shape->zValue());
 }
+
+void SubgraphNode::SetFrameColor(const QColor &qc)
+{
+    Node::SetFrameColor(qc);
+    QPen pen=shape->pen();
+    pen.setColor(frameColor);
+    subShape[0]->setPen(pen);
+    subShape[1]->setPen(pen);
+}
 int SubgraphNode::GetType()
 {
-    return 5;
+    return 6;
 }
 
 void SubgraphNode::OpenSubGraph()
 {
-    point_w->addNewTab();
+    BindToText(MainWindow::instance()->scene());
+    point_w->addNewTab(content->get_text_content());
 }
+

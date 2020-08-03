@@ -35,9 +35,9 @@ int GraphElement::GetID(){
 QString GraphElement::getIdNum(int num)
 {
     if(num == 0)
-        return "0";
+        return "0x0";
 
-    QString res = "0x";
+    QString res;
     QString hex[16] = {"0", "1", "2", "3", "4", "5", "6", "7",
                       "8", "9", "a", "b", "c", "d", "e", "f"};
 
@@ -47,6 +47,6 @@ QString GraphElement::getIdNum(int num)
         res = hex[num2 % 16] + res;//取余即是最低位
         num2 /= 16;
     }
-    return res;
+    return "0x"+res;
 }//得到ID的16进制表示的字符串
 
