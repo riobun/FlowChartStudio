@@ -422,6 +422,7 @@ void Arrow::removeArrow()
     if(ar->Arrownode!=nullptr){
         ar->Arrownode->Remove(scene);
     }
+    ar->deleteID();
 //   endItem()->RemoveAsDestination(this);
 //   startItem()->RemoveAsSource(this);
 //   new ChangeElementAction(this, ElementShape::Arrow, false);
@@ -445,6 +446,7 @@ void Arrow::removemyself()
    startItem()->RemoveAsSource(this);
    new ChangeElementAction(this, ElementShape::Arrow, false);
    if(content) content->delete_text(scene);
+   this->deleteID();
 }
 
 //! [1]
