@@ -12,6 +12,8 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QList>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 //**********************************************************
 #include <QFileDialog>
 #include <QMessageBox>
@@ -46,11 +48,21 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //状态栏
-    QLabel * status_label = new QLabel("提示信息",this);
-    ui->statusbar->addWidget(status_label);
+//    QLabel * status_label = new QLabel("提示信息",this);
+//    ui->statusbar->addWidget(status_label);
 
-    QLabel * status_label_right = new QLabel("右侧提示信息",this);
-    ui->statusbar->addPermanentWidget(status_label_right);
+//    QLabel * status_label_right = new QLabel("右侧提示信息",this);
+//    ui->statusbar->addPermanentWidget(status_label_right);
+
+
+        ui->listWidget->addItem("提示信息1");
+        ui->listWidget->addItem("提示信息2");
+        ui->listWidget->addItem("提示信息3");
+        ui->listWidget->addItem("提示信息4");
+        ui->listWidget->addItem("提示信息5");
+
+
+
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
