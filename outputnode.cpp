@@ -38,8 +38,8 @@ void OutputNode::SetShape()
     polygon<<QPoint(location.x()-width/2,location.y());
     polygon<<QPointF(location.x(),location.y()+height/2)<<QPointF(location.x()+width/2,location.y()+height/2);
     shape->setPolygon(polygon);
-    double k=0.8;
-    subShape->setRect(location.x()+width/4-k*width/4,location.y()-k*height/2,k*width/2,k*height);
+    double k1=0.8,k2=0.6;
+    subShape->setRect(location.x()+width/4-k2*width/4,location.y()-k1*height/2,k2*width/2,k1*height);
 }
 void OutputNode::SetFrameColor(const QColor &qc)
 {

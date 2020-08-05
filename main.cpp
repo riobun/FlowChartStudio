@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "rectangle.h"
-#include "diamond.h"
-#define DEBUG
+#include "inneroutputnode.h"
 
 MainWindow* point_w = nullptr;
 

@@ -27,6 +27,8 @@ SOURCES += \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
+    innerinputnode.cpp \
+    inneroutputnode.cpp \
     inputnode.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -54,6 +56,8 @@ HEADERS += \
     graphelement.h \
     groupaction.h \
     idpool.h \
+    innerinputnode.h \
+    inneroutputnode.h \
     inputnode.h \
     mainwindow.h \
     node.h \

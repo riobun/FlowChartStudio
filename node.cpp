@@ -143,13 +143,12 @@ void Node::BindToText(QGraphicsScene* qgs)
 {
     if(content==nullptr)
     {
-        content=new Text(location);
-        content->putup_text(qgs);
-        content->build_text();
         QString temp="0x";
         temp+= QString::number(GetID(),16);
-        temp+=":文本";
-        content->change_content(temp);
+        content=new Text(location,nullptr,temp,true);
+        content->putup_text(qgs);
+        content->build_text();
+        content->change_content("文本");
         content->setZValue(shape->zValue());
     }
 }
