@@ -4,7 +4,6 @@
 Node::Node(){}
 Node::Node(QPointF lc,double w,double h):location(lc),width(w),height(h)
 {
-   //shape=new NodeItem(this);
 }
 
 Node::~Node()
