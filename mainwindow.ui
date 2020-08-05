@@ -230,7 +230,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/images/in2.png</normaloff>:/images/in2.png</iconset>
+          <normaloff>:/images/in3.png</normaloff>:/images/in3.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -247,7 +247,7 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/images/out2.png</normaloff>:/images/out2.png</iconset>
+          <normaloff>:/images/out3.png</normaloff>:/images/out3.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -289,7 +289,7 @@
       <x>970</x>
       <y>10</y>
       <width>221</width>
-      <height>781</height>
+      <height>701</height>
      </rect>
     </property>
    </widget>
@@ -299,7 +299,7 @@
       <x>140</x>
       <y>10</y>
       <width>821</width>
-      <height>791</height>
+      <height>701</height>
      </rect>
     </property>
     <widget class="QWidget" name="tab">
@@ -317,6 +317,16 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>720</y>
+      <width>1187</width>
+      <height>117</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -391,6 +401,7 @@
     </property>
     <addaction name="actionnew_pro"/>
     <addaction name="actionopen_pro"/>
+    <addaction name="actionsave"/>
     <addaction name="actionclose_pro"/>
     <addaction name="actioncheck_pro"/>
     <addaction name="actionrun_pro"/>
@@ -402,7 +413,6 @@
    <addaction name="arrowMenu"/>
    <addaction name="textMenu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
@@ -696,6 +706,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionsave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/baocun.png</normaloff>:/images/baocun.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存</string>
    </property>
   </action>
  </widget>

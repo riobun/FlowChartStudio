@@ -40,6 +40,7 @@ public:
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
     void addNewTab();
+    void addNewTab(QString name);
     Graph* graph();
 
     QColor bdColor = Qt::black;
@@ -133,5 +134,6 @@ private:
     QMap<QModelIndex,FlowChartScene* > scenes;
     QMap<QGraphicsScene*, Graph*> graphs;
 
+    QVector<QPair<int,QString>> index_name_subgraph;
 };
 #endif // MAINWINDOW_H

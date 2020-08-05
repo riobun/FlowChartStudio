@@ -12,6 +12,8 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QList>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 //**********************************************************
 #include <QFileDialog>
 #include <QMessageBox>
@@ -43,10 +45,24 @@ MainWindow::MainWindow(QWidget *parent)
         textEdit->setGeometry(QRect(150,120,700,600));
         textEdit->setHidden(true); //隐藏文本编辑
     //*****************************************************
-//    //侧边栏
-//    ui->addSubgraghButton->setIcon(QIcon(":/images/subGraph_new.png"));
-//    ui->addFatherPortButton->setIcon(QIcon(":/images/Right_new.png"));
-//    ui->addSonPortButton->setIcon(QIcon(":/images/Left_new.png"));
+
+
+    //状态栏
+//    QLabel * status_label = new QLabel("提示信息",this);
+//    ui->statusbar->addWidget(status_label);
+
+//    QLabel * status_label_right = new QLabel("右侧提示信息",this);
+//    ui->statusbar->addPermanentWidget(status_label_right);
+
+
+        ui->listWidget->addItem("提示信息1");
+        ui->listWidget->addItem("提示信息2");
+        ui->listWidget->addItem("提示信息3");
+        ui->listWidget->addItem("提示信息4");
+        ui->listWidget->addItem("提示信息5");
+
+
+
 
     //工具栏
     ui->toolBar->addWidget(ui->backBtn);
@@ -528,6 +544,33 @@ void MainWindow::addNewTab(){
 
 
     scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+}
+
+void MainWindow::addNewTab(QString name){
+    foreach(auto n, index_name_subgraph){
+        if(n.second==name){
+            ui->tabWidget->setCurrentIndex(n.first);
+            return;
+        }
+    }
+
+    //创建新的VIEW和SCENE，并绑定
+    FlowChartScene* scene = new FlowChartScene();
+    QGraphicsView* graphicsView = new QGraphicsView();
+
+    graphicsView->setScene(scene);
+
+    //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
+    QWidget *tabFile = new QWidget(this);
+    QVBoxLayout *layout1 = new QVBoxLayout;
+    layout1->addWidget(graphicsView);
+    tabFile->setLayout(layout1);
+    int index = ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),name);
+    ui->tabWidget->setCurrentWidget(tabFile);
+
+    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+
+    index_name_subgraph.push_back({index,name});
 }
 
 void MainWindow::on_addSubgraghButton_clicked()

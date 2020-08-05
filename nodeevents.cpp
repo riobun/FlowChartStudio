@@ -68,16 +68,17 @@ void NodeEvents::cutElements(Node* node)
     graph->clear();
     graph->node = node;
     auto action = new GroupAction();
-    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    /*foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         if (!graph->node) graph->node = node;
         foreach (auto arrow, node->getSourceArrows())
         {
             graph->addArrow(arrow);
         }
-    }
+    }*/
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         graph->addNode(node);
         *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
     }
@@ -85,6 +86,11 @@ void NodeEvents::cutElements(Node* node)
     {
         graph->addText(text);
         *action << new ChangeElementAction(text, ElementShape::Text, false);
+    }
+    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
+    {
+        graph->addArrow(arrow);
+        *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
     }
     action->Do();
 }
@@ -94,21 +100,26 @@ void NodeEvents::copyElements(Node* node)
     auto graph = MainWindow::instance()->cutGraph;
     graph->clear();
     graph->node = node;
-    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    /*foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         if (!graph->node) graph->node = node;
         foreach (auto arrow, node->getSourceArrows())
         {
             graph->addArrow(arrow);
         }
-    }
+    }*/
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
+        if (!graph->node) graph->node = node;
         graph->addNode(node);
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
         graph->addText(text);
+    }
+    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
+    {
+        graph->addArrow(arrow);
     }
 }
 
@@ -145,6 +156,14 @@ void NodeEvents::selectAll()
     foreach (auto node, graph->getNodes())
     {
         node->getNodeItem()->SetSelected(true);
+    }
+    foreach (auto arrow, graph->getArrows())
+    {
+        arrow->setSelected(true);
+    }
+    foreach (auto text, graph->getTexts())
+    {
+        text->setSelected(true);
     }
 }
 

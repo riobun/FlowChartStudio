@@ -72,5 +72,7 @@ int SubgraphNode::GetType()
 
 void SubgraphNode::OpenSubGraph()
 {
-    point_w->addNewTab();
+    BindToText(MainWindow::instance()->scene());
+    point_w->addNewTab(content->get_text_content());
 }
+

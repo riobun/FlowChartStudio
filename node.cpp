@@ -136,6 +136,7 @@ void Node::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
          arrow->removeArrow();
      }
      isRemoved=false;
+      this->deleteID();
 }
 
 void Node::BindToText(QGraphicsScene* qgs)

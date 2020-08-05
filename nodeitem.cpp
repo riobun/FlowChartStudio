@@ -157,10 +157,10 @@ int NodeItem::GetHeight(){
     return node->GetHeight();
 }
 void NodeItem::RemoveAsSource(Arrow* ar){
-    //node->DisconnectAsSource(ar);
+    node->DisconnectAsSource(ar);
 }
 void NodeItem::RemoveAsDestination(Arrow* ar){
-    //node->DisconnectAsSource(ar);
+    node->DisconnectAsSource(ar);
 }
 
 void NodeItem::SetSelected(bool b)
