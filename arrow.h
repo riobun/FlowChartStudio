@@ -26,6 +26,7 @@ public:
     QPainterPath shape() const override;
     void setArrowColor(const QColor &color);
     QColor getColor() { return myColor; }
+    int getType() { return atype; }
     void setType(int flag);
     void setSize(int size);
     void setId(int size);

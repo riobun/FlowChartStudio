@@ -140,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->arrowComboBox->addItem("实线箭头");
     ui->arrowComboBox->addItem("虚线箭头");
     ui->arrowComboBox->addItem("点线箭头");
+    connect(ui->arrowComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)));
 
     //菜单栏信号
     //文本框
@@ -762,3 +763,25 @@ void MainWindow::textButtonTriggered() {}
 void MainWindow::fillButtonTriggered() {}
 void MainWindow::bdButtonTriggered() {}
 void MainWindow::arrowColorButtonTriggered() {}
+
+void MainWindow::lineTypeChanged(int index)
+{
+    auto type = index + 1;
+    if (selectedArrows()->size() > 0)
+    {
+        ui->arrowComboBox->setCurrentIndex(lineType - 1);
+        auto action = new GroupAction;
+        foreach (auto arrow, *selectedArrows())
+        {
+            *action << new EditElementAction(arrow, ElementShape::Arrow,
+                                             ElementProperty::ArrowKind,
+                                             new int(arrow->getType()),
+                                             new int(type));
+        }
+        action->Do();
+    }
+    else
+    {
+        lineType = type;
+    }
+}

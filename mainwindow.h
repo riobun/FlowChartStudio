@@ -47,6 +47,7 @@ public:
     QColor fillColor = Qt::white;
     QColor lineColor = Qt::black;
     QColor textColor = Qt::black;
+    int lineType = 1;
     Graph* cutGraph = new Graph;
 
 public slots:
@@ -56,6 +57,8 @@ public slots:
     void Copy();
     void Paste();
     void SelectAll();
+
+    void lineTypeChanged(int index);
 
 private slots:
     void textColorChanged();
