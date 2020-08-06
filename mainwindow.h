@@ -99,10 +99,10 @@ private slots:
     void on_addInnerOutputButton_clicked();
 
 private:
-    void changeFrameButton(QColor color);
-    void changeFillButton(QColor color);
-    void changeLineButton(QColor color);
-    void changeTextLineButton(QColor color);
+    void changeFrameColor(QColor color);
+    void changeFillColor(QColor color);
+    void changeLineColor(QColor color);
+    void changeTextColor(QColor color);
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();

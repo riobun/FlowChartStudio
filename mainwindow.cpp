@@ -144,10 +144,8 @@ MainWindow::MainWindow(QWidget *parent)
     //菜单栏信号
     //文本框
     connect(ui->action_fontColor,&QAction::triggered,[=](){
-        textColor = QColorDialog::getColor(QColor(Qt::black));
-        clickTextColorButton();
-        fontColorToolBtn->setIcon(createColorToolButtonIcon(
-                                      ":/images/textpointer.png", textColor));
+        auto color = QColorDialog::getColor(QColor(Qt::black));
+        changeTextColor(color);
     });
     connect(ui->action_font,&QAction::triggered,[](){
         bool flag;
@@ -155,24 +153,17 @@ MainWindow::MainWindow(QWidget *parent)
     });
     //箭头
     connect(ui->action_arrowColor,&QAction::triggered,[=](){
-        lineColor = QColorDialog::getColor(QColor(Qt::black));
-        clickLineBtn();
-        fillColorToolBtn->setIcon(createColorToolButtonIcon(
-                                         ":/images/floodfill.png", lineColor));
+        auto color = QColorDialog::getColor(QColor(Qt::black));
+        changeLineColor(color);
     });
     //节点
     connect(ui->action_bgColor,&QAction::triggered,[=](){
-        fillColor = QColorDialog::getColor(QColor(Qt::black));
-        clickFillBtn();
-        fillColorToolBtn->setIcon(createColorToolButtonIcon(
-                                         ":/images/floodfill.png", fillColor));
+        auto color = QColorDialog::getColor(QColor(Qt::black));
+        changeFillColor(color);
     });
     connect(ui->action_bdColor,&QAction::triggered,[this](){
-        bdColor = QColorDialog::getColor(QColor(Qt::black));
-        changeFrameButton(bdColor);
-/*        clickbdBtn();
-        bdColorToolBtn->setIcon(createColorToolButtonIcon(
-                                         ":/images/bdcolor.png", bdColor));*/
+        auto color = QColorDialog::getColor(QColor(Qt::black));
+        changeFrameColor(color);
     });
 
     //项目树形结构
@@ -323,83 +314,30 @@ QIcon MainWindow::createColorIcon(QColor color)
 void MainWindow::textColorChanged()
 {
     textAction = qobject_cast<QAction *>(sender());
-    fontColorToolBtn->setIcon(createColorToolButtonIcon(
-                                     ":/images/textpointer.png",
-                                     qvariant_cast<QColor>(textAction->data())));
-    textButtonTriggered();
-    textColor = qvariant_cast<QColor>(textAction->data());
-    if (selectedTexts()->size() > 0)
-    {
-        clickTextColorButton();
-    }
-}
-
-void MainWindow::textButtonTriggered()
-{
-//    scene->setTextColor(qvariant_cast<QColor>(textAction->data()));
+    auto color = qvariant_cast<QColor>(textAction->data());
+    changeTextColor(color);
 }
 
 void MainWindow::itemColorChanged()
 {
     fillAction = qobject_cast<QAction *>(sender());
-    fillColorToolBtn->setIcon(createColorToolButtonIcon(
-                                     ":/images/floodfill.png",
-                                     qvariant_cast<QColor>(fillAction->data())));
-    fillButtonTriggered();
     auto color = qvariant_cast<QColor>(fillAction->data());
-    fillColor = color;
-    if (selectedNodes()->size() > 0)
-    {
-        clickFillBtn();
-    }
-}
-
-void MainWindow::fillButtonTriggered()
-{
-    //scene->setItemColor(qvariant_cast<QColor>(fillAction->data()));
+    changeFillColor(color);
 }
 
 void MainWindow::bdColorChanged()
 {
     bdAction = qobject_cast<QAction *>(sender());
     auto color = qvariant_cast<QColor>(bdAction->data());
-    changeFrameButton(color);
-/*    bdColorToolBtn->setIcon(createColorToolButtonIcon(
-                                     ":/images/bdcolor.png",
-                                     qvariant_cast<QColor>(bdAction->data())));
-    bdButtonTriggered();
-    auto color = qvariant_cast<QColor>(bdAction->data());
-    bdColor = color;
-    if (selectedNodes()->size() > 0)
-    {
-        clickbdBtn();
-    }*/
-}
-
-void MainWindow::bdButtonTriggered()
-{
-    //scene->setBdColor(qvariant_cast<QColor>(bdAction->data()));
+    changeFrameColor(color);
 }
 
 void MainWindow::arrowColorChanged()
 {
     arrowColorAction = qobject_cast<QAction *>(sender());
-    arrowColorToolBtn->setIcon(createColorToolButtonIcon(
-                                     ":/images/arrowcolor.png",
-                                     qvariant_cast<QColor>(arrowColorAction->data())));
-    arrowColorButtonTriggered();
-    lineColor = qvariant_cast<QColor>(arrowColorAction->data());
-    if (selectedArrows()->size() > 0)
-    {
-        clickLineBtn();
-    }
+    auto color = qvariant_cast<QColor>(arrowColorAction->data());
+    changeLineColor(color);
 }
-
-void MainWindow::arrowColorButtonTriggered()
-{
-    //scene->setBdColor(qvariant_cast<QColor>(bdAction->data()));
-}
-
 
 void MainWindow::on_addRectangleButton_clicked()
 {
@@ -752,7 +690,7 @@ void MainWindow::on_addInnerOutputButton_clicked()
     _nextAddedShape = ElementShape::InnerOutput;
 }
 
-void MainWindow::changeFrameButton(QColor color)
+void MainWindow::changeFrameColor(QColor color)
 {
     if (selectedNodes()->size() > 0)
     {
@@ -769,17 +707,58 @@ void MainWindow::changeFrameButton(QColor color)
     }
 }
 
-void MainWindow::changeFillButton(QColor color)
+void MainWindow::changeFillColor(QColor color)
 {
-
+    if (selectedNodes()->size() > 0)
+    {
+        auto oldColor = fillColor;
+        fillColor = color;
+        clickFillBtn();
+        fillColor = oldColor;
+    }
+    else
+    {
+        fillColor = color;
+        auto icon = createColorToolButtonIcon(":/images/floodfill.png", color);
+        fillColorToolBtn->setIcon(icon);
+    }
 }
 
-void MainWindow::changeLineButton(QColor color)
+void MainWindow::changeLineColor(QColor color)
 {
-
+    if (selectedArrows()->size() > 0)
+    {
+        auto oldColor = lineColor;
+        lineColor = color;
+        clickLineBtn();
+        lineColor = oldColor;
+    }
+    else
+    {
+        lineColor = color;
+        auto icon = createColorToolButtonIcon(":/images/arrowcolor.png", color);
+        arrowColorToolBtn->setIcon(icon);
+    }
 }
 
-void MainWindow::changeTextLineButton(QColor color)
+void MainWindow::changeTextColor(QColor color)
 {
-
+    if (selectedTexts()->size() > 0)
+    {
+        auto oldColor = textColor;
+        textColor = color;
+        clickTextColorButton();
+        textColor = oldColor;
+    }
+    else
+    {
+        textColor = color;
+        auto icon = createColorToolButtonIcon(":/images/taxtcolor.png", color);
+        fontColorToolBtn->setIcon(icon);
+    }
 }
+
+void MainWindow::textButtonTriggered() {}
+void MainWindow::fillButtonTriggered() {}
+void MainWindow::bdButtonTriggered() {}
+void MainWindow::arrowColorButtonTriggered() {}
