@@ -72,18 +72,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addSeparator();
 
     fontBtn = new QFontComboBox(this);
-    connect(fontBtn, &QFontComboBox::currentFontChanged, this, &MainWindow::changeFont);
+    connect(fontBtn, &QFontComboBox::currentFontChanged, this, &MainWindow::changeFontFamily);
     ui->toolBar->addWidget(fontBtn);
 
     ui->toolBar->addSeparator();
 
     //字号
-    QComboBox* fontSizeCombo = new QComboBox(this);
+    fontSizeCombo = new QComboBox(this);
     fontSizeCombo->setEditable(true);
     for (int i = 6; i < 52; i = i + 2)
         fontSizeCombo->addItem(QString().setNum(i));
     QIntValidator *validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
+    connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
     ui->toolBar->addWidget(fontSizeCombo);
 
     ui->toolBar->addSeparator();
@@ -787,7 +788,7 @@ void MainWindow::lineTypeChanged(int index)
     }
 }
 
-void MainWindow::changeFont(QFont font)
+void MainWindow::changeFontFamily(QFont font)
 {
     auto family = font.family();
     if (selectedTexts()->size() > 0)
@@ -799,12 +800,34 @@ void MainWindow::changeFont(QFont font)
             *action << new EditElementAction(text, ElementShape::Text,
                                              ElementProperty::Font,
                                              new QFont(text->get_text_font()),
-                                             new QFont(family));
+                                             new QFont(family, fontSize));
         }
         action->Do();
     }
     else
     {
         fontFamily = family;
+    }
+}
+
+void MainWindow::changeFontSize(QString sizeString)
+{
+    auto size = sizeString.toInt();
+    if (selectedTexts()->size() > 0)
+    {
+        auto action = new GroupAction;
+        fontSizeCombo->setCurrentText(QString::number(fontSize));
+        foreach (auto text, *selectedTexts())
+        {
+            *action << new EditElementAction(text, ElementShape::Text,
+                                             ElementProperty::Font,
+                                             new QFont(text->get_text_font()),
+                                             new QFont(fontFamily, size));
+        }
+        action->Do();
+    }
+    else
+    {
+        fontSize = size;
     }
 }

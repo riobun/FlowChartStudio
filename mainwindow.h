@@ -50,6 +50,7 @@ public:
     QColor textColor = Qt::black;
     int lineType = 1;
     QString fontFamily = "宋体";
+    int fontSize = 6;
     Graph* cutGraph = new Graph;
 
 public slots:
@@ -61,7 +62,8 @@ public slots:
     void SelectAll();
 
     void lineTypeChanged(int index);
-    void changeFont(QFont font);
+    void changeFontFamily(QFont font);
+    void changeFontSize(QString sizeString);
 
 private slots:
     void textColorChanged();
@@ -135,6 +137,7 @@ private:
     QAction *bdAction;
     QAction *arrowColorAction;
     QFontComboBox* fontBtn;
+    QComboBox* fontSizeCombo;
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;
     QToolButton* fontColorToolBtn;

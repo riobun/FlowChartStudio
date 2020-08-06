@@ -76,7 +76,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         {
             auto text = new Text(point);
             text->reset_color(window->textColor);
-            text->reset_font(QFont(window->fontFamily));
+            text->reset_font(QFont(window->fontFamily, window->fontSize));
             auto action = new ChangeElementAction(text, ElementShape::Text, true);
             action->Do();
         }
