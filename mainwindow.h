@@ -94,6 +94,10 @@ private slots:
 
     void on_action1_4_triggered();
     //*****************************************************
+    void on_addInnerInputButton_clicked();
+
+    void on_addInnerOutputButton_clicked();
+
 private:
     void clickbdBtn();
     void clickFillBtn();

@@ -14,6 +14,8 @@
 #include "inputnode.h"
 #include "outputnode.h"
 #include "nodeevents.h"
+#include "innerinputnode.h"
+#include "inneroutputnode.h"
 
 
 FlowChartScene::FlowChartScene()
@@ -96,6 +98,18 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         {
             auto output = new OutputNode(point, 100.0, 50.0);
             auto action = new ChangeElementAction(output, ElementShape::Output, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::InnerInput)
+        {
+            auto innerInput = new InnerInputNode(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(innerInput, ElementShape::InnerInput, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::InnerOutput)
+        {
+            auto innerOutput = new InnerOutputNode(point, 100.0, 50.0);
+            auto action = new ChangeElementAction(innerOutput, ElementShape::InnerInput, true);
             action->Do();
         }
         window->setNextAddedShape(ElementShape::Unknown);

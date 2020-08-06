@@ -32,7 +32,8 @@ void ChangeElementAction::Do()
     }
     else if (shape == ElementShape::Diamond || shape == ElementShape::Rectangle ||
              shape == ElementShape::SubGraph || shape == ElementShape::Input ||
-             shape == ElementShape::Output || shape==ElementShape::Arrownode)
+             shape == ElementShape::Output || shape==ElementShape::Arrownode
+             || shape == ElementShape::InnerInput || shape == ElementShape::InnerOutput)
     {
         auto node = static_cast<Node*>(element);
         if (isCreated)

@@ -740,3 +740,13 @@ Graph* MainWindow::graph()
 {
     return static_cast<FlowChartScene*>(scene())->graph;
 }
+
+void MainWindow::on_addInnerInputButton_clicked()
+{
+    _nextAddedShape = ElementShape::InnerInput;
+}
+
+void MainWindow::on_addInnerOutputButton_clicked()
+{
+    _nextAddedShape = ElementShape::InnerOutput;
+}

@@ -47,7 +47,10 @@ EditElementAction::~EditElementAction()
 
 void EditElementAction::Do()
 {
-    if(shape == ElementShape::Rectangle || shape==ElementShape::Diamond)
+    if(shape == ElementShape::Rectangle || shape==ElementShape::Diamond ||
+            shape == ElementShape::Input || shape == ElementShape::Output ||
+            shape == ElementShape::InnerInput || shape == ElementShape::InnerOutput
+            || shape == ElementShape::SubGraph)
       {
           auto node = static_cast<Node*>(element);
 

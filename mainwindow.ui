@@ -224,6 +224,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="addInnerInputButton">
+        <property name="text">
+         <string>InnerInput</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="addFatherPortButton">
         <property name="text">
          <string/>
@@ -237,6 +244,13 @@
           <width>61</width>
           <height>61</height>
          </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="addInnerOutputButton">
+        <property name="text">
+         <string>InnerOutput</string>
         </property>
        </widget>
       </item>
@@ -335,7 +349,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
