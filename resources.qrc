@@ -62,5 +62,7 @@
         <file>images/out2.png</file>
         <file>images/in3.png</file>
         <file>images/out3.png</file>
+        <file>images/innerIn.png</file>
+        <file>images/innerOut.png</file>
     </qresource>
 </RCC>
