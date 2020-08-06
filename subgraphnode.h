@@ -3,6 +3,8 @@
 #include "node.h"
 #include "QGraphicsLineItem"
 
+#include"inputnode.h"
+#include"outputnode.h"
 #include "mainwindow.h"
 
 extern MainWindow* point_w;
