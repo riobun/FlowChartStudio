@@ -128,12 +128,15 @@ void DetailsDialog::pressbutton(){
     }
 
     if(b==1){
-        s.append("NOT ");
+        s.append("（NOT ");
     }
 
 
     s.append(nameEdit->text());
     //s.chop(1);
+    if(b==1){
+        s.append(")")
+    }
     s.append(" ");
     logicEdit->setText(s);
     textlogiclist.append(nameEdit->text());
