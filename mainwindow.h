@@ -42,6 +42,7 @@ public:
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
     void addNewTab();
     void addNewTab(QString name);
+    int index_tab();
     Graph* graph();
 
     QColor bdColor = Qt::black;
