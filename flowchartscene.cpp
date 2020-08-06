@@ -51,22 +51,31 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         auto window = MainWindow::instance();
         auto shape = window->nextAddedShape();
         auto point = event->scenePos();
-        if (shape == ElementShape::Text)
+        if (isNode(shape))
+        {
+            Node* node;
+            constexpr double width = 100;
+            constexpr double height = 50;
+            switch (shape)
+            {
+                case ElementShape::Input: node = new InputNode(point, width, height); break;
+                case ElementShape::Output: node = new OutputNode(point, width, height); break;
+                case ElementShape::Diamond: node = new Diamond(point, width, height); break;
+                case ElementShape::SubGraph: node = new SubgraphNode(point, width); break;
+                case ElementShape::Rectangle: node = new Rectangle(point, width, height); break;
+                case ElementShape::InnerInput: node = new InnerInputNode(point, width, height); break;
+                case ElementShape::InnerOutput: node = new InnerOutputNode(point, width, height); break;
+                default: throw;
+            }
+            node->SetFrameColor(window->bdColor);
+            node->SetBackgroundColor(window->fillColor);
+            auto action = new ChangeElementAction(node, shape, true);
+            action->Do();
+        }
+        else if (shape == ElementShape::Text)
         {
             auto text = new Text(point);
             auto action = new ChangeElementAction(text, ElementShape::Text, true);
-            action->Do();
-        }
-        else if (shape == ElementShape::Diamond)
-        {
-            auto diamond = new Diamond(point, 100.0, 50.0);
-            auto action = new ChangeElementAction(diamond, ElementShape::Diamond, true);
-            action->Do();
-        }
-        else if (shape == ElementShape::Rectangle)
-        {
-            auto rectangle = new Rectangle(point, 100.0, 50.0);
-            auto action = new ChangeElementAction(rectangle, ElementShape::Rectangle, true);
             action->Do();
         }
         else if (shape == ElementShape::Arrow)
@@ -81,36 +90,6 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
             window->setNextAddedShape(ElementShape::Unknown);
             return;
-        }
-        else if (shape == ElementShape::SubGraph)
-        {
-            auto subgraph = new SubgraphNode(point, 100.0);
-            auto action = new ChangeElementAction(subgraph, ElementShape::SubGraph, true);
-            action->Do();
-        }
-        else if (shape == ElementShape::Input)
-        {
-            auto input = new InputNode(point, 100.0, 50.0);
-            auto action = new ChangeElementAction(input, ElementShape::Input, true);
-            action->Do();
-        }
-        else if (shape == ElementShape::Output)
-        {
-            auto output = new OutputNode(point, 100.0, 50.0);
-            auto action = new ChangeElementAction(output, ElementShape::Output, true);
-            action->Do();
-        }
-        else if (shape == ElementShape::InnerInput)
-        {
-            auto innerInput = new InnerInputNode(point, 100.0, 50.0);
-            auto action = new ChangeElementAction(innerInput, ElementShape::InnerInput, true);
-            action->Do();
-        }
-        else if (shape == ElementShape::InnerOutput)
-        {
-            auto innerOutput = new InnerOutputNode(point, 100.0, 50.0);
-            auto action = new ChangeElementAction(innerOutput, ElementShape::InnerInput, true);
-            action->Do();
         }
         window->setNextAddedShape(ElementShape::Unknown);
     }

@@ -13,33 +13,11 @@ void ChangeElementAction::Do()
 {
     auto window = MainWindow::instance();
     auto scene = window->scene();
-    if (shape == ElementShape::Text)
-    {
-        auto text = static_cast<Text*>(element);
-        if (isCreated)
-        {
-            text->putup_text(scene);
-            window->graph()->addText(text);
-            connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
-            text->build_text(MainWindow::instance()->textColor, QFont());
-        }
-        else
-        {
-            window->graph()->removeText(text);
-            window->selectedTexts()->removeAll(text);
-            text->delete_text(scene);
-        }
-    }
-    else if (shape == ElementShape::Diamond || shape == ElementShape::Rectangle ||
-             shape == ElementShape::SubGraph || shape == ElementShape::Input ||
-             shape == ElementShape::Output || shape==ElementShape::Arrownode
-             || shape == ElementShape::InnerInput || shape == ElementShape::InnerOutput)
+    if (isNode(shape))
     {
         auto node = static_cast<Node*>(element);
         if (isCreated)
         {
-            node->SetFrameColor(window->bdColor);
-            node->SetBackgroundColor(window->fillColor);
             auto item = node->getNodeItem();
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             connect(item, &NodeItem::NewLocation, this, &ChangeElementAction::onNodeMoved);
@@ -58,6 +36,23 @@ void ChangeElementAction::Do()
             node->Remove(scene);
             MainWindow::instance()->graph()->removeNode(node);
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
+        }
+    }
+    else if (shape == ElementShape::Text)
+    {
+        auto text = static_cast<Text*>(element);
+        if (isCreated)
+        {
+            text->putup_text(scene);
+            window->graph()->addText(text);
+            connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
+            text->build_text(MainWindow::instance()->textColor, QFont());
+        }
+        else
+        {
+            window->graph()->removeText(text);
+            window->selectedTexts()->removeAll(text);
+            text->delete_text(scene);
         }
     }
     else if (shape == ElementShape::Arrow)

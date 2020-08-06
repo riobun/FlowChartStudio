@@ -16,4 +16,12 @@ enum class ElementShape
     InnerOutput,
 };
 
+inline bool isNode(ElementShape shape)
+{
+    return shape == ElementShape::Input || shape == ElementShape::Output ||
+            shape == ElementShape::Diamond || shape == ElementShape::SubGraph ||
+            shape == ElementShape::Rectangle || shape == ElementShape::InnerInput ||
+            shape == ElementShape::InnerOutput;
+}
+
 #endif // SHAPE_H
