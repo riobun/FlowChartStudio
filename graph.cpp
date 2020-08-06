@@ -62,6 +62,27 @@ void Graph::addNode(Node* node)
     nodes.insert(node->GetID(), node);
 }
 
+
+void Graph::addNode(Node* node, int index, ElementShape shape){
+    node_info n;
+    n.node_id=node->GetID();
+    n.p_node=node;
+    n.index=index;
+    n.shape=shape;
+    v_node_info.push_back(n);
+}
+
+QVector<QPair<Node*,ElementShape>> Graph::Nodes_ElementShape(int index){
+    QVector<QPair<Node*,ElementShape>> v;
+    foreach(auto n,v_node_info){
+        if(n.index == index){
+            v.push_back({n.p_node,n.shape});
+        }
+    }
+    return v;
+}
+
+
 void Graph::removeNode(Node* node)
 {
     nodes.remove(node->GetID());
