@@ -43,6 +43,11 @@ EditElementAction::~EditElementAction()
         delete (bool*)from;
         delete (bool*)to;
     }
+    else if (property == ElementProperty::ArrowKind)
+    {
+        delete (int*)from;
+        delete (int*)to;
+    }
 }
 
 void EditElementAction::Do()
@@ -109,6 +114,11 @@ void EditElementAction::Do()
         {
             auto toColor = static_cast<QColor*>(to);
             arrow->setArrowColor(*toColor);
+        }
+        else if (property == ElementProperty::ArrowKind)
+        {
+            auto toKind = static_cast<int*>(to);
+            arrow->setType(*toKind);
         }
     }
 }
