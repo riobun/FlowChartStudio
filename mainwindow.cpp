@@ -754,7 +754,7 @@ void MainWindow::changeTextColor(QColor color)
     else
     {
         textColor = color;
-        auto icon = createColorToolButtonIcon(":/images/taxtcolor.png", color);
+        auto icon = createColorToolButtonIcon(":/images/textpointer.png", color);
         fontColorToolBtn->setIcon(icon);
     }
 }

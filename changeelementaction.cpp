@@ -46,7 +46,7 @@ void ChangeElementAction::Do()
             text->putup_text(scene);
             window->graph()->addText(text);
             connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
-            text->build_text(MainWindow::instance()->textColor, QFont());
+            text->build_text(text->get_text_color(), QFont());
         }
         else
         {

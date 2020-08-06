@@ -75,6 +75,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         else if (shape == ElementShape::Text)
         {
             auto text = new Text(point);
+            text->reset_color(window->textColor);
             auto action = new ChangeElementAction(text, ElementShape::Text, true);
             action->Do();
         }
