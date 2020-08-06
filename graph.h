@@ -3,7 +3,7 @@
 
 #include"node.h"
 #include"text.h"
-
+#include "elementshape.h"
 
 class Graph:public GraphElement
 {
@@ -35,6 +35,10 @@ public:
 
     void BindToText(QGraphicsScene *qgs) override {}
     Node* node;
+    
+    void addNode(Node* node, int index, ElementShape shape);
+    QVector<QPair<Node*,ElementShape>> Nodes_ElementShape(int index);
+    
 private:
     void SetVisibility(bool set);
     bool isExpended;
@@ -43,6 +47,15 @@ private:
     QMap<int, Arrow*> arrows;
     QVector<Text*> texts;
     QMap<int, Graph*> subGraph;
+    
+    struct node_info{
+        int node_id;
+        Node* p_node = nullptr;
+        int index;
+        ElementShape shape;
+    };
+    QVector<node_info> v_node_info;
+    
 };
 
 #endif // GRAPH_H
