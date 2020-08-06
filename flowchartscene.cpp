@@ -203,7 +203,7 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     auto action = new GroupAction();
     auto graph = MainWindow::instance()->cutGraph;
     QPointF offset;
-    if (event) offset = event->scenePos() - graph->node->GetLocation();
+    if (event && graph->node) offset = event->scenePos() - graph->node->GetLocation();
     else offset = QPointF();
     QMap<Node*, Node*> nodes;
     foreach (auto node, graph->getNodes())
