@@ -181,8 +181,8 @@ MainWindow::MainWindow(QWidget *parent)
     itemFileFolder1->appendRow(itemFile1);
 
     _scene = new FlowChartScene();
-    ui->graphicsView->setScene(scene());
-    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+//    ui->graphicsView->setScene(scene());
+//    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
 
     //页面选项卡设计
     ui->tabWidget->clear();
@@ -190,11 +190,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->usesScrollButtons();
 
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
+
+    FlowChartScene* scene = new FlowChartScene();
+    ui->graphicsView->setScene(scene);
     QWidget *tabFile0 = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(ui->graphicsView);
     tabFile0->setLayout(layout);
     ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
+    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
+
+     _scene = ui->graphicsView->scene();
 
     _instance = this;
 
@@ -442,6 +450,9 @@ void MainWindow::clickTextColorButton()
 }
 
 void MainWindow::removeSubTab(int index){
+
+    open_scenes.removeAt(index);
+
     if(ui->tabWidget->count() == 1) {
         ui->tabWidget->removeTab(index);
 
@@ -450,6 +461,7 @@ void MainWindow::removeSubTab(int index){
     else {
         ui->tabWidget->removeTab(index);
     }
+    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
@@ -469,6 +481,8 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
 
 
     scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(){
@@ -488,6 +502,8 @@ void MainWindow::addNewTab(){
 
 
     scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(QString name){
@@ -513,8 +529,11 @@ void MainWindow::addNewTab(QString name){
     ui->tabWidget->setCurrentWidget(tabFile);
 
     scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
 
     index_name_subgraph.push_back({index,name});
+
 }
 
 

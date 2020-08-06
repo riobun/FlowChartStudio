@@ -33,6 +33,7 @@ public:
 
     static MainWindow* instance() { return _instance; }
     QGraphicsScene* scene() { return _scene; }
+    QList<QGraphicsScene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { undoStack.append(action); }
@@ -127,6 +128,7 @@ private:
 
     QGraphicsScene* _scene;
 
+    QList<QGraphicsScene*> open_scenes;
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
