@@ -135,7 +135,7 @@ void DetailsDialog::pressbutton(){
     s.append(nameEdit->text());
     //s.chop(1);
     if(b==1){
-        s.append(")")
+        s.append(")");
     }
     s.append(" ");
     logicEdit->setText(s);

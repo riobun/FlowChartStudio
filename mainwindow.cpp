@@ -167,11 +167,12 @@ MainWindow::MainWindow(QWidget *parent)
         fillColorToolBtn->setIcon(createColorToolButtonIcon(
                                          ":/images/floodfill.png", fillColor));
     });
-    connect(ui->action_bdColor,&QAction::triggered,[=](){
+    connect(ui->action_bdColor,&QAction::triggered,[this](){
         bdColor = QColorDialog::getColor(QColor(Qt::black));
-        clickbdBtn();
+        changeFrameButton(bdColor);
+/*        clickbdBtn();
         bdColorToolBtn->setIcon(createColorToolButtonIcon(
-                                         ":/images/bdcolor.png", bdColor));
+                                         ":/images/bdcolor.png", bdColor));*/
     });
 
     //项目树形结构
@@ -361,7 +362,9 @@ void MainWindow::fillButtonTriggered()
 void MainWindow::bdColorChanged()
 {
     bdAction = qobject_cast<QAction *>(sender());
-    bdColorToolBtn->setIcon(createColorToolButtonIcon(
+    auto color = qvariant_cast<QColor>(bdAction->data());
+    changeFrameButton(color);
+/*    bdColorToolBtn->setIcon(createColorToolButtonIcon(
                                      ":/images/bdcolor.png",
                                      qvariant_cast<QColor>(bdAction->data())));
     bdButtonTriggered();
@@ -370,7 +373,7 @@ void MainWindow::bdColorChanged()
     if (selectedNodes()->size() > 0)
     {
         clickbdBtn();
-    }
+    }*/
 }
 
 void MainWindow::bdButtonTriggered()
@@ -583,8 +586,6 @@ void MainWindow::on_addFatherPortButton_clicked()
     _nextAddedShape = ElementShape::Input;
 }
 
-
-
 void MainWindow::on_addSonPortButton_clicked()
 {
     _nextAddedShape = ElementShape::Output;
@@ -749,4 +750,36 @@ void MainWindow::on_addInnerInputButton_clicked()
 void MainWindow::on_addInnerOutputButton_clicked()
 {
     _nextAddedShape = ElementShape::InnerOutput;
+}
+
+void MainWindow::changeFrameButton(QColor color)
+{
+    if (selectedNodes()->size() > 0)
+    {
+        auto oldColor = bdColor;
+        bdColor = color;
+        clickbdBtn();
+        bdColor = oldColor;
+    }
+    else
+    {
+        bdColor = color;
+        auto icon = createColorToolButtonIcon(":/images/bdcolor.png", color);
+        bdColorToolBtn->setIcon(icon);
+    }
+}
+
+void MainWindow::changeFillButton(QColor color)
+{
+
+}
+
+void MainWindow::changeLineButton(QColor color)
+{
+
+}
+
+void MainWindow::changeTextLineButton(QColor color)
+{
+
 }
