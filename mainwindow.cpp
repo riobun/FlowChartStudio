@@ -71,7 +71,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->toolBar->addSeparator();
 
-    QFontComboBox* fontBtn = new QFontComboBox(this);
+    fontBtn = new QFontComboBox(this);
+    connect(fontBtn, &QFontComboBox::currentFontChanged, this, &MainWindow::changeFont);
     ui->toolBar->addWidget(fontBtn);
 
     ui->toolBar->addSeparator();
@@ -783,5 +784,27 @@ void MainWindow::lineTypeChanged(int index)
     else
     {
         lineType = type;
+    }
+}
+
+void MainWindow::changeFont(QFont font)
+{
+    auto family = font.family();
+    if (selectedTexts()->size() > 0)
+    {
+        fontBtn->setCurrentText(fontFamily);
+        auto action = new GroupAction;
+        foreach (auto text, *selectedTexts())
+        {
+            *action << new EditElementAction(text, ElementShape::Text,
+                                             ElementProperty::Font,
+                                             new QFont(text->get_text_font()),
+                                             new QFont(family));
+        }
+        action->Do();
+    }
+    else
+    {
+        fontFamily = family;
     }
 }

@@ -6,6 +6,7 @@
 #include <QToolButton>
 #include <QVector>
 #include <QStandardItemModel>
+#include <QFontComboBox>
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
@@ -48,6 +49,7 @@ public:
     QColor lineColor = Qt::black;
     QColor textColor = Qt::black;
     int lineType = 1;
+    QString fontFamily = "宋体";
     Graph* cutGraph = new Graph;
 
 public slots:
@@ -59,6 +61,7 @@ public slots:
     void SelectAll();
 
     void lineTypeChanged(int index);
+    void changeFont(QFont font);
 
 private slots:
     void textColorChanged();
@@ -131,6 +134,7 @@ private:
     QAction *fillAction;
     QAction *bdAction;
     QAction *arrowColorAction;
+    QFontComboBox* fontBtn;
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;
     QToolButton* fontColorToolBtn;

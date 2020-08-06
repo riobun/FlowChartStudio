@@ -76,6 +76,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         {
             auto text = new Text(point);
             text->reset_color(window->textColor);
+            text->reset_font(QFont(window->fontFamily));
             auto action = new ChangeElementAction(text, ElementShape::Text, true);
             action->Do();
         }
@@ -242,6 +243,7 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     foreach (auto text, graph->getTexts())
     {
         auto newText = new Text(text->get_text_location());
+        newText->reset_font(text->get_text_font());
         *action << new ChangeElementAction(newText, ElementShape::Text, true);
     }
     foreach (auto arrow, graph->getArrows())
