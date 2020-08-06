@@ -517,6 +517,12 @@ void MainWindow::addNewTab(QString name){
     index_name_subgraph.push_back({index,name});
 }
 
+
+int MainWindow::index_tab(){
+    return ui->tabWidget->currentIndex();
+}
+
+
 void MainWindow::on_addSubgraghButton_clicked()
 {
     _nextAddedShape = ElementShape::SubGraph;
