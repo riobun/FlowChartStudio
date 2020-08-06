@@ -22,6 +22,7 @@ void ChangeElementAction::Do()
             connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
             connect(item, &NodeItem::NewLocation, this, &ChangeElementAction::onNodeMoved);
             node->Paint(scene);
+            MainWindow::instance()->graph()->addNode(node);
             MainWindow::instance()->graph()->addNode(node,MainWindow::instance()->index_tab(),shape);
         }
         else
