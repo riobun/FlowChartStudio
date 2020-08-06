@@ -233,6 +233,8 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
             newNode = new OutputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Output;
         }
+        newNode->SetFrameColor(node->GetFrameColor());
+        newNode->SetBackgroundColor(node->GetBackgroundColor());
         *action << new ChangeElementAction(newNode, shape, true);
         nodes.insert(node, newNode);
     }
