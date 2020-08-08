@@ -174,7 +174,7 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
         QString defaultInput =content;
         bool ok=false;
         QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
-        if(ok){
+        if(ok&&!t.isEmpty()){
             change_content(t);
         }
 
