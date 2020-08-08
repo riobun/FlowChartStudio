@@ -263,7 +263,8 @@ MainWindow::MainWindow(QWidget *parent)
             QLayoutItem* item = ui->tabWidget->currentWidget()->layout()->itemAt(0);
             QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
 
-            _scene = graphicView->scene();
+            _scene->clearSelect();
+            _scene = static_cast<FlowChartScene*>(graphicView->scene());
         }
 
     });

@@ -268,3 +268,12 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     action->Do();
     graph->clear();
 }
+
+void FlowChartScene::clearSelect()
+{
+    auto window = MainWindow::instance();
+    window->selectedNodes()->clear();
+    window->selectedTexts()->clear();
+    window->selectedArrows()->clear();
+    clearSelection();
+}

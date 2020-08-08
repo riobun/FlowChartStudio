@@ -14,6 +14,7 @@ public:
 
     static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);
     Graph* graph = new Graph;
+    void clearSelect();
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

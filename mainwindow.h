@@ -32,7 +32,7 @@ public:
     ~MainWindow();
 
     static MainWindow* instance() { return _instance; }
-    QGraphicsScene* scene() { return _scene; }
+    FlowChartScene* scene() { return _scene; }
     QList<QGraphicsScene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
@@ -126,7 +126,7 @@ private:
 
     static MainWindow* _instance;
 
-    QGraphicsScene* _scene;
+    FlowChartScene* _scene;
 
     QList<QGraphicsScene*> open_scenes;
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
