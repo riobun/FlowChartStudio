@@ -159,6 +159,16 @@ MainWindow::MainWindow(QWidget *parent)
         auto color = QColorDialog::getColor(QColor(Qt::black));
         changeLineColor(color);
     });
+    // 箭头样式
+    connect(ui->action_arrow1, &QAction::triggered, [this](){
+        lineTypeChanged(0);
+    });
+    connect(ui->action_arrow2, &QAction::triggered, [this](){
+        lineTypeChanged(1);
+    });
+    connect(ui->actiondain, &QAction::triggered, [this](){
+        lineTypeChanged(2);
+    });
     //节点
     connect(ui->action_bgColor,&QAction::triggered,[=](){
         auto color = QColorDialog::getColor(QColor(Qt::black));
@@ -205,14 +215,6 @@ MainWindow::MainWindow(QWidget *parent)
 //     _scene = ui->graphicsView->scene();
 
     _instance = this;
-
-    connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
-    connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
-    connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
-    connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
-    connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
-    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
-    connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 
     //项目树结构和页面选项卡的连接
     connect(ui->treeView,&QTreeView::clicked,[=](){
@@ -269,7 +271,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     });
 
-
+    // 将编辑菜单栏中的动作绑定到槽
+    connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
+    connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
+    connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
+    connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
+    connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
+    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
+    connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 }
 
 MainWindow::~MainWindow()

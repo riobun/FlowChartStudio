@@ -235,9 +235,13 @@ void MainWindow::arrowColorButtonTriggered() {}
 void MainWindow::lineTypeChanged(int index)
 {
     auto type = index + 1;
+    if (type == 3) type++;
+    ui->arrowComboBox->setCurrentIndex(index);
     if (selectedArrows()->size() > 0)
     {
-        ui->arrowComboBox->setCurrentIndex(lineType - 1);
+        auto lastIndex = lineType - 1;
+        if (lastIndex == 3) lastIndex--;
+        ui->arrowComboBox->setCurrentIndex(lastIndex);
         auto action = new GroupAction;
         foreach (auto arrow, *selectedArrows())
         {
