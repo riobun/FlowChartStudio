@@ -52,7 +52,7 @@ public:
     QColor textColor = Qt::black;
     int lineType = 1;
     QString fontFamily = "宋体";
-    int fontSize = 6;
+    int fontSize = 12;
     Graph* cutGraph = new Graph;
 
 public slots:

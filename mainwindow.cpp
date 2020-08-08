@@ -82,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     fontSizeCombo->setEditable(true);
     for (int i = 6; i < 52; i = i + 2)
         fontSizeCombo->addItem(QString().setNum(i));
+    fontSizeCombo->setCurrentText("12");
     QIntValidator *validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
     connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
