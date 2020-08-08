@@ -114,6 +114,7 @@ private:
     void changeFillColor(QColor color);
     void changeLineColor(QColor color);
     void changeTextColor(QColor color);
+    void changeFont(QFont font);
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();

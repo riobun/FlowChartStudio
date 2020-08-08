@@ -302,6 +302,29 @@ void MainWindow::changeFontSize(QString sizeString)
     }
 }
 
+void MainWindow::changeFont(QFont font)
+{
+    if (selectedTexts()->size() > 0)
+    {
+        auto action = new GroupAction;
+        foreach (auto text, *selectedTexts())
+        {
+            *action << new EditElementAction(text, ElementShape::Text,
+                                             ElementProperty::Font,
+                                             new QFont(text->get_text_font()),
+                                             new QFont(font));
+        }
+        action->Do();
+    }
+    else
+    {
+        fontSize = font.pointSize();
+        fontFamily = font.family();
+        fontSizeCombo->setCurrentText(QString::number(fontSize));
+        fontBtn->setCurrentFont(font);
+    }
+}
+
 void MainWindow::deleteElement()
 {
     NodeEvents::deleteElemets();

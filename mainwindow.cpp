@@ -150,9 +150,10 @@ MainWindow::MainWindow(QWidget *parent)
         auto color = QColorDialog::getColor(QColor(Qt::black));
         changeTextColor(color);
     });
-    connect(ui->action_font,&QAction::triggered,[](){
+    connect(ui->action_font,&QAction::triggered,[this](){
         bool flag;
-        QFontDialog::getFont(&flag,QFont("宋体",20));
+        auto font = QFontDialog::getFont(&flag, QFont("宋体",20));
+        if (flag) changeFont(font);
     });
     //箭头
     connect(ui->action_arrowColor,&QAction::triggered,[=](){
