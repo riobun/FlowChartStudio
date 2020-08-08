@@ -30,6 +30,7 @@ SOURCES += \
     innerinputnode.cpp \
     inneroutputnode.cpp \
     inputnode.cpp \
+    interaction.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
