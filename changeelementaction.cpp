@@ -113,6 +113,10 @@ void ChangeElementAction::onTextSelected(Text* text, bool isSelected)
     else
     {
         selectedTexts->removeAll(text);
+        if (text->get_text_all() == "")
+        {
+            (new ChangeElementAction(text, ElementShape::Text, false))->Do();
+        }
     }
 }
 
