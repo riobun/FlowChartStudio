@@ -297,3 +297,8 @@ void MainWindow::changeFontSize(QString sizeString)
         fontSize = size;
     }
 }
+
+void MainWindow::deleteElement()
+{
+    NodeEvents::deleteElemets();
+}

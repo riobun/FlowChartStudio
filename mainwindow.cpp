@@ -212,7 +212,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
     connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
     connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
-
+    connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 
     //项目树结构和页面选项卡的连接
     connect(ui->treeView,&QTreeView::clicked,[=](){

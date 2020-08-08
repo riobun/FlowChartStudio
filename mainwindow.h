@@ -62,6 +62,7 @@ public slots:
     void Copy();
     void Paste();
     void SelectAll();
+    void deleteElement();
 
     void lineTypeChanged(int index);
     void changeFontFamily(QFont font);

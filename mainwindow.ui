@@ -133,8 +133,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>139</width>
-       <height>679</height>
+       <width>118</width>
+       <height>718</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -369,7 +369,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -393,7 +393,7 @@
     <addaction name="copyAction"/>
     <addaction name="pasteAction"/>
     <addaction name="action1_12"/>
-    <addaction name="action1_13"/>
+    <addaction name="deleteAction"/>
     <addaction name="selectAllAction"/>
    </widget>
    <widget class="QMenu" name="nodeMenu">
@@ -577,13 +577,16 @@
     <string>移动</string>
    </property>
   </action>
-  <action name="action1_13">
+  <action name="deleteAction">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
    </property>
    <property name="text">
     <string>删除</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
   <action name="action1_14">
