@@ -181,8 +181,8 @@ MainWindow::MainWindow(QWidget *parent)
     itemFileFolder1->appendRow(itemFile1);
 
     _scene = new FlowChartScene();
-//    ui->graphicsView->setScene(scene());
-//    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    ui->graphicsView->setScene(scene());
+    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
 
     //页面选项卡设计
     ui->tabWidget->clear();
@@ -191,18 +191,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
 
-    FlowChartScene* scene = new FlowChartScene();
-    ui->graphicsView->setScene(scene);
+//    FlowChartScene* scene = new FlowChartScene();
+//    ui->graphicsView->setScene(scene);
     QWidget *tabFile0 = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(ui->graphicsView);
     tabFile0->setLayout(layout);
     ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
-    open_scenes.append(scene);
+//    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    open_scenes.append(_scene);
     qDebug()<<open_scenes.count();
 
-     _scene = ui->graphicsView->scene();
+//     _scene = ui->graphicsView->scene();
 
     _instance = this;
 
