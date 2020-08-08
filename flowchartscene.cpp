@@ -167,6 +167,7 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (to)
         {
             auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem(),1);
+            arrow->setArrowColor(MainWindow::instance()->lineColor);
             auto action = new ChangeElementAction(arrow, ElementShape::Arrow, true);
             action->Do();
         }
@@ -263,6 +264,7 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         }
 
         auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), 1);
+        newArrow->setArrowColor(arrow->getColor());
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
     }
     action->Do();

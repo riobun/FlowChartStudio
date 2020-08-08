@@ -66,10 +66,8 @@ void ChangeElementAction::Do()
             arrow->setZValue(-100.0);
             arrow->s = onArrowSelected;
             MainWindow::instance()->scene()->addItem(arrow);
-            arrow->setArrowColor(MainWindow::instance()->lineColor);
             arrow->updatePosition();
             MainWindow::instance()->graph()->addArrow(arrow);
-            arrow->s = onArrowSelected;
         }
         else
         {
