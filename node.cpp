@@ -1,5 +1,7 @@
 #include "node.h"
 #include"arrow.h"
+#include "mainwindow.h"
+#include "changeelementaction.h"
 
 Node::Node(){}
 Node::Node(QPointF lc,double w,double h):location(lc),width(w),height(h)
@@ -146,10 +148,12 @@ void Node::BindToText(QGraphicsScene* qgs)
         QString temp="0x";
         temp+= QString::number(GetID(),16);
         content=new Text(location,nullptr,temp,true);
-        content->putup_text(qgs);
-        content->build_text();
         content->change_content("文本");
         content->setZValue(shape->zValue());
+        auto window = MainWindow::instance();
+        content->reset_font(QFont(window->fontFamily, window->fontSize));
+        content->reset_color(window->textColor);
+        (new ChangeElementAction(content, ElementShape::Text, true))->Do();
     }
 }
 
