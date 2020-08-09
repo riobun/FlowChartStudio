@@ -217,7 +217,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     _scene = new FlowChartScene();
     ui->graphicsView->setScene(scene());
-    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    //_scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    _scene->setSceneRect(QRectF(0,0,5000,5000));
 
     //页面选项卡设计
     ui->tabWidget->clear();
@@ -388,7 +389,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     ui->tabWidget->setCurrentWidget(tabFile);
 
 
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    scene->setSceneRect(QRectF(0,0,5000,5000));
     open_scenes.append(scene);
     qDebug()<<open_scenes.count();
 }
@@ -409,7 +410,7 @@ void MainWindow::addNewTab(){
     ui->tabWidget->setCurrentWidget(tabFile);
 
 
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    scene->setSceneRect(QRectF(0,0,5000,5000));
     open_scenes.append(scene);
     qDebug()<<open_scenes.count();
 }
@@ -436,7 +437,7 @@ void MainWindow::addNewTab(QString name){
     int index = ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),name);
     ui->tabWidget->setCurrentWidget(tabFile);
 
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    scene->setSceneRect(QRectF(0,0,5000,5000));
     open_scenes.append(scene);
     qDebug()<<open_scenes.count();
 
