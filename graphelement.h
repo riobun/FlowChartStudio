@@ -20,6 +20,10 @@ class GraphElement //图形元素
           virtual void BindToText(QGraphicsScene* qgs)=0;
           int father;//一个流程图的父流程图的ID，暂定
           int Id;//单个文件内唯一,文件内可能存在若干图形，不同图形ID不同
+          QString sId;//16进制字符串的ID
+          void setsId(){this->sId=getIdNum(this->Id);}
+          QString getsId(){return this->sId;}
+          bool changesId(QString str);//用户手动修改图形元素的ID值
           int graphId;//一个流程图的Id，一个图形可以通过该ID知道它是属于那个流程图的
           //1 2 3 4 5 ...
           //1 1 0 1 0 ...
@@ -28,7 +32,8 @@ class GraphElement //图形元素
           void setId();
           void deleteID();//删除ID
           QString getIdNum(int num);
-
+          int CStringHexToInt(QString str);
+          bool isRepeat(QString str);
 private:
 //          static int maxid;
 };
