@@ -26,7 +26,7 @@ Arrow::Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd, QGraphicsItem *
     endItem->GetNode()->ConnectAsDestination(this);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 //    setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    setType(1);
+    //setType(1);
     //xy[11][11]=1;
 
 }
@@ -75,27 +75,34 @@ void Arrow::updatePosition()
 
 //! [4]
 void Arrow::setType(int flag){
+    for(Arrow* ar: arrowlist){
     if(flag==1){
-    setPen(QPen(myColor,asize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    atype=1;
+    ar->atype=1;
+    ar->setPen(QPen(ar->myColor, ar->asize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
     }//实线
     else if(flag==2){
-    setPen(QPen(myColor,asize, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));  //标准虚线
-    atype=2;
+    ar->atype=2;
+    ar->setPen(QPen(ar->myColor, ar->asize, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));  //标准虚线
+
     }
     else if(flag==3){
-    setPen(QPen(myColor, asize, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));   //紧凑虚线
-    atype=3;
+    ar->atype=3;
+    ar->setPen(QPen(ar->myColor, ar->asize, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));   //紧凑虚线
+
     }
     else if(flag==4){
-    setPen(QPen(myColor, asize,Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));  //
-    atype=4;
+    ar->atype=4;
+    ar->setPen(QPen(ar->myColor, ar->asize,Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));  //
+
     }
     else if(flag==5){
-    setPen(QPen(myColor, asize, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));   //
-    atype=5;
+    ar->atype=5;
+    ar->setPen(QPen(ar->myColor, ar->asize, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));   //
+
     }
-    update();
+    ar->update();
+}
 }
 void Arrow::setSize(int size){
     setPen(QPen(myColor, size,Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -331,6 +338,12 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     if(HaveEnd){
     painter->drawPolygon(arrowHead);}
     if (isSelected()) {
+               for(Arrow* ar: arrowlist){
+               ar->setSelected(true);
+                if(ar->Arrownode!=nullptr){
+                    ar->Arrownode->getNodeItem()->SetSelected(true);
+                }
+               }
                 QBrush* brush=new QBrush();
                 painter->setBrush(*brush);
                 painter->setPen(QPen(QColor(139,69,19),4, Qt::DashLine));
@@ -562,12 +575,29 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //     }
 //     解决方法：
      QPainterPath p = this->root;
+     int type=this->getType();
+     QColor color=this->myColor;
      this->removemyself();
      MainWindow::instance()->scene()->removeItem(this);
 
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
      auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
+
+     auto laction1=new EditElementAction(arrow2, ElementShape::Arrow,
+                                                  ElementProperty::ArrowKind,
+                                                  new int(arrow2->getType()),
+                                                  new int(type));
+     laction1->Do();
+     auto laction2=new EditElementAction(arrow3, ElementShape::Arrow,
+                                                  ElementProperty::ArrowKind,
+                                                  new int(arrow3->getType()),
+                                                  new int(type));
+     laction2->Do();
+     arrow2->setType(type);
+     arrow3->setType(type);
+     arrow2->setArrowColor(color);
+     arrow3->setArrowColor(color);
      arrow2->arrowlist.append(this->arrowlist);
      arrow3->arrowlist.append(this->arrowlist);
      arrow2->arrowlist.removeOne(this);

@@ -54,13 +54,18 @@ void NodeEvents::deleteElemets()
     {
         *action << new ChangeElementAction(text, ElementShape::Text, false);
     }
+    foreach (auto Arrownode, *MainWindow::instance()->selectedNodes())
+    {
+        *action << new ChangeElementAction(Arrownode, ElementShape::Arrownode, false);
+    }
     foreach (auto arrow, *MainWindow::instance()->selectedArrows())
     {
-        arrow->removeArrow();
+        //arrow->removeArrow();
         *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
     }
     action->Do();
 }
+//修改了删除箭头的bug
 
 void NodeEvents::cutElements(Node* node)
 {
