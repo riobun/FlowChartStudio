@@ -149,7 +149,7 @@ void NodeItem::RemoveAsSource(Arrow* ar){
     node->DisconnectAsSource(ar);
 }
 void NodeItem::RemoveAsDestination(Arrow* ar){
-    node->DisconnectAsSource(ar);
+    node->DisconnectAsDestination(ar);
 }
 
 void NodeItem::SetSelected(bool b)

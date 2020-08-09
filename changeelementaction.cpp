@@ -66,7 +66,7 @@ void ChangeElementAction::Do()
         if (isCreated)
         {
             arrow->myStartItem->GetNode()->ConnectAsSource(arrow);
-            arrow->myEndItem->GetNode()->ConnectAsSource(arrow);
+            arrow->myEndItem->GetNode()->ConnectAsDestination(arrow);
             arrow->setZValue(-100.0);
             arrow->s = onArrowSelected;
             MainWindow::instance()->scene()->addItem(arrow);

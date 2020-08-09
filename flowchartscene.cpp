@@ -16,6 +16,7 @@
 #include "nodeevents.h"
 #include "innerinputnode.h"
 #include "inneroutputnode.h"
+#include "arrownode.h"
 
 
 FlowChartScene::FlowChartScene()
@@ -236,6 +237,11 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         {
             newNode = new OutputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Output;
+        }
+        else if (dynamic_cast<Arrownode*>(node))
+        {
+            newNode = new Arrownode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
+            shape = ElementShape::Arrownode;
         }
         newNode->SetFrameColor(node->GetFrameColor());
         newNode->SetBackgroundColor(node->GetBackgroundColor());
