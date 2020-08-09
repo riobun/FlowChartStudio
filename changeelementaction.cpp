@@ -75,6 +75,8 @@ void ChangeElementAction::Do()
         }
         else
         {
+            arrow->myStartItem->GetNode()->DisconnectAsSource(arrow);
+            arrow->myEndItem->GetNode()->DisconnectAsDestination(arrow);
             MainWindow::instance()->graph()->removeArrow(arrow);
             MainWindow::instance()->scene()->removeItem(arrow);
             MainWindow::instance()->selectedArrows()->remove(arrow->GetID());
