@@ -584,18 +584,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
 
-     auto laction1=new EditElementAction(arrow2, ElementShape::Arrow,
-                                                  ElementProperty::ArrowKind,
-                                                  new int(arrow2->getType()),
-                                                  new int(type));
-     laction1->Do();
-     auto laction2=new EditElementAction(arrow3, ElementShape::Arrow,
-                                                  ElementProperty::ArrowKind,
-                                                  new int(arrow3->getType()),
-                                                  new int(type));
-     laction2->Do();
-     arrow2->setType(type);
-     arrow3->setType(type);
+
      arrow2->setArrowColor(color);
      arrow3->setArrowColor(color);
      arrow2->arrowlist.append(this->arrowlist);
@@ -612,6 +601,19 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      }
      arrow2->Arrownode=arrownode;
 //     arrow3->Arrownode=arrownode;
+     auto laction1=new EditElementAction(arrow2, ElementShape::Arrow,
+                                                  ElementProperty::ArrowKind,
+                                                  new int(arrow2->getType()),
+                                                  new int(type));
+     laction1->Do();
+     auto laction2=new EditElementAction(arrow3, ElementShape::Arrow,
+                                                  ElementProperty::ArrowKind,
+                                                  new int(arrow3->getType()),
+                                                  new int(type));
+     laction2->Do();
+     arrow2->setType(type);
+     arrow3->setType(type);
+     //修改属性要建立在arrowlist之后
      if(myEndItem->GetWidth()>5){
      arrow3->HaveEnd=1;}
      else{
