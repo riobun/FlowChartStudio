@@ -37,6 +37,8 @@ void ChangeElementAction::Do()
             node->Remove(scene);
             MainWindow::instance()->graph()->removeNode(node);
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
+            disconnect(node->getNodeItem(), &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
+            node->getNodeItem()->setSelected(false);
         }
     }
     else if (shape == ElementShape::Text)
@@ -58,6 +60,8 @@ void ChangeElementAction::Do()
             window->graph()->removeText(text);
             window->selectedTexts()->removeAll(text);
             text->delete_text(scene);
+            disconnect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
+            text->setSelected(false);
         }
     }
     else if (shape == ElementShape::Arrow)
@@ -75,9 +79,13 @@ void ChangeElementAction::Do()
         }
         else
         {
+            arrow->myStartItem->GetNode()->DisconnectAsSource(arrow);
+            arrow->myEndItem->GetNode()->DisconnectAsDestination(arrow);
             MainWindow::instance()->graph()->removeArrow(arrow);
             MainWindow::instance()->scene()->removeItem(arrow);
             MainWindow::instance()->selectedArrows()->remove(arrow->GetID());
+            arrow->s = nullptr;
+            arrow->setSelected(false);
         }
     }
 }

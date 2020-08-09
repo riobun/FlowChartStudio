@@ -46,22 +46,17 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
 void NodeEvents::deleteElemets()
 {
     auto action = new GroupAction;
-    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
     {
-        *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
+        *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
         *action << new ChangeElementAction(text, ElementShape::Text, false);
     }
-    foreach (auto Arrownode, *MainWindow::instance()->selectedNodes())
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
-        *action << new ChangeElementAction(Arrownode, ElementShape::Arrownode, false);
-    }
-    foreach (auto arrow, *MainWindow::instance()->selectedArrows())
-    {
-        //arrow->removeArrow();
-        *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
+        *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
     }
     action->Do();
 }

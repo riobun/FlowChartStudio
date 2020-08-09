@@ -257,7 +257,8 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
             auto newNode = nodes[text->parent];
             QString temp="0x";
             temp+= QString::number(newNode->GetID(),16);
-            newText = new Text(newNode->GetLocation(), newNode, temp, true);
+            auto position = newNode->GetLocation() + text->get_text_location() - text->parent->GetLocation();
+            newText = new Text(position, newNode, temp, true);
         }
         else newText = new Text(text->get_text_location());
         newText->reset_font(text->get_text_font());
