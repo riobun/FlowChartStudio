@@ -44,6 +44,7 @@ public:
     TextItem* getTextItem() const { return shape; }
     Node* parent = nullptr;
     QPointF lastPosition;
+    QString getId() { return ID; }
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);

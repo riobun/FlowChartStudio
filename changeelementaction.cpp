@@ -46,7 +46,7 @@ void ChangeElementAction::Do()
         {
             auto parent = text->parent;
             if (parent) parent->content = text;
-            else window->graph()->addText(text);
+            window->graph()->addText(text);
             text->putup_text(scene);
             connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
             text->build_text(text->get_text_color(), text->get_text_font());

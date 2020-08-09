@@ -65,18 +65,26 @@ void NodeEvents::deleteElemets()
 void NodeEvents::cutElements(Node* node)
 {
     auto graph = MainWindow::instance()->cutGraph;
-    auto scene = MainWindow::instance()->scene();
     graph->clear();
     graph->node = node;
     auto action = new GroupAction();
+    auto texts = QVector<Text*>();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         if (!graph->node) graph->node = node;
         graph->addNode(node);
+        auto text = node->content;
+        if (text)
+        {
+            texts.append(text);
+            graph->addText(text);
+            *action << new ChangeElementAction(text, ElementShape::Text, false);
+        }
         *action << new ChangeElementAction(node, ElementShape::Rectangle, false);
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
+        if (texts.contains(text)) continue;
         graph->addText(text);
         *action << new ChangeElementAction(text, ElementShape::Text, false);
     }
@@ -93,13 +101,21 @@ void NodeEvents::copyElements(Node* node)
     auto graph = MainWindow::instance()->cutGraph;
     graph->clear();
     graph->node = node;
+    auto texts = QVector<Text*>();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         if (!graph->node) graph->node = node;
+        auto text = node->content;
+        if (text)
+        {
+            texts.append(text);
+            graph->addText(text);
+        }
         graph->addNode(node);
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
+        if (texts.contains(text)) continue;
         graph->addText(text);
     }
     foreach (auto arrow, *MainWindow::instance()->selectedArrows())

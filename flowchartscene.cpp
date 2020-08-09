@@ -244,8 +244,18 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     }
     foreach (auto text, graph->getTexts())
     {
-        auto newText = new Text(text->get_text_location());
+        Text* newText;
+        if (text->parent)
+        {
+            auto newNode = nodes[text->parent];
+            QString temp="0x";
+            temp+= QString::number(newNode->GetID(),16);
+            newText = new Text(newNode->GetLocation(), newNode, temp, true);
+        }
+        else newText = new Text(text->get_text_location());
         newText->reset_font(text->get_text_font());
+        newText->change_content(text->get_text_content());
+        newText->setZValue(text->zValue());
         *action << new ChangeElementAction(newText, ElementShape::Text, true);
     }
     foreach (auto arrow, graph->getArrows())
