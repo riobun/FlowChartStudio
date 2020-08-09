@@ -44,12 +44,12 @@ void ChangeElementAction::Do()
         auto text = static_cast<Text*>(element);
         if (isCreated)
         {
-            text->putup_text(scene);
-            window->graph()->addText(text);
-            connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
-            text->build_text(text->get_text_color(), text->get_text_font());
             auto parent = text->parent;
             if (parent) parent->content = text;
+            else window->graph()->addText(text);
+            text->putup_text(scene);
+            connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
+            text->build_text(text->get_text_color(), text->get_text_font());
         }
         else
         {

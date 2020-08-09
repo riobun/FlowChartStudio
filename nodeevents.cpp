@@ -6,6 +6,7 @@
 #include "groupaction.h"
 #include "arrow.h"
 #include "subgraphnode.h"
+#include "editelementaction.h"
 
 
 void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *event)
@@ -112,13 +113,41 @@ void NodeEvents::mousePressEvent(Node* node, QGraphicsSceneMouseEvent *event)
 
 }
 
-void NodeEvents::mouseReleaseEvent(Node* node, QGraphicsSceneMouseEvent *event)
+void NodeEvents::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
+    auto action = new GroupAction;
+    auto addTextAction = [action](Text* text)
+    {
+        *action << new EditElementAction(text, ElementShape::Text,
+                                         ElementProperty::Location,
+                                         new QPointF(text->lastPosition),
+                                         new QPointF(text->get_text_location()));
+    };
+    auto texts = QVector<Text*>();
+    foreach (auto node, *MainWindow::instance()->selectedNodes())
+    {
+        *action << new EditElementAction(node, ElementShape::Rectangle,
+                                        ElementProperty::Location,
+                                        new QPointF(node->getNodeItem()->lastLocation),
+                                        new QPointF(node->GetLocation()));
+        auto text = node->content;
+        if (text)
+        {
+            addTextAction(text);
+            text->lastPosition = text->get_text_location();
+            texts.append(text);
+        }
+    }
+    foreach (auto text, *MainWindow::instance()->selectedTexts())
+    {
+        if (texts.contains(text)) continue;
+        addTextAction(text);
+    }
 }
 
 void NodeEvents::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
+    auto texts = QVector<Text*>();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         node->SetLocation(node->GetLocation()+event->pos()-event->lastPos());
@@ -126,10 +155,12 @@ void NodeEvents::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
         if(text)
         {
             text->move_text(text->get_text_location()+event->pos()-event->lastPos());
+            texts.append(text);
         }
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
+        if (texts.contains(text)) continue;
         text->move_text((text->get_text_location()+event->pos()-event->lastPos()));
     }
 }

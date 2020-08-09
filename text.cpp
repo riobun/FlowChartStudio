@@ -22,6 +22,7 @@ Text::Text(QPointF primary_location,Node* parent,QString parentID,bool IDchanged
     setFlags(QGraphicsItem::ItemIsSelectable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     this->parent = parent;
+    lastPosition = primary_location;
     //setTextInteractionFlags(Qt::TextEditable);
 }
 /*Text::Text(QPointF position1, QPointF position2,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {//两个鼠标位置表示对角线两个顶点
@@ -252,4 +253,15 @@ QVariant Text::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Text::mousePressEvent(QGraphicsSceneMouseEvent* event){
     QGraphicsTextItem::mousePressEvent(event);
+    lastPosition = location;
+}
+
+void Text::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsTextItem::mouseReleaseEvent(event);
+    if (lastPosition != location)
+    {
+        NodeEvents::mouseReleaseEvent(event);
+        lastPosition = location;
+    }
 }

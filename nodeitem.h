@@ -22,6 +22,7 @@ public:
     int GetHeight();
     void RemoveAsSource(Arrow* ar);
     void RemoveAsDestination(Arrow* ar);
+    QPointF lastLocation;
 signals:
     void Selected(Node* n,bool b);
     void NewLocation(Node* n,QPointF oldLoc);
@@ -42,7 +43,7 @@ private:
     bool isResized=false;
     bool isMoved=false;
     double lastWidth,lastHeight;
-    QPointF lastLocation;
+
     Node* node=nullptr;
     bool isDoubleClick=false;
     int mytype=1;

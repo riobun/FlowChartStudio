@@ -43,11 +43,13 @@ public:
     Text* get_item();
     TextItem* getTextItem() const { return shape; }
     Node* parent = nullptr;
+    QPointF lastPosition;
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
 
@@ -60,6 +62,7 @@ private:
     TextItem* shape=new TextItem(this);
     QString ID;
     bool IDchange=false;
+
 
 signals:
     void Selected(Text*t,bool b);

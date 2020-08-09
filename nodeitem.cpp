@@ -67,6 +67,8 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         {
             isResized=true;
         }
+        auto text = GetNode()->content;
+        if (text) text->lastPosition = text->get_text_location();
     }
 }
 
@@ -92,14 +94,7 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
             else
             {
-                auto action = new GroupAction;
-                foreach (auto node, *MainWindow::instance()->selectedNodes())
-                {
-                    *action << new EditElementAction(node, ElementShape::Rectangle,
-                                                    ElementProperty::Location,
-                                                    new QPointF(node->getNodeItem()->lastLocation),
-                                                    new QPointF(node->GetLocation()));
-                }
+                NodeEvents::mouseReleaseEvent(event);
             }
         }
     }
