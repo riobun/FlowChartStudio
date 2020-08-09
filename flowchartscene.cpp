@@ -17,6 +17,7 @@
 #include "innerinputnode.h"
 #include "inneroutputnode.h"
 #include "arrownode.h"
+#include <QVector>
 
 
 FlowChartScene::FlowChartScene()
@@ -264,6 +265,7 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         newText->setZValue(text->zValue());
         *action << new ChangeElementAction(newText, ElementShape::Text, true);
     }
+    auto arrows = QMap<Arrow*, Arrow*>();
     foreach (auto arrow, graph->getArrows())
     {
         auto graph = MainWindow::instance()->graph();
@@ -281,9 +283,21 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         }
 
         auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), arrow->getHaveEnd());
+        arrows.insert(arrow, newArrow);
         newArrow->setArrowColor(arrow->getColor());
         newArrow->setType(arrow->getType());
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
+    }
+    QMapIterator<Arrow*, Arrow*> i(arrows);
+    while (i.hasNext())
+    {
+        auto pair = i.next();
+        auto oldArrow = pair.key();
+        auto newArrow = pair.value();
+        foreach (auto carrow, oldArrow->arrowlist)
+        {
+            newArrow->arrowlist.append(arrows[carrow]);
+        }
     }
     action->Do();
     graph->clear();
