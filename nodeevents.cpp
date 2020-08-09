@@ -205,8 +205,11 @@ void NodeEvents::scaleNodes(Node* node, QGraphicsSceneMouseEvent *event)
     double cw = nw * 2 - node->GetWidth(), ch = nh * 2 - node->GetHeight();
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
-        node->SetHeight(node->GetHeight() + ch);
-        node->SetWidth(node->GetWidth() + cw);
+        auto newW = node->GetWidth() + cw, newH = node->GetHeight() + ch;
+        if (newW < 25) newW = 25;
+        if (newH < 25) newH = 25;
+        node->SetHeight(newH);
+        node->SetWidth(newW);
         foreach (auto arrow, node->getArrows())
         {
             arrow->update();

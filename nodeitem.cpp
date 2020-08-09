@@ -86,6 +86,7 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 foreach (auto node, *MainWindow::instance()->selectedNodes())
                 {
                     auto item = node->getNodeItem();
+                    if (item->lastWidth == node->GetWidth() && item->lastHeight == node->GetHeight()) continue;
                     *action << new EditElementAction(node, ElementShape::Rectangle,
                                                      ElementProperty::Size,
                                                      new QSizeF(item->lastWidth, item->lastHeight),
