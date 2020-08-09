@@ -530,7 +530,7 @@ QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemSelectedHasChanged)
     {
-        s(this, QGraphicsItem::isSelected());
+        if (s) s(this, QGraphicsItem::isSelected());
     }
     else if(change==QGraphicsItem::ItemPositionChange)
     {
