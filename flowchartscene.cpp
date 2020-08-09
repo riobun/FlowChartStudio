@@ -280,7 +280,7 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
             if (!graph->getNodes().contains(toNode->GetID())) continue;
         }
 
-        auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), 1);
+        auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), arrow->getHaveEnd());
         newArrow->setArrowColor(arrow->getColor());
         newArrow->setType(arrow->getType());
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
