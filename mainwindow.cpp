@@ -48,13 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //状态栏
-//    QLabel * status_label = new QLabel("提示信息",this);
-//    ui->statusbar->addWidget(status_label);
-
-//    QLabel * status_label_right = new QLabel("右侧提示信息",this);
-//    ui->statusbar->addPermanentWidget(status_label_right);
-
-
         ui->listWidget->addItem("提示信息1");
         ui->listWidget->addItem("提示信息2");
         ui->listWidget->addItem("提示信息3");
@@ -94,8 +87,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addWidget(ui->italicBtn);
     ui->toolBar->addWidget(ui->underlineBtn);
 
-    ui->toolBar->addSeparator();
-
     //字体颜色
     fontColorToolBtn = new QToolButton(this);
     fontColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
@@ -105,17 +96,6 @@ MainWindow::MainWindow(QWidget *parent)
     fontColorToolBtn->setAutoFillBackground(true);
     connect(fontColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickTextColorButton);
     ui->toolBar->addWidget(fontColorToolBtn);
-    ui->toolBar->addSeparator();
-
-    //填充颜色
-    fillColorToolBtn = new QToolButton(this);
-    fillColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    fillColorToolBtn->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
-    fillAction = fillColorToolBtn->menu()->defaultAction();
-    fillColorToolBtn->setIcon(createColorToolButtonIcon(
-                                     ":/images/floodfill.png", Qt::white));
-    connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
-    ui->toolBar->addWidget(fillColorToolBtn);
 
     //边框颜色
     bdColorToolBtn = new QToolButton(this);
@@ -127,6 +107,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(bdColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickbdBtn);
     ui->toolBar->addWidget(bdColorToolBtn);
 
+    //填充颜色
+    fillColorToolBtn = new QToolButton(this);
+    fillColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    fillColorToolBtn->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
+    fillAction = fillColorToolBtn->menu()->defaultAction();
+    fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/floodfill.png", Qt::white));
+    connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
+    ui->toolBar->addWidget(fillColorToolBtn);
+
+
     //箭头颜色
     arrowColorToolBtn = new QToolButton(this);
     arrowColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
@@ -137,13 +128,45 @@ MainWindow::MainWindow(QWidget *parent)
     connect(arrowColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickLineBtn);
     ui->toolBar->addWidget(arrowColorToolBtn);
 
-    ui->toolBar->addSeparator();
 
     ui->toolBar->addWidget(ui->arrowComboBox);
     ui->arrowComboBox->addItem("实线箭头");
     ui->arrowComboBox->addItem("虚线箭头");
     ui->arrowComboBox->addItem("点线箭头");
     connect(ui->arrowComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)));
+
+        ui->toolBar->addSeparator();
+
+    //边框粗细
+     ui->bdSizeButton->setEnabled(false);
+     ui->toolBar->addWidget(ui->bdSizeButton);
+
+    bdSizeCombo = new QComboBox(this);
+    bdSizeCombo->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        bdSizeCombo->addItem(QString().setNum(i));
+    bdSizeCombo->setCurrentText("6");
+    QIntValidator *bd_validator = new QIntValidator(2, 15, this);
+    bdSizeCombo->setValidator(validator);
+    //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    ui->toolBar->addWidget(bdSizeCombo);
+
+    //箭头粗细
+    ui->arrowSizeButton->setEnabled(false);
+    ui->toolBar->addWidget(ui->arrowSizeButton);
+
+    arrowSizeCombo = new QComboBox(this);
+    arrowSizeCombo->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        arrowSizeCombo->addItem(QString().setNum(i));
+    arrowSizeCombo->setCurrentText("6");
+    QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
+    arrowSizeCombo->setValidator(validator);
+    //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    ui->toolBar->addWidget(arrowSizeCombo);
+
+
+
 
     //菜单栏信号
     //文本框

@@ -143,6 +143,9 @@ private:
     QAction *arrowColorAction;
     QFontComboBox* fontBtn;
     QComboBox* fontSizeCombo;
+    QComboBox* bdSizeCombo;
+    QComboBox* arrowSizeCombo;
+
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;
     QToolButton* fontColorToolBtn;
