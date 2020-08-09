@@ -147,13 +147,13 @@ void Node::BindToText(QGraphicsScene* qgs)
     {
         QString temp="0x";
         temp+= QString::number(GetID(),16);
-        content=new Text(location,nullptr,temp,true);
-        content->change_content("文本");
-        content->setZValue(shape->zValue());
+        auto text = new Text(location, this, temp, true);
+        text->change_content("文本");
+        text->setZValue(shape->zValue());
         auto window = MainWindow::instance();
-        content->reset_font(QFont(window->fontFamily, window->fontSize));
-        content->reset_color(window->textColor);
-        (new ChangeElementAction(content, ElementShape::Text, true))->Do();
+        text->reset_font(QFont(window->fontFamily, window->fontSize));
+        text->reset_color(window->textColor);
+        (new ChangeElementAction(text, ElementShape::Text, true))->Do();
     }
 }
 

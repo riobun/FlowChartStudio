@@ -1,5 +1,3 @@
-
-
 #include"text.h"
 
 #include <QKeyEvent>
@@ -15,13 +13,15 @@
 #include<QColorDialog>
 #include "nodeevents.h"
 
-Text::Text(QPointF primary_location,QGraphicsItem* parent,QString parentID,bool IDchanged ): QGraphicsTextItem(parent) {
+Text::Text(QPointF primary_location,Node* parent,QString parentID,bool IDchanged )
+{
     location = primary_location;
     ID=parentID;
     IDchange=IDchanged;
     setZValue(120);
-    setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
+    setFlags(QGraphicsItem::ItemIsSelectable);
     content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    this->parent = parent;
     //setTextInteractionFlags(Qt::TextEditable);
 }
 /*Text::Text(QPointF position1, QPointF position2,QGraphicsItem* parent ): QGraphicsRectItem(parent)  {//两个鼠标位置表示对角线两个顶点
@@ -102,18 +102,14 @@ void Text::reset_font(QFont new_font) {
 }*/
 
 void Text::move_text(QPointF new_location) {
-
-
     location = new_location;
     setPos(location);
-
 }
 
 void Text::reset_color(QColor new_color) {
     emit shape->NewColor(this,color);
     color = new_color;
     setDefaultTextColor(color);
-
 }
 
 /*void Text::resize_text(double d_width, double d_height) {
@@ -159,11 +155,8 @@ Text* Text::get_item() {
 
 void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-        qDebug() << "Custom item moved.";
-        QGraphicsItem::mouseMoveEvent(event);
-        move_text(pos());
-        qDebug() << "moved" << pos();
-
+    QGraphicsItem::mouseMoveEvent(event);
+    NodeEvents::mouseMoveEvent(event);
 }
 
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
@@ -177,11 +170,8 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
         if(ok&&!t.isEmpty()){
             change_content(t);
         }
-
-
     }
     QGraphicsTextItem::mouseDoubleClickEvent(event);
-
 }
 
 void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
@@ -202,8 +192,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 
     if (selectedAction == deleteAction)
     {
-        auto action = new ChangeElementAction(this, ElementShape::Text, false);
-        action->Do();
+        NodeEvents::deleteElemets();
     }
     else if(selectedAction == editAction){
         QString dlgTitle="文本框对话框";
@@ -261,11 +250,6 @@ QVariant Text::itemChange(GraphicsItemChange change, const QVariant &value)
     return value;
 }
 
-
 void Text::mousePressEvent(QGraphicsSceneMouseEvent* event){
     QGraphicsTextItem::mousePressEvent(event);
-    shape->Selected(this,true);
 }
-
-
-

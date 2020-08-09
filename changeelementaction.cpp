@@ -48,9 +48,13 @@ void ChangeElementAction::Do()
             window->graph()->addText(text);
             connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
             text->build_text(text->get_text_color(), text->get_text_font());
+            auto parent = text->parent;
+            if (parent) parent->content = text;
         }
         else
         {
+            auto parent = text->parent;
+            if (parent) parent->content = nullptr;
             window->graph()->removeText(text);
             window->selectedTexts()->removeAll(text);
             text->delete_text(scene);
