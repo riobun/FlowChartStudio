@@ -68,14 +68,6 @@ void NodeEvents::cutElements(Node* node)
     graph->clear();
     graph->node = node;
     auto action = new GroupAction();
-    /*foreach (auto node, *MainWindow::instance()->selectedNodes())
-    {
-        if (!graph->node) graph->node = node;
-        foreach (auto arrow, node->getSourceArrows())
-        {
-            graph->addArrow(arrow);
-        }
-    }*/
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         if (!graph->node) graph->node = node;
@@ -100,14 +92,6 @@ void NodeEvents::copyElements(Node* node)
     auto graph = MainWindow::instance()->cutGraph;
     graph->clear();
     graph->node = node;
-    /*foreach (auto node, *MainWindow::instance()->selectedNodes())
-    {
-        if (!graph->node) graph->node = node;
-        foreach (auto arrow, node->getSourceArrows())
-        {
-            graph->addArrow(arrow);
-        }
-    }*/
     foreach (auto node, *MainWindow::instance()->selectedNodes())
     {
         if (!graph->node) graph->node = node;
