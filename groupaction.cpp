@@ -4,7 +4,7 @@
 
 GroupAction::GroupAction()
 {
-    qDebug() << "GroupAction" << Qt::endl;
+    qDebug() << "GroupAction" ;
 }
 
 GroupAction& GroupAction::operator<<(Action* action)

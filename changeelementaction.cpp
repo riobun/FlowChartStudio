@@ -11,7 +11,7 @@ void onArrowSelected(Arrow* arrow, bool isSelected);
 ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated) :
     isCreated(isCreated), shape(shape), element(element)
 {
-    qDebug() << "ChangeElementAction" << Qt::endl;
+    qDebug() << "ChangeElementAction" << endl;
 }
 
 void ChangeElementAction::Do()

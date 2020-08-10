@@ -9,7 +9,7 @@
 EditElementAction::EditElementAction(void* element, ElementShape shape, ElementProperty property, void* from, void* to)
     : shape(shape), property(property), from(from), to(to), element(element)
 {
-    qDebug() << "EditElementAction" << Qt::endl;
+    qDebug() << "EditElementAction" ;
 }
 
 EditElementAction::~EditElementAction()
