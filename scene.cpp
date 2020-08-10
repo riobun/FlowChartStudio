@@ -19,15 +19,13 @@
 #include "arrownode.h"
 #include <QVector>
 
+QList<Scene*> Scene::_scenes;
+Scene* Scene::_activeScene = nullptr;
 
-Scene* Scene::getActiveScene()
+Scene* Scene::create()
 {
-
-}
-
-Scene::Scene()
-{
-
+    auto scene = new Scene();
+    _scenes.append(scene);
 }
 
 Scene::~Scene()
