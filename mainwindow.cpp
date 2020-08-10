@@ -603,3 +603,7 @@ Graph* MainWindow::graph()
     return static_cast<Scene*>(scene())->graph;
 }
 
+Ui::MainWindow* MainWindow::getUi() const
+{
+    return ui;
+}

@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "elementshape.h"
+
 class MainWindow;
 
 class Operator : public QObject
@@ -12,7 +14,13 @@ class Operator : public QObject
 public:
     Operator(MainWindow* parent);
 
-    MainWindow* window() const;
+    MainWindow* getWindow() const;
+
+private:
+    void connectAddButtons();
+
+private:
+    ElementShape _nextAddedShape;
 };
 
 #endif // ELEMENTOPERATOR_H

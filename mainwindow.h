@@ -57,6 +57,9 @@ public:
     int fontSize = 12;
     Graph* cutGraph = new Graph;
 
+public:
+    Ui::MainWindow* getUi() const;
+
 public slots:
     void Undo();
     void Redo();
