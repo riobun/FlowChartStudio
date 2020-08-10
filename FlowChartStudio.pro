@@ -44,7 +44,8 @@ SOURCES += \
     subgraphnode.cpp \
     text.cpp \
     textitem.cpp\
-    textdialog.cpp
+    textdialog.cpp\
+    textdialog2.cpp
 
 HEADERS += \
     action.h \
@@ -76,6 +77,7 @@ HEADERS += \
     text.h \
     textitem.h\
     textdialog.h\
+    textdialog2.h\
     textlogic.h
 
 FORMS += \
