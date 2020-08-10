@@ -204,6 +204,14 @@ MainWindow::MainWindow(QWidget *parent)
         auto color = QColorDialog::getColor(QColor(Qt::black));
         changeFrameColor(color);
     });
+    //箭头和节点粗细
+    connect(ui->action_nodeSize,&QAction::triggered,[=](){
+        sizeDialog();
+    });
+    connect(ui->action_arrowSize,&QAction::triggered,[=](){
+        sizeDialog();
+    });
+
 
     //项目树形结构
     QStandardItemModel* model = new QStandardItemModel(ui->treeView);
@@ -597,6 +605,73 @@ void MainWindow::on_action1_4_triggered()//另存为
            file.close();
        }
 }
+
+void MainWindow::sizeDialog(){
+    QDialog dlg(this);
+    dlg.resize(400,300);
+    dlg.setWindowTitle("设置粗细");
+    QLabel *label_nodeSize = new QLabel();
+    label_nodeSize->setText("边框粗细：");
+    nodeSizeCombo_menu = new QComboBox(this);
+    nodeSizeCombo_menu->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        nodeSizeCombo_menu->addItem(QString().setNum(i));
+    nodeSizeCombo_menu->setCurrentText("6");
+    QIntValidator *node_validator = new QIntValidator(2, 15, this);
+    nodeSizeCombo_menu->setValidator(node_validator);
+    QHBoxLayout* up =new QHBoxLayout();
+    up->addWidget(label_nodeSize);
+    up->addWidget(nodeSizeCombo_menu);
+    up->setContentsMargins(30,5,30,5);
+    up->setSpacing(10);
+
+    QLabel *label_arrowSize = new QLabel();
+    label_arrowSize->setText("箭头粗细：");
+    arrowSizeCombo_menu = new QComboBox(this);
+    arrowSizeCombo->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        arrowSizeCombo->addItem(QString().setNum(i));
+    arrowSizeCombo_menu->setCurrentText("6");
+    QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
+    arrowSizeCombo_menu->setValidator(arrow_validator);
+    QHBoxLayout* down =new QHBoxLayout();
+    down->addWidget(label_arrowSize);
+    down->addWidget(arrowSizeCombo_menu);
+    down->setContentsMargins(30,5,30,5);
+    down->setSpacing(10);
+
+    ok_sizeBtn = new QPushButton();
+    ok_sizeBtn->setText("确定");
+    cancel_sizeBtn = new QPushButton();
+    cancel_sizeBtn->setText("取消");
+    QHBoxLayout* tail =new QHBoxLayout();
+    tail->addWidget(ok_sizeBtn);
+    tail->addWidget(cancel_sizeBtn);
+    tail->setContentsMargins(50,20,50,20);
+    tail->setSpacing(20);
+
+    QVBoxLayout*sizeDialog = new QVBoxLayout();
+    sizeDialog->addLayout(up);
+    sizeDialog->addLayout(down);
+    sizeDialog->addLayout(tail);
+
+
+    dlg.setLayout(sizeDialog);
+
+//    connect(ok_sizeBtn,&QPushButton::click,[=](){
+//        dlg.done(1);
+//    });
+//    connect(cancel_sizeBtn,&QPushButton::click,this,&MainWindow::cancel_sizeBtn_clicked);
+
+    dlg.exec();
+}
+
+//void MainWindow::ok_sizeBtn_clicked(){
+//    dlg.done(1);
+//}
+//void MainWindow::cancel_sizeBtn_clicked(){
+//    dlg.done(0);
+//}
 
 Graph* MainWindow::graph()
 {

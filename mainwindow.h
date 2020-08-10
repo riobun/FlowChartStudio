@@ -72,6 +72,9 @@ public slots:
     void lineTypeChanged(int index);
     void changeFontFamily(QFont font);
     void changeFontSize(QString sizeString);
+    void sizeDialog();
+    void ok_sizeBtn_clicked();
+    void cancel_sizeBtn_clicked();
 
 private slots:
     void textColorChanged();
@@ -150,6 +153,10 @@ private:
     QComboBox* fontSizeCombo;
     QComboBox* bdSizeCombo;
     QComboBox* arrowSizeCombo;
+    QComboBox* nodeSizeCombo_menu;
+    QComboBox* arrowSizeCombo_menu;
+    QPushButton* ok_sizeBtn;
+    QPushButton* cancel_sizeBtn;
 
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;

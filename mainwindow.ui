@@ -137,8 +137,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>118</width>
-               <height>718</height>
+               <width>139</width>
+               <height>700</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -515,7 +515,7 @@
      <x>0</x>
      <y>0</y>
      <width>1300</width>
-     <height>26</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -548,7 +548,7 @@
     </property>
     <addaction name="action_bgColor"/>
     <addaction name="action_bdColor"/>
-    <addaction name="actioncuxi"/>
+    <addaction name="action_nodeSize"/>
    </widget>
    <widget class="QMenu" name="arrowMenu">
     <property name="title">
@@ -568,7 +568,7 @@
     </widget>
     <addaction name="action_arrowColor"/>
     <addaction name="menu"/>
-    <addaction name="actioncuxi_2"/>
+    <addaction name="action_arrowSize"/>
    </widget>
    <widget class="QMenu" name="textMenu">
     <property name="title">
@@ -902,7 +902,7 @@
     <string>保存</string>
    </property>
   </action>
-  <action name="actioncuxi">
+  <action name="action_nodeSize">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/cuxi.png</normaloff>:/images/cuxi.png</iconset>
@@ -911,7 +911,7 @@
     <string>边框粗细</string>
    </property>
   </action>
-  <action name="actioncuxi_2">
+  <action name="action_arrowSize">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/cuxi.png</normaloff>:/images/cuxi.png</iconset>
