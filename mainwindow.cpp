@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
     fontSizeCombo->setCurrentText("12");
     QIntValidator *validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
-    connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    connect(fontSizeCombo, SIGNAL(activated(const QString&)), this, SLOT(changeFontSize(QString)));
     ui->toolBar->addWidget(fontSizeCombo);
 
     ui->toolBar->addSeparator();
