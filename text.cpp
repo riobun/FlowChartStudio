@@ -163,13 +163,25 @@ void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
     if(textInteractionFlags()==Qt::NoTextInteraction){
        // setTextInteractionFlags(Qt::TextEditorInteraction);
-        QString dlgTitle="文本框对话框";
-        QString txtLable="请输入文本框中的文字";
-        QString defaultInput =content;
-        bool ok=false;
-        QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
-        if(ok&&!t.isEmpty()){
-            change_content(t);
+       /* */
+        if(ID!=NULL){
+        DetailsDialog2 dialog(ID,content);
+
+        if (dialog.exec() == QDialog::Accepted) {
+
+            ID=dialog.senderID();
+            change_content(dialog.senderContent());
+        }
+        }
+        else{
+            QString dlgTitle="文本框对话框";
+                    QString txtLable="请输入文本框中的文字";
+                    QString defaultInput =content;
+                    bool ok=false;
+                    QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
+                    if(ok&&!t.isEmpty()){
+                        change_content(t);
+                    }
         }
     }
     QGraphicsTextItem::mouseDoubleClickEvent(event);
@@ -196,14 +208,26 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
         NodeEvents::deleteElemets();
     }
     else if(selectedAction == editAction){
-        QString dlgTitle="文本框对话框";
-        QString txtLable="请输入文本框中的文字";
-        QString defaultInput =content;
-        bool ok=false;
-         QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
-        if(ok&&!t.isEmpty()){
-            change_content(t);
+        if(ID!=NULL){
+        DetailsDialog2 dialog(ID,content);
+
+        if (dialog.exec() == QDialog::Accepted) {
+
+            ID=dialog.senderID();
+            change_content(dialog.senderContent());
+            }
         }
+        else{
+            QString dlgTitle="文本框对话框";
+                    QString txtLable="请输入文本框中的文字";
+                    QString defaultInput =content;
+                    bool ok=false;
+                    QString t=QInputDialog::getMultiLineText(NULL,dlgTitle,txtLable,defaultInput,&ok);
+                    if(ok&&!t.isEmpty()){
+                        change_content(t);
+                    }
+        }
+
     }
     else if(selectedAction == fontAction){
        //QFont iniFont=ui->plainTextEdit->font();

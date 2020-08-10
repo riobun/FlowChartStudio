@@ -13,7 +13,7 @@
 #include <QGraphicsScene>
 #include<textitem.h>
 #include<textdialog.h>
-
+#include<textdialog2.h>
 class Node;
 
 class TextItem;

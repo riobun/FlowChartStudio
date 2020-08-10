@@ -1,5 +1,5 @@
 #include<textdialog2.h>
-//#include<graphelement.h>
+#include<idpool.h>
 #include<QGridLayout>
 #include<QMessageBox>
 
@@ -54,18 +54,34 @@ void DetailsDialog2::verify()
         isID=true;
     }
     else{
-
-    //isID=GraphElement::isRepeat(IDEdit->text());
+       // isID2=isNorm(IDEdit->text());
+        if(isID2==true){
+         //   isID=isRepeat(IDEdit->text());
+        }
     }
-    if (isID && !contentEdit->toPlainText().isEmpty()) {
+    if (isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
         ID=IDEdit->text();
         accept();
         return;
     }
+    else if(!isID2){
+        QMessageBox::StandardButton answer;
+        answer = QMessageBox::warning(this, tr("修改后的ID不合法"),
+            tr("修改后的ID格式不正确\n"
+               "应以0x为开头的16进制\n"
+               "是否放弃修改?"),
+            QMessageBox::Yes | QMessageBox::No);
+
+        if (answer == QMessageBox::Yes)
+            accept();
+        else
+            reject();
+    }
+
     else if(!isID){
         QMessageBox::StandardButton answer;
         answer = QMessageBox::warning(this, tr("修改后的ID不合法"),
-            tr("修改后的ID不合法\n"
+            tr("修改后的ID与已有ID重复\n"
                "是否放弃修改?"),
             QMessageBox::Yes | QMessageBox::No);
 
