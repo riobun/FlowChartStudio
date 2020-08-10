@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->arrowComboBox->addItem("实线箭头");
     ui->arrowComboBox->addItem("虚线箭头");
     ui->arrowComboBox->addItem("点线箭头");
-    connect(ui->arrowComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)));
+    connect(ui->arrowComboBox, SIGNAL(activated(int)), this, SLOT(lineTypeChanged(int)));
 
         ui->toolBar->addSeparator();
 
