@@ -23,7 +23,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class ElementOperator;
+class Operator;
 
 class MainWindow : public QMainWindow
 {
@@ -165,6 +165,6 @@ private:
     QVector<QPair<int,QString>> index_name_subgraph;
 
 private:
-    ElementOperator* _elementOperator;
+    Operator* _operator;
 };
 #endif // MAINWINDOW_H

@@ -5,12 +5,12 @@
 
 class MainWindow;
 
-class ElementOperator : public QObject
+class Operator : public QObject
 {
     Q_OBJECT
 
 public:
-    ElementOperator(MainWindow* parent);
+    Operator(MainWindow* parent);
 
     MainWindow* window() const;
 };

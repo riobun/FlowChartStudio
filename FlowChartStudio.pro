@@ -25,7 +25,6 @@ SOURCES += \
     editelementaction.cpp \
     element.cpp \
     elementevents.cpp \
-    elementoperator.cpp \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
@@ -38,6 +37,7 @@ SOURCES += \
     node.cpp \
     nodeevents.cpp \
     nodeitem.cpp \
+    operator.cpp \
     outputnode.cpp \
     rectangle.cpp\
     scene.cpp \
@@ -56,7 +56,6 @@ HEADERS += \
     element.h \
     elementProperty.h \
     elementevents.h \
-    elementoperator.h \
     elementshape.h \
     graph.h \
     graphelement.h \
@@ -69,6 +68,7 @@ HEADERS += \
     node.h \
     nodeevents.h \
     nodeitem.h \
+    operator.h \
     outputnode.h \
     rectangle.h\
     scene.h \
