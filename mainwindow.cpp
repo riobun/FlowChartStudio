@@ -225,6 +225,10 @@ MainWindow::MainWindow(QWidget *parent)
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
     itemFileFolder1->appendRow(itemFile1);
 
+    //treeview右键菜单
+    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->treeView,&QTreeView::customContextMenuRequested,this,&MainWindow::onTreeViewMenuRequested);
+
     _scene = new Scene();
     ui->graphicsView->setScene(scene());
     //_scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
@@ -670,6 +674,15 @@ void MainWindow::ok_sizeBtn_clicked(){
 }
 void MainWindow::cancel_sizeBtn_clicked(){
     dlg->done(0);
+}
+
+void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
+    QModelIndex curIndex = ui->treeView->indexAt(pos);
+    if(curIndex.isValid()){
+        QMenu menu;
+        menu.addAction("关闭");
+        menu.exec(QCursor::pos());
+    }
 }
 
 Graph* MainWindow::graph()

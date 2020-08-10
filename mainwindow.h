@@ -103,6 +103,8 @@ private slots:
 
     void on_addSonPortButton_clicked();
 
+    void onTreeViewMenuRequested(const QPoint &pos);
+
 
 //*****************************************************
     void on_action1_triggered();
