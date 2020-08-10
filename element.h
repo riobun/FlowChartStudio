@@ -5,17 +5,20 @@
 
 #include "elementshape.h"
 
-class FlowChartScene;
+class Scene;
 
 class Element : public QObject
 {
     Q_OBJECT
 
-protected:
-    Element(FlowChartScene* scene, ElementShape shape);
+public:
+    static Element* create(ElementShape shape);
 
 private:
-    FlowChartScene* _scene;
+    Element(Scene* scene, ElementShape shape);
+
+private:
+    Scene* _scene;
     ElementShape _shape;
 };
 

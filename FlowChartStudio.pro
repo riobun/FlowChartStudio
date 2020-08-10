@@ -25,7 +25,6 @@ SOURCES += \
     editelementaction.cpp \
     element.cpp \
     elementevents.cpp \
-    flowchartscene.cpp \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
@@ -40,6 +39,7 @@ SOURCES += \
     nodeitem.cpp \
     outputnode.cpp \
     rectangle.cpp\
+    scene.cpp \
     subgraphnode.cpp \
     text.cpp \
     textitem.cpp\
@@ -56,7 +56,6 @@ HEADERS += \
     elementProperty.h \
     elementevents.h \
     elementshape.h \
-    flowchartscene.h \
     graph.h \
     graphelement.h \
     groupaction.h \
@@ -70,6 +69,7 @@ HEADERS += \
     nodeitem.h \
     outputnode.h \
     rectangle.h\
+    scene.h \
     subgraphnode.h \
     text.h \
     textitem.h\

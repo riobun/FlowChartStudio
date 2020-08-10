@@ -72,7 +72,7 @@ void MainWindow::on_addSonPortButton_clicked()
 
 void MainWindow::Cut() { NodeEvents::cutElements(); }
 void MainWindow::Copy() { NodeEvents::copyElements(); }
-void MainWindow::Paste() { FlowChartScene::pasteElements(); }
+void MainWindow::Paste() { Scene::pasteElements(); }
 void MainWindow::SelectAll() { NodeEvents::selectAll(); }
 
 void MainWindow::Undo()

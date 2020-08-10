@@ -6,11 +6,14 @@
 #include "graph.h"
 
 
-class FlowChartScene : public QGraphicsScene
+class Scene : public QGraphicsScene
 {
 public:
-    FlowChartScene();
-    ~FlowChartScene();
+    static Scene* getActiveScene();
+
+public:
+    Scene();
+    ~Scene();
 
     static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);
     Graph* graph = new Graph;

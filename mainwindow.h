@@ -11,7 +11,7 @@
 #include "action.h"
 #include "node.h"
 #include "graph.h"
-#include "flowchartscene.h"
+#include "scene.h"
 #include <QMap>
 //*************************************************
 #include <QMenu>
@@ -32,7 +32,7 @@ public:
     ~MainWindow();
 
     static MainWindow* instance() { return _instance; }
-    FlowChartScene* scene() { return _scene; }
+    Scene* scene() { return _scene; }
     QList<QGraphicsScene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
@@ -128,7 +128,7 @@ private:
 
     static MainWindow* _instance;
 
-    FlowChartScene* _scene;
+    Scene* _scene;
 
     QList<QGraphicsScene*> open_scenes;
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
@@ -157,7 +157,7 @@ private:
     QMap<int, Node*> _selectedNodes;
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
-    QMap<QModelIndex,FlowChartScene* > scenes;
+    QMap<QModelIndex,Scene* > scenes;
     QMap<QGraphicsScene*, Graph*> graphs;
 
     QVector<QPair<int,QString>> index_name_subgraph;

@@ -24,7 +24,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "flowchartscene.h"
+#include "scene.h"
 #include "editelementaction.h"
 #include "groupaction.h"
 #include "nodeevents.h"
@@ -215,7 +215,7 @@ MainWindow::MainWindow(QWidget *parent)
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
     itemFileFolder1->appendRow(itemFile1);
 
-    _scene = new FlowChartScene();
+    _scene = new Scene();
     ui->graphicsView->setScene(scene());
     //_scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
     _scene->setSceneRect(QRectF(0,0,5000,5000));
@@ -292,7 +292,7 @@ MainWindow::MainWindow(QWidget *parent)
             QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
 
             _scene->clearSelect();
-            _scene = static_cast<FlowChartScene*>(graphicView->scene());
+            _scene = static_cast<Scene*>(graphicView->scene());
         }
 
     });
@@ -375,7 +375,7 @@ void MainWindow::removeSubTab(int index){
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
     //创建新的VIEW和SCENE，并绑定
-    FlowChartScene* scene = new FlowChartScene();
+    Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -396,7 +396,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
 
 void MainWindow::addNewTab(){
     //创建新的VIEW和SCENE，并绑定
-    FlowChartScene* scene = new FlowChartScene();
+    Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -424,7 +424,7 @@ void MainWindow::addNewTab(QString name){
     }
 
     //创建新的VIEW和SCENE，并绑定
-    FlowChartScene* scene = new FlowChartScene();
+    Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -597,6 +597,6 @@ void MainWindow::on_action1_4_triggered()//另存为
 
 Graph* MainWindow::graph()
 {
-    return static_cast<FlowChartScene*>(scene())->graph;
+    return static_cast<Scene*>(scene())->graph;
 }
 

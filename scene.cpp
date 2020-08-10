@@ -1,4 +1,4 @@
-#include "flowchartscene.h"
+#include "scene.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QDebug>
@@ -20,17 +20,22 @@
 #include <QVector>
 
 
-FlowChartScene::FlowChartScene()
+Scene* Scene::getActiveScene()
 {
 
 }
 
-FlowChartScene::~FlowChartScene()
+Scene::Scene()
+{
+
+}
+
+Scene::~Scene()
 {
     delete graph;
 }
 
-void FlowChartScene::keyPressEvent(QKeyEvent *event)
+void Scene::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control)
     {
@@ -38,7 +43,7 @@ void FlowChartScene::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void FlowChartScene::keyReleaseEvent(QKeyEvent *event)
+void Scene::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control)
     {
@@ -46,7 +51,7 @@ void FlowChartScene::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::MouseButton::LeftButton)
     {
@@ -113,7 +118,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     keyDownPosition = event->scenePos();
 }
 
-void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (line)
     {
@@ -139,7 +144,7 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseMoveEvent(event);
 }
 
-void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
@@ -180,7 +185,7 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void Scene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QGraphicsScene::contextMenuEvent(event);
     if (!event->isAccepted())
@@ -202,7 +207,7 @@ void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
-void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
+void Scene::pasteElements(QGraphicsSceneContextMenuEvent *event)
 {
     auto action = new GroupAction();
     auto graph = MainWindow::instance()->cutGraph;
@@ -304,7 +309,7 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     graph->clear();
 }
 
-void FlowChartScene::clearSelect()
+void Scene::clearSelect()
 {
     auto window = MainWindow::instance();
     window->selectedNodes()->clear();
