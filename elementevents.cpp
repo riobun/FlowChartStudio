@@ -1,6 +1,6 @@
 #include "elementevents.h"
 
-ElementEvents::ElementEvents(QObject *parent) : QObject(parent)
+void ElementEvents::onSelected(void* element, bool isSelected)
 {
 
 }

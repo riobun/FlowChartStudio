@@ -6,11 +6,9 @@
 class ElementEvents : public QObject
 {
     Q_OBJECT
-public:
-    explicit ElementEvents(QObject *parent = nullptr);
 
-signals:
-
+public slots:
+    static void onSelected(void* element, bool isSelected);
 };
 
 #endif // ELEMENTEVENTS_H
