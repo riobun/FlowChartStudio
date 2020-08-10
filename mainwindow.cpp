@@ -628,9 +628,9 @@ void MainWindow::sizeDialog(){
     QLabel *label_arrowSize = new QLabel();
     label_arrowSize->setText("箭头粗细：");
     arrowSizeCombo_menu = new QComboBox(this);
-    arrowSizeCombo->setEditable(true);
+    arrowSizeCombo_menu->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
-        arrowSizeCombo->addItem(QString().setNum(i));
+        arrowSizeCombo_menu->addItem(QString().setNum(i));
     arrowSizeCombo_menu->setCurrentText("6");
     QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
     arrowSizeCombo_menu->setValidator(arrow_validator);
