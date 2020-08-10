@@ -25,6 +25,7 @@ SOURCES += \
     editelementaction.cpp \
     element.cpp \
     elementevents.cpp \
+    file.cpp \
     flowchartscene.cpp \
     graph.cpp \
     graphelement.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
     elementProperty.h \
     elementevents.h \
     elementshape.h \
+    file.h \
     flowchartscene.h \
     graph.h \
     graphelement.h \

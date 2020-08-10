@@ -3,14 +3,17 @@
 
 #include <QObject>
 
+#include "elementshape.h"
+
 class Element : public QObject
 {
     Q_OBJECT
-public:
-    explicit Element(QObject *parent = nullptr);
 
-signals:
+protected:
+    Element(ElementShape shape);
 
+private:
+    ElementShape _shape;
 };
 
 #endif // ELEMENT_H

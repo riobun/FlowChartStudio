@@ -1,6 +1,6 @@
 #include "element.h"
 
-Element::Element(QObject *parent) : QObject(parent)
+Element::Element(ElementShape shape) : _shape(shape)
 {
 
 }
