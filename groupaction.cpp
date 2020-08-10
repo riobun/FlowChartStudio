@@ -1,6 +1,11 @@
 #include "groupaction.h"
 #include "mainwindow.h"
+#include <QDebug>
 
+GroupAction::GroupAction()
+{
+    qDebug() << "GroupAction" << Qt::endl;
+}
 
 GroupAction& GroupAction::operator<<(Action* action)
 {
@@ -16,10 +21,6 @@ void GroupAction::Do()
     {
         action->Do();
     }
-#ifdef QT_DEBUG
-#include <QDebug>
-    qDebug() << "Do GroupElementAction." << endl;
-#endif
 }
 
 void GroupAction::Undo()

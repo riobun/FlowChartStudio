@@ -3,11 +3,15 @@
 #include "text.h"
 #include "node.h"
 #include "arrow.h"
+#include <QDebug>
 
 void onArrowSelected(Arrow* arrow, bool isSelected);
 
 ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated) :
-    isCreated(isCreated), shape(shape), element(element) {}
+    isCreated(isCreated), shape(shape), element(element)
+{
+    qDebug() << "ChangeElementAction" << Qt::endl;
+}
 
 void ChangeElementAction::Do()
 {
@@ -88,10 +92,6 @@ void ChangeElementAction::Do()
             arrow->setSelected(false);
         }
     }
-#ifdef QT_DEBUG
-#include <QDebug>
-    qDebug() << "Do ChangeElementAction." << endl;
-#endif
 }
 
 void ChangeElementAction::Undo()

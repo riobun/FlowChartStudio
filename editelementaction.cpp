@@ -4,9 +4,13 @@
 #include <QPointF>
 #include "mainwindow.h"
 #include "arrow.h"
+#include <QDebug>
 
 EditElementAction::EditElementAction(void* element, ElementShape shape, ElementProperty property, void* from, void* to)
-    : shape(shape), property(property), from(from), to(to), element(element) {}
+    : shape(shape), property(property), from(from), to(to), element(element)
+{
+    qDebug() << "EditElementAction" << Qt::endl;
+}
 
 EditElementAction::~EditElementAction()
 {
@@ -121,10 +125,6 @@ void EditElementAction::Do()
             arrow->setType(*toKind);
         }
     }
-#ifdef QT_DEBUG
-#include <QDebug>
-    qDebug() << "Do EditElementAction." << endl;
-#endif
 }
 
 void EditElementAction::Undo()
