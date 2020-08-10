@@ -88,6 +88,10 @@ void ChangeElementAction::Do()
             arrow->setSelected(false);
         }
     }
+#ifdef QT_DEBUG
+#include <QDebug>
+    qDebug() << "Do ChangeElementAction." << endl;
+#endif
 }
 
 void ChangeElementAction::Undo()

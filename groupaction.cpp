@@ -16,6 +16,10 @@ void GroupAction::Do()
     {
         action->Do();
     }
+#ifdef QT_DEBUG
+#include <QDebug>
+    qDebug() << "Do GroupElementAction." << endl;
+#endif
 }
 
 void GroupAction::Undo()

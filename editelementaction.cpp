@@ -121,6 +121,10 @@ void EditElementAction::Do()
             arrow->setType(*toKind);
         }
     }
+#ifdef QT_DEBUG
+#include <QDebug>
+    qDebug() << "Do EditElementAction." << endl;
+#endif
 }
 
 void EditElementAction::Undo()
