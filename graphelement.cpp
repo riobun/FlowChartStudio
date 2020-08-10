@@ -84,7 +84,7 @@ int GraphElement::CStringHexToInt(QString str)
 }//利用ID字符串转成int值
 bool GraphElement::isRepeat(QString str){
     int nRet=CStringHexToInt(str);
-    if(k1[nRet]==1){
+    if(k1[nRet-1]==1){
             return true;
         }else return false;
 }
