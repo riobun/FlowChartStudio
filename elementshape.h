@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-enum class ElementShape
+enum class ElementShape : unsigned char
 {
     Unknown,
     Rectangle,

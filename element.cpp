@@ -1,6 +1,7 @@
 #include "element.h"
 
-Element::Element(ElementShape shape) : _shape(shape)
+Element::Element(FlowChartScene* scene, ElementShape shape) : _scene(scene),
+    _shape(shape)
 {
 
 }
