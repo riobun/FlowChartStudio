@@ -25,6 +25,7 @@ SOURCES += \
     editelementaction.cpp \
     element.cpp \
     elementevents.cpp \
+    elementoperator.cpp \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
     element.h \
     elementProperty.h \
     elementevents.h \
+    elementoperator.h \
     elementshape.h \
     graph.h \
     graphelement.h \
