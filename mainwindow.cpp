@@ -205,6 +205,7 @@ MainWindow::MainWindow(QWidget *parent)
         changeFrameColor(color);
     });
     //箭头和节点粗细
+
     connect(ui->action_nodeSize,&QAction::triggered,[=](){
         sizeDialog();
     });
@@ -607,9 +608,10 @@ void MainWindow::on_action1_4_triggered()//另存为
 }
 
 void MainWindow::sizeDialog(){
-    QDialog dlg(this);
-    dlg.resize(400,300);
-    dlg.setWindowTitle("设置粗细");
+//    QDialog dlg(this);
+    dlg = new QDialog(this);
+    dlg->resize(400,300);
+    dlg->setWindowTitle("设置粗细");
     QLabel *label_nodeSize = new QLabel();
     label_nodeSize->setText("边框粗细：");
     nodeSizeCombo_menu = new QComboBox(this);
@@ -656,22 +658,19 @@ void MainWindow::sizeDialog(){
     sizeDialog->addLayout(tail);
 
 
-    dlg.setLayout(sizeDialog);
+    dlg->setLayout(sizeDialog);
 
-//    connect(ok_sizeBtn,&QPushButton::click,[=](){
-//        dlg.done(1);
-//    });
-//    connect(cancel_sizeBtn,&QPushButton::click,this,&MainWindow::cancel_sizeBtn_clicked);
-
-    dlg.exec();
+    connect(cancel_sizeBtn,&QPushButton::clicked,this,&MainWindow::cancel_sizeBtn_clicked);
+    connect(ok_sizeBtn,&QPushButton::clicked,this,&MainWindow::ok_sizeBtn_clicked);
+    dlg->exec();
 }
 
-//void MainWindow::ok_sizeBtn_clicked(){
-//    dlg.done(1);
-//}
-//void MainWindow::cancel_sizeBtn_clicked(){
-//    dlg.done(0);
-//}
+void MainWindow::ok_sizeBtn_clicked(){
+    dlg->done(1);
+}
+void MainWindow::cancel_sizeBtn_clicked(){
+    dlg->done(0);
+}
 
 Graph* MainWindow::graph()
 {
