@@ -3,14 +3,16 @@
 
 #include <QObject>
 
+class MainWindow;
+
 class ElementOperator : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit ElementOperator(QObject *parent = nullptr);
+    ElementOperator(MainWindow* parent);
 
-signals:
-
+    MainWindow* window() const;
 };
 
 #endif // ELEMENTOPERATOR_H

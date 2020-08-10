@@ -23,6 +23,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class ElementOperator;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -161,5 +163,8 @@ private:
     QMap<QGraphicsScene*, Graph*> graphs;
 
     QVector<QPair<int,QString>> index_name_subgraph;
+
+private:
+    ElementOperator* _elementOperator;
 };
 #endif // MAINWINDOW_H
