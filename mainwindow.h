@@ -13,6 +13,7 @@
 #include "graph.h"
 #include "scene.h"
 #include <QMap>
+#include <QDir>
 //*************************************************
 #include <QMenu>
 #include <QAction>
@@ -24,6 +25,13 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class Operator;
+
+struct item_data
+{
+    int type;
+
+};
+Q_DECLARE_METATYPE(item_data);
 
 class MainWindow : public QMainWindow
 {
@@ -166,6 +174,7 @@ private:
     QPushButton* ok_sizeBtn;
     QPushButton* cancel_sizeBtn;
     QDialog *dlg;
+    QStandardItemModel* model;
 
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;

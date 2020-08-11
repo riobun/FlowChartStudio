@@ -214,14 +214,27 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //项目树形结构
-    QStandardItemModel* model = new QStandardItemModel(ui->treeView);
+    model = new QStandardItemModel(ui->treeView);
     ui->treeView->setModel(model);
     model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
     QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目1");
+    item_data data0;
+    data0.type=1;//表示项目
+    QVariant itemVariData;
+    itemVariData.setValue<item_data>(data0);
+    itemProject1->setData(itemVariData,Qt::UserRole);
     model->appendRow(itemProject1);
+
     QStandardItem* itemFileFolder1 = new QStandardItem(QIcon(":/images/filefolder.png"),tr("Folder1"));
+    data0.type=2;//文件夹
+    itemVariData.setValue<item_data>(data0);
+    itemFileFolder1->setData(itemVariData,Qt::UserRole);
     itemProject1->appendRow(itemFileFolder1);
+
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
+    data0.type=3;//文件
+    itemVariData.setValue<item_data>(data0);
+    itemFileFolder1->setData(itemVariData,Qt::UserRole);
     itemFileFolder1->appendRow(itemFile1);
 
     //treeview右键菜单
@@ -675,9 +688,31 @@ void MainWindow::cancel_sizeBtn_clicked(){
 
 void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
     QModelIndex curIndex = ui->treeView->indexAt(pos);
+    QStandardItem* curItem = model->itemFromIndex(curIndex);
     if(curIndex.isValid()){
         QMenu menu;
-        menu.addAction("关闭");
+        int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
+        switch (item_type) {
+        case 1:
+            menu.addAction("Add New to Project");
+            menu.addAction("Add Existing to Project");
+            menu.addAction("Save Project");
+            menu.addAction("Save Project As");
+            menu.addAction("Close Project");
+            break;
+        case 2:
+            menu.addAction("Add New to Folder");
+            menu.addAction("Add Existing to Folder");
+            menu.addAction("Remove from Project");
+            break;
+        default:
+            menu.addAction("Close");
+            menu.addAction("Remove from Project");
+            menu.addAction("Save");
+            menu.addAction("Save As");
+
+        }
+
         menu.exec(QCursor::pos());
     }
 }
