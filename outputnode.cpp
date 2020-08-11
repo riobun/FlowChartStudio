@@ -4,6 +4,7 @@
 #include "inneroutputnode.h"
 #include "changeelementaction.h"
 #include "elementshape.h"
+#include "arrow.h"
 OutputNode::OutputNode()
 {
 
@@ -22,16 +23,20 @@ void OutputNode::Paint(QGraphicsScene *qgs)
 {
     Node::Paint(qgs);
     qgs->addItem(subShape);
-    if(GetType()==5)
+    if(!dynamic_cast<InnerOutputNode*>(this))
     {
         if(fatherGraph)
         {
             QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
             foreach(auto i,qm)
             {
-                InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
-                ChangeElementAction* CEA=new ChangeElementAction(ion,ElementShape::InnerOutput,true);
-                CEA->Do();
+                InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()+i->GetHeight()),width,height);
+                ChangeElementAction* CEA1=new ChangeElementAction(ion,ElementShape::InnerOutput,true,(Scene*)i->GetRelatedQGS());
+                Arrow* arr=new Arrow(i->getNodeItem(),ion->getNodeItem(),1);
+                CEA1->Do();
+                relatedInner.insert(ion->GetID(),ion);
+                ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)i->GetRelatedQGS());
+                CEA2->Do();
             }
         }
     }
@@ -41,6 +46,11 @@ void OutputNode::Remove(QGraphicsScene *qgs)
 {
     Node::Remove(qgs);
     qgs->removeItem(subShape);
+    foreach(auto i,relatedInner)
+    {
+         ChangeElementAction* CEA=new ChangeElementAction(i,ElementShape::InnerOutput,false,(Scene*)i->GetRelatedQGS());
+         CEA->Do();
+    }
 }
 
 void OutputNode::ChangeZValue(bool isSelected)

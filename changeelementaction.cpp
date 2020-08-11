@@ -51,7 +51,7 @@ void ChangeElementAction::Do()
                 arrow->removeArrow();
                 auto action = new ChangeElementAction(arrow, ElementShape::Arrow, false);
                 action->Do();
-               }
+            }
             node->Remove(scene);
             MainWindow::instance()->graph()->removeNode(node);
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
@@ -91,7 +91,7 @@ void ChangeElementAction::Do()
             arrow->myEndItem->GetNode()->ConnectAsDestination(arrow);
             arrow->setZValue(-100.0);
             arrow->s = onArrowSelected;
-            MainWindow::instance()->scene()->addItem(arrow);
+            scene->addItem(arrow);
             arrow->updatePosition();
             MainWindow::instance()->graph()->addArrow(arrow);
         }

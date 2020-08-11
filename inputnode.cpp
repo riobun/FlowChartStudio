@@ -1,5 +1,8 @@
 #include "inputnode.h"
-
+#include "innerinputnode.h"
+#include "arrow.h"
+#include "changeelementaction.h"
+#include "subgraphnode.h"
 
 InputNode::InputNode()
 {
@@ -29,6 +32,23 @@ void InputNode::Paint(QGraphicsScene *qgs)
     qgs->addItem(subShape[0]);
     qgs->addItem(subShape[1]);
     qgs->addItem(subShape[2]);
+    if(!dynamic_cast<InnerInputNode*>(this))
+    {
+        if(fatherGraph)
+        {
+            QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
+            foreach(auto i,qm)
+            {
+                InnerInputNode* iin=new InnerInputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()+i->GetHeight()),width,height);
+                ChangeElementAction* CEA1=new ChangeElementAction(iin,ElementShape::InnerInput,true,(Scene*)i->GetRelatedQGS());
+                Arrow* arr=new Arrow(i->getNodeItem(),iin->getNodeItem(),1);
+                CEA1->Do();
+                relatedInner.insert(iin->GetID(),iin);
+                ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)i->GetRelatedQGS());
+                CEA2->Do();
+            }
+        }
+    }
 }
 void InputNode::Remove(QGraphicsScene *qgs)
 {
@@ -36,6 +56,11 @@ void InputNode::Remove(QGraphicsScene *qgs)
     qgs->removeItem(subShape[0]);
     qgs->removeItem(subShape[1]);
     qgs->removeItem(subShape[2]);
+    foreach(auto i,relatedInner)
+    {
+         ChangeElementAction* CEA=new ChangeElementAction(i,ElementShape::InnerInput,false,(Scene*)i->GetRelatedQGS());
+         CEA->Do();
+    }
 }
 
 void InputNode::ChangeZValue(bool isSelected)

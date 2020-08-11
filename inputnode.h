@@ -1,7 +1,7 @@
 #ifndef INPUTNODE_H
 #define INPUTNODE_H
 #include"node.h"
-
+class InnerInputNode;
 class InputNode:public Node
 {
 public:
@@ -16,6 +16,7 @@ public:
     ~InputNode();
 protected:
      QVector<QGraphicsLineItem*> subShape;
+     QMap<int,InnerInputNode*> relatedInner;
 };
 
 #endif // INPUTNODE_H

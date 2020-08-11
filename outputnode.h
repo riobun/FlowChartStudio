@@ -2,6 +2,7 @@
 #define OUTPUTNODE_H
 #include "node.h"
 class SubgraphNode;
+class InnerOutputNode;
 class OutputNode:public Node
 {
 public:
@@ -16,6 +17,7 @@ public:
     ~OutputNode();
 protected:
     QGraphicsEllipseItem* subShape=new QGraphicsEllipseItem();
+    QMap<int,InnerOutputNode*> relatedInner;
 
 };
 

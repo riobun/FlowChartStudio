@@ -100,9 +100,9 @@ private slots:
 
     void on_addSubgraghButton_clicked();
 
-    void on_addFatherPortButton_clicked(){};
+    void on_addFatherPortButton_clicked();
 
-    void on_addSonPortButton_clicked(){};
+    void on_addSonPortButton_clicked();
 
     void onTreeViewMenuRequested(const QPoint &pos);
 
