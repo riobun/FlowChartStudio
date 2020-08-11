@@ -29,6 +29,7 @@ public:
     int getType() { return atype; }
     void setType(int flag);
     void setSize(int size);
+    int getSize() {return asize;}
     void setId(int size);
     void setList();
     NodeItem *startItem() const { return myStartItem; }

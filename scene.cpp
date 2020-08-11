@@ -165,6 +165,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem(),1);
             arrow->setArrowColor(MainWindow::instance()->lineColor);
             arrow->setType(MainWindow::instance()->lineType);
+            arrow->setSize(MainWindow::instance()->lineWidth);
             auto action = new ChangeElementAction(arrow, ElementShape::Arrow, true);
             action->Do();
         }
@@ -281,6 +282,7 @@ void Scene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         arrows.insert(arrow, newArrow);
         newArrow->setArrowColor(arrow->getColor());
         newArrow->setType(arrow->getType());
+        newArrow->setSize(arrow->getSize());
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
     }
     QMapIterator<Arrow*, Arrow*> i(arrows);

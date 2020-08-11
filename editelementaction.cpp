@@ -124,6 +124,11 @@ void EditElementAction::Do()
             auto toKind = static_cast<int*>(to);
             arrow->setType(*toKind);
         }
+        else if (property == ElementProperty::ArrowWidth)
+        {
+            auto toWidth = static_cast<int*>(to);
+            arrow->setSize(*toWidth);
+        }
     }
 }
 

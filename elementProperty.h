@@ -13,6 +13,7 @@ enum class ElementProperty
     FontColor,
     String,
     ArrowKind,
+    ArrowWidth,
 };
 
 #endif // ELEMENTPROPERTY_H

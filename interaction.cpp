@@ -339,7 +339,31 @@ void MainWindow::changeFont(QFont font)
     }
 }
 
+void MainWindow::changeLineWidth(QString widthString)
+{
+    auto width = widthString.toInt();
+    if (selectedArrows()->empty())
+    {
+        lineWidth = width;
+    }
+    else
+    {
+        auto action = new GroupAction;
+        arrowSizeCombo->setCurrentText(QString::number(lineWidth));
+        foreach (auto arrow, *selectedArrows())
+        {
+            *action << new EditElementAction(arrow, ElementShape::Arrow,
+                                             ElementProperty::ArrowWidth,
+                                             new int(arrow->getSize()),
+                                             new int(width));
+        }
+        action->Do();
+    }
+}
 void MainWindow::deleteElement()
 {
     NodeEvents::deleteElemets();
 }
+
+void MainWindow::on_addSonPortButton_clicked() {}
+void MainWindow::on_addFatherPortButton_clicked() {}

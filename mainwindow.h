@@ -35,7 +35,7 @@ public:
 
     static MainWindow* instance() { return _instance; }
     Scene* scene() { return _scene; }
-    QList<QGraphicsScene*> open_scene(){return open_scenes;}
+    QList<Scene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { scene()->undoStack.append(action); }
@@ -56,6 +56,7 @@ public:
     QString fontFamily = "宋体";
     int fontSize = 12;
     Graph* cutGraph = new Graph;
+    int lineWidth = 2;
 
 public:
     Ui::MainWindow* getUi() const;
@@ -129,6 +130,7 @@ private:
     void changeLineColor(QColor color);
     void changeTextColor(QColor color);
     void changeFont(QFont font);
+    void changeLineWidth(QString width);
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();
@@ -144,7 +146,7 @@ private:
 
     Scene* _scene;
 
-    QList<QGraphicsScene*> open_scenes;
+    QList<Scene*> open_scenes;
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
