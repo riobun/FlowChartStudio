@@ -39,9 +39,9 @@ void InputNode::Paint(QGraphicsScene *qgs)
             QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
             foreach(auto i,qm)
             {
-                InnerInputNode* iin=new InnerInputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()+i->GetHeight()),width,height);
+                InnerInputNode* iin=new InnerInputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
                 ChangeElementAction* CEA1=new ChangeElementAction(iin,ElementShape::InnerInput,true,(Scene*)i->GetRelatedQGS());
-                Arrow* arr=new Arrow(i->getNodeItem(),iin->getNodeItem(),1);
+                Arrow* arr=new Arrow(iin->getNodeItem(),i->getNodeItem(),1);
                 CEA1->Do();
                 relatedInner.insert(iin->GetID(),iin);
                 ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)i->GetRelatedQGS());

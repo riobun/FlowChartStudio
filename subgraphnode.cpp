@@ -29,6 +29,7 @@ SubgraphNode::~SubgraphNode()
 void SubgraphNode::Paint(QGraphicsScene *qgs)
 {
     Node::Paint(qgs);
+    if(relatedGraph) relatedGraph->AddRelatedNode(this);
     qgs->addItem(subShape[0]);
     qgs->addItem(subShape[1]);
 }
@@ -49,6 +50,7 @@ void SubgraphNode::Remove(QGraphicsScene *qgs)
     Node::Remove(qgs);
     qgs->removeItem(subShape[0]);
     qgs->removeItem(subShape[1]);
+    if(relatedGraph)relatedGraph->RemoveRelatedNode(this);
 }
 void SubgraphNode::ChangeZValue(bool isSelected)
 {

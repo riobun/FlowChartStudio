@@ -30,7 +30,7 @@ void OutputNode::Paint(QGraphicsScene *qgs)
             QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
             foreach(auto i,qm)
             {
-                InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()+i->GetHeight()),width,height);
+                InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()+i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
                 ChangeElementAction* CEA1=new ChangeElementAction(ion,ElementShape::InnerOutput,true,(Scene*)i->GetRelatedQGS());
                 Arrow* arr=new Arrow(i->getNodeItem(),ion->getNodeItem(),1);
                 CEA1->Do();

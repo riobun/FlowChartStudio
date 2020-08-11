@@ -50,7 +50,7 @@ void ChangeElementAction::Do()
             foreach (auto arrow, arrows)
             {
                 arrow->removeArrow();
-                auto action = new ChangeElementAction(arrow, ElementShape::Arrow, false);
+                auto action = new ChangeElementAction(arrow, ElementShape::Arrow, false,scene);
                 action->Do();
             }
             node->Remove(scene);
