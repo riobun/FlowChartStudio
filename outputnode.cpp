@@ -2,6 +2,8 @@
 #include "graph.h"
 #include "subgraphnode.h"
 #include "inneroutputnode.h"
+#include "changeelementaction.h"
+#include "elementshape.h"
 OutputNode::OutputNode()
 {
 
@@ -28,7 +30,8 @@ void OutputNode::Paint(QGraphicsScene *qgs)
             foreach(auto i,qm)
             {
                 InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
-                ion->Paint(i->GetRelatedQGS());
+                ChangeElementAction* CEA=new ChangeElementAction(ion,ElementShape::InnerOutput,true);
+                CEA->Do();
             }
         }
     }
