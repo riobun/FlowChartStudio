@@ -360,8 +360,10 @@ void MainWindow::changeLineWidth(QString widthString)
         action->Do();
     }
 }
-
 void MainWindow::deleteElement()
 {
     NodeEvents::deleteElemets();
 }
+
+void MainWindow::on_addSonPortButton_clicked() {}
+void MainWindow::on_addFatherPortButton_clicked() {}

@@ -7,16 +7,30 @@
 
 void onArrowSelected(Arrow* arrow, bool isSelected);
 
-ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated) :
+Scene* scene;
+
+ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated, Scene* scene) :
     isCreated(isCreated), shape(shape), element(element)
 {
+    ::scene = scene;
+    if (scene)
+    {
+        auto lastScene = MainWindow::instance()->scene();
+        lastScene->undoStack.removeLast();
+        scene->undoStack.append(this);
+    }
     qDebug() << "ChangeElementAction" << endl;
+}
+
+ChangeElementAction::~ChangeElementAction()
+{
+    ::scene = nullptr;
 }
 
 void ChangeElementAction::Do()
 {
     auto window = MainWindow::instance();
-    auto scene = window->scene();
+    auto scene = ::scene ? ::scene : window->scene();
     if (isNode(shape))
     {
         auto node = static_cast<Node*>(element);

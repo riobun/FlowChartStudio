@@ -10,7 +10,7 @@ class Action : public QObject
 
 public:
     Action();
-    ~Action();
+    virtual ~Action();
 
     virtual void Do() = 0;
     virtual void Undo() = 0;
