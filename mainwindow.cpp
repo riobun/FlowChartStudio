@@ -159,7 +159,7 @@ MainWindow::MainWindow(QWidget *parent)
     arrowSizeCombo->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
         arrowSizeCombo->addItem(QString().setNum(i));
-    arrowSizeCombo->setCurrentText("6");
+    arrowSizeCombo->setCurrentText("2");
     QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
     arrowSizeCombo->setValidator(arrow_validator);
     connect(arrowSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeLineWidth);
