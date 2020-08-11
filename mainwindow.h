@@ -56,6 +56,7 @@ public:
     QString fontFamily = "宋体";
     int fontSize = 12;
     Graph* cutGraph = new Graph;
+    int lineWidth = 2;
 
 public:
     Ui::MainWindow* getUi() const;
@@ -129,6 +130,7 @@ private:
     void changeLineColor(QColor color);
     void changeTextColor(QColor color);
     void changeFont(QFont font);
+    void changeLineWidth(QString width);
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();

@@ -145,7 +145,7 @@ MainWindow::MainWindow(QWidget *parent)
     bdSizeCombo->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
         bdSizeCombo->addItem(QString().setNum(i));
-    bdSizeCombo->setCurrentText("6");
+    bdSizeCombo->setCurrentText("2");
     QIntValidator *bd_validator = new QIntValidator(2, 15, this);
     bdSizeCombo->setValidator(bd_validator);
     //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
@@ -162,7 +162,7 @@ MainWindow::MainWindow(QWidget *parent)
     arrowSizeCombo->setCurrentText("6");
     QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
     arrowSizeCombo->setValidator(arrow_validator);
-    //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    connect(arrowSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeLineWidth);
     ui->toolBar->addWidget(arrowSizeCombo);
 
 
