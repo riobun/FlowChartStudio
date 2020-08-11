@@ -85,6 +85,7 @@ void MainWindow::Undo()
         undoStack.removeLast();
         action->Undo();
         redoStack.append(action);
+        scene()->lastUndoSize = undoStack.size();
     }
 }
 
@@ -92,12 +93,14 @@ void MainWindow::Redo()
 {
     auto& undoStack = scene()->undoStack;
     auto& redoStack = scene()->redoStack;
+    if (undoStack.size() > scene()->lastUndoSize) redoStack.clear();
     if (redoStack.size() > 0)
     {
         auto action = redoStack.last();
         redoStack.removeLast();
         action->Do();
         undoStack.append(action);
+        scene()->lastUndoSize = undoStack.size();
     }
 }
 

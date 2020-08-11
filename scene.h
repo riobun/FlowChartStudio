@@ -19,6 +19,7 @@ public:
     void clearSelect();
     QList<Action*> undoStack;
     QList<Action*> redoStack;
+    int lastUndoSize;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
