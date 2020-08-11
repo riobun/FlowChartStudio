@@ -4,7 +4,7 @@
 #include"node.h"
 #include"text.h"
 #include "elementshape.h"
-
+class SubgraphNode;
 class Graph:public GraphElement
 {
 public:
@@ -32,7 +32,9 @@ public:
     QMap<int, Node*>& getNodes() { return nodes; }
     QMap<int, Arrow*>& getArrows() { return arrows; }
     QVector<Text*>& getTexts() { return texts; }
-
+    QMap<int, SubgraphNode*>& getRelatedNodes(){return relatedNodes;}
+    void AddRelatedNode(SubgraphNode* sn);
+    void RemoveRelatedNode(SubgraphNode* sn);
     void BindToText(QGraphicsScene *qgs) override {}
     Node* node;
     
@@ -47,7 +49,7 @@ private:
     QMap<int, Arrow*> arrows;
     QVector<Text*> texts;
     QMap<int, Graph*> subGraph;
-    
+    QMap<int, SubgraphNode*> relatedNodes;
     struct node_info{
         int node_id;
         Node* p_node = nullptr;

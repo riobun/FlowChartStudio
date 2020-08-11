@@ -1,5 +1,7 @@
 #include "outputnode.h"
-
+#include "graph.h"
+#include "subgraphnode.h"
+#include "inneroutputnode.h"
 OutputNode::OutputNode()
 {
 
@@ -18,6 +20,15 @@ void OutputNode::Paint(QGraphicsScene *qgs)
 {
     Node::Paint(qgs);
     qgs->addItem(subShape);
+    if(fatherGraph)
+    {
+        QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
+        foreach(auto i,qm)
+        {
+            InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
+            ion->Paint(i->GetRelatedQGS());
+        }
+    }
 }
 
 void OutputNode::Remove(QGraphicsScene *qgs)

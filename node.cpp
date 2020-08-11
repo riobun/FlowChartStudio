@@ -76,6 +76,8 @@ QVector<Arrow*> Node::getArrows()
 
 void Node::Paint(QGraphicsScene* qgs)
 {
+    if(!fatherGraph) fatherGraph=MainWindow::instance()->graph();
+    if(!relatedQGS) relatedQGS=qgs;
     SetShape();
     shape->setVisible(true);
     shape->setFlags(QGraphicsItem::ItemIsSelectable);

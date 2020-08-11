@@ -8,6 +8,7 @@
 #include"QGraphicsScene"
 #include"nodeitem.h"
 class Arrow;
+class Graph;
 class Node:public GraphElement
 {
 public:
@@ -39,13 +40,15 @@ public:
 
     NodeItem* getNodeItem() const { return shape; }
     virtual int GetType()=0;
-
+    QGraphicsScene* GetRelatedQGS() {return relatedQGS;}
 protected:
     QPointF location=QPointF(0.0,0.0);//表示图形中心位置
     double width,height;
     QColor backgroundColor=Qt::white,frameColor=Qt::black;
     NodeItem* shape=new NodeItem(this);
     bool isRemoved=false;
+    Graph* fatherGraph=nullptr;
+    QGraphicsScene* relatedQGS=nullptr;
 private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;

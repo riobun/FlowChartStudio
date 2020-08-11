@@ -1,6 +1,6 @@
 #include "graph.h"
 #include "arrow.h"
-
+#include "subgraphnode.h"
 Graph::Graph(QVector<Node*>& v_Node, QVector<Text*>& v_Text, QVector<Graph*>& v_Graph){
 
 }
@@ -238,4 +238,14 @@ void Graph::clear()
     nodes.clear();
     texts.clear();
     arrows.clear();
+}
+
+void Graph::AddRelatedNode(SubgraphNode *sn)
+{
+    relatedNodes.insert(sn->GetID(),sn);
+}
+
+void Graph::RemoveRelatedNode(SubgraphNode *sn)
+{
+    relatedNodes.remove(sn->GetID());
 }

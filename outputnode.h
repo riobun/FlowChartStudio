@@ -1,7 +1,7 @@
 #ifndef OUTPUTNODE_H
 #define OUTPUTNODE_H
 #include "node.h"
-
+class SubgraphNode;
 class OutputNode:public Node
 {
 public:

@@ -8,7 +8,7 @@
 #include "mainwindow.h"
 
 extern MainWindow* point_w;
-
+class Graph;
 class SubgraphNode:public Node
 {
 public:
@@ -27,6 +27,7 @@ public:
     
 protected:
     QVector<QGraphicsLineItem*> subShape;
+    Graph* relatedGraph=nullptr;
 };
 
 #endif // SUBGRAPHNODE_H
