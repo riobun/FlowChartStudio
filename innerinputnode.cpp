@@ -42,5 +42,5 @@ void InnerInputNode::SetFrameColor(const QColor &qc)
 }
 int InnerInputNode::GetType()
 {
-    return 4;
+    return 7;
 }

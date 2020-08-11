@@ -20,13 +20,16 @@ void OutputNode::Paint(QGraphicsScene *qgs)
 {
     Node::Paint(qgs);
     qgs->addItem(subShape);
-    if(fatherGraph)
+    if(GetType()==5)
     {
-        QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
-        foreach(auto i,qm)
+        if(fatherGraph)
         {
-            InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
-            ion->Paint(i->GetRelatedQGS());
+            QMap<int,SubgraphNode*> qm=fatherGraph->getRelatedNodes();
+            foreach(auto i,qm)
+            {
+                InnerOutputNode* ion=new InnerOutputNode(QPointF(i->GetLocation().x()-i->GetWidth(),i->GetLocation().y()-i->GetHeight()),width,height);
+                ion->Paint(i->GetRelatedQGS());
+            }
         }
     }
 }
