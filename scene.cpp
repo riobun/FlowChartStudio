@@ -19,15 +19,6 @@
 #include "arrownode.h"
 #include <QVector>
 
-QList<Scene*> Scene::_scenes;
-Scene* Scene::_activeScene = nullptr;
-
-Scene* Scene::create()
-{
-    auto scene = new Scene();
-    _scenes.append(scene);
-}
-
 Scene::~Scene()
 {
     delete graph;

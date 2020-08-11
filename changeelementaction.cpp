@@ -4,7 +4,6 @@
 #include "node.h"
 #include "arrow.h"
 #include <QDebug>
-#include "element.h"
 
 void onArrowSelected(Arrow* arrow, bool isSelected);
 
@@ -18,10 +17,6 @@ void ChangeElementAction::Do()
 {
     auto window = MainWindow::instance();
     auto scene = window->scene();
-    if (element == nullptr)
-    {
-        element = Element::create(shape);
-    }
     if (isNode(shape))
     {
         auto node = static_cast<Node*>(element);

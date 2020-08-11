@@ -23,7 +23,6 @@ SOURCES += \
     changeelementaction.cpp \
     diamond.cpp \
     editelementaction.cpp \
-    element.cpp \
     elementevents.cpp \
     graph.cpp \
     graphelement.cpp \
@@ -37,7 +36,6 @@ SOURCES += \
     node.cpp \
     nodeevents.cpp \
     nodeitem.cpp \
-    operator.cpp \
     outputnode.cpp \
     rectangle.cpp\
     scene.cpp \
@@ -54,7 +52,6 @@ HEADERS += \
     changeelementaction.h \
     diamond.h \
     editelementaction.h \
-    element.h \
     elementProperty.h \
     elementevents.h \
     elementshape.h \
@@ -69,7 +66,6 @@ HEADERS += \
     node.h \
     nodeevents.h \
     nodeitem.h \
-    operator.h \
     outputnode.h \
     rectangle.h\
     scene.h \

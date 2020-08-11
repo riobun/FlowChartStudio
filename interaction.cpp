@@ -60,12 +60,12 @@ void MainWindow::on_addSubgraghButton_clicked()
     _nextAddedShape = ElementShape::SubGraph;
 }
 
-void MainWindow::on_addFatherPortButton_clicked()
+void MainWindow::on_addInputButton_clicked()
 {
     _nextAddedShape = ElementShape::Input;
 }
 
-void MainWindow::on_addSonPortButton_clicked()
+void MainWindow::on_addOutputButton_clicked()
 {
     _nextAddedShape = ElementShape::Output;
 }
@@ -77,23 +77,30 @@ void MainWindow::SelectAll() { NodeEvents::selectAll(); }
 
 void MainWindow::Undo()
 {
+    auto& undoStack = scene()->undoStack;
+    auto& redoStack = scene()->redoStack;
     if (undoStack.size() > 0)
     {
         auto action = undoStack.last();
         undoStack.removeLast();
         action->Undo();
         redoStack.append(action);
+        scene()->lastUndoSize = undoStack.size();
     }
 }
 
 void MainWindow::Redo()
 {
+    auto& undoStack = scene()->undoStack;
+    auto& redoStack = scene()->redoStack;
+    if (undoStack.size() > scene()->lastUndoSize) redoStack.clear();
     if (redoStack.size() > 0)
     {
         auto action = redoStack.last();
         redoStack.removeLast();
         action->Do();
         undoStack.append(action);
+        scene()->lastUndoSize = undoStack.size();
     }
 }
 
@@ -126,8 +133,15 @@ void MainWindow::clickFillBtn()
 void MainWindow::clickLineBtn()
 {
     auto action = new GroupAction;
+    QVector<Arrow*> arrows;
     foreach (auto arrow, *selectedArrows())
     {
+        if (arrows.contains(arrow)) continue;
+        //arrow->setArrowColor(lineColor);
+        foreach (auto arrow, arrow->arrowlist)
+        {
+            arrows.append(arrow);
+        }
         *action << new EditElementAction(arrow, ElementShape::Arrow,
                                          ElementProperty::FrameColor,
                                          new QColor(arrow->getColor()),
