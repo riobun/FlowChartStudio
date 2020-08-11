@@ -14,6 +14,7 @@ GraphElement::GraphElement()
 {
 //    Id = ++maxid;
      this->setId();
+     this->setsId();
 }
 void GraphElement::setId(){
     for(int i=0;i<200;i++){
@@ -53,4 +54,51 @@ void GraphElement::deleteID()
 {
    k1[this->Id-1]=0;
    return ;
+}
+int GraphElement::CStringHexToInt(QString str)
+{
+    int nRet = 0;
+    int count = 1;
+    for (int i = str.length() - 1; i >= 0; --i)
+    {
+        int nNum = 0;
+        char chTest;
+        chTest = str.at(i).unicode();
+        if (chTest >= '0' && chTest <= '9')
+        {
+            char a='0';
+            nNum = chTest - a;
+        }
+        else if (chTest >= 'A' && chTest <= 'F')
+        {
+            nNum = chTest - 'A' + 10;
+        }
+        else if (chTest >= 'a' && chTest <= 'f')
+        {
+            nNum = chTest - 'a' + 10;
+        }
+        nRet += nNum * count;
+        count *= 16;
+    }
+    return nRet;
+}//利用ID字符串转成int值
+bool GraphElement::isRepeat(QString str){
+    int nRet=CStringHexToInt(str);
+    if(k1[nRet-1]==1){
+            return true;
+        }else return false;
+}
+bool GraphElement::changesId(QString str){
+    if(isRepeat(str)){
+        return false;
+        //用户输入的ID已经分配 0x111 8987
+    }
+    else if(!str.startsWith("0x")){
+        return false;
+    }//未以0x开头，命名不规范
+    k1[this->GetID()-1]=0;
+    this->sId=str;
+    this->Id=CStringHexToInt(str);
+    k1[this->GetID()-1]=1;
+    return true;
 }

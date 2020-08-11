@@ -1,6 +1,11 @@
 #include "groupaction.h"
 #include "mainwindow.h"
+#include <QDebug>
 
+GroupAction::GroupAction()
+{
+    qDebug() << "GroupAction" ;
+}
 
 GroupAction& GroupAction::operator<<(Action* action)
 {

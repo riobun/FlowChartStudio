@@ -11,6 +11,8 @@ class GroupAction : public Action
     Q_OBJECT
 
 public:
+    GroupAction();
+
     GroupAction& operator<<(Action* action);
 
     void Do() override;

@@ -6,11 +6,12 @@
 #include <QToolButton>
 #include <QVector>
 #include <QStandardItemModel>
+#include <QFontComboBox>
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
 #include "graph.h"
-#include "flowchartscene.h"
+#include "scene.h"
 #include <QMap>
 //*************************************************
 #include <QMenu>
@@ -22,6 +23,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class Operator;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -31,7 +34,8 @@ public:
     ~MainWindow();
 
     static MainWindow* instance() { return _instance; }
-    QGraphicsScene* scene() { return _scene; }
+    Scene* scene() { return _scene; }
+    QList<QGraphicsScene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
     void Doing(Action* action) { undoStack.append(action); }
@@ -41,6 +45,7 @@ public:
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
     void addNewTab();
     void addNewTab(QString name);
+    int index_tab();
     Graph* graph();
 
     QColor bdColor = Qt::black;
@@ -48,7 +53,12 @@ public:
     QColor lineColor = Qt::black;
     QColor textColor = Qt::black;
     int lineType = 1;
+    QString fontFamily = "宋体";
+    int fontSize = 12;
     Graph* cutGraph = new Graph;
+
+public:
+    Ui::MainWindow* getUi() const;
 
 public slots:
     void Undo();
@@ -57,8 +67,14 @@ public slots:
     void Copy();
     void Paste();
     void SelectAll();
+    void deleteElement();
 
     void lineTypeChanged(int index);
+    void changeFontFamily(QFont font);
+    void changeFontSize(QString sizeString);
+    void sizeDialog();
+    void ok_sizeBtn_clicked();
+    void cancel_sizeBtn_clicked();
 
 private slots:
     void textColorChanged();
@@ -87,6 +103,8 @@ private slots:
 
     void on_addSonPortButton_clicked();
 
+    void onTreeViewMenuRequested(const QPoint &pos);
+
 
 //*****************************************************
     void on_action1_triggered();
@@ -106,6 +124,7 @@ private:
     void changeFillColor(QColor color);
     void changeLineColor(QColor color);
     void changeTextColor(QColor color);
+    void changeFont(QFont font);
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();
@@ -119,8 +138,9 @@ private:
 
     static MainWindow* _instance;
 
-    QGraphicsScene* _scene;
+    Scene* _scene;
 
+    QList<QGraphicsScene*> open_scenes;
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
@@ -131,6 +151,16 @@ private:
     QAction *fillAction;
     QAction *bdAction;
     QAction *arrowColorAction;
+    QFontComboBox* fontBtn;
+    QComboBox* fontSizeCombo;
+    QComboBox* bdSizeCombo;
+    QComboBox* arrowSizeCombo;
+    QComboBox* nodeSizeCombo_menu;
+    QComboBox* arrowSizeCombo_menu;
+    QPushButton* ok_sizeBtn;
+    QPushButton* cancel_sizeBtn;
+    QDialog *dlg;
+
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;
     QToolButton* fontColorToolBtn;
@@ -142,9 +172,12 @@ private:
     QMap<int, Node*> _selectedNodes;
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
-    QMap<QModelIndex,FlowChartScene* > scenes;
+    QMap<QModelIndex,Scene* > scenes;
     QMap<QGraphicsScene*, Graph*> graphs;
 
     QVector<QPair<int,QString>> index_name_subgraph;
+
+private:
+    Operator* _operator;
 };
 #endif // MAINWINDOW_H

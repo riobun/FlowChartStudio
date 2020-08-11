@@ -1,4 +1,4 @@
-#include "flowchartscene.h"
+#include "scene.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QDebug>
@@ -16,19 +16,24 @@
 #include "nodeevents.h"
 #include "innerinputnode.h"
 #include "inneroutputnode.h"
+#include "arrownode.h"
+#include <QVector>
 
+QList<Scene*> Scene::_scenes;
+Scene* Scene::_activeScene = nullptr;
 
-FlowChartScene::FlowChartScene()
+Scene* Scene::create()
 {
-
+    auto scene = new Scene();
+    _scenes.append(scene);
 }
 
-FlowChartScene::~FlowChartScene()
+Scene::~Scene()
 {
     delete graph;
 }
 
-void FlowChartScene::keyPressEvent(QKeyEvent *event)
+void Scene::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control)
     {
@@ -36,7 +41,7 @@ void FlowChartScene::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void FlowChartScene::keyReleaseEvent(QKeyEvent *event)
+void Scene::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control)
     {
@@ -44,7 +49,7 @@ void FlowChartScene::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::MouseButton::LeftButton)
     {
@@ -76,6 +81,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         {
             auto text = new Text(point);
             text->reset_color(window->textColor);
+            text->reset_font(QFont(window->fontFamily, window->fontSize));
             auto action = new ChangeElementAction(text, ElementShape::Text, true);
             action->Do();
         }
@@ -110,7 +116,7 @@ void FlowChartScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     keyDownPosition = event->scenePos();
 }
 
-void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (line)
     {
@@ -136,7 +142,7 @@ void FlowChartScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseMoveEvent(event);
 }
 
-void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
     if (rect)
@@ -166,6 +172,8 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (to)
         {
             auto arrow = new Arrow(lineFrom->getNodeItem(),to->getNodeItem(),1);
+            arrow->setArrowColor(MainWindow::instance()->lineColor);
+            arrow->setType(MainWindow::instance()->lineType);
             auto action = new ChangeElementAction(arrow, ElementShape::Arrow, true);
             action->Do();
         }
@@ -175,7 +183,7 @@ void FlowChartScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void Scene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QGraphicsScene::contextMenuEvent(event);
     if (!event->isAccepted())
@@ -197,12 +205,12 @@ void FlowChartScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 }
 
-void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
+void Scene::pasteElements(QGraphicsSceneContextMenuEvent *event)
 {
     auto action = new GroupAction();
     auto graph = MainWindow::instance()->cutGraph;
     QPointF offset;
-    if (event) offset = event->scenePos() - graph->node->GetLocation();
+    if (event && graph->node) offset = event->scenePos() - graph->node->GetLocation();
     else offset = QPointF();
     QMap<Node*, Node*> nodes;
     foreach (auto node, graph->getNodes())
@@ -234,6 +242,11 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
             newNode = new OutputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
             shape = ElementShape::Output;
         }
+        else if (dynamic_cast<Arrownode*>(node))
+        {
+            newNode = new Arrownode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
+            shape = ElementShape::Arrownode;
+        }
         newNode->SetFrameColor(node->GetFrameColor());
         newNode->SetBackgroundColor(node->GetBackgroundColor());
         *action << new ChangeElementAction(newNode, shape, true);
@@ -241,9 +254,22 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     }
     foreach (auto text, graph->getTexts())
     {
-        auto newText = new Text(text->get_text_location());
+        Text* newText;
+        if (text->parent)
+        {
+            auto newNode = nodes[text->parent];
+            QString temp="0x";
+            temp+= QString::number(newNode->GetID(),16);
+            auto position = newNode->GetLocation() + text->get_text_location() - text->parent->GetLocation();
+            newText = new Text(position, newNode, temp, true);
+        }
+        else newText = new Text(text->get_text_location());
+        newText->reset_font(text->get_text_font());
+        newText->change_content(text->get_text_content());
+        newText->setZValue(text->zValue());
         *action << new ChangeElementAction(newText, ElementShape::Text, true);
     }
+    auto arrows = QMap<Arrow*, Arrow*>();
     foreach (auto arrow, graph->getArrows())
     {
         auto graph = MainWindow::instance()->graph();
@@ -260,9 +286,32 @@ void FlowChartScene::pasteElements(QGraphicsSceneContextMenuEvent *event)
             if (!graph->getNodes().contains(toNode->GetID())) continue;
         }
 
-        auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), 1);
+        auto newArrow = new Arrow(fromNode->getNodeItem(), toNode->getNodeItem(), arrow->getHaveEnd());
+        arrows.insert(arrow, newArrow);
+        newArrow->setArrowColor(arrow->getColor());
+        newArrow->setType(arrow->getType());
         *action << new ChangeElementAction(newArrow, ElementShape::Arrow, true);
+    }
+    QMapIterator<Arrow*, Arrow*> i(arrows);
+    while (i.hasNext())
+    {
+        auto pair = i.next();
+        auto oldArrow = pair.key();
+        auto newArrow = pair.value();
+        foreach (auto carrow, oldArrow->arrowlist)
+        {
+            newArrow->arrowlist.append(arrows[carrow]);
+        }
     }
     action->Do();
     graph->clear();
+}
+
+void Scene::clearSelect()
+{
+    auto window = MainWindow::instance();
+    window->selectedNodes()->clear();
+    window->selectedTexts()->clear();
+    window->selectedArrows()->clear();
+    clearSelection();
 }

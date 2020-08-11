@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-enum class ElementShape
+enum class ElementShape : unsigned char
 {
     Unknown,
     Rectangle,
@@ -21,7 +21,7 @@ inline bool isNode(ElementShape shape)
     return shape == ElementShape::Input || shape == ElementShape::Output ||
             shape == ElementShape::Diamond || shape == ElementShape::SubGraph ||
             shape == ElementShape::Rectangle || shape == ElementShape::InnerInput ||
-            shape == ElementShape::InnerOutput;
+            shape == ElementShape::InnerOutput || shape == ElementShape::Arrownode;
 }
 
 #endif // SHAPE_H

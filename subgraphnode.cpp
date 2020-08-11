@@ -72,7 +72,18 @@ int SubgraphNode::GetType()
 
 void SubgraphNode::OpenSubGraph()
 {
+    
     BindToText(MainWindow::instance()->scene());
     point_w->addNewTab(content->get_text_content());
+    QVector<QPair<Node*,ElementShape>> v =
+            MainWindow::instance()->graph()->Nodes_ElementShape(point_w->index_tab());
+    foreach(auto n,v){
+        if(n.second==ElementShape::Input){
+            //画输入节点
+        }
+        if(n.second==ElementShape::Output){
+            //画输出节点
+        }
+    }
 }
 

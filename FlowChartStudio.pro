@@ -23,24 +23,29 @@ SOURCES += \
     changeelementaction.cpp \
     diamond.cpp \
     editelementaction.cpp \
-    flowchartscene.cpp \
+    element.cpp \
+    elementevents.cpp \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
     innerinputnode.cpp \
     inneroutputnode.cpp \
     inputnode.cpp \
+    interaction.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
     nodeevents.cpp \
     nodeitem.cpp \
+    operator.cpp \
     outputnode.cpp \
     rectangle.cpp\
+    scene.cpp \
     subgraphnode.cpp \
     text.cpp \
     textitem.cpp\
-    textdialog.cpp
+    textdialog.cpp\
+    textdialog2.cpp
 
 HEADERS += \
     action.h \
@@ -49,9 +54,10 @@ HEADERS += \
     changeelementaction.h \
     diamond.h \
     editelementaction.h \
+    element.h \
     elementProperty.h \
+    elementevents.h \
     elementshape.h \
-    flowchartscene.h \
     graph.h \
     graphelement.h \
     groupaction.h \
@@ -63,12 +69,15 @@ HEADERS += \
     node.h \
     nodeevents.h \
     nodeitem.h \
+    operator.h \
     outputnode.h \
     rectangle.h\
+    scene.h \
     subgraphnode.h \
     text.h \
     textitem.h\
     textdialog.h\
+    textdialog2.h\
     textlogic.h
 
 FORMS += \

@@ -24,11 +24,12 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "flowchartscene.h"
+#include "scene.h"
 #include "editelementaction.h"
 #include "groupaction.h"
 #include "nodeevents.h"
 #include "arrow.h"
+#include "operator.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -48,13 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //状态栏
-//    QLabel * status_label = new QLabel("提示信息",this);
-//    ui->statusbar->addWidget(status_label);
-
-//    QLabel * status_label_right = new QLabel("右侧提示信息",this);
-//    ui->statusbar->addPermanentWidget(status_label_right);
-
-
         ui->listWidget->addItem("提示信息1");
         ui->listWidget->addItem("提示信息2");
         ui->listWidget->addItem("提示信息3");
@@ -71,18 +65,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->toolBar->addSeparator();
 
-    QFontComboBox* fontBtn = new QFontComboBox(this);
+    fontBtn = new QFontComboBox(this);
+    connect(fontBtn, &QFontComboBox::currentFontChanged, this, &MainWindow::changeFontFamily);
     ui->toolBar->addWidget(fontBtn);
 
     ui->toolBar->addSeparator();
 
     //字号
-    QComboBox* fontSizeCombo = new QComboBox(this);
+    fontSizeCombo = new QComboBox(this);
     fontSizeCombo->setEditable(true);
     for (int i = 6; i < 52; i = i + 2)
         fontSizeCombo->addItem(QString().setNum(i));
+    fontSizeCombo->setCurrentText("12");
     QIntValidator *validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
+    connect(fontSizeCombo, SIGNAL(activated(const QString&)), this, SLOT(changeFontSize(QString)));
     ui->toolBar->addWidget(fontSizeCombo);
 
     ui->toolBar->addSeparator();
@@ -90,8 +87,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addWidget(ui->boldBtn);
     ui->toolBar->addWidget(ui->italicBtn);
     ui->toolBar->addWidget(ui->underlineBtn);
-
-    ui->toolBar->addSeparator();
 
     //字体颜色
     fontColorToolBtn = new QToolButton(this);
@@ -102,17 +97,6 @@ MainWindow::MainWindow(QWidget *parent)
     fontColorToolBtn->setAutoFillBackground(true);
     connect(fontColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickTextColorButton);
     ui->toolBar->addWidget(fontColorToolBtn);
-    ui->toolBar->addSeparator();
-
-    //填充颜色
-    fillColorToolBtn = new QToolButton(this);
-    fillColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    fillColorToolBtn->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
-    fillAction = fillColorToolBtn->menu()->defaultAction();
-    fillColorToolBtn->setIcon(createColorToolButtonIcon(
-                                     ":/images/floodfill.png", Qt::white));
-    connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
-    ui->toolBar->addWidget(fillColorToolBtn);
 
     //边框颜色
     bdColorToolBtn = new QToolButton(this);
@@ -124,6 +108,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(bdColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickbdBtn);
     ui->toolBar->addWidget(bdColorToolBtn);
 
+    //填充颜色
+    fillColorToolBtn = new QToolButton(this);
+    fillColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
+    fillColorToolBtn->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
+    fillAction = fillColorToolBtn->menu()->defaultAction();
+    fillColorToolBtn->setIcon(createColorToolButtonIcon(
+                                     ":/images/floodfill.png", Qt::white));
+    connect(fillColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickFillBtn);
+    ui->toolBar->addWidget(fillColorToolBtn);
+
+
     //箭头颜色
     arrowColorToolBtn = new QToolButton(this);
     arrowColorToolBtn->setPopupMode(QToolButton::MenuButtonPopup);
@@ -134,13 +129,45 @@ MainWindow::MainWindow(QWidget *parent)
     connect(arrowColorToolBtn, &QAbstractButton::clicked, this, &MainWindow::clickLineBtn);
     ui->toolBar->addWidget(arrowColorToolBtn);
 
-    ui->toolBar->addSeparator();
 
     ui->toolBar->addWidget(ui->arrowComboBox);
     ui->arrowComboBox->addItem("实线箭头");
     ui->arrowComboBox->addItem("虚线箭头");
     ui->arrowComboBox->addItem("点线箭头");
-    connect(ui->arrowComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)));
+    connect(ui->arrowComboBox, SIGNAL(activated(int)), this, SLOT(lineTypeChanged(int)));
+
+        ui->toolBar->addSeparator();
+
+    //边框粗细
+     ui->bdSizeButton->setEnabled(false);
+     ui->toolBar->addWidget(ui->bdSizeButton);
+
+    bdSizeCombo = new QComboBox(this);
+    bdSizeCombo->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        bdSizeCombo->addItem(QString().setNum(i));
+    bdSizeCombo->setCurrentText("6");
+    QIntValidator *bd_validator = new QIntValidator(2, 15, this);
+    bdSizeCombo->setValidator(bd_validator);
+    //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    ui->toolBar->addWidget(bdSizeCombo);
+
+    //箭头粗细
+    ui->arrowSizeButton->setEnabled(false);
+    ui->toolBar->addWidget(ui->arrowSizeButton);
+
+    arrowSizeCombo = new QComboBox(this);
+    arrowSizeCombo->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        arrowSizeCombo->addItem(QString().setNum(i));
+    arrowSizeCombo->setCurrentText("6");
+    QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
+    arrowSizeCombo->setValidator(arrow_validator);
+    //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    ui->toolBar->addWidget(arrowSizeCombo);
+
+
+
 
     //菜单栏信号
     //文本框
@@ -148,14 +175,25 @@ MainWindow::MainWindow(QWidget *parent)
         auto color = QColorDialog::getColor(QColor(Qt::black));
         changeTextColor(color);
     });
-    connect(ui->action_font,&QAction::triggered,[](){
+    connect(ui->action_font,&QAction::triggered,[this](){
         bool flag;
-        QFontDialog::getFont(&flag,QFont("宋体",20));
+        auto font = QFontDialog::getFont(&flag, QFont("宋体",20));
+        if (flag) changeFont(font);
     });
     //箭头
     connect(ui->action_arrowColor,&QAction::triggered,[=](){
         auto color = QColorDialog::getColor(QColor(Qt::black));
         changeLineColor(color);
+    });
+    // 箭头样式
+    connect(ui->action_arrow1, &QAction::triggered, [this](){
+        lineTypeChanged(0);
+    });
+    connect(ui->action_arrow2, &QAction::triggered, [this](){
+        lineTypeChanged(1);
+    });
+    connect(ui->actiondain, &QAction::triggered, [this](){
+        lineTypeChanged(2);
     });
     //节点
     connect(ui->action_bgColor,&QAction::triggered,[=](){
@@ -166,6 +204,15 @@ MainWindow::MainWindow(QWidget *parent)
         auto color = QColorDialog::getColor(QColor(Qt::black));
         changeFrameColor(color);
     });
+    //箭头和节点粗细
+
+    connect(ui->action_nodeSize,&QAction::triggered,[=](){
+        sizeDialog();
+    });
+    connect(ui->action_arrowSize,&QAction::triggered,[=](){
+        sizeDialog();
+    });
+
 
     //项目树形结构
     QStandardItemModel* model = new QStandardItemModel(ui->treeView);
@@ -178,9 +225,14 @@ MainWindow::MainWindow(QWidget *parent)
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
     itemFileFolder1->appendRow(itemFile1);
 
-    _scene = new FlowChartScene();
+    //treeview右键菜单
+    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->treeView,&QTreeView::customContextMenuRequested,this,&MainWindow::onTreeViewMenuRequested);
+
+    _scene = new Scene();
     ui->graphicsView->setScene(scene());
-    _scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    //_scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    _scene->setSceneRect(QRectF(0,0,5000,5000));
 
     //页面选项卡设计
     ui->tabWidget->clear();
@@ -188,21 +240,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->usesScrollButtons();
 
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
+
+//    FlowChartScene* scene = new FlowChartScene();
+//    ui->graphicsView->setScene(scene);
     QWidget *tabFile0 = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(ui->graphicsView);
     tabFile0->setLayout(layout);
     ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
+//    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
+    open_scenes.append(_scene);
+    qDebug()<<open_scenes.count();
+
+//     _scene = ui->graphicsView->scene();
 
     _instance = this;
-
-    connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
-    connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
-    connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
-    connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
-    connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
-    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
-
 
     //项目树结构和页面选项卡的连接
     connect(ui->treeView,&QTreeView::clicked,[=](){
@@ -253,12 +305,22 @@ MainWindow::MainWindow(QWidget *parent)
             QLayoutItem* item = ui->tabWidget->currentWidget()->layout()->itemAt(0);
             QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
 
-            _scene = graphicView->scene();
+            _scene->clearSelect();
+            _scene = static_cast<Scene*>(graphicView->scene());
         }
 
     });
 
+    // 将编辑菜单栏中的动作绑定到槽
+    connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
+    connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));
+    connect(ui->cutAction, SIGNAL(triggered()), this, SLOT(Cut()));
+    connect(ui->copyAction, SIGNAL(triggered()), this, SLOT(Copy()));
+    connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
+    connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
+    connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 
+    _operator = new Operator(this);
 }
 
 MainWindow::~MainWindow()
@@ -312,134 +374,10 @@ QIcon MainWindow::createColorIcon(QColor color)
     return QIcon(pixmap);
 }
 
-void MainWindow::textColorChanged()
-{
-    textAction = qobject_cast<QAction *>(sender());
-    auto color = qvariant_cast<QColor>(textAction->data());
-    changeTextColor(color);
-}
-
-void MainWindow::itemColorChanged()
-{
-    fillAction = qobject_cast<QAction *>(sender());
-    auto color = qvariant_cast<QColor>(fillAction->data());
-    changeFillColor(color);
-}
-
-void MainWindow::bdColorChanged()
-{
-    bdAction = qobject_cast<QAction *>(sender());
-    auto color = qvariant_cast<QColor>(bdAction->data());
-    changeFrameColor(color);
-}
-
-void MainWindow::arrowColorChanged()
-{
-    arrowColorAction = qobject_cast<QAction *>(sender());
-    auto color = qvariant_cast<QColor>(arrowColorAction->data());
-    changeLineColor(color);
-}
-
-void MainWindow::on_addRectangleButton_clicked()
-{
-    _nextAddedShape = ElementShape::Rectangle;
-}
-
-void MainWindow::on_addDiamondButton_clicked()
-{
-    _nextAddedShape = ElementShape::Diamond;
-}
-
-void MainWindow::on_addArrowButton_clicked()
-{
-    _nextAddedShape = ElementShape::Arrow;
-}
-
-void MainWindow::on_addTextButton_clicked()
-{
-    _nextAddedShape = ElementShape::Text;
-}
-
-void MainWindow::Cut() { NodeEvents::cutElements(); }
-void MainWindow::Copy() { NodeEvents::copyElements(); }
-void MainWindow::Paste() { FlowChartScene::pasteElements(); }
-void MainWindow::SelectAll() { NodeEvents::selectAll(); }
-
-void MainWindow::Undo()
-{
-    if (undoStack.size() > 0)
-    {
-        auto action = undoStack.last();
-        undoStack.removeLast();
-        action->Undo();
-        redoStack.append(action);
-    }
-}
-
-void MainWindow::Redo()
-{
-    if (redoStack.size() > 0)
-    {
-        auto action = redoStack.last();
-        redoStack.removeLast();
-        action->Do();
-        undoStack.append(action);
-    }
-}
-
-void MainWindow::clickbdBtn()
-{
-    auto action = new GroupAction;
-    foreach (auto node, *selectedNodes())
-    {
-        *action << new EditElementAction(node, ElementShape::Rectangle,
-                                         ElementProperty::FrameColor,
-                                         new QColor(node->GetFrameColor()),
-                                         new QColor(bdColor));
-    }
-    action->Do();
-}
-
-void MainWindow::clickFillBtn()
-{
-    auto action = new GroupAction;
-    foreach (auto node, *selectedNodes())
-    {
-        *action << new EditElementAction(node, ElementShape::Rectangle,
-                                         ElementProperty::BackgroundColor,
-                                         new QColor(node->GetBackgroundColor()),
-                                         new QColor(fillColor));
-    }
-    action->Do();
-}
-
-void MainWindow::clickLineBtn()
-{
-    auto action = new GroupAction;
-    foreach (auto arrow, *selectedArrows())
-    {
-        *action << new EditElementAction(arrow, ElementShape::Arrow,
-                                         ElementProperty::FrameColor,
-                                         new QColor(arrow->getColor()),
-                                         new QColor(lineColor));
-    }
-    action->Do();
-}
-
-void MainWindow::clickTextColorButton()
-{
-    auto action = new GroupAction;
-    foreach (auto text, *selectedTexts())
-    {
-        *action << new EditElementAction(text, ElementShape::Text,
-                                         ElementProperty::FontColor,
-                                         new QColor(text->get_text_color()),
-                                         new QColor(textColor));
-    }
-    action->Do();
-}
-
 void MainWindow::removeSubTab(int index){
+
+    open_scenes.removeAt(index);
+
     if(ui->tabWidget->count() == 1) {
         ui->tabWidget->removeTab(index);
 
@@ -448,11 +386,12 @@ void MainWindow::removeSubTab(int index){
     else {
         ui->tabWidget->removeTab(index);
     }
+    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
     //创建新的VIEW和SCENE，并绑定
-    FlowChartScene* scene = new FlowChartScene();
+    Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -466,12 +405,14 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     ui->tabWidget->setCurrentWidget(tabFile);
 
 
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    scene->setSceneRect(QRectF(0,0,5000,5000));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(){
     //创建新的VIEW和SCENE，并绑定
-    FlowChartScene* scene = new FlowChartScene();
+    Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -485,7 +426,9 @@ void MainWindow::addNewTab(){
     ui->tabWidget->setCurrentWidget(tabFile);
 
 
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    scene->setSceneRect(QRectF(0,0,5000,5000));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(QString name){
@@ -497,7 +440,7 @@ void MainWindow::addNewTab(QString name){
     }
 
     //创建新的VIEW和SCENE，并绑定
-    FlowChartScene* scene = new FlowChartScene();
+    Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -510,24 +453,16 @@ void MainWindow::addNewTab(QString name){
     int index = ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),name);
     ui->tabWidget->setCurrentWidget(tabFile);
 
-    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), graphicsView->size()));
+    scene->setSceneRect(QRectF(0,0,5000,5000));
+    open_scenes.append(scene);
+    qDebug()<<open_scenes.count();
 
     index_name_subgraph.push_back({index,name});
+
 }
 
-void MainWindow::on_addSubgraghButton_clicked()
-{
-    _nextAddedShape = ElementShape::SubGraph;
-}
-
-void MainWindow::on_addFatherPortButton_clicked()
-{
-    _nextAddedShape = ElementShape::Input;
-}
-
-void MainWindow::on_addSonPortButton_clicked()
-{
-    _nextAddedShape = ElementShape::Output;
+int MainWindow::index_tab(){
+    return ui->tabWidget->currentIndex();
 }
 
 void MainWindow::modifyTabText(QStandardItem* item){
@@ -676,112 +611,86 @@ void MainWindow::on_action1_4_triggered()//另存为
        }
 }
 
+void MainWindow::sizeDialog(){
+//    QDialog dlg(this);
+    dlg = new QDialog(this);
+    dlg->resize(400,300);
+    dlg->setWindowTitle("设置粗细");
+    QLabel *label_nodeSize = new QLabel();
+    label_nodeSize->setText("边框粗细：");
+    nodeSizeCombo_menu = new QComboBox(this);
+    nodeSizeCombo_menu->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        nodeSizeCombo_menu->addItem(QString().setNum(i));
+    nodeSizeCombo_menu->setCurrentText("6");
+    QIntValidator *node_validator = new QIntValidator(2, 15, this);
+    nodeSizeCombo_menu->setValidator(node_validator);
+    QHBoxLayout* up =new QHBoxLayout();
+    up->addWidget(label_nodeSize);
+    up->addWidget(nodeSizeCombo_menu);
+    up->setContentsMargins(30,5,30,5);
+    up->setSpacing(10);
+
+    QLabel *label_arrowSize = new QLabel();
+    label_arrowSize->setText("箭头粗细：");
+    arrowSizeCombo_menu = new QComboBox(this);
+    arrowSizeCombo_menu->setEditable(true);
+    for (int i = 2; i < 16; i = i + 1)
+        arrowSizeCombo_menu->addItem(QString().setNum(i));
+    arrowSizeCombo_menu->setCurrentText("6");
+    QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
+    arrowSizeCombo_menu->setValidator(arrow_validator);
+    QHBoxLayout* down =new QHBoxLayout();
+    down->addWidget(label_arrowSize);
+    down->addWidget(arrowSizeCombo_menu);
+    down->setContentsMargins(30,5,30,5);
+    down->setSpacing(10);
+
+    ok_sizeBtn = new QPushButton();
+    ok_sizeBtn->setText("确定");
+    cancel_sizeBtn = new QPushButton();
+    cancel_sizeBtn->setText("取消");
+    QHBoxLayout* tail =new QHBoxLayout();
+    tail->addWidget(ok_sizeBtn);
+    tail->addWidget(cancel_sizeBtn);
+    tail->setContentsMargins(50,20,50,20);
+    tail->setSpacing(20);
+
+    QVBoxLayout*sizeDialog = new QVBoxLayout();
+    sizeDialog->addLayout(up);
+    sizeDialog->addLayout(down);
+    sizeDialog->addLayout(tail);
+
+
+    dlg->setLayout(sizeDialog);
+
+    connect(cancel_sizeBtn,&QPushButton::clicked,this,&MainWindow::cancel_sizeBtn_clicked);
+    connect(ok_sizeBtn,&QPushButton::clicked,this,&MainWindow::ok_sizeBtn_clicked);
+    dlg->exec();
+}
+
+void MainWindow::ok_sizeBtn_clicked(){
+    dlg->done(1);
+}
+void MainWindow::cancel_sizeBtn_clicked(){
+    dlg->done(0);
+}
+
+void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
+    QModelIndex curIndex = ui->treeView->indexAt(pos);
+    if(curIndex.isValid()){
+        QMenu menu;
+        menu.addAction("关闭");
+        menu.exec(QCursor::pos());
+    }
+}
+
 Graph* MainWindow::graph()
 {
-    return static_cast<FlowChartScene*>(scene())->graph;
+    return static_cast<Scene*>(scene())->graph;
 }
 
-void MainWindow::on_addInnerInputButton_clicked()
+Ui::MainWindow* MainWindow::getUi() const
 {
-    _nextAddedShape = ElementShape::InnerInput;
-}
-
-void MainWindow::on_addInnerOutputButton_clicked()
-{
-    _nextAddedShape = ElementShape::InnerOutput;
-}
-
-void MainWindow::changeFrameColor(QColor color)
-{
-    if (selectedNodes()->size() > 0)
-    {
-        auto oldColor = bdColor;
-        bdColor = color;
-        clickbdBtn();
-        bdColor = oldColor;
-    }
-    else
-    {
-        bdColor = color;
-        auto icon = createColorToolButtonIcon(":/images/bdcolor.png", color);
-        bdColorToolBtn->setIcon(icon);
-    }
-}
-
-void MainWindow::changeFillColor(QColor color)
-{
-    if (selectedNodes()->size() > 0)
-    {
-        auto oldColor = fillColor;
-        fillColor = color;
-        clickFillBtn();
-        fillColor = oldColor;
-    }
-    else
-    {
-        fillColor = color;
-        auto icon = createColorToolButtonIcon(":/images/floodfill.png", color);
-        fillColorToolBtn->setIcon(icon);
-    }
-}
-
-void MainWindow::changeLineColor(QColor color)
-{
-    if (selectedArrows()->size() > 0)
-    {
-        auto oldColor = lineColor;
-        lineColor = color;
-        clickLineBtn();
-        lineColor = oldColor;
-    }
-    else
-    {
-        lineColor = color;
-        auto icon = createColorToolButtonIcon(":/images/arrowcolor.png", color);
-        arrowColorToolBtn->setIcon(icon);
-    }
-}
-
-void MainWindow::changeTextColor(QColor color)
-{
-    if (selectedTexts()->size() > 0)
-    {
-        auto oldColor = textColor;
-        textColor = color;
-        clickTextColorButton();
-        textColor = oldColor;
-    }
-    else
-    {
-        textColor = color;
-        auto icon = createColorToolButtonIcon(":/images/textpointer.png", color);
-        fontColorToolBtn->setIcon(icon);
-    }
-}
-
-void MainWindow::textButtonTriggered() {}
-void MainWindow::fillButtonTriggered() {}
-void MainWindow::bdButtonTriggered() {}
-void MainWindow::arrowColorButtonTriggered() {}
-
-void MainWindow::lineTypeChanged(int index)
-{
-    auto type = index + 1;
-    if (selectedArrows()->size() > 0)
-    {
-        ui->arrowComboBox->setCurrentIndex(lineType - 1);
-        auto action = new GroupAction;
-        foreach (auto arrow, *selectedArrows())
-        {
-            *action << new EditElementAction(arrow, ElementShape::Arrow,
-                                             ElementProperty::ArrowKind,
-                                             new int(arrow->getType()),
-                                             new int(type));
-        }
-        action->Do();
-    }
-    else
-    {
-        lineType = type;
-    }
+    return ui;
 }

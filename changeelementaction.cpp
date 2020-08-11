@@ -3,16 +3,25 @@
 #include "text.h"
 #include "node.h"
 #include "arrow.h"
+#include <QDebug>
+#include "element.h"
 
 void onArrowSelected(Arrow* arrow, bool isSelected);
 
 ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool isCreated) :
-    isCreated(isCreated), shape(shape), element(element) {}
+    isCreated(isCreated), shape(shape), element(element)
+{
+    qDebug() << "ChangeElementAction" << endl;
+}
 
 void ChangeElementAction::Do()
 {
     auto window = MainWindow::instance();
     auto scene = window->scene();
+    if (element == nullptr)
+    {
+        element = Element::create(shape);
+    }
     if (isNode(shape))
     {
         auto node = static_cast<Node*>(element);
@@ -23,6 +32,7 @@ void ChangeElementAction::Do()
             connect(item, &NodeItem::NewLocation, this, &ChangeElementAction::onNodeMoved);
             node->Paint(scene);
             MainWindow::instance()->graph()->addNode(node);
+            MainWindow::instance()->graph()->addNode(node,MainWindow::instance()->index_tab(),shape);
         }
         else
         {
@@ -36,6 +46,8 @@ void ChangeElementAction::Do()
             node->Remove(scene);
             MainWindow::instance()->graph()->removeNode(node);
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
+            disconnect(node->getNodeItem(), &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
+            node->getNodeItem()->setSelected(false);
         }
     }
     else if (shape == ElementShape::Text)
@@ -43,16 +55,22 @@ void ChangeElementAction::Do()
         auto text = static_cast<Text*>(element);
         if (isCreated)
         {
-            text->putup_text(scene);
+            auto parent = text->parent;
+            if (parent) parent->content = text;
             window->graph()->addText(text);
+            text->putup_text(scene);
             connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
-            text->build_text(text->get_text_color(), QFont());
+            text->build_text(text->get_text_color(), text->get_text_font());
         }
         else
         {
+            auto parent = text->parent;
+            if (parent) parent->content = nullptr;
             window->graph()->removeText(text);
             window->selectedTexts()->removeAll(text);
             text->delete_text(scene);
+            disconnect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
+            text->setSelected(false);
         }
     }
     else if (shape == ElementShape::Arrow)
@@ -61,20 +79,22 @@ void ChangeElementAction::Do()
         if (isCreated)
         {
             arrow->myStartItem->GetNode()->ConnectAsSource(arrow);
-            arrow->myEndItem->GetNode()->ConnectAsSource(arrow);
+            arrow->myEndItem->GetNode()->ConnectAsDestination(arrow);
             arrow->setZValue(-100.0);
             arrow->s = onArrowSelected;
             MainWindow::instance()->scene()->addItem(arrow);
-            arrow->setArrowColor(MainWindow::instance()->lineColor);
             arrow->updatePosition();
             MainWindow::instance()->graph()->addArrow(arrow);
-            arrow->s = onArrowSelected;
         }
         else
         {
+            arrow->myStartItem->GetNode()->DisconnectAsSource(arrow);
+            arrow->myEndItem->GetNode()->DisconnectAsDestination(arrow);
             MainWindow::instance()->graph()->removeArrow(arrow);
             MainWindow::instance()->scene()->removeItem(arrow);
             MainWindow::instance()->selectedArrows()->remove(arrow->GetID());
+            arrow->s = nullptr;
+            arrow->setSelected(false);
         }
     }
 }
@@ -112,6 +132,10 @@ void ChangeElementAction::onTextSelected(Text* text, bool isSelected)
     else
     {
         selectedTexts->removeAll(text);
+        if (text->get_text_all() == "")
+        {
+            (new ChangeElementAction(text, ElementShape::Text, false))->Do();
+        }
     }
 }
 

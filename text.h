@@ -13,12 +13,14 @@
 #include <QGraphicsScene>
 #include<textitem.h>
 #include<textdialog.h>
+#include<textdialog2.h>
+class Node;
 
 class TextItem;
 class Text : public QGraphicsTextItem{
 Q_OBJECT
 public:
-    Text(QPointF primary_location,QGraphicsItem* parent = 0,QString parentID = NULL,bool IDchanged=false);//由节点生成
+    Text(QPointF primary_location,Node* parent = 0,QString parentID = NULL,bool IDchanged=false);//由节点生成
     //Text(QPointF position1, QPointF position2,QGraphicsItem* parent = 0);//由图生成（鼠标位置决定大小）
     ~Text();
     void build_text(QColor c=Qt::black, QFont f=QFont());//初始化并在界面中显示
@@ -40,11 +42,15 @@ public:
     QColor get_text_color();
     Text* get_item();
     TextItem* getTextItem() const { return shape; }
+    Node* parent = nullptr;
+    QPointF lastPosition;
+    QString getId() { return ID; }
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
 
@@ -57,6 +63,8 @@ private:
     TextItem* shape=new TextItem(this);
     QString ID;
     bool IDchange=false;
+
+
 signals:
     void Selected(Text*t,bool b);
 };

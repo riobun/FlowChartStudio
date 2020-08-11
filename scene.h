@@ -2,18 +2,24 @@
 #define FLOWCHARTSCENE_H
 
 #include <QGraphicsScene>
+#include <QList>
+
 #include "rectangle.h"
 #include "graph.h"
 
 
-class FlowChartScene : public QGraphicsScene
+class Scene : public QGraphicsScene
 {
 public:
-    FlowChartScene();
-    ~FlowChartScene();
+    static Scene* create();
+    static Scene* getActiveScene() { return _activeScene; }
+
+public:
+    ~Scene();
 
     static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);
     Graph* graph = new Graph;
+    void clearSelect();
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
@@ -21,6 +27,14 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+
+private:
+    static QList<Scene*> _scenes;
+    static Scene* _activeScene;
+
+private:
+
+
 private:
     Rectangle* rect=nullptr;
     QPointF selectLeftTop;

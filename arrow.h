@@ -39,6 +39,7 @@ public:
     virtual void BindToText(QGraphicsScene* qgs) override;
     NodeItem *myStartItem;
     NodeItem *myEndItem;
+    int getHaveEnd() {return HaveEnd;}
 
     using Selected = void (*)(Arrow* n,bool b);
     Selected s;

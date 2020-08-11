@@ -64,5 +64,8 @@
         <file>images/out3.png</file>
         <file>images/innerIn.png</file>
         <file>images/innerOut.png</file>
+        <file>images/cuxi.png</file>
+        <file>images/arrow_cuxi.png</file>
+        <file>images/bd_cuxi.png</file>
     </qresource>
 </RCC>

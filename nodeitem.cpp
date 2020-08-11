@@ -19,20 +19,11 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         isMoved=true;
         if(event->modifiers()==Qt::ShiftModifier&&isResized)
         {
-              /*QPointF pos = event->pos();
-              double nw=sqrt(pow(node->GetLocation().x() - pos.x(), 2)),nh=sqrt(pow(node->GetLocation().y() - pos.y(), 2));
-              node->SetHeight(nh*2);
-              node->SetWidth(nw*2);
-              foreach (auto arrow, node->getArrows())
-              {
-                  arrow->update();
-              }*/
             NodeEvents::scaleNodes(node, event);
         }
         else
         {
             NodeEvents::mouseMoveEvent(event);
-
             QGraphicsItem::mouseMoveEvent(event);
         }
     }
@@ -62,7 +53,6 @@ void NodeItem::keyReleaseEvent(QKeyEvent *event)
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);
-//    SetSelected(true);
     if(event->button()==Qt::MouseButton::LeftButton)
     {
         isFocus=true;
@@ -77,6 +67,8 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         {
             isResized=true;
         }
+        auto text = GetNode()->content;
+        if (text) text->lastPosition = text->get_text_location();
     }
 }
 
@@ -90,26 +82,23 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         {
             if(isResized)
             {
-                emit NewSize(node,lastWidth,lastHeight);
-            }
-            else
-            {
                 auto action = new GroupAction;
                 foreach (auto node, *MainWindow::instance()->selectedNodes())
                 {
+                    auto item = node->getNodeItem();
+                    if (item->lastWidth == node->GetWidth() && item->lastHeight == node->GetHeight()) continue;
                     *action << new EditElementAction(node, ElementShape::Rectangle,
-                                                    ElementProperty::Location,
-                                                    new QPointF(node->getNodeItem()->lastLocation),
-                                                    new QPointF(node->GetLocation()));
-                    //emit node->getNodeItem()->NewLocation(node,lastLocation);
+                                                     ElementProperty::Size,
+                                                     new QSizeF(item->lastWidth, item->lastHeight),
+                                                     new QSizeF(node->GetWidth(), node->GetHeight()));
                 }
+            }
+            else
+            {
+                NodeEvents::mouseReleaseEvent(event);
             }
         }
     }
-/*    if (lastLocation != event->scenePos())
-    {
-        emit NewLocation(node,lastLocation);
-    }*/
     isMoved=false;
     isFocus=false;
     isResized=false;
@@ -160,7 +149,7 @@ void NodeItem::RemoveAsSource(Arrow* ar){
     node->DisconnectAsSource(ar);
 }
 void NodeItem::RemoveAsDestination(Arrow* ar){
-    node->DisconnectAsSource(ar);
+    node->DisconnectAsDestination(ar);
 }
 
 void NodeItem::SetSelected(bool b)
