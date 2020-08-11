@@ -17,6 +17,7 @@
 #include "groupaction.h"
 #include "changeelementaction.h"
 #include "editelementaction.h"
+#include "groupaction.h"
 
 Arrow::Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd, QGraphicsItem *parent)
     : QGraphicsPathItem(parent), myStartItem(startItem),myEndItem(endItem),HaveEnd(haveEnd)
@@ -457,7 +458,6 @@ void Arrow::removemyself()
     auto scene = window->scene();
    endItem()->RemoveAsDestination(this);
    startItem()->RemoveAsSource(this);
-   new ChangeElementAction(this, ElementShape::Arrow, false);
    if(content) content->delete_text(scene);
    this->deleteID();
 }
@@ -545,26 +545,16 @@ QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
+    auto action = new GroupAction;
      QGraphicsItem::mouseDoubleClickEvent(event);
      isDoubleClick=true;
      auto point = event->scenePos();
      auto arrownode = new class Arrownode(point, 5.0, 5.0);
 //     arrownode->SetBackgroundColor(this->getColor());
 //     arrownode->SetFrameColor(this->getColor());
-     auto action = new ChangeElementAction(arrownode, ElementShape::Arrownode, true);
-     auto actioncolor1 =
-     new EditElementAction(arrownode, ElementShape::Rectangle,
-                                                      ElementProperty::FrameColor,
-                                                      new QColor(arrownode->GetFrameColor()),
-                                                      new QColor(this->getColor()));
-     auto actioncolor2=
-     new EditElementAction(arrownode, ElementShape::Rectangle,
-                                                      ElementProperty::BackgroundColor,
-                                                      new QColor(arrownode->GetBackgroundColor()),
-                                                      new QColor(this->getColor()));
-     action->Do();
-     actioncolor1->Do();
-     actioncolor2->Do();
+     *action << new ChangeElementAction(arrownode, ElementShape::Arrownode, true);
+     arrownode->SetFrameColor(getColor());
+     arrownode->SetBackgroundColor(getColor());
      auto arrows = myStartItem->GetNode()->getArrows();
 //     foreach (auto arrow, arrows)
 //     {
@@ -600,29 +590,18 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //         arrow2->arrowlist[i]->Arrownode=arrownode;
      }
      arrow2->Arrownode=arrownode;
-//     arrow3->Arrownode=arrownode;
-     auto laction1=new EditElementAction(arrow2, ElementShape::Arrow,
-                                                  ElementProperty::ArrowKind,
-                                                  new int(arrow2->getType()),
-                                                  new int(type));
-     laction1->Do();
-     auto laction2=new EditElementAction(arrow3, ElementShape::Arrow,
-                                                  ElementProperty::ArrowKind,
-                                                  new int(arrow3->getType()),
-                                                  new int(type));
-     laction2->Do();
-     arrow2->setType(type);
-     arrow3->setType(type);
+     arrow2->setType(getType());
+     arrow3->setType(getType());
      //修改属性要建立在arrowlist之后
      if(myEndItem->GetWidth()>5){
      arrow3->HaveEnd=1;}
      else{
      arrow3->HaveEnd=0;}
      //思考，我们加入箭头构造的判定条件如果满足就不生成黑色三角形
-     auto action2 = new ChangeElementAction(arrow2, ElementShape::Arrow, true);
-     action2->Do();
-     auto action3 = new ChangeElementAction(arrow3, ElementShape::Arrow, true);
-     action3->Do();
+     *action << new ChangeElementAction(arrow2, ElementShape::Arrow, true);
+     *action << new ChangeElementAction(arrow3, ElementShape::Arrow, true);
+     *action << new ChangeElementAction(this, ElementShape::Arrow, false);
+     action->Do();
      this->update();
 }
 void Arrow::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
