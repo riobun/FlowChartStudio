@@ -119,6 +119,10 @@ private slots:
 
     void on_addInnerOutputButton_clicked();
 
+    void on_addInputButton_clicked();
+
+    void on_addOutputButton_clicked();
+
 private:
     void changeFrameColor(QColor color);
     void changeFillColor(QColor color);
