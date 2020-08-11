@@ -11,10 +11,6 @@
 class Scene : public QGraphicsScene
 {
 public:
-    static Scene* create();
-    static Scene* getActiveScene() { return _activeScene; }
-
-public:
     ~Scene();
 
     static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);
@@ -27,13 +23,6 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
-
-private:
-    static QList<Scene*> _scenes;
-    static Scene* _activeScene;
-
-private:
-
 
 private:
     Rectangle* rect=nullptr;

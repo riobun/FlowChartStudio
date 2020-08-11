@@ -29,7 +29,6 @@
 #include "groupaction.h"
 #include "nodeevents.h"
 #include "arrow.h"
-#include "operator.h"
 
 
 MainWindow* MainWindow::_instance;
@@ -319,8 +318,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
     connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
     connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
-
-    _operator = new Operator(this);
 }
 
 MainWindow::~MainWindow()

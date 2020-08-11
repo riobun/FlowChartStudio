@@ -176,8 +176,5 @@ private:
     QMap<QGraphicsScene*, Graph*> graphs;
 
     QVector<QPair<int,QString>> index_name_subgraph;
-
-private:
-    Operator* _operator;
 };
 #endif // MAINWINDOW_H
