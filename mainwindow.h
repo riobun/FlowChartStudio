@@ -38,8 +38,8 @@ public:
     QList<QGraphicsScene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }
     void setNextAddedShape(ElementShape shape) { _nextAddedShape = shape; }
-    void Doing(Action* action) { undoStack.append(action); }
-    void Discard(Action* action) { if (undoStack.last() == action) undoStack.removeLast(); }
+    void Doing(Action* action) { scene()->undoStack.append(action); }
+    void Discard(Action* action) { if (scene()->undoStack.last() == action) scene()->undoStack.removeLast(); }
     QMap<int, Node*>* selectedNodes() { return &_selectedNodes; }
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
@@ -167,8 +167,6 @@ private:
     QToolButton* fillColorToolBtn;
 
     ElementShape _nextAddedShape;
-    QList<Action*> undoStack;
-    QList<Action*> redoStack;
     QMap<int, Node*> _selectedNodes;
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;

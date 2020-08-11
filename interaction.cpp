@@ -77,6 +77,8 @@ void MainWindow::SelectAll() { NodeEvents::selectAll(); }
 
 void MainWindow::Undo()
 {
+    auto& undoStack = scene()->undoStack;
+    auto& redoStack = scene()->redoStack;
     if (undoStack.size() > 0)
     {
         auto action = undoStack.last();
@@ -88,6 +90,8 @@ void MainWindow::Undo()
 
 void MainWindow::Redo()
 {
+    auto& undoStack = scene()->undoStack;
+    auto& redoStack = scene()->redoStack;
     if (redoStack.size() > 0)
     {
         auto action = redoStack.last();
