@@ -50,17 +50,20 @@ QString DetailsDialog2::senderContent() const
 
 void DetailsDialog2::verify()
 {
-    if(IDEdit->text()==ID){
+    QString str;
+    str.append(IDEdit->text());
+   // str.chop(1);
+    if(str==ID){
         isID=true;
     }
     else{
-       // isID2=isNorm(IDEdit->text());
+       isID2=isNorm(str);
         if(isID2==true){
-         //   isID=isRepeat(IDEdit->text());
+         isID=isRepeat(str);
         }
     }
     if (isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
-        ID=IDEdit->text();
+        ID=str;
         accept();
         return;
     }
@@ -74,8 +77,8 @@ void DetailsDialog2::verify()
 
         if (answer == QMessageBox::Yes)
             accept();
-        else
-            reject();
+        //else
+            //reject();
     }
 
     else if(!isID){
@@ -87,8 +90,8 @@ void DetailsDialog2::verify()
 
         if (answer == QMessageBox::Yes)
             accept();
-        else
-            reject();
+       // else
+           // reject();
 
     }
     else if(contentEdit->toPlainText().isEmpty()){
@@ -98,10 +101,10 @@ void DetailsDialog2::verify()
            "是否添加描述?"),
         QMessageBox::Yes | QMessageBox::No);
 
-    if (answer == QMessageBox::Yes)
+    if (answer == QMessageBox::No)
         reject();
-    else
-        accept();
+   // else
+        //accept();
     }
 }
 
