@@ -32,6 +32,6 @@ private:
     QString content;
     QString ID;
     bool isID=false;
-    bool isID2=false;
+    bool isID2=true;
 };
 #endif // TEXTDIALOG2_H
