@@ -43,7 +43,8 @@ SOURCES += \
     text.cpp \
     textitem.cpp\
     textdialog.cpp\
-    textdialog2.cpp
+    textdialog2.cpp\
+    textdialog3.cpp
 
 HEADERS += \
     action.h \
@@ -74,6 +75,7 @@ HEADERS += \
     textitem.h\
     textdialog.h\
     textdialog2.h\
+    textdialog3.h\
     textlogic.h
 
 FORMS += \
