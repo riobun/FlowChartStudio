@@ -65,6 +65,11 @@ QString Text::get_text_all(){
     return all;
 }
 
+QString Text::get_text_logic()
+{
+    return logic;
+}
+
 void Text::delete_text(QGraphicsScene* scene) {
     scene->removeItem(this);
     //在存储文件中删除

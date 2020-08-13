@@ -41,6 +41,10 @@ public:
     NodeItem* getNodeItem() const { return shape; }
     virtual int GetType()=0;
     QGraphicsScene* GetRelatedQGS() {return relatedQGS;}
+    //将对像转成JSONOBJECT
+        virtual QJsonObject get_JsonObject() override;
+        //根据JSON转成成相应的对象
+        virtual void set_JsonObject(QJsonObject qso) override;
 protected:
     QPointF location=QPointF(0.0,0.0);//表示图形中心位置
     double width,height;
@@ -49,6 +53,8 @@ protected:
     bool isRemoved=false;
     Graph* fatherGraph=nullptr;
     QGraphicsScene* relatedQGS=nullptr;
+    //add by luo yigui,bound by BindToText function
+        Text *boundTextView=nullptr;
 private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;

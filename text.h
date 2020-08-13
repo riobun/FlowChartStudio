@@ -36,7 +36,7 @@ public:
    // void resize_text(double d_width, double d_height);//参数：表示宽和高的位移
     void change_content(QString new_c);
 
-
+    QString get_text_logic(); //add by luo yigui
     QFont get_text_font();
     QString get_text_content();
     QString get_text_all();

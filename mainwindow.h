@@ -14,11 +14,14 @@
 #include "scene.h"
 #include <QMap>
 #include <QDir>
-//*************************************************
-#include <QMenu>
-#include <QAction>
-#include <QTextEdit>
-//*********************************************
+//*****************************
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
+#include <QDebug>
+#include <QFileDialog>
+#include <QByteArray>//***********************
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -115,15 +118,9 @@ private slots:
     void onTreeViewMenuRequested(const QPoint &pos);
 
 
-//*****************************************************
-    void on_action1_triggered();
-
-    void on_action1_2_triggered();
-
-    void on_action1_3_triggered();
-
-    void on_action1_4_triggered();
-    //*****************************************************
+    //***************************************
+     void on_action1_3_triggered();
+     //***************************************
     void on_addInnerInputButton_clicked();
 
     void on_addInnerOutputButton_clicked();
@@ -158,9 +155,6 @@ private:
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
-    //**********************************
-    QTextEdit *textEdit;
-      //***********************
     QAction *textAction;
     QAction *fillAction;
     QAction *bdAction;

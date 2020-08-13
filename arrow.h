@@ -45,6 +45,11 @@ public:
     using Selected = void (*)(Arrow* n,bool b);
     Selected s;
 
+    //将对像转成JSONOBJECT
+        virtual QJsonObject get_JsonObject() override;
+        //根据JSON转成成相应的对象
+        virtual void set_JsonObject(QJsonObject qso) override;
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = nullptr) override;

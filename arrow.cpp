@@ -670,3 +670,39 @@ void Arrow::setArrowColor(const QColor &color)
         ar->Arrownode->SetBackgroundColor(color);
     }}
 }
+
+//*******************
+QJsonObject Arrow::get_JsonObject()
+{ /*
+   Arrow
+        id:
+        scrld:
+        Dstld:
+        PathPoints:{
+                   x:
+                   y:
+                   }
+        LineColor:
+        LineWidth:
+        TextView:{
+                 Id:0x567,
+                 Width:30,
+                 Height:15,
+                 FontColor:"red",
+                 FontType:"宋体"
+                 FontSize:"8"
+                 TextContent:{
+                              TextDescription:"begin",
+                              LogicAction:“(A AND B) AND (NOT C) ”
+                             }
+  */
+    QJsonObject qso;
+
+    qso.insert("id",GetID());
+    qso.insert("type",getType());
+
+}
+void Arrow::set_JsonObject(QJsonObject qso)
+{
+
+}
