@@ -441,6 +441,10 @@ void MainWindow::addNewTab(){
 void MainWindow::addNewTab(QString name){
     foreach(auto n, index_name_subgraph){
         if(n.second==name){
+            if(!ui->tabWidget->isTabEnabled(n.first)){
+                n.second="";
+                break;
+            }
             ui->tabWidget->setCurrentIndex(n.first);
             return;
         }
