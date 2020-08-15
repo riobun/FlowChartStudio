@@ -690,5 +690,27 @@ void MainWindow::on_action1_3_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
+    auto tabwidget = ui->tabWidget;
+    auto lastIndex = tabwidget->currentIndex();
+    tabwidget->setCurrentIndex(index);
+    auto widget = tabwidget->currentWidget();
+    auto layout = widget->layout();
+    auto item = layout->itemAt(0);
+    auto itemWidget = item->widget();
+    auto view = qobject_cast<QGraphicsView*>(itemWidget);
+    auto graphicsScene = view->scene();
+    auto scene = static_cast<Scene*>(graphicsScene);
+    auto isChanged = scene->isChanged;
+    if (isChanged)
+    {
+        auto yesButton = QMessageBox::Yes;
+        auto result = QMessageBox::information(this, "提示", "本文件有更改，要保存吗",
+                                               yesButton | QMessageBox::No,
+                                               yesButton);
+        if (result == yesButton)
+        {
 
+        }
+    }
+    tabwidget->setCurrentIndex(lastIndex);
 }
