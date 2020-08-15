@@ -687,3 +687,8 @@ void MainWindow::on_action1_3_triggered()
              file.write(doc.toJson(QJsonDocument::Indented)); //Indented:表示自动添加/n回车符
              file.close();
 }
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+
+}
