@@ -479,25 +479,38 @@ int MainWindow::index_tab(){
     return ui->tabWidget->currentIndex();
 }
 
+QVector<QString> getChildrenTexts(QStandardItem* item)
+{
+    QVector<QString> children;
+    for (auto i = 0; i < item->rowCount(); i++)
+    {
+        auto child = item->child(i);
+        children.append(child->text());
+        children.append(getChildrenTexts(child));
+    }
+    return children;
+}
+
 void MainWindow::modifyTabText(QStandardItem* item){
     auto row = item->row();
     auto parent = item->parent();
     auto text = item->text();
     auto hasSame = true;
+    QVector<QString> names;
+    for (auto i = 0; i < model->rowCount(); i++)
+    {
+        names.append(model->item(i)->text());
+        names.append(getChildrenTexts(model->item(i)));
+    }
+    names.removeOne(text);
     while (hasSame)
     {
         hasSame = false;
-        for (auto i = 0; i < parent->rowCount(); i++)
+        if (names.contains(item->text()))
         {
-            if (i == row) continue;
-            auto brother = parent->child(i);
-            auto brotherText = brother->text();
-            if (brotherText == item->text())
-            {
-                QMessageBox::information(this, "提示", "在上一文件夹下有同名文件", QMessageBox::Yes);
-                item->setText(item->text() + "1");
-                hasSame = true;
-            }
+            QMessageBox::information(this, "提示", "出现同名", QMessageBox::Yes);
+            item->setText(item->text() + "1");
+            hasSame = true;
         }
     }
 
@@ -571,18 +584,6 @@ void MainWindow::cancel_sizeBtn_clicked(){
     dlg->done(0);
 }
 
-QVector<QString> getChildrenTexts(QStandardItem* item)
-{
-    QVector<QString> children;
-    for (auto i = 0; i < item->rowCount(); i++)
-    {
-        auto child = item->child(i);
-        children.append(child->text());
-        children.append(getChildrenTexts(child));
-    }
-    return children;
-}
-
 void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
     QModelIndex curIndex = ui->treeView->indexAt(pos);
     QStandardItem* curItem = model->itemFromIndex(curIndex);
@@ -620,6 +621,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         auto close = [this, curItem]()
         {
             auto texts = getChildrenTexts(curItem);
+            texts.append(curItem->text());
             auto tabWidget = ui->tabWidget;
             auto count = tabWidget->count();
             for (auto i = count - 1; i >= 0; i--)
@@ -638,11 +640,18 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             auto parent = curItem->parent();
             parent->removeRow(row);
         };
-        if (selectedAction == addProjectAction)
+        auto addFolder = [this, curItem]()
         {
-            QFileDialog fileDialog;
-            QString fileName = fileDialog.getSaveFileName(this, "新建项目", "请输入项目名", "JSON File(*.json)");
-        }
+            QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/filefolder.png"),"文件夹1");
+            item_data data0;
+            data0.type=2;
+            QVariant itemVariData;
+            itemVariData.setValue<item_data>(data0);
+            itemFile1->setData(itemVariData,Qt::UserRole);
+            curItem->appendRow(itemFile1);
+            modifyTabText(itemFile1);
+        };
+        if (selectedAction == addProjectAction) addFolder();
         else if (selectedAction == addExistingProjectAction)
         {
             QFileDialog fileDialog;
@@ -669,17 +678,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             curItem->appendRow(itemFile1);
             modifyTabText(itemFile1);
         }
-        else if (selectedAction == AddFolderAction)
-        {
-            QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/filefolder.png"),"文件夹1");
-            item_data data0;
-            data0.type=2;
-            QVariant itemVariData;
-            itemVariData.setValue<item_data>(data0);
-            itemFile1->setData(itemVariData,Qt::UserRole);
-            curItem->appendRow(itemFile1);
-            modifyTabText(itemFile1);
-        }
+        else if (selectedAction == AddFolderAction) addFolder();
         else if (selectedAction == AddExistingFolderAction)
         {
             QFileDialog fileDialog;
