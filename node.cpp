@@ -233,7 +233,7 @@ QJsonObject Node::get_JsonObject()
 
         QJsonObject TVCqso;
         TVCqso.insert("TextDescription",boundTextView->get_text_content());
-        //TVCqso.insert("LogicAction",boundTextView->get_text_logic());
+        TVCqso.insert("LogicAction",boundTextView->get_text_logic());
 
         TVqso.insert("TextContent",QJsonValue(TVCqso));
 

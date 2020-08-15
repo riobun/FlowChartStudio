@@ -391,7 +391,7 @@ File:{
     QJsonArray arrowArray;
     while(iter2!=getArrows().end())
     {
-        if(iter2.value()->getType()==3)// atype
+        if(iter2.value()->getType()==1||2||3)// atype
         {
             arrowArray.append(iter2.value()->get_JsonObject());
         }

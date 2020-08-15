@@ -684,6 +684,15 @@ QJsonObject Arrow::get_JsonObject()
                    }
         LineColor:
         LineWidth:
+        LineType:#1实线 2虚线 3点线
+        startPoint:{
+                    x:
+                    y:
+                    }
+        endPoint:{
+                   x:
+                   y:
+                 }
         TextView:{
                  Id:0x567,
                  Width:30,
@@ -697,9 +706,22 @@ QJsonObject Arrow::get_JsonObject()
                              }
   */
     QJsonObject qso;
+    QJsonObject startpointobj;
+    QJsonObject endpointobj;
+
+    startpointobj.insert("x",myStartItem->pos().x());
+    startpointobj.insert("y",myStartItem->pos().y());
+    endpointobj.insert("x",myEndItem->pos().x());
+    endpointobj.insert("y",myEndItem->pos().y());
 
     qso.insert("id",GetID());
-    qso.insert("type",getType());
+    qso.insert("Linetype",getType());
+    qso.insert("Color",this->myColor.name());
+    qso.insert("size",getSize());
+    qso.insert("startPoint",startpointobj);
+    qso.insert("endPoint",endpointobj);
+
+    return qso;
 
 }
 void Arrow::set_JsonObject(QJsonObject qso)

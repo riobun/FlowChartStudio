@@ -586,48 +586,43 @@ Ui::MainWindow* MainWindow::getUi() const
 }
 void MainWindow::on_action1_3_triggered()
 {
-
-    QMap<QGraphicsScene*, Graph*>::iterator iter;
+    QList<Scene*>::iterator iter;
     QJsonArray graphArray;
     QJsonObject qso;
     QString path;
 
-    iter=this->graphs.begin();
-    while (iter!=graphs.end())
-     {
-            graphArray.append(iter.value()->get_JsonObject());
-            //save all
-            if(iter.value()->getPath()=="" ||  iter.value()->getPath()==nullptr)
-            {
-                //打开文件保存对话框选取路径与文件名，存入PATH
-                QFileDialog fileDialog;
-                QString fileName = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.json)"));
-            }
-            //存入每一个GRAPH到文件中
-            iter.value()->write_to_file(path);
-
-             QJsonObject gqso;
-             gqso.insert("FilePath",path);
-             gqso.insert("GraphID",iter.value()->GetID());
-             graphArray.append(gqso);
-             iter++;
+    for(iter=open_scenes.begin();iter!=open_scenes.end();iter++)
+    {
+        graphArray.append((*iter)->graph->get_JsonObject());
+        //save all
+       if((*iter)->graph->getPath()=="" ||  (*iter)->graph->getPath()==nullptr)
+        {
+            //打开文件保存对话框选取路径与文件名，存入PATH
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this,tr("保存文件"),"请输入文件名",tr("JSON File(*.json)"));
         }
+        //存入每一个GRAPH到文件中
+          (*iter)->graph->write_to_file(path);
+          QJsonObject gqso;
+          gqso.insert("FilePath",path);
+          gqso.insert("GraphID",(*iter)->graph->GetID());
+          graphArray.append(gqso);                     }
+
 
             qso.insert("Project",QJsonValue(graphArray));
-
-      //save qso into json file
+            //save qso into json file
             QJsonDocument doc;
-
             doc.setObject(qso);
-
-            //打开项目文件，这一部分的项目文件名，应当是右边TREEVIEW项目保存时给定的项目文件名，在TREEVIEW没有做好之前暂时用以下文件名作调试。
-             QFile file(QApplication::applicationDirPath()+"/1.json");
-             if(!file.open(QIODevice::WriteOnly)) {
-                    qDebug() << "File open failed!";
-                } else {
-                    qDebug() <<"File open successfully!";
-                }
-
-             file.write(doc.toJson(QJsonDocument::Indented)); //Indented:表示自动添加/n回车符
-             file.close();
+               //打开项目文件，这一部分的项目文件名，应当是右边TREEVIEW项目保存时给定的项目文件名，在TREEVIEW没有做好之前暂时用以下文件名作调试。
+            QFile file(QApplication::applicationDirPath()+"/1.json");
+            if(!file.open(QIODevice::WriteOnly))
+            {
+                qDebug() << "File open failed!";
+            }
+            else
+            {
+                qDebug() <<"File open successfully!";
+            }
+                 file.write(doc.toJson(QJsonDocument::Indented)); //Indented:表示自动添加/n回车符
+                 file.close();
 }
