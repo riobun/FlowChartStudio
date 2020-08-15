@@ -129,6 +129,8 @@ private slots:
 
     void on_addOutputButton_clicked();
 
+    void on_tabWidget_tabCloseRequested(int index);
+
 private:
     void changeFrameColor(QColor color);
     void changeFillColor(QColor color);
