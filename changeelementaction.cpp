@@ -19,7 +19,6 @@ ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool
         lastScene->undoStack.removeLast();
         scene->undoStack.append(this);
     }
-    qDebug() << "ChangeElementAction" << endl;
 }
 
 ChangeElementAction::~ChangeElementAction()
@@ -31,6 +30,7 @@ void ChangeElementAction::Do()
 {
     auto window = MainWindow::instance();
     auto scene = ::scene ? ::scene : window->scene();
+    scene->isChanged = true;
     auto graph = scene->graph;
     if (isNode(shape))
     {
