@@ -14,6 +14,7 @@
 #include<textitem.h>
 #include<textdialog.h>
 #include<textdialog2.h>
+#include<textdialog3.h>
 class Node;
 
 class TextItem;
@@ -35,6 +36,7 @@ public:
    // void resize_text(double d_width, double d_height);//参数：表示宽和高的位移
     void change_content(QString new_c);
 
+    QString get_text_logic(); //add by luo yigui
     QFont get_text_font();
     QString get_text_content();
     QString get_text_all();
@@ -45,6 +47,9 @@ public:
     Node* parent = nullptr;
     QPointF lastPosition;
     QString getId() { return ID; }
+    QString getInput(){return Input;}
+    void change_input(QString inputID);
+    void change_ID(QString ID_);
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
@@ -63,7 +68,8 @@ private:
     TextItem* shape=new TextItem(this);
     QString ID;
     bool IDchange=false;
-
+    QString Input;
+    bool isInput=false;
 
 signals:
     void Selected(Text*t,bool b);

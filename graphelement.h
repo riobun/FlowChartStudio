@@ -34,6 +34,12 @@ class GraphElement //图形元素
           QString getIdNum(int num);
           int CStringHexToInt(QString str);
           bool isRepeat(QString str);
+
+          //将对像转成JSONOBJECT
+          virtual QJsonObject get_JsonObject()=0;
+          //根据JSON转成成相应的对象
+          virtual void set_JsonObject(QJsonObject qso)=0;
+
 private:
 //          static int maxid;
 };

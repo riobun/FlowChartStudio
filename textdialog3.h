@@ -1,5 +1,5 @@
-#ifndef TEXTDIALOG2_H
-#define TEXTDIALOG2_H
+#ifndef TEXTDIALOG3_H
+#define TEXTDIALOG3_H
 
 
 #include <QDialog>
@@ -11,19 +11,22 @@
 #include<QDialogButtonBox>
 #include<QPushButton>
 #include <QComboBox>
-class DetailsDialog2 : public QDialog
+class DetailsDialog3 : public QDialog
 {
     Q_OBJECT
 
 public:
-    DetailsDialog2(QString ID_,QString con,const QString &title="文本编辑框", QWidget *parent=0);
+    DetailsDialog3(QString input_,QString ID_,QString con,const QString &title="文本编辑框", QWidget *parent=0);
 
 public slots:
     void verify() ;
 public:
     QString senderID() const;
     QString senderContent() const;
+    QString senderInput()const;
 private:
+    QLabel *InputLabel;
+    QLineEdit *InputEdit;
     QLabel *IDLabel;
     QLineEdit *IDEdit;
     QLabel *contentLabel;
@@ -33,5 +36,7 @@ private:
     QString ID;
     bool isID=false;
     bool isID2=true;
+    QString input;
+    bool isInput=false;
 };
-#endif // TEXTDIALOG2_H
+#endif // TEXTDIALOG3_H

@@ -249,3 +249,180 @@ void Graph::RemoveRelatedNode(SubgraphNode *sn)
 {
     relatedNodes.remove(sn->GetID());
 }
+
+//将对像转成JSONOBJECT
+QJsonObject  Graph::get_JsonObject()
+{
+
+    QJsonObject qso;
+
+    /*
+File:{
+      Name:"aaa",
+          Path:"d:/testfile1/aaa",
+              */
+    qso.insert("Id",this->GetID());
+    qso.insert("Path",this->getPath());
+
+
+    //对于每一种NODE，构建QJSON
+    QMap<int,Node*>::iterator iter;
+    iter=this->getNodes().begin();
+    QJsonArray recArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==1) //rectangle
+        {
+            recArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(recArray.size()>0)
+    {
+        qso.insert("Rectangles",QJsonValue(recArray));
+    }
+
+    iter=this->getNodes().begin();
+    QJsonArray DiamondArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==2) //Diamond
+        {
+            DiamondArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(DiamondArray.size()>0)
+    {
+        qso.insert("Diamonds",QJsonValue(DiamondArray));
+    }
+
+    //for subgraph node
+    iter=this->getNodes().begin();
+    QJsonArray subgraphArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==6) //subgraph
+        {
+            subgraphArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(subgraphArray.size()>0)
+    {
+        qso.insert("Subgraphs",QJsonValue(subgraphArray));
+    }
+
+    //for input node
+    iter=this->getNodes().begin();
+    QJsonArray inputArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==4) //input node
+        {
+            inputArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(inputArray.size()>0)
+    {
+        qso.insert("Inports",QJsonValue(inputArray));
+    }
+
+    //for output node
+    iter=this->getNodes().begin();
+    QJsonArray outputArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==5) //output node
+        {
+            outputArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(outputArray.size()>0)
+    {
+        qso.insert("Outports",QJsonValue(outputArray));
+    }
+
+    //for inner input ports
+    iter=this->getNodes().begin();
+    QJsonArray iinputArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==4) //innerinput node
+        {
+            iinputArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(iinputArray.size()>0)
+    {
+        qso.insert("InnerInports",QJsonValue(iinputArray));
+    }
+
+    //for inner output ports
+    iter=this->getNodes().begin();
+    QJsonArray ioutputArray;
+    while (iter!=this->getNodes().end())
+     {
+
+        if(iter.value()->GetType()==5) //inneroutput node  ????
+        {
+            ioutputArray.append(iter.value()->get_JsonObject());
+        }
+        iter++;
+    }
+    if(ioutputArray.size()>0)
+    {
+        qso.insert("InnerOutports",QJsonValue(ioutputArray));
+    }
+
+    //for arrows
+
+    QMap<int,Arrow*>::iterator iter2;
+    iter2=this->getArrows().begin();
+    QJsonArray arrowArray;
+    while(iter2!=getArrows().end())
+    {
+        if(iter2.value()->getType()==1||2||3)// atype
+        {
+            arrowArray.append(iter2.value()->get_JsonObject());
+        }
+        iter2++;
+    }
+    if(arrowArray.size()>0)
+    {
+        qso.insert("Arrows",QJsonValue(arrowArray));
+    }
+
+    return qso;
+}
+
+//根据JSON转成成相应的对象
+void  Graph::set_JsonObject(QJsonObject qso)
+{
+
+}
+
+QString Graph::getPath()
+{
+    return this->graphFilePath;
+}
+
+//add by luo yigui
+//save to the json file and set graphFilePath
+int Graph::write_to_file(QString path)
+{
+    //get the json of this
+    graphFilePath=path;
+    //save file to path
+    return 1;
+}
+

@@ -13,17 +13,28 @@
 #include "graph.h"
 #include "scene.h"
 #include <QMap>
-//*************************************************
-#include <QMenu>
-#include <QAction>
-#include <QTextEdit>
-//*********************************************
+#include <QDir>
+//*****************************
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
+#include <QDebug>
+#include <QFileDialog>
+#include <QByteArray>//***********************
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class Operator;
+
+struct item_data
+{
+    int type;
+
+};
+Q_DECLARE_METATYPE(item_data);
 
 class MainWindow : public QMainWindow
 {
@@ -76,6 +87,7 @@ public slots:
     void sizeDialog();
     void ok_sizeBtn_clicked();
     void cancel_sizeBtn_clicked();
+    void treeItemChanged(QStandardItem* item);
 
 private slots:
     void textColorChanged();
@@ -107,15 +119,9 @@ private slots:
     void onTreeViewMenuRequested(const QPoint &pos);
 
 
-//*****************************************************
-    void on_action1_triggered();
-
-    void on_action1_2_triggered();
-
-    void on_action1_3_triggered();
-
-    void on_action1_4_triggered();
-    //*****************************************************
+    //***************************************
+     void on_action1_3_triggered();
+     //***************************************
     void on_addInnerInputButton_clicked();
 
     void on_addInnerOutputButton_clicked();
@@ -123,6 +129,8 @@ private slots:
     void on_addInputButton_clicked();
 
     void on_addOutputButton_clicked();
+
+    void on_tabWidget_tabCloseRequested(int index);
 
 private:
     void changeFrameColor(QColor color);
@@ -150,9 +158,6 @@ private:
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
-    //**********************************
-    QTextEdit *textEdit;
-      //***********************
     QAction *textAction;
     QAction *fillAction;
     QAction *bdAction;
@@ -166,6 +171,7 @@ private:
     QPushButton* ok_sizeBtn;
     QPushButton* cancel_sizeBtn;
     QDialog *dlg;
+    QStandardItemModel* model;
 
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;

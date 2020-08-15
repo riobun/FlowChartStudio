@@ -20,6 +20,7 @@ public:
     QList<Action*> undoStack;
     QList<Action*> redoStack;
     int lastUndoSize;
+    bool isChanged = false;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

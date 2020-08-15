@@ -65,6 +65,11 @@ QString Text::get_text_all(){
     return all;
 }
 
+QString Text::get_text_logic()
+{
+    return logic;
+}
+
 void Text::delete_text(QGraphicsScene* scene) {
     scene->removeItem(this);
     //在存储文件中删除
@@ -121,7 +126,15 @@ void Text::reset_color(QColor new_color) {
 void Text::change_content(QString new_c){
     emit shape->NewContent(this,content);
     content=new_c;
-    if(IDchange){
+    if(isInput){
+        all="REF:";
+        all.append(Input);
+        all.append("@");
+        all.append(ID);
+        all.append("\n");
+        all.append(content);
+    }
+    else if(IDchange){
     all=ID;
     all.append(":ID");
     all.append("\n");
@@ -133,6 +146,16 @@ void Text::change_content(QString new_c){
     setPlainText(all);
 
 }
+ void Text::change_input(QString inputID){
+     Input=inputID;
+     isInput=true;
+ }
+
+ void Text::change_ID(QString ID_){
+     ID=ID_;
+     IDchange=true;
+ }
+
 QFont Text::get_text_font() {
     return font;
 }
@@ -164,13 +187,24 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
     if(textInteractionFlags()==Qt::NoTextInteraction){
        // setTextInteractionFlags(Qt::TextEditorInteraction);
        /* */
-        if(ID!=NULL){
+        if(isInput){
+            DetailsDialog3 dialog(Input,ID,content);
+
+            if (dialog.exec() == QDialog::Accepted) {
+
+                ID=dialog.senderID();
+                change_content(dialog.senderContent());
+                Input=dialog.senderInput();
+            }
+        }
+        else if(ID!=NULL){
         DetailsDialog2 dialog(ID,content);
 
         if (dialog.exec() == QDialog::Accepted) {
 
             ID=dialog.senderID();
             change_content(dialog.senderContent());
+
         }
         }
         else{
@@ -208,7 +242,17 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
         NodeEvents::deleteElemets();
     }
     else if(selectedAction == editAction){
-        if(ID!=NULL){
+        if(isInput){
+            DetailsDialog3 dialog(Input,ID,content);
+
+            if (dialog.exec() == QDialog::Accepted) {
+
+                ID=dialog.senderID();
+                change_content(dialog.senderContent());
+                Input=dialog.senderInput();
+            }
+        }
+        else if(ID!=NULL){
         DetailsDialog2 dialog(ID,content);
 
         if (dialog.exec() == QDialog::Accepted) {

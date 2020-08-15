@@ -14,13 +14,6 @@
 #include <QList>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-//**********************************************************
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QFile>
-#include <QFileDevice>
-#include <QTextStream>
-#include <QtEvents> //************************************
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -30,7 +23,17 @@
 #include "nodeevents.h"
 #include "arrow.h"
 
-
+//**************************
+#include "graph.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
+#include <QMessageBox>
+#include <QByteArray>
+#include <QDebug>
+#include <QVariant>
+//**************************
 MainWindow* MainWindow::_instance;
 
 
@@ -39,12 +42,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //*****************************************************
-        textEdit = new QTextEdit(this);
-
-        textEdit->setGeometry(QRect(150,120,700,600));
-        textEdit->setHidden(true); //隐藏文本编辑
-    //*****************************************************
 
 
     //状态栏
@@ -214,14 +211,28 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //项目树形结构
-    QStandardItemModel* model = new QStandardItemModel(ui->treeView);
+    model = new QStandardItemModel(ui->treeView);
+    connect(model, &QStandardItemModel::itemChanged, this, &MainWindow::treeItemChanged);
     ui->treeView->setModel(model);
     model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
     QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目1");
+    item_data data0;
+    data0.type=1;//表示项目
+    QVariant itemVariData;
+    itemVariData.setValue<item_data>(data0);
+    itemProject1->setData(itemVariData,Qt::UserRole);
     model->appendRow(itemProject1);
+
     QStandardItem* itemFileFolder1 = new QStandardItem(QIcon(":/images/filefolder.png"),tr("Folder1"));
+    data0.type=2;//文件夹
+    itemVariData.setValue<item_data>(data0);
+    itemFileFolder1->setData(itemVariData,Qt::UserRole);
     itemProject1->appendRow(itemFileFolder1);
+
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
+    data0.type=3;//文件
+    itemVariData.setValue<item_data>(data0);
+    itemFile1->setData(itemVariData,Qt::UserRole);
     itemFileFolder1->appendRow(itemFile1);
 
     //treeview右键菜单
@@ -289,9 +300,11 @@ MainWindow::MainWindow(QWidget *parent)
                     break;
             }
 
-            connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
+
         }
     });
+
+    connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
 
 //    connect(ui->treeView,&QTreeView::clicked,[=](){
 //       qDebug()<<ui->treeView->currentIndex();
@@ -431,6 +444,10 @@ void MainWindow::addNewTab(){
 void MainWindow::addNewTab(QString name){
     foreach(auto n, index_name_subgraph){
         if(n.second==name){
+            if(!ui->tabWidget->isTabEnabled(n.first)){
+                n.second="";
+                break;
+            }
             ui->tabWidget->setCurrentIndex(n.first);
             return;
         }
@@ -462,151 +479,45 @@ int MainWindow::index_tab(){
     return ui->tabWidget->currentIndex();
 }
 
+QVector<QString> getChildrenTexts(QStandardItem* item)
+{
+    QVector<QString> children;
+    for (auto i = 0; i < item->rowCount(); i++)
+    {
+        auto child = item->child(i);
+        children.append(child->text());
+        children.append(getChildrenTexts(child));
+    }
+    return children;
+}
+
 void MainWindow::modifyTabText(QStandardItem* item){
+    auto row = item->row();
+    auto parent = item->parent();
+    auto text = item->text();
+    auto hasSame = true;
+    QVector<QString> names;
+    for (auto i = 0; i < model->rowCount(); i++)
+    {
+        names.append(model->item(i)->text());
+        names.append(getChildrenTexts(model->item(i)));
+    }
+    names.removeOne(text);
+    while (hasSame)
+    {
+        hasSame = false;
+        if (names.contains(item->text()))
+        {
+            QMessageBox::information(this, "提示", "出现同名", QMessageBox::Yes);
+            item->setText(item->text() + "1");
+            hasSame = true;
+        }
+    }
 
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
 }
 
-//****************************************************************
-int Flag_isOpen = 0;       //标记：判断是否打开或创建了一个文件
-int Flag_IsNew = 0;        //标记：如果新建了文件就为1，初始值为0
-QString Last_FileName;     //最后一次保存的文件的名字
-QString Last_FileContent;  //最后一次保存文件的内容
-void MainWindow::on_action1_triggered()//新建
-{
 
-    textEdit->clear();              //清除原先文件内容
-    textEdit->setHidden(false);     //显示文本框
-    Flag_IsNew = 1;                 //新文件标记位设为1
-    Flag_isOpen = 1;                //新文件创建 标记位设为1
-}
-
-void MainWindow::on_action1_2_triggered()//打开
-{
-    QString fileName;
-        fileName = QFileDialog::getOpenFileName(this,tr("Open File"),tr(""),tr("Text File (*.txt)"));
-        if(fileName == "")
-        {
-            return;
-        }
-        else
-        {
-           QFile file(fileName);
-           if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-           {
-               QMessageBox::warning(this,tr("错误"),tr("打开文件失败"));
-               return;
-           }
-           else
-           {
-               if(!file.isReadable())
-               {
-                   QMessageBox::warning(this,tr("错误"),tr("该文件不可读"));
-               }
-               else
-               {
-                   QTextStream textStream(&file);       //读取文件，使用QTextStream
-                   while(!textStream.atEnd())
-                   {
-                       textEdit->setPlainText(textStream.readAll());
-                   }
-                   textEdit->show();
-                   file.close();
-                   Flag_isOpen = 1;
-                   Last_FileName = fileName;
-               }
-           }
-        }
-}
-
-void MainWindow::on_action1_3_triggered()//保存
-{
-    if(Flag_IsNew)                  //如果新文件标记位为1，则弹出保存文件对话框
-       {
-           if(textEdit->toPlainText() == "")
-           {
-               QMessageBox::warning(this,tr("警告"),tr("内容不能为空!"),QMessageBox::Ok);
-           }
-           else
-           {
-               QFileDialog fileDialog;
-               QString str = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.txt)"));
-               if(str == "")
-               {
-                   return;
-               }
-               QFile filename(str);
-               if(!filename.open(QIODevice::WriteOnly | QIODevice::Text))
-               {
-                   QMessageBox::warning(this,tr("错误"),tr("打开文件失败"),QMessageBox::Ok);
-                   return;
-               }
-               else
-               {
-                   QTextStream textStream(&filename);
-                   QString str = textEdit->toPlainText();
-                   textStream<<str;
-                   Last_FileContent = str;
-               }
-               QMessageBox::information(this,"保存文件","保存文件成功",QMessageBox::Ok);
-               filename.close();
-               Flag_IsNew = 0;     //新文件标记位记为0
-               Last_FileName = str;//保存文件内容
-           }
-       }
-       else                        //否则，新文件标记位是0，代表是旧文件，默认直接保存覆盖源文件
-       {
-           if(Flag_isOpen)         //判断是否创建或打开了一个文件
-           {
-               QFile file(Last_FileName);
-               if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
-               {
-                   QMessageBox::warning(this,tr("警告"),tr("打开文件失败"));
-                   return;
-               }
-               else
-               {
-                   QTextStream textStream(&file);
-                   QString str = textEdit->toPlainText();
-                   textStream<<str;
-                   Last_FileContent = str;
-                   file.close();
-               }
-           }
-           else
-           {
-               QMessageBox::warning(this,tr("警告"),tr("请先创建或者打开文件"));
-               return;
-           }
-       }
-}
-
-void MainWindow::on_action1_4_triggered()//另存为
-{
-    QFileDialog fileDialog;
-       QString fileName = fileDialog.getSaveFileName(this,tr("Open File"),"/home",tr("Text File(*.txt)"));
-       if(fileName == "")
-       {
-           return;
-       }
-       QFile file(fileName);
-       if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
-       {
-           QMessageBox::warning(this,tr("错误"),tr("打开文件失败"));
-           return;
-       }
-       else
-       {
-           QTextStream textStream(&file);
-           QString str = textEdit->toPlainText();
-           textStream<<str;
-           QMessageBox::warning(this,tr("提示"),tr("保存文件成功"));
-           Last_FileContent = str;
-           Last_FileName = fileName;
-           Flag_IsNew = 0;
-           file.close();
-       }
-}
 
 void MainWindow::sizeDialog(){
 //    QDialog dlg(this);
@@ -675,10 +586,116 @@ void MainWindow::cancel_sizeBtn_clicked(){
 
 void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
     QModelIndex curIndex = ui->treeView->indexAt(pos);
+    QStandardItem* curItem = model->itemFromIndex(curIndex);
     if(curIndex.isValid()){
         QMenu menu;
-        menu.addAction("关闭");
-        menu.exec(QCursor::pos());
+        int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
+        QAction* addProjectAction = nullptr, *addExistingProjectAction = nullptr,
+                *SaveProjectAction = nullptr, *SaveProjectAsAction = nullptr,
+                *CloseProjectAction = nullptr, *AddFolderAction = nullptr,
+                *AddExistingFolderAction = nullptr, *RemoveFolderAction = nullptr,
+                *CloseFileAction = nullptr, *RemoveFileAction = nullptr,
+                *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
+                *AddFileAction = nullptr;
+        switch (item_type) {
+        case 1:
+            addProjectAction = menu.addAction("Add New to Project");
+            addExistingProjectAction = menu.addAction("Add Existing to Project");
+            SaveProjectAction = menu.addAction("Save Project");
+            SaveProjectAsAction = menu.addAction("Save Project As");
+            CloseProjectAction = menu.addAction("Close Project");
+            break;
+        case 2:
+            AddFileAction = menu.addAction("Add New File to Folder");
+            AddFolderAction = menu.addAction("Add New Folder to Folder");
+            AddExistingFolderAction = menu.addAction("Add Existing to Folder");
+            RemoveFolderAction = menu.addAction("Remove from Project");
+            break;
+        default:
+            CloseFileAction = menu.addAction("Close");
+            RemoveFileAction = menu.addAction("Remove from Project");
+            SaveFileAction = menu.addAction("Save");
+            SaveAsFileAction = menu.addAction("Save As");
+        }
+        auto selectedAction = menu.exec(QCursor::pos());
+        auto close = [this, curItem]()
+        {
+            auto texts = getChildrenTexts(curItem);
+            texts.append(curItem->text());
+            auto tabWidget = ui->tabWidget;
+            auto count = tabWidget->count();
+            for (auto i = count - 1; i >= 0; i--)
+            {
+                auto text = tabWidget->tabText(i);
+                if (texts.contains(text))
+                {
+                    tabWidget->tabCloseRequested(i);
+                }
+            }
+        };
+        auto remove = [close, curItem]()
+        {
+            close();
+            auto row = curItem->row();
+            auto parent = curItem->parent();
+            parent->removeRow(row);
+        };
+        auto addFolder = [this, curItem]()
+        {
+            QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/filefolder.png"),"文件夹1");
+            item_data data0;
+            data0.type=2;
+            QVariant itemVariData;
+            itemVariData.setValue<item_data>(data0);
+            itemFile1->setData(itemVariData,Qt::UserRole);
+            curItem->appendRow(itemFile1);
+            modifyTabText(itemFile1);
+        };
+        if (selectedAction == addProjectAction) addFolder();
+        else if (selectedAction == addExistingProjectAction)
+        {
+            QFileDialog fileDialog;
+            auto fileName = fileDialog.getOpenFileName(this, "打开现有文件", "", "JSON File(*.json)");
+        }
+        else if (selectedAction == SaveProjectAction)
+        {
+
+        }
+        else if (selectedAction == SaveProjectAsAction)
+        {
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this, "另存为项目", "请输入项目名", "JSON File(*.json)");
+        }
+        else if (selectedAction == CloseProjectAction) close();
+        else if (selectedAction == AddFileAction)
+        {
+            QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
+            item_data data0;
+            data0.type=3;
+            QVariant itemVariData;
+            itemVariData.setValue<item_data>(data0);
+            itemFile1->setData(itemVariData,Qt::UserRole);
+            curItem->appendRow(itemFile1);
+            modifyTabText(itemFile1);
+        }
+        else if (selectedAction == AddFolderAction) addFolder();
+        else if (selectedAction == AddExistingFolderAction)
+        {
+            QFileDialog fileDialog;
+            auto fileName = fileDialog.getExistingDirectory(this, "打开现有文件夹");
+        }
+        else if (selectedAction == RemoveFolderAction) remove();
+        else if (selectedAction == CloseFileAction) close();
+        else if (selectedAction == RemoveFileAction) remove();
+        else if (selectedAction == SaveFileAction)
+        {
+
+        }
+        else if (selectedAction == SaveAsFileAction)
+        {
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this, "另存为文件", "请输入文件名", "JSON File(*.json)");
+        }
     }
 }
 
@@ -690,4 +707,80 @@ Graph* MainWindow::graph()
 Ui::MainWindow* MainWindow::getUi() const
 {
     return ui;
+}
+void MainWindow::on_action1_3_triggered()
+{
+    QList<Scene*>::iterator iter;
+    QJsonArray graphArray;
+    QJsonObject qso;
+    QString path;
+
+    for(iter=open_scenes.begin();iter!=open_scenes.end();iter++)
+    {
+        graphArray.append((*iter)->graph->get_JsonObject());
+        //save all
+       if((*iter)->graph->getPath()=="" ||  (*iter)->graph->getPath()==nullptr)
+        {
+            //打开文件保存对话框选取路径与文件名，存入PATH
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this,tr("保存文件"),"请输入文件名",tr("JSON File(*.json)"));
+        }
+        //存入每一个GRAPH到文件中
+          (*iter)->graph->write_to_file(path);
+          QJsonObject gqso;
+          gqso.insert("FilePath",path);
+          gqso.insert("GraphID",(*iter)->graph->GetID());
+          graphArray.append(gqso);                     }
+
+
+            qso.insert("Project",QJsonValue(graphArray));
+            //save qso into json file
+            QJsonDocument doc;
+            doc.setObject(qso);
+               //打开项目文件，这一部分的项目文件名，应当是右边TREEVIEW项目保存时给定的项目文件名，在TREEVIEW没有做好之前暂时用以下文件名作调试。
+            QFile file(QApplication::applicationDirPath()+"/1.json");
+            if(!file.open(QIODevice::WriteOnly))
+            {
+                qDebug() << "File open failed!";
+            }
+            else
+            {
+                qDebug() <<"File open successfully!";
+            }
+                 file.write(doc.toJson(QJsonDocument::Indented)); //Indented:表示自动添加/n回车符
+                 file.close();
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    auto tabwidget = ui->tabWidget;
+    auto lastIndex = tabwidget->currentIndex();
+    tabwidget->setCurrentIndex(index);
+    auto widget = tabwidget->currentWidget();
+    auto layout = widget->layout();
+    auto item = layout->itemAt(0);
+    auto itemWidget = item->widget();
+    auto view = qobject_cast<QGraphicsView*>(itemWidget);
+    auto graphicsScene = view->scene();
+    auto scene = static_cast<Scene*>(graphicsScene);
+    auto isChanged = scene->isChanged;
+    if (isChanged)
+    {
+        auto yesButton = QMessageBox::Yes;
+        QString fileName = tabwidget->tabText(index);
+        auto message = fileName + "文件有更改，要保存吗？";
+        auto result = QMessageBox::information(this, "提示", message,
+                                               yesButton | QMessageBox::No,
+                                               yesButton);
+        if (result == yesButton)
+        {
+
+        }
+    }
+    tabwidget->setCurrentIndex(lastIndex);
+}
+
+void MainWindow::treeItemChanged(QStandardItem* item)
+{
+
 }

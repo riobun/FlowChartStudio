@@ -4,6 +4,7 @@
 #include"node.h"
 #include"text.h"
 #include "elementshape.h"
+#include <QFile>
 class SubgraphNode;
 class Graph:public GraphElement
 {
@@ -41,6 +42,20 @@ public:
     void addNode(Node* node, int index, ElementShape shape);
     QVector<QPair<Node*,ElementShape>> Nodes_ElementShape(int index);
     
+    //****************************************************************
+        //将对像转成JSONOBJECT
+        virtual QJsonObject get_JsonObject() override;
+        //根据JSON转成成相应的对象
+        virtual void set_JsonObject(QJsonObject qso) override;
+
+        //add by luo yigui
+        //save to the json file and set graphFilePath
+        int write_to_file(QString path);
+
+        //read the contend from json file and construct the graph
+        int read_from_file(QString path);
+
+        QString getPath();
 private:
     void SetVisibility(bool set);
     bool isExpended;
@@ -57,7 +72,9 @@ private:
         ElementShape shape;
     };
     QVector<node_info> v_node_info;
-    
+    //add by luo yigui
+        QFile graphFile;
+        QString graphFilePath;
 };
 
 #endif // GRAPH_H

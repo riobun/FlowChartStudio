@@ -9,7 +9,6 @@
 EditElementAction::EditElementAction(void* element, ElementShape shape, ElementProperty property, void* from, void* to)
     : shape(shape), property(property), from(from), to(to), element(element)
 {
-    qDebug() << "EditElementAction" ;
 }
 
 EditElementAction::~EditElementAction()
@@ -56,6 +55,7 @@ EditElementAction::~EditElementAction()
 
 void EditElementAction::Do()
 {
+    MainWindow::instance()->scene()->isChanged = true;
     if(shape == ElementShape::Rectangle || shape==ElementShape::Diamond ||
             shape == ElementShape::Input || shape == ElementShape::Output ||
             shape == ElementShape::InnerInput || shape == ElementShape::InnerOutput
