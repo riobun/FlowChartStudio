@@ -162,6 +162,17 @@ void Node::BindToText(QGraphicsScene* qgs)
     }
 }
 
+void Node::SetThickness(double nt)
+{
+    QPen pen=shape->pen();
+    pen.setWidthF(nt);
+    shape->setPen(pen);
+}
+double Node::GetThickness()
+{
+    QPen pen=shape->pen();
+    return pen.widthF();
+}
 QVector<Arrow*> Node::getSourceArrows()
 {
     QVector<Arrow*> vec;

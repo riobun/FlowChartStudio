@@ -41,6 +41,13 @@ void InnerOutputNode::SetFrameColor(const QColor &qc)
     pen.setColor(frameColor);
     innerLine->setPen(pen);
 }
+void InnerOutputNode::SetThickness(double nt)
+{
+    OutputNode::SetThickness(nt);
+    QPen pen=shape->pen();
+    pen.setWidthF(nt);
+    innerLine->setPen(pen);
+}
 int InnerOutputNode::GetType()
 {
     return 8;

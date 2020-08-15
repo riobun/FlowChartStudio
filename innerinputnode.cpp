@@ -40,6 +40,13 @@ void InnerInputNode::SetFrameColor(const QColor &qc)
     pen.setColor(frameColor);
     innerLine->setPen(pen);
 }
+void InnerInputNode::SetThickness(double nt)
+{
+    InputNode::SetThickness(nt);
+    QPen pen=shape->pen();
+    pen.setWidthF(nt);
+    innerLine->setPen(pen);
+}
 int InnerInputNode::GetType()
 {
     return 7;

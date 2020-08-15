@@ -72,6 +72,14 @@ int SubgraphNode::GetType()
     return 6;
 }
 
+void SubgraphNode::SetThickness(double nt)
+{
+    Node::SetThickness(nt);
+    QPen pen=shape->pen();
+    pen.setWidthF(nt);
+    subShape[0]->setPen(pen);
+    subShape[1]->setPen(pen);
+}
 void SubgraphNode::OpenSubGraph()
 {
     

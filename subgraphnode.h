@@ -21,6 +21,7 @@ public:
     virtual void Remove(QGraphicsScene *qgs) override;
     virtual void ChangeZValue(bool isSelected) override;
     virtual void SetFrameColor(const QColor &qc) override;
+    virtual void SetThickness(double nt) override;
     ~SubgraphNode();
     
     void OpenSubGraph();

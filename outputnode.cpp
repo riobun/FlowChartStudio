@@ -75,6 +75,13 @@ void OutputNode::SetFrameColor(const QColor &qc)
     pen.setColor(frameColor);
     subShape->setPen(pen);
 }
+void OutputNode::SetThickness(double nt)
+{
+    Node::SetThickness(nt);
+    QPen pen=shape->pen();
+    pen.setWidthF(nt);
+    subShape->setPen(pen);
+}
 int OutputNode::GetType()
 {
     return 5;

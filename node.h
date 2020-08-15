@@ -40,6 +40,8 @@ public:
 
     NodeItem* getNodeItem() const { return shape; }
     virtual int GetType()=0;
+    virtual void SetThickness(double nt);
+    double GetThickness();
     QGraphicsScene* GetRelatedQGS() {return relatedQGS;}
     //将对像转成JSONOBJECT
         virtual QJsonObject get_JsonObject() override;

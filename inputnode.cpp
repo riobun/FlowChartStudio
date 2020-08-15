@@ -92,6 +92,15 @@ void InputNode::SetFrameColor(const QColor &qc)
     subShape[1]->setPen(pen);
     subShape[2]->setPen(pen);
 }
+void InputNode::SetThickness(double nt)
+{
+    Node::SetThickness(nt);
+    QPen pen=shape->pen();
+    pen.setWidthF(nt);
+    subShape[0]->setPen(pen);
+    subShape[1]->setPen(pen);
+    subShape[2]->setPen(pen);
+}
 int InputNode::GetType()
 {
     return 4;
