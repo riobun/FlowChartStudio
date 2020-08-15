@@ -212,6 +212,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //项目树形结构
     model = new QStandardItemModel(ui->treeView);
+    connect(model, &QStandardItemModel::itemChanged, this, &MainWindow::treeItemChanged);
     ui->treeView->setModel(model);
     model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
     QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目1");
@@ -299,9 +300,11 @@ MainWindow::MainWindow(QWidget *parent)
                     break;
             }
 
-            connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
+
         }
     });
+
+    connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
 
 //    connect(ui->treeView,&QTreeView::clicked,[=](){
 //       qDebug()<<ui->treeView->currentIndex();
@@ -477,6 +480,26 @@ int MainWindow::index_tab(){
 }
 
 void MainWindow::modifyTabText(QStandardItem* item){
+    auto row = item->row();
+    auto parent = item->parent();
+    auto text = item->text();
+    auto hasSame = true;
+    while (hasSame)
+    {
+        hasSame = false;
+        for (auto i = 0; i < parent->rowCount(); i++)
+        {
+            if (i == row) continue;
+            auto brother = parent->child(i);
+            auto brotherText = brother->text();
+            if (brotherText == item->text())
+            {
+                QMessageBox::information(this, "提示", "在上一文件夹下有同名文件", QMessageBox::Yes);
+                item->setText(item->text() + "1");
+                hasSame = true;
+            }
+        }
+    }
 
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
 }
@@ -571,7 +594,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 *CloseProjectAction = nullptr, *AddFolderAction = nullptr,
                 *AddExistingFolderAction = nullptr, *RemoveFolderAction = nullptr,
                 *CloseFileAction = nullptr, *RemoveFileAction = nullptr,
-                *SaveFileAction = nullptr, *SaveAsFileAction = nullptr;
+                *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
+                *AddFileAction = nullptr;
         switch (item_type) {
         case 1:
             addProjectAction = menu.addAction("Add New to Project");
@@ -581,7 +605,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             CloseProjectAction = menu.addAction("Close Project");
             break;
         case 2:
-            AddFolderAction = menu.addAction("Add New to Folder");
+            AddFileAction = menu.addAction("Add New File to Folder");
+            AddFolderAction = menu.addAction("Add New Folder to Folder");
             AddExistingFolderAction = menu.addAction("Add Existing to Folder");
             RemoveFolderAction = menu.addAction("Remove from Project");
             break;
@@ -615,11 +640,13 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         };
         if (selectedAction == addProjectAction)
         {
-
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this, "新建项目", "请输入项目名", "JSON File(*.json)");
         }
         else if (selectedAction == addExistingProjectAction)
         {
-
+            QFileDialog fileDialog;
+            auto fileName = fileDialog.getOpenFileName(this, "打开现有文件", "", "JSON File(*.json)");
         }
         else if (selectedAction == SaveProjectAction)
         {
@@ -627,16 +654,36 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         else if (selectedAction == SaveProjectAsAction)
         {
-
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this, "另存为项目", "请输入项目名", "JSON File(*.json)");
         }
         else if (selectedAction == CloseProjectAction) close();
+        else if (selectedAction == AddFileAction)
+        {
+            QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
+            item_data data0;
+            data0.type=3;
+            QVariant itemVariData;
+            itemVariData.setValue<item_data>(data0);
+            itemFile1->setData(itemVariData,Qt::UserRole);
+            curItem->appendRow(itemFile1);
+            modifyTabText(itemFile1);
+        }
         else if (selectedAction == AddFolderAction)
         {
-
+            QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/filefolder.png"),"文件夹1");
+            item_data data0;
+            data0.type=2;
+            QVariant itemVariData;
+            itemVariData.setValue<item_data>(data0);
+            itemFile1->setData(itemVariData,Qt::UserRole);
+            curItem->appendRow(itemFile1);
+            modifyTabText(itemFile1);
         }
         else if (selectedAction == AddExistingFolderAction)
         {
-
+            QFileDialog fileDialog;
+            auto fileName = fileDialog.getExistingDirectory(this, "打开现有文件夹");
         }
         else if (selectedAction == RemoveFolderAction) remove();
         else if (selectedAction == CloseFileAction) close();
@@ -647,7 +694,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         else if (selectedAction == SaveAsFileAction)
         {
-
+            QFileDialog fileDialog;
+            QString fileName = fileDialog.getSaveFileName(this, "另存为文件", "请输入文件名", "JSON File(*.json)");
         }
     }
 }
@@ -731,4 +779,9 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         }
     }
     tabwidget->setCurrentIndex(lastIndex);
+}
+
+void MainWindow::treeItemChanged(QStandardItem* item)
+{
+
 }

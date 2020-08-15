@@ -87,6 +87,7 @@ public slots:
     void sizeDialog();
     void ok_sizeBtn_clicked();
     void cancel_sizeBtn_clicked();
+    void treeItemChanged(QStandardItem* item);
 
 private slots:
     void textColorChanged();
