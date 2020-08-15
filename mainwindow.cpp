@@ -704,7 +704,18 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     if (isChanged)
     {
         auto yesButton = QMessageBox::Yes;
-        auto result = QMessageBox::information(this, "提示", "本文件有更改，要保存吗",
+        QString fileName;
+        foreach (auto pair, index_name_subgraph)
+        {
+            auto pairIndex = pair.first;
+            if (pairIndex == index)
+            {
+                fileName = pair.second;
+                break;
+            }
+        }
+        auto message = fileName + "文件有更改，要保存吗？";
+        auto result = QMessageBox::information(this, "提示", message,
                                                yesButton | QMessageBox::No,
                                                yesButton);
         if (result == yesButton)
