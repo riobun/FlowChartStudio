@@ -231,7 +231,7 @@ MainWindow::MainWindow(QWidget *parent)
     QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
     data0.type=3;//文件
     itemVariData.setValue<item_data>(data0);
-    itemFileFolder1->setData(itemVariData,Qt::UserRole);
+    itemFile1->setData(itemVariData,Qt::UserRole);
     itemFileFolder1->appendRow(itemFile1);
 
     //treeview右键菜单
@@ -548,6 +548,18 @@ void MainWindow::cancel_sizeBtn_clicked(){
     dlg->done(0);
 }
 
+QVector<QString> getChildrenTexts(QStandardItem* item)
+{
+    QVector<QString> children;
+    for (auto i = 0; i < item->rowCount(); i++)
+    {
+        auto child = item->child(i);
+        children.append(child->text());
+        children.append(getChildrenTexts(child));
+    }
+    return children;
+}
+
 void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
     QModelIndex curIndex = ui->treeView->indexAt(pos);
     QStandardItem* curItem = model->itemFromIndex(curIndex);
@@ -580,6 +592,27 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             SaveAsFileAction = menu.addAction("Save As");
         }
         auto selectedAction = menu.exec(QCursor::pos());
+        auto close = [this, curItem]()
+        {
+            auto texts = getChildrenTexts(curItem);
+            auto tabWidget = ui->tabWidget;
+            auto count = tabWidget->count();
+            for (auto i = count - 1; i >= 0; i--)
+            {
+                auto text = tabWidget->tabText(i);
+                if (texts.contains(text))
+                {
+                    tabWidget->tabCloseRequested(i);
+                }
+            }
+        };
+        auto remove = [close, curItem]()
+        {
+            close();
+            auto row = curItem->row();
+            auto parent = curItem->parent();
+            parent->removeRow(row);
+        };
         if (selectedAction == addProjectAction)
         {
 
@@ -596,10 +629,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         {
 
         }
-        else if (selectedAction == CloseProjectAction)
-        {
-
-        }
+        else if (selectedAction == CloseProjectAction) close();
         else if (selectedAction == AddFolderAction)
         {
 
@@ -608,27 +638,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         {
 
         }
-        else if (selectedAction == RemoveFolderAction)
-        {
-
-        }
-        else if (selectedAction == CloseFileAction)
-        {
-            auto tabWidget = ui->tabWidget;
-            for (auto i = 0; i < tabWidget->count(); i++)
-            {
-                auto text = tabWidget->tabText(i);
-                if (text == curItem->text())
-                {
-                    tabWidget->tabCloseRequested(i);
-                    break;
-                }
-            }
-        }
-        else if (selectedAction == RemoveFileAction)
-        {
-
-        }
+        else if (selectedAction == RemoveFolderAction) remove();
+        else if (selectedAction == CloseFileAction) close();
+        else if (selectedAction == RemoveFileAction) remove();
         else if (selectedAction == SaveFileAction)
         {
 
