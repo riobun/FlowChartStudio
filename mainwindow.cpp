@@ -614,7 +614,16 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         else if (selectedAction == CloseFileAction)
         {
-
+            auto tabWidget = ui->tabWidget;
+            for (auto i = 0; i < tabWidget->count(); i++)
+            {
+                auto text = tabWidget->tabText(i);
+                if (text == curItem->text())
+                {
+                    tabWidget->tabCloseRequested(i);
+                    break;
+                }
+            }
         }
         else if (selectedAction == RemoveFileAction)
         {
