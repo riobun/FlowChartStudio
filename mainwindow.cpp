@@ -554,28 +554,80 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
     if(curIndex.isValid()){
         QMenu menu;
         int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
+        QAction* addProjectAction = nullptr, *addExistingProjectAction = nullptr,
+                *SaveProjectAction = nullptr, *SaveProjectAsAction = nullptr,
+                *CloseProjectAction = nullptr, *AddFolderAction = nullptr,
+                *AddExistingFolderAction = nullptr, *RemoveFolderAction = nullptr,
+                *CloseFileAction = nullptr, *RemoveFileAction = nullptr,
+                *SaveFileAction = nullptr, *SaveAsFileAction = nullptr;
         switch (item_type) {
         case 1:
-            menu.addAction("Add New to Project");
-            menu.addAction("Add Existing to Project");
-            menu.addAction("Save Project");
-            menu.addAction("Save Project As");
-            menu.addAction("Close Project");
+            addProjectAction = menu.addAction("Add New to Project");
+            addExistingProjectAction = menu.addAction("Add Existing to Project");
+            SaveProjectAction = menu.addAction("Save Project");
+            SaveProjectAsAction = menu.addAction("Save Project As");
+            CloseProjectAction = menu.addAction("Close Project");
             break;
         case 2:
-            menu.addAction("Add New to Folder");
-            menu.addAction("Add Existing to Folder");
-            menu.addAction("Remove from Project");
+            AddFolderAction = menu.addAction("Add New to Folder");
+            AddExistingFolderAction = menu.addAction("Add Existing to Folder");
+            RemoveFolderAction = menu.addAction("Remove from Project");
             break;
         default:
-            menu.addAction("Close");
-            menu.addAction("Remove from Project");
-            menu.addAction("Save");
-            menu.addAction("Save As");
+            CloseFileAction = menu.addAction("Close");
+            RemoveFileAction = menu.addAction("Remove from Project");
+            SaveFileAction = menu.addAction("Save");
+            SaveAsFileAction = menu.addAction("Save As");
+        }
+        auto selectedAction = menu.exec(QCursor::pos());
+        if (selectedAction == addProjectAction)
+        {
 
         }
+        else if (selectedAction == addExistingProjectAction)
+        {
 
-        menu.exec(QCursor::pos());
+        }
+        else if (selectedAction == SaveProjectAction)
+        {
+
+        }
+        else if (selectedAction == SaveProjectAsAction)
+        {
+
+        }
+        else if (selectedAction == CloseProjectAction)
+        {
+
+        }
+        else if (selectedAction == AddFolderAction)
+        {
+
+        }
+        else if (selectedAction == AddExistingFolderAction)
+        {
+
+        }
+        else if (selectedAction == RemoveFolderAction)
+        {
+
+        }
+        else if (selectedAction == CloseFileAction)
+        {
+
+        }
+        else if (selectedAction == RemoveFileAction)
+        {
+
+        }
+        else if (selectedAction == SaveFileAction)
+        {
+
+        }
+        else if (selectedAction == SaveAsFileAction)
+        {
+
+        }
     }
 }
 
