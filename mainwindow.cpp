@@ -514,12 +514,13 @@ QVector<QString> MainWindow::getChildrenPaths(QStandardItem* item)
     return children;
 }
 
-void MainWindow::checkName(QStandardItem *item){
+void MainWindow::checkName(QStandardItem *item, bool showMessage){
     auto row = item->row();
     auto parent = item->parent();
     auto text = item->text();
     auto path = item->data(Qt::UserRole).value<item_data>().path;
     auto hasSame = true;
+    auto hasShown = false;
     QVector<QString> paths;
     for (auto i = 0; i < model->rowCount(); i++)
     {
@@ -536,32 +537,13 @@ void MainWindow::checkName(QStandardItem *item){
         hasSame = false;
         if (paths.contains(path))
         {
-            QMessageBox::information(this, "提示", "出现同名", QMessageBox::Yes);
+            if (!hasShown && showMessage)
+            {
+                QMessageBox::information(this, "提示", "出现同名", QMessageBox::Yes);
+            }
+            hasShown = true;
             item->setText(item->text() + "1");
             path=path+"1";
-
-            item_data data0;
-            if(item->data(Qt::UserRole).value<item_data>().type == 2){
-                data0.type=2;
-                data0.path=path;
-                QVariant itemVariData;
-                itemVariData.setValue<item_data>(data0);
-                item->setData(itemVariData,Qt::UserRole);
-            }
-            else if(item->data(Qt::UserRole).value<item_data>().type == 3){
-                data0.type=3;
-                data0.path=path;
-                QVariant itemVariData;
-                itemVariData.setValue<item_data>(data0);
-                item->setData(itemVariData,Qt::UserRole);
-            }
-            else if(item->data(Qt::UserRole).value<item_data>().type == 1){
-                data0.type=3;
-                data0.path=path;
-                QVariant itemVariData;
-                itemVariData.setValue<item_data>(data0);
-                item->setData(itemVariData,Qt::UserRole);
-            }
 
             qDebug()<<"curItem:"<<item->data(Qt::UserRole).value<item_data>().path;
             qDebug()<<"path:"<<path;
@@ -569,18 +551,31 @@ void MainWindow::checkName(QStandardItem *item){
             hasSame = true;
         }
     }
-
+    item_data data0;
+    if(item->data(Qt::UserRole).value<item_data>().type == 2){
+        data0.type=2;
+        data0.path=path;
+        QVariant itemVariData;
+        itemVariData.setValue<item_data>(data0);
+        item->setData(itemVariData,Qt::UserRole);
+    }
+    else if(item->data(Qt::UserRole).value<item_data>().type == 3){
+        data0.type=3;
+        data0.path=path;
+        QVariant itemVariData;
+        itemVariData.setValue<item_data>(data0);
+        item->setData(itemVariData,Qt::UserRole);
+    }
+    else if(item->data(Qt::UserRole).value<item_data>().type == 1){
+        data0.type=3;
+        data0.path=path;
+        QVariant itemVariData;
+        itemVariData.setValue<item_data>(data0);
+        item->setData(itemVariData,Qt::UserRole);
+    }
 }
 
 void MainWindow::modifyTabText(QStandardItem* item){
-
-    static bool nameChanged = false;
-    if (nameChanged)
-    {
-        nameChanged = false;
-        return;
-    }
-    nameChanged = true;
 
     if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
 
@@ -741,7 +736,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             itemVariData.setValue<item_data>(data0);
             itemFile1->setData(itemVariData,Qt::UserRole);
             curItem->appendRow(itemFile1);
-            checkName(itemFile1);
+            checkName(itemFile1, false);
         };
         if (selectedAction == addProjectAction) addFolder();
         else if (selectedAction == addExistingProjectAction)
@@ -769,7 +764,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             itemVariData.setValue<item_data>(data0);
             itemFile1->setData(itemVariData,Qt::UserRole);
             curItem->appendRow(itemFile1);
-            checkName(itemFile1);
+            checkName(itemFile1, false);
         }
         else if (selectedAction == AddFolderAction) addFolder();
         else if (selectedAction == AddExistingFolderAction)

@@ -156,7 +156,7 @@ private:
     void clickLineBtn();
     void clickTextColorButton();
     void addNewTab(QStandardItem* currentItem);
-    void checkName(QStandardItem* item);
+    void checkName(QStandardItem *item, bool showMessage = true);
 
 
 private:
