@@ -21,6 +21,7 @@ public:
     QList<Action*> redoStack;
     int lastUndoSize;
     bool isChanged = false;
+    QString file_path;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

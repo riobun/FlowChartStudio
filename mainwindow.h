@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QStandardItemModel>
 #include <QFontComboBox>
+#include <QString>
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
@@ -32,9 +33,18 @@ class Operator;
 struct item_data
 {
     int type;
+    QString path;
 
 };
+struct tab_data
+{
+
+    QString path;
+
+};
+
 Q_DECLARE_METATYPE(item_data);
+Q_DECLARE_METATYPE(tab_data);
 
 class MainWindow : public QMainWindow
 {
@@ -58,6 +68,8 @@ public:
     void addNewTab(QString name);
     int index_tab();
     Graph* graph();
+    QVector<QString> getChildrenPaths(QStandardItem* item);
+
 
     QColor bdColor = Qt::black;
     QColor fillColor = Qt::white;
@@ -68,6 +80,7 @@ public:
     int fontSize = 12;
     Graph* cutGraph = new Graph;
     int lineWidth = 2;
+
 
 public:
     Ui::MainWindow* getUi() const;
@@ -144,6 +157,7 @@ private:
     void clickLineBtn();
     void clickTextColorButton();
     void addNewTab(QStandardItem* currentItem);
+    void checkName(QStandardItem* item);
 
 
 private:

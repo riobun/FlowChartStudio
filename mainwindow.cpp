@@ -215,22 +215,25 @@ MainWindow::MainWindow(QWidget *parent)
     connect(model, &QStandardItemModel::itemChanged, this, &MainWindow::treeItemChanged);
     ui->treeView->setModel(model);
     model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
-    QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目1");
+    QStandardItem* itemProject1 = new QStandardItem(QIcon(":/images/project.png"),"项目0");
     item_data data0;
     data0.type=1;//表示项目
+    data0.path="Desktop/项目0";
     QVariant itemVariData;
     itemVariData.setValue<item_data>(data0);
     itemProject1->setData(itemVariData,Qt::UserRole);
     model->appendRow(itemProject1);
 
-    QStandardItem* itemFileFolder1 = new QStandardItem(QIcon(":/images/filefolder.png"),tr("Folder1"));
+    QStandardItem* itemFileFolder1 = new QStandardItem(QIcon(":/images/filefolder.png"),tr("文件夹0"));
     data0.type=2;//文件夹
+    data0.path="Desktop/项目0/文件夹0";
     itemVariData.setValue<item_data>(data0);
     itemFileFolder1->setData(itemVariData,Qt::UserRole);
     itemProject1->appendRow(itemFileFolder1);
 
-    QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
+    QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件0");
     data0.type=3;//文件
+    data0.path="Desktop/项目0/文件夹0/文件0";
     itemVariData.setValue<item_data>(data0);
     itemFile1->setData(itemVariData,Qt::UserRole);
     itemFileFolder1->appendRow(itemFile1);
@@ -260,7 +263,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->addTab(tabFile0,QIcon(":/images/file.png"),"0");
 //    scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
     open_scenes.append(_scene);
-    qDebug()<<open_scenes.count();
+    //在tab里保存路径
+    tab_data Data0;
+    Data0.path = "NULL";
+    QVariant tabVariData;
+    tabVariData.setValue<tab_data>(Data0);
+    ui->tabWidget->tabBar()->setTabData(0,tabVariData);
 
 //     _scene = ui->graphicsView->scene();
 
@@ -272,43 +280,43 @@ MainWindow::MainWindow(QWidget *parent)
         QModelIndex currentIndex = ui->treeView->currentIndex();
         QStandardItem* currentItem = model->itemFromIndex(currentIndex);
 
-        if(!currentItem->hasChildren())
+        if(currentItem->data(Qt::UserRole).value<item_data>().type == 3)
         {
             int i;
-            for(i=0;i<ui->tabWidget->count();i++){
-                if(ui->tabWidget->tabText(i)==currentItem->text())
+            for(i=0;i<ui->tabWidget->count();i++){   
+
+                if( ui->tabWidget->tabBar()->tabData(i).value<tab_data>().path==currentItem->data(Qt::UserRole).value<item_data>().path)
                     break;
             }
             if(i>=ui->tabWidget->count()){
 
                addNewTab(currentItem);
             }
+            else {
+                ui->tabWidget->setCurrentIndex(i);
+            }
         }
     });
 
+    //找到tab中要改名的那个tab的index
     connect(ui->treeView,&QTreeView::doubleClicked,[=](){
 
         QModelIndex currentIndex = ui->treeView->currentIndex();
         QStandardItem* currentItem = model->itemFromIndex(currentIndex);
 
-//        qDebug()<<ui->tabWidget->count();
-        if(!currentItem->hasChildren())
+        if(currentItem->data(Qt::UserRole).value<item_data>().type == 3)
         {
 
             for(rename_index=0;rename_index<ui->tabWidget->count();rename_index++){
-                if(ui->tabWidget->tabText(rename_index)==currentItem->text())
+                if(ui->tabWidget->tabBar()->tabData(rename_index).value<tab_data>().path==currentItem->data(Qt::UserRole).value<item_data>().path)
                     break;
             }
-
-
         }
     });
 
+    //改tab名字和路径
     connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
 
-//    connect(ui->treeView,&QTreeView::clicked,[=](){
-//       qDebug()<<ui->treeView->currentIndex();
-//    });
 
     //切换选项卡时scene的切换
     connect(ui->tabWidget,&QTabWidget::currentChanged,[=](){
@@ -414,10 +422,19 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
     ui->tabWidget->setCurrentWidget(tabFile);
 
+    int tabCount = ui->tabWidget->count();
+
+    //在tab里保存路径
+    tab_data Data0;
+    Data0.path = currentItem->data(Qt::UserRole).value<item_data>().path;
+    QVariant tabVariData;
+    tabVariData.setValue<tab_data>(Data0);
+    ui->tabWidget->tabBar()->setTabData(tabCount-1,tabVariData);
+
 
     scene->setSceneRect(QRectF(0,0,5000,5000));
     open_scenes.append(scene);
-    qDebug()<<open_scenes.count();
+
 }
 
 void MainWindow::addNewTab(){
@@ -434,6 +451,13 @@ void MainWindow::addNewTab(){
     tabFile->setLayout(layout1);
     ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),"0");
     ui->tabWidget->setCurrentWidget(tabFile);
+
+    //在tab里保存路径
+    tab_data Data0;
+    Data0.path = "NULL";
+    QVariant tabVariData;
+    tabVariData.setValue<tab_data>(Data0);
+    ui->tabWidget->tabBar()->setTabData(0,tabVariData);
 
 
     scene->setSceneRect(QRectF(0,0,5000,5000));
@@ -469,7 +493,6 @@ void MainWindow::addNewTab(QString name){
 
     scene->setSceneRect(QRectF(0,0,5000,5000));
     open_scenes.append(scene);
-    qDebug()<<open_scenes.count();
 
     index_name_subgraph.push_back({index,name});
 
@@ -479,42 +502,97 @@ int MainWindow::index_tab(){
     return ui->tabWidget->currentIndex();
 }
 
-QVector<QString> getChildrenTexts(QStandardItem* item)
+QVector<QString> MainWindow::getChildrenPaths(QStandardItem* item)
 {
     QVector<QString> children;
     for (auto i = 0; i < item->rowCount(); i++)
     {
         auto child = item->child(i);
-        children.append(child->text());
-        children.append(getChildrenTexts(child));
+        children.append(child->data(Qt::UserRole).value<item_data>().path);
+        children.append(getChildrenPaths(child));
     }
     return children;
 }
 
-void MainWindow::modifyTabText(QStandardItem* item){
+void MainWindow::checkName(QStandardItem *item){
     auto row = item->row();
     auto parent = item->parent();
     auto text = item->text();
+    auto path = item->data(Qt::UserRole).value<item_data>().path;
     auto hasSame = true;
-    QVector<QString> names;
+    QVector<QString> paths;
     for (auto i = 0; i < model->rowCount(); i++)
     {
-        names.append(model->item(i)->text());
-        names.append(getChildrenTexts(model->item(i)));
+        paths.append(model->item(i)->data(Qt::UserRole).value<item_data>().path);
+        paths.append(getChildrenPaths(model->item(i)));
     }
-    names.removeOne(text);
+    for(auto i =0;i<paths.count();i++){
+        qDebug()<<"paths:"<<paths[i];
+    }
+
+    paths.removeOne(path);
     while (hasSame)
     {
         hasSame = false;
-        if (names.contains(item->text()))
+        if (paths.contains(path))
         {
             QMessageBox::information(this, "提示", "出现同名", QMessageBox::Yes);
             item->setText(item->text() + "1");
+            path=path+"1";
+
+            item_data data0;
+            if(item->data(Qt::UserRole).value<item_data>().type == 2){
+                data0.type=2;
+                data0.path=path;
+                QVariant itemVariData;
+                itemVariData.setValue<item_data>(data0);
+                item->setData(itemVariData,Qt::UserRole);
+            }
+            else if(item->data(Qt::UserRole).value<item_data>().type == 3){
+                data0.type=3;
+                data0.path=path;
+                QVariant itemVariData;
+                itemVariData.setValue<item_data>(data0);
+                item->setData(itemVariData,Qt::UserRole);
+            }
+            else if(item->data(Qt::UserRole).value<item_data>().type == 1){
+                data0.type=3;
+                data0.path=path;
+                QVariant itemVariData;
+                itemVariData.setValue<item_data>(data0);
+                item->setData(itemVariData,Qt::UserRole);
+            }
+
+            qDebug()<<"curItem:"<<item->data(Qt::UserRole).value<item_data>().path;
+            qDebug()<<"path:"<<path;
+
             hasSame = true;
         }
     }
 
+}
+
+void MainWindow::modifyTabText(QStandardItem* item){
+
+    if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
+
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
+
+    //修改tab里存储的路径
+    tab_data Data0;
+    Data0.path = item->parent()->data(Qt::UserRole).value<item_data>().path+"/"+item->text();
+    qDebug()<<Data0.path;
+    QVariant tabVariData;
+    tabVariData.setValue<tab_data>(Data0);
+    ui->tabWidget->tabBar()->setTabData(rename_index,tabVariData);
+
+    //修改item里存储的路径
+    item_data data1;
+    data1.type=3;
+    data1.path=Data0.path;
+    QVariant itemVariData;
+    itemVariData.setValue<item_data>(data1);
+    item->setData(itemVariData,Qt::UserRole);
 }
 
 
@@ -597,41 +675,46 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 *CloseFileAction = nullptr, *RemoveFileAction = nullptr,
                 *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
                 *AddFileAction = nullptr;
+        QAction* showPathAction = nullptr;
         switch (item_type) {
         case 1:
-            addProjectAction = menu.addAction("Add New to Project");
+            addProjectAction = menu.addAction("Add New Folder to Project");
+            AddFileAction = menu.addAction("Add New File to Folder");
             addExistingProjectAction = menu.addAction("Add Existing to Project");
             SaveProjectAction = menu.addAction("Save Project");
             SaveProjectAsAction = menu.addAction("Save Project As");
             CloseProjectAction = menu.addAction("Close Project");
+            showPathAction = menu.addAction("Show Path");
             break;
         case 2:
             AddFileAction = menu.addAction("Add New File to Folder");
             AddFolderAction = menu.addAction("Add New Folder to Folder");
             AddExistingFolderAction = menu.addAction("Add Existing to Folder");
             RemoveFolderAction = menu.addAction("Remove from Project");
+            showPathAction = menu.addAction("Show Path");
             break;
         default:
             CloseFileAction = menu.addAction("Close");
             RemoveFileAction = menu.addAction("Remove from Project");
             SaveFileAction = menu.addAction("Save");
             SaveAsFileAction = menu.addAction("Save As");
+            showPathAction = menu.addAction("Show Path");
         }
         auto selectedAction = menu.exec(QCursor::pos());
         auto close = [this, curItem]()
         {
-            auto texts = getChildrenTexts(curItem);
-            texts.append(curItem->text());
-            auto tabWidget = ui->tabWidget;
-            auto count = tabWidget->count();
-            for (auto i = count - 1; i >= 0; i--)
-            {
-                auto text = tabWidget->tabText(i);
-                if (texts.contains(text))
-                {
-                    tabWidget->tabCloseRequested(i);
-                }
-            }
+//            auto texts = getChildrenTexts(curItem);
+//            texts.append(curItem->text());
+//            auto tabWidget = ui->tabWidget;
+//            auto count = tabWidget->count();
+//            for (auto i = count - 1; i >= 0; i--)
+//            {
+//                auto text = tabWidget->tabText(i);
+//                if (texts.contains(text))
+//                {
+//                    tabWidget->tabCloseRequested(i);
+//                }
+//            }
         };
         auto remove = [close, curItem]()
         {
@@ -645,11 +728,12 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/filefolder.png"),"文件夹1");
             item_data data0;
             data0.type=2;
+            data0.path=curItem->data(Qt::UserRole).value<item_data>().path+"/"+itemFile1->text();
             QVariant itemVariData;
             itemVariData.setValue<item_data>(data0);
             itemFile1->setData(itemVariData,Qt::UserRole);
             curItem->appendRow(itemFile1);
-            modifyTabText(itemFile1);
+            checkName(itemFile1);
         };
         if (selectedAction == addProjectAction) addFolder();
         else if (selectedAction == addExistingProjectAction)
@@ -672,11 +756,12 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             QStandardItem* itemFile1 = new QStandardItem(QIcon(":/images/file.png"),"文件1");
             item_data data0;
             data0.type=3;
+            data0.path=curItem->data(Qt::UserRole).value<item_data>().path+"/"+itemFile1->text();
             QVariant itemVariData;
             itemVariData.setValue<item_data>(data0);
             itemFile1->setData(itemVariData,Qt::UserRole);
             curItem->appendRow(itemFile1);
-            modifyTabText(itemFile1);
+            checkName(itemFile1);
         }
         else if (selectedAction == AddFolderAction) addFolder();
         else if (selectedAction == AddExistingFolderAction)
