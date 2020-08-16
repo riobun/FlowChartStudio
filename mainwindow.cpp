@@ -577,10 +577,10 @@ void MainWindow::checkName(QStandardItem *item, bool showMessage){
 
 void MainWindow::modifyTabText(QStandardItem* item){
 
-    if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
+//    if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
 
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
-
+/*
     //修改tab里存储的路径
     tab_data Data0;
     Data0.path = item->parent()->data(Qt::UserRole).value<item_data>().path+"/"+item->text();
@@ -595,7 +595,7 @@ void MainWindow::modifyTabText(QStandardItem* item){
     data1.path=Data0.path;
     QVariant itemVariData;
     itemVariData.setValue<item_data>(data1);
-    item->setData(itemVariData,Qt::UserRole);
+    item->setData(itemVariData,Qt::UserRole);*/
 }
 
 

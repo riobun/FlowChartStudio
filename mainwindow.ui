@@ -137,8 +137,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>139</width>
-               <height>700</height>
+               <width>118</width>
+               <height>718</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -515,7 +515,7 @@
      <x>0</x>
      <y>0</y>
      <width>1300</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -528,6 +528,7 @@
     <addaction name="action1_4"/>
     <addaction name="action1_5"/>
     <addaction name="action1_6"/>
+    <addaction name="actionsaveProject"/>
    </widget>
    <widget class="QMenu" name="editMenu">
     <property name="title">
@@ -918,6 +919,16 @@
    </property>
    <property name="text">
     <string>箭头粗细</string>
+   </property>
+  </action>
+  <action name="actionss">
+   <property name="text">
+    <string>ss</string>
+   </property>
+  </action>
+  <action name="actionsaveProject">
+   <property name="text">
+    <string>保存项目</string>
    </property>
   </action>
  </widget>
