@@ -574,6 +574,13 @@ void MainWindow::checkName(QStandardItem *item){
 
 void MainWindow::modifyTabText(QStandardItem* item){
 
+    auto data = item->data(Qt::UserRole).value<item_data>();
+    if (data.nameChanged)
+    {
+        data.nameChanged = false;
+        return;
+    }
+
     if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
 
     ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
@@ -593,6 +600,8 @@ void MainWindow::modifyTabText(QStandardItem* item){
     QVariant itemVariData;
     itemVariData.setValue<item_data>(data1);
     item->setData(itemVariData,Qt::UserRole);
+
+    data.nameChanged = true;
 }
 
 

@@ -34,7 +34,7 @@ struct item_data
 {
     int type;
     QString path;
-
+    bool nameChanged;
 };
 struct tab_data
 {
