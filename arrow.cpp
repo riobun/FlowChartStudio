@@ -499,7 +499,14 @@ void Arrow::BindToText(QGraphicsScene* qgs){
     content=new Text((QPoint((myStartItem->pos().x()+myEndItem->pos().x())/2,
                      (myStartItem->pos().y()+myEndItem->pos().y())/2)));
     content->putup_text(qgs);
-    content->build_text();}
+    content->build_text();
+    content->change_content("文本");
+    auto window = MainWindow::instance();
+    content->reset_font(QFont(window->fontFamily, window->fontSize));
+    content->reset_color(window->textColor);
+    (new ChangeElementAction(content, ElementShape::Text, true))->Do();
+
+    }
 };
 //void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){
 //    if (!isSelected())
