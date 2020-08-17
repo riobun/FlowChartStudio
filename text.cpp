@@ -240,6 +240,8 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     if (selectedAction == deleteAction)
     {
         NodeEvents::deleteElemets();
+        auto action = new ChangeElementAction(this, ElementShape::Text, false);
+                action->Do();
     }
     else if(selectedAction == editAction){
         if(isInput){

@@ -344,6 +344,8 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
                 if(ar->Arrownode!=nullptr){
                     ar->Arrownode->getNodeItem()->SetSelected(true);
                 }
+                if(ar->content!=nullptr){
+                ar->content->setSelected(true);}
                }
                 QBrush* brush=new QBrush();
                 painter->setBrush(*brush);
@@ -432,7 +434,12 @@ void Arrow::removeArrow()
     ar->startItem()->RemoveAsSource(ar);
     new ChangeElementAction(ar, ElementShape::Arrow, false);
     scene->removeItem(ar);
-    if(content) ar->content->delete_text(scene);
+    if(content)
+         {ar->content->delete_text(scene);
+          scene->removeItem(content);
+          auto action = new ChangeElementAction(content, ElementShape::Text, false);
+                  action->Do();
+    }
     if(ar->Arrownode!=nullptr){
         ar->Arrownode->Remove(scene);
     }
@@ -458,7 +465,12 @@ void Arrow::removemyself()
     auto scene = window->scene();
    endItem()->RemoveAsDestination(this);
    startItem()->RemoveAsSource(this);
-   if(content) content->delete_text(scene);
+   if(content) {
+       content->delete_text(scene);
+       scene->removeItem(content);
+       auto action = new ChangeElementAction(content, ElementShape::Text, false);
+               action->Do();
+   }
    this->deleteID();
 }
 
@@ -545,6 +557,8 @@ QVariant Arrow::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
+    auto window = MainWindow::instance();
+    auto scene = window->scene();
     auto action = new GroupAction;
      QGraphicsItem::mouseDoubleClickEvent(event);
      isDoubleClick=true;
@@ -566,6 +580,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //     解决方法：
      QPainterPath p = this->root;
      int type=this->getType();
+     Text* content=this->content;
      QColor color=this->myColor;
      this->removemyself();
      MainWindow::instance()->scene()->removeItem(this);
@@ -577,6 +592,10 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
      arrow2->setArrowColor(color);
      arrow3->setArrowColor(color);
+     if(content!=nullptr){
+     arrow2->content=content;
+     arrow2->content->putup_text(scene);
+     arrow2->content->build_text();}
      arrow2->arrowlist.append(this->arrowlist);
      arrow3->arrowlist.append(this->arrowlist);
      arrow2->arrowlist.removeOne(this);
