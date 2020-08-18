@@ -522,13 +522,6 @@
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="action1_15"/>
-    <addaction name="action1_2"/>
-    <addaction name="action1_3"/>
-    <addaction name="action1_4"/>
-    <addaction name="action1_5"/>
-    <addaction name="action1_6"/>
-    <addaction name="actionsaveProject"/>
    </widget>
    <widget class="QMenu" name="editMenu">
     <property name="title">
@@ -929,6 +922,31 @@
   <action name="actionsaveProject">
    <property name="text">
     <string>保存项目</string>
+   </property>
+  </action>
+  <action name="newProjectAction">
+   <property name="text">
+    <string>新建项目</string>
+   </property>
+  </action>
+  <action name="actionnewProject">
+   <property name="text">
+    <string>newProject</string>
+   </property>
+  </action>
+  <action name="newProjectAction_2">
+   <property name="text">
+    <string>newProject</string>
+   </property>
+  </action>
+  <action name="actionnewFile">
+   <property name="text">
+    <string>newFile</string>
+   </property>
+  </action>
+  <action name="openProjectAction">
+   <property name="text">
+    <string>openProject</string>
    </property>
   </action>
  </widget>

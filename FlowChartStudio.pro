@@ -31,6 +31,7 @@ SOURCES += \
     inneroutputnode.cpp \
     inputnode.cpp \
     interaction.cpp \
+    item.cpp \
     main.cpp \
     mainwindow.cpp \
     node.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     nodeitem.cpp \
     outputnode.cpp \
     rectangle.cpp\
+    saver.cpp \
     scene.cpp \
     subgraphnode.cpp \
     text.cpp \
@@ -47,6 +49,7 @@ SOURCES += \
     textdialog3.cpp
 
 HEADERS += \
+    ItemType.h \
     action.h \
     arrow.h \
     arrownode.h \
@@ -63,12 +66,14 @@ HEADERS += \
     innerinputnode.h \
     inneroutputnode.h \
     inputnode.h \
+    item.h \
     mainwindow.h \
     node.h \
     nodeevents.h \
     nodeitem.h \
     outputnode.h \
     rectangle.h\
+    saver.h \
     scene.h \
     subgraphnode.h \
     text.h \
