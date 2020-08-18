@@ -615,7 +615,12 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
          arrow2->arrowlist[i]->arrowlist=arrow2->arrowlist;
 //         arrow2->arrowlist[i]->Arrownode=arrownode;
      }
-     arrow2->Arrownode=arrownode;
+     if(arrow2->endItem()->GetWidth()<=5){
+         arrow2->Arrownode=dynamic_cast<class Arrownode*>(arrow2->endItem()->GetNode());
+     }
+     if(arrow3->endItem()->GetWidth()<=5){
+         arrow3->Arrownode=dynamic_cast<class Arrownode*>(arrow3->endItem()->GetNode());
+     }
      arrow2->setType(getType());
      arrow3->setType(getType());
      //修改属性要建立在arrowlist之后
