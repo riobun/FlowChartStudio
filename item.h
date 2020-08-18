@@ -14,6 +14,7 @@ public:
     Item(::ItemType type, const QString& path);
     ::ItemType itemType() const { return _type; }
     const QString& path() const { return _path; }
+    void rename(const QString& newName);
 
 private:
     ::ItemType _type;

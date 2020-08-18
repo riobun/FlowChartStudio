@@ -20,4 +20,17 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path), _sc
     {
 
     }
+    else if (type == ::ItemType::Project)
+    {
+        _path = pathParts[0];
+        for (auto i = 1; i < length - 1; i++)
+        {
+            auto pathPart = pathParts[i];
+            _path += "/" + pathPart;
+        }
+    }
+}
+
+void Item::rename(const QString &newName)
+{
 }

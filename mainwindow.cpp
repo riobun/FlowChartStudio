@@ -325,6 +325,17 @@ MainWindow::MainWindow(QWidget *parent)
             Saver::AddNewProject(path);
         }
     });
+    auto openProjectAction = fileMenu->addAction("打开项目");
+    connect(openProjectAction, &QAction::triggered, [this]()
+    {
+        auto path = QFileDialog::getOpenFileName(this, "打开项目", QString(),
+                                                 "项目文件(*.pr)");
+        if (path != QString())
+        {
+            auto item = Saver::Open(path);
+            model->appendRow(item);
+        }
+    });
 
     // 将编辑菜单栏中的动作绑定到槽
     connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
@@ -570,11 +581,19 @@ void MainWindow::checkName(QStandardItem *item, bool showMessage){
     }
 }
 
-void MainWindow::modifyTabText(QStandardItem* item){
+void MainWindow::modifyTabText(QStandardItem* standardItem){
 
 //    if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
 
-    ui->tabWidget->tabBar()->setTabText(rename_index,item->text());
+    ui->tabWidget->tabBar()->setTabText(rename_index,standardItem->text());
+
+    auto item = static_cast<Item*>(standardItem);
+    auto newName = item->text();
+    if (item->itemType() == ::ItemType::File)
+    {
+        Saver::Rename(item->path(), newName);
+    }
+    item->rename(newName);
 /*
     //修改tab里存储的路径
     tab_data Data0;
@@ -715,12 +734,13 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 }
             }
         };
-        auto remove = [close, curItem]()
+        auto remove = [this, close, curItem]()
         {
             close();
             auto row = curItem->row();
             auto parent = curItem->parent();
-            parent->removeRow(row);
+            if (parent) parent->removeRow(row);
+            else model->removeRow(row);
         };
         auto save = [item]()
         {
@@ -734,7 +754,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         };
         auto addFile = [item]()
         {
-            auto newPath = item->path() + "/新文件";
+            auto newPath = item->path() + "/新文件.gr";
             auto newItem = new Item(::ItemType::File, newPath);
             item->appendRow(newItem);
             Saver::AddNewFile(newPath);
@@ -743,7 +763,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         else if (selectedAction == addExistingProjectAction)
         {
             auto path = QFileDialog::getOpenFileName(this, "打开现有文件", "",
-                                                     "项目文件(*.pr)");
+                                                     "图文件(*.gr)");
             if (path != QString())
             {
                 auto newItem = Saver::Open(path);
@@ -756,7 +776,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         else if (selectedAction == SaveProjectAction) save();
         else if (selectedAction == SaveProjectAsAction)
         {
-            auto path = QFileDialog::getSaveFileName(this, "另存为项目", "请输入项目名",
+            auto path = QFileDialog::getSaveFileName(this, "另存为项目", "",
                                                      "项目文件(*.pr)");
             Saver::SaveAs(item, path);
         }
@@ -785,8 +805,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         else if (selectedAction == SaveAsFileAction)
         {
-            auto path = QFileDialog::getSaveFileName(this, "另存为文件",
-                                                            "请输入文件名",
+            auto path = QFileDialog::getSaveFileName(this, "另存为文件", "",
                                                             "图文件(*.gr)");
             Saver::SaveAs(item, path);
         }
