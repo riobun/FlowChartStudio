@@ -265,7 +265,7 @@ MainWindow::MainWindow(QWidget *parent)
             int i;
             for(i=0;i<ui->tabWidget->count();i++){   
 
-                if( ui->tabWidget->tabBar()->tabData(i).value<tab_data>().path==currentItem->data(Qt::UserRole).value<item_data>().path)
+                if( ui->tabWidget->tabBar()->tabData(i).value<tab_data>().path==item->path())
                     break;
             }
             if(i>=ui->tabWidget->count()){
@@ -283,12 +283,13 @@ MainWindow::MainWindow(QWidget *parent)
 
         QModelIndex currentIndex = ui->treeView->currentIndex();
         QStandardItem* currentItem = model->itemFromIndex(currentIndex);
+        auto item = static_cast<Item*>(currentItem);
 
-        if(currentItem->data(Qt::UserRole).value<item_data>().type == 3)
+        if(item->itemType() == ItemType::File)
         {
 
             for(rename_index=0;rename_index<ui->tabWidget->count();rename_index++){
-                if(ui->tabWidget->tabBar()->tabData(rename_index).value<tab_data>().path==currentItem->data(Qt::UserRole).value<item_data>().path)
+                if(ui->tabWidget->tabBar()->tabData(rename_index).value<tab_data>().path==item->path())
                     break;
             }
         }
@@ -414,6 +415,8 @@ void MainWindow::removeSubTab(int index){
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
+    auto item = static_cast<Item*>(currentItem);
+
     //创建新的VIEW和SCENE，并绑定
     Scene* scene = new Scene();
     QGraphicsView* graphicsView = new QGraphicsView();
@@ -432,7 +435,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
 
     //在tab里保存路径
     tab_data Data0;
-    Data0.path = currentItem->data(Qt::UserRole).value<item_data>().path;
+    Data0.path = item->path();
     QVariant tabVariData;
     tabVariData.setValue<tab_data>(Data0);
     ui->tabWidget->tabBar()->setTabData(tabCount-1,tabVariData);
@@ -583,33 +586,29 @@ void MainWindow::checkName(QStandardItem *item, bool showMessage){
 
 void MainWindow::modifyTabText(QStandardItem* standardItem){
 
-//    if(item->data(Qt::UserRole).value<item_data>().type != 3) return;
+    auto item = static_cast<Item*>(standardItem);
+
+    if(item->itemType() != ItemType::File) return;
 
     ui->tabWidget->tabBar()->setTabText(rename_index,standardItem->text());
 
-    auto item = static_cast<Item*>(standardItem);
     auto newName = item->text();
     if (item->itemType() == ::ItemType::File)
     {
         Saver::Rename(item->path(), newName);
     }
-    item->rename(newName);
-/*
+    //item->rename(newName);
+
     //修改tab里存储的路径
     tab_data Data0;
-    Data0.path = item->parent()->data(Qt::UserRole).value<item_data>().path+"/"+item->text();
+    Data0.path = static_cast<Item*>(item->parent())->path()+"/"+item->text();
     qDebug()<<Data0.path;
     QVariant tabVariData;
     tabVariData.setValue<tab_data>(Data0);
     ui->tabWidget->tabBar()->setTabData(rename_index,tabVariData);
 
     //修改item里存储的路径
-    item_data data1;
-    data1.type=3;
-    data1.path=Data0.path;
-    QVariant itemVariData;
-    itemVariData.setValue<item_data>(data1);
-    item->setData(itemVariData,Qt::UserRole);*/
+    item->setPath(Data0.path);
 }
 
 
