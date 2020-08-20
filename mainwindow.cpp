@@ -313,9 +313,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     // 文件菜单
-    auto fileMenu = ui->fileMenu;
-    auto addNewProjectAction = fileMenu->addAction("新建项目");
-    connect(addNewProjectAction, &QAction::triggered, [this]()
+
+    connect(ui->actionnew_pro, &QAction::triggered, [this]()
     {
         auto path = QFileDialog::getSaveFileName(this, "新建项目", QString(),
                                                  "项目文件(*.pr)");
@@ -326,8 +325,8 @@ MainWindow::MainWindow(QWidget *parent)
             Saver::AddNewProject(path);
         }
     });
-    auto openProjectAction = fileMenu->addAction("打开项目");
-    connect(openProjectAction, &QAction::triggered, [this]()
+
+    connect(ui->actionopen_pro, &QAction::triggered, [this]()
     {
         auto path = QFileDialog::getOpenFileName(this, "打开项目", QString(),
                                                  "项目文件(*.pr)");
