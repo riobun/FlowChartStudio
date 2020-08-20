@@ -232,7 +232,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->usesScrollButtons();
 
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
-/*
+
 //    FlowChartScene* scene = new FlowChartScene();
 //    ui->graphicsView->setScene(scene);
     QWidget *tabFile0 = new QWidget(this);
@@ -250,7 +250,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->tabBar()->setTabData(0,tabVariData);
 
 //     _scene = ui->graphicsView->scene();
-*/
+
     _instance = this;
 
     //项目树结构和页面选项卡的连接
