@@ -22,6 +22,7 @@ public:
     int GetHeight();
     void RemoveAsSource(Arrow* ar);
     void RemoveAsDestination(Arrow* ar);
+    bool Getisselect(){return isSelected;};
     QPointF lastLocation;
 signals:
     void Selected(Node* n,bool b);

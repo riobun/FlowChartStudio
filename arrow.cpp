@@ -619,6 +619,9 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow3->setArrowColor(color);
      if(content!=nullptr){
      arrow2->content=content;
+     arrow3->content=content;
+     arrownode->content=content;
+     //给arrownode的content赋值
      arrow2->content->putup_text(scene);
      arrow2->content->build_text();}
      arrow2->arrowlist.append(this->arrowlist);

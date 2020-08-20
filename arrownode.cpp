@@ -87,3 +87,9 @@ int Arrownode::GetType()
 {
     return 3;
 }
+int Arrownode::selecttext()
+{
+    if(this->getNodeItem()->Getisselect()){
+        this->content->setSelected(true);
+    }
+}

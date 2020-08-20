@@ -18,6 +18,7 @@ public:
     virtual void SetShape() override;
     virtual void BindToText(QGraphicsScene* qgs) override{};
     virtual int GetType() override;
+    int selecttext();
     ~Arrownode();
 };
 
