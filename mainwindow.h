@@ -121,7 +121,7 @@ private slots:
 
     void removeSubTab(int index);
     void modifyTabText(QStandardItem* item);
-
+    void modifyChildPath(QStandardItem* item);
     void on_addSubgraghButton_clicked();
 
     void on_addFatherPortButton_clicked();

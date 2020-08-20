@@ -312,7 +312,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     });
 
-    // 文件菜单
+    // 项目菜单
 
     connect(ui->actionnew_pro, &QAction::triggered, [this]()
     {
@@ -522,6 +522,18 @@ QVector<QString> MainWindow::getChildrenPaths(QStandardItem* item)
     return children;
 }
 
+void MainWindow::modifyChildPath(QStandardItem* item){
+    for (auto i = 0; i < item->rowCount(); i++){
+        auto child = item->child(i);
+        QString parentPath=static_cast<Item*>(child->parent())->path();
+        QString curPath = parentPath+"/"+child->text();
+        static_cast<Item*>(child)->setPath(curPath);
+        if(child->rowCount()!=0){
+            modifyChildPath(child);
+        }
+    }
+}
+
 void MainWindow::checkName(QStandardItem *item, bool showMessage){
     auto row = item->row();
     auto parent = item->parent();
@@ -587,27 +599,50 @@ void MainWindow::modifyTabText(QStandardItem* standardItem){
 
     auto item = static_cast<Item*>(standardItem);
 
-    if(item->itemType() != ItemType::File) return;
+    if(item->itemType() == ItemType::File) {
+        ui->tabWidget->tabBar()->setTabText(rename_index,standardItem->text());
 
-    ui->tabWidget->tabBar()->setTabText(rename_index,standardItem->text());
+        auto newName = item->text();
+        if (item->itemType() == ::ItemType::File)
+        {
+            Saver::Rename(item->path(), newName);
+        }
+        //item->rename(newName);
 
-    auto newName = item->text();
-    if (item->itemType() == ::ItemType::File)
-    {
-        Saver::Rename(item->path(), newName);
+        //修改tab里存储的路径
+        tab_data Data0;
+        Data0.path = static_cast<Item*>(item->parent())->path()+"/"+item->text();
+        qDebug()<<Data0.path;
+        QVariant tabVariData;
+        tabVariData.setValue<tab_data>(Data0);
+        ui->tabWidget->tabBar()->setTabData(rename_index,tabVariData);
+
+        //修改item里存储的路径
+        item->setPath(Data0.path);
     }
-    //item->rename(newName);
+    else if(item->itemType() == ItemType::Folder){
+        QString parentPath=static_cast<Item*>(item->parent())->path();
+        QString curPath = parentPath+"/"+item->text();
+        item->setPath(curPath);
+        modifyChildPath(item);
 
-    //修改tab里存储的路径
-    tab_data Data0;
-    Data0.path = static_cast<Item*>(item->parent())->path()+"/"+item->text();
-    qDebug()<<Data0.path;
-    QVariant tabVariData;
-    tabVariData.setValue<tab_data>(Data0);
-    ui->tabWidget->tabBar()->setTabData(rename_index,tabVariData);
+    }
+    else if (item->itemType() == ItemType::Project) {
+        QString prePath=static_cast<Item*>(item)->path();
+        QString curPath;
+        auto prePathParts = prePath.split('/');
+        auto length = prePathParts.length();
+        for (auto i = 1; i < length - 2; i++)
+        {
+            auto pathPart = prePathParts[i];
+            curPath += "/" + pathPart;
+        }
+        curPath+=item->text();
+        item->setPath(curPath);
+        modifyChildPath(item);
+    }
 
-    //修改item里存储的路径
-    item->setPath(Data0.path);
+
 }
 
 
@@ -623,7 +658,7 @@ void MainWindow::sizeDialog(){
     nodeSizeCombo_menu->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
         nodeSizeCombo_menu->addItem(QString().setNum(i));
-    nodeSizeCombo_menu->setCurrentText("6");
+    nodeSizeCombo_menu->setCurrentText("2");
     QIntValidator *node_validator = new QIntValidator(2, 15, this);
     nodeSizeCombo_menu->setValidator(node_validator);
     QHBoxLayout* up =new QHBoxLayout();
@@ -638,7 +673,7 @@ void MainWindow::sizeDialog(){
     arrowSizeCombo_menu->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
         arrowSizeCombo_menu->addItem(QString().setNum(i));
-    arrowSizeCombo_menu->setCurrentText("6");
+    arrowSizeCombo_menu->setCurrentText("2");
     QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
     arrowSizeCombo_menu->setValidator(arrow_validator);
     QHBoxLayout* down =new QHBoxLayout();
