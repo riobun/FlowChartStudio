@@ -607,6 +607,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      int type=this->getType();
      Text* content=this->content;
      QColor color=this->myColor;
+     int oldid=this->GetID();
      this->removemyself();
      MainWindow::instance()->scene()->removeItem(this);
 
@@ -624,6 +625,13 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      //给arrownode的content赋值
      arrow2->content->putup_text(scene);
      arrow2->content->build_text();}
+     arrownode->deleteID();
+          arrow2->deleteID();
+          arrow2->Id=oldid;
+          arrow2->chagearrowID(oldid);
+          arrow3->deleteID();
+          arrow3->Id=oldid;
+          arrow3->chagearrowID(oldid);
      arrow2->arrowlist.append(this->arrowlist);
      arrow3->arrowlist.append(this->arrowlist);
      arrow2->arrowlist.removeOne(this);

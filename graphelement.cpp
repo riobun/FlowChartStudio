@@ -102,3 +102,7 @@ bool GraphElement::changesId(QString str){
     k1[this->GetID()-1]=1;
     return true;
 }
+int GraphElement::chagearrowID(int oldid){
+    k1[oldid-1]=1;
+    return true;
+}
