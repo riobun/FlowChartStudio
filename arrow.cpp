@@ -496,8 +496,26 @@ void Arrow::removemyself()
 
 void Arrow::BindToText(QGraphicsScene* qgs){
     if(content==nullptr){
-    content=new Text((QPoint((myStartItem->pos().x()+myEndItem->pos().x())/2,
-                     (myStartItem->pos().y()+myEndItem->pos().y())/2)));
+        QLineF centerLine(myStartItem->pos(), list[1]);
+        QPolygonF StartPolygon = myStartItem->polygon();
+        //得到myEndItem图形所有顶点相对于中点的坐标组
+        QPointF p1 = StartPolygon.first() + myStartItem->pos();
+        //pos()方法得到图形中点相对于窗口左上角的坐标
+        //得到myEndItem图形第一个顶点相对于窗口左上角的坐标
+        QPointF intersectPoint;
+        for (int i = 1; i < StartPolygon.count(); ++i) {
+            QPointF p2 = StartPolygon.at(i) + myStartItem->pos();
+            QLineF polyLine = QLineF(p1, p2);
+            QLineF::IntersectType intersectType =
+                polyLine.intersect(centerLine, &intersectPoint);
+            if (intersectType == QLineF::BoundedIntersection)
+                break;
+            p1 = p2;
+        }
+//    content=new Text((QPoint((myStartItem->pos().x()+myEndItem->pos().x())/2,
+//                     (myStartItem->pos().y()+myEndItem->pos().y())/2)));
+            content=new Text((QPoint((intersectPoint.x()+list[1].x())/2,
+                             (intersectPoint.y()+list[1].y())/2)));
     content->putup_text(qgs);
     content->build_text();
     content->change_content("文本");
