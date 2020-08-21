@@ -37,6 +37,7 @@ public:
     QVector<Arrow*> getArrows();
     QVector<Arrow*> getSourceArrows();
     virtual void ChangeZValue(bool isSelected);
+    void SetRef(QString s);
 
     NodeItem* getNodeItem() const { return shape; }
     virtual int GetType()=0;

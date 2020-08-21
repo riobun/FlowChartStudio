@@ -46,6 +46,7 @@ void InputNode::Paint(QGraphicsScene *qgs)
                 relatedInner.insert(iin->GetID(),iin);
                 ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)i->GetRelatedQGS());
                 CEA2->Do();
+                iin->BindToText(nullptr);
             }
         }
     }

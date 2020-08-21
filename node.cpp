@@ -149,7 +149,7 @@ void Node::BindToText(QGraphicsScene* qgs)
     {
         QString temp="0x";
         temp+= QString::number(GetID(),16);
-        auto text = new Text(location, this, temp, true);
+        auto text = new Text(QPointF(location.x()-width/2,location.y()-height/2), this, temp, true);
         text->change_content("文本");
         text->setZValue(shape->zValue());
         auto window = MainWindow::instance();
@@ -167,6 +167,12 @@ void Node::SetThickness(double nt)
     QPen pen=shape->pen();
     pen.setWidthF(nt);
     shape->setPen(pen);
+}
+
+void Node::SetRef(QString s)
+{
+    if(!content) return;
+    content->change_input(s);
 }
 double Node::GetThickness()
 {

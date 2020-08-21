@@ -15,9 +15,11 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
     QAction* subGraphAction;
+    QAction* subGraphAction2;
     if (dynamic_cast<SubgraphNode*>(node))
     {
         subGraphAction = menu.addAction("打开子图");
+        subGraphAction2 = menu.addAction("创建所有端口");
     }
     auto cutAction = menu.addAction("剪切");
     cutAction->setShortcut(QKeySequence::Cut);
@@ -32,6 +34,11 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     {
         auto sgnode = static_cast<SubgraphNode*>(node);
         sgnode->OpenSubGraph();
+    }
+    else if (selectedAction && selectedAction == subGraphAction2)
+    {
+        auto sgnode = static_cast<SubgraphNode*>(node);
+
     }
     else if (selectedAction == copyAction)
     {
