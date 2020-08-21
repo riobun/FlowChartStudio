@@ -129,7 +129,7 @@ void Text::change_content(QString new_c){
     if(isInput){
         all="REF:";
         all.append(Input);
-        all.append("@");
+        all.append("\nID:");
         all.append(ID);
         all.append("\n");
         all.append(content);
