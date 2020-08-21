@@ -33,10 +33,12 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
      QGraphicsItem::mouseDoubleClickEvent(event);
      isDoubleClick=true;
-     if(this->GetNode()->GetType()!=3){
+     if(this->GetNode()->GetType()!=3)
+     {
      node->BindToText(MainWindow::instance()->scene());
      setSelected(false);
-     node->content->getTextItem()->SetSelected(true);}
+     node->content->getTextItem()->SetSelected(true);
+     }
 }
 
 void NodeItem::keyPressEvent(QKeyEvent *event)

@@ -15,11 +15,10 @@ public:
     virtual void ChangeZValue(bool isSelected) override;
     virtual void SetFrameColor(const QColor &qc) override;
     virtual void SetThickness(double nt) override;
+     QMap<int,InnerOutputNode*> relatedInner;
     ~OutputNode();
 protected:
-    QGraphicsEllipseItem* subShape=new QGraphicsEllipseItem();
-    QMap<int,InnerOutputNode*> relatedInner;
-
+    QGraphicsEllipseItem* subShape=new QGraphicsEllipseItem();   
 };
 
 #endif // OUTPUTNODE_H

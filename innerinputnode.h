@@ -14,6 +14,7 @@ public:
     virtual void ChangeZValue(bool isSelected) override;
     virtual void SetFrameColor(const QColor &qc) override;
     virtual void SetThickness(double nt) override;
+    virtual void BindToText(QGraphicsScene* qgs) override;
     ~InnerInputNode();
 private:
     QGraphicsLineItem* innerLine=new QGraphicsLineItem();

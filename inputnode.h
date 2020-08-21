@@ -14,10 +14,11 @@ public:
     virtual void ChangeZValue(bool isSelected) override;
     virtual void SetFrameColor(const QColor &qc) override;
     virtual void SetThickness(double nt) override;
+    QMap<int,InnerInputNode*> relatedInner;
     ~InputNode();
 protected:
      QVector<QGraphicsLineItem*> subShape;
-     QMap<int,InnerInputNode*> relatedInner;
+
 };
 
 #endif // INPUTNODE_H

@@ -32,7 +32,7 @@ void InputNode::Paint(QGraphicsScene *qgs)
     qgs->addItem(subShape[0]);
     qgs->addItem(subShape[1]);
     qgs->addItem(subShape[2]);
-    if(!dynamic_cast<InnerInputNode*>(this))
+    if(GetType()==4)
     {
         if(fatherGraph)
         {
@@ -46,7 +46,11 @@ void InputNode::Paint(QGraphicsScene *qgs)
                 relatedInner.insert(iin->GetID(),iin);
                 ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)i->GetRelatedQGS());
                 CEA2->Do();
-                iin->BindToText(nullptr);
+                iin->BindToText(iin->relatedQGS);
+                QString temp="0x";
+                temp+= QString::number(GetID(),16);
+                iin->content->change_input(temp);
+                iin->content->change_content("文本");
             }
         }
     }

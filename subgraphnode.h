@@ -25,6 +25,7 @@ public:
     ~SubgraphNode();
     
     void OpenSubGraph();
+    void CreateAllPort();
     
 protected:
     QVector<QGraphicsLineItem*> subShape;

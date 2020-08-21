@@ -23,7 +23,7 @@ void OutputNode::Paint(QGraphicsScene *qgs)
 {
     Node::Paint(qgs);
     qgs->addItem(subShape);
-    if(!dynamic_cast<InnerOutputNode*>(this))
+    if(GetType()==5)
     {
         if(fatherGraph)
         {
@@ -37,6 +37,11 @@ void OutputNode::Paint(QGraphicsScene *qgs)
                 relatedInner.insert(ion->GetID(),ion);
                 ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)i->GetRelatedQGS());
                 CEA2->Do();
+                ion->BindToText(ion->relatedQGS);
+                QString temp="0x";
+                temp+= QString::number(GetID(),16);
+                ion->content->change_input(temp);
+                ion->content->change_content("文本");
             }
         }
     }

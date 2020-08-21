@@ -38,6 +38,7 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     else if (selectedAction && selectedAction == subGraphAction2)
     {
         auto sgnode = static_cast<SubgraphNode*>(node);
+        sgnode->CreateAllPort();
 
     }
     else if (selectedAction == copyAction)

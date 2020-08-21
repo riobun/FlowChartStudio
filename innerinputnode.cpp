@@ -1,4 +1,6 @@
 #include "innerinputnode.h"
+#include "mainwindow.h"
+#include "changeelementaction.h"
 
 InnerInputNode::InnerInputNode()
 {
@@ -14,6 +16,26 @@ void InnerInputNode::Paint(QGraphicsScene *qgs)
 {
     InputNode::Paint(qgs);
     qgs->addItem(innerLine);
+}
+
+void InnerInputNode::BindToText(QGraphicsScene *qgs)
+{
+    if(content==nullptr)
+    {
+        QString temp="0x";
+        temp+= QString::number(GetID(),16);
+        auto text = new Text(QPointF(location.x()-width/2,location.y()-height/2), this, temp, true);
+        text->change_input("");
+        text->change_content("文本");
+        text->setZValue(shape->zValue());
+        auto window = MainWindow::instance();
+        text->reset_font(QFont(window->fontFamily, window->fontSize));
+        text->reset_color(window->textColor);
+        (new ChangeElementAction(text, ElementShape::Text, true,(Scene*)qgs))->Do();
+        //add by luo yigui
+                this->boundTextView=text;
+               // this->boundTextView->setParent(this);
+    }
 }
 void InnerInputNode::Remove(QGraphicsScene *qgs)
 {

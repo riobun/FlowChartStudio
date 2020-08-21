@@ -1,4 +1,11 @@
 #include "subgraphnode.h"
+#include "inputnode.h"
+#include "innerinputnode.h"
+#include "arrow.h"
+#include "changeelementaction.h"
+#include "subgraphnode.h"
+#include "outputnode.h"
+#include "inneroutputnode.h"
 #include <math.h>
 
 SubgraphNode::SubgraphNode()
@@ -99,3 +106,42 @@ void SubgraphNode::OpenSubGraph()
     }
 }
 
+void SubgraphNode::CreateAllPort()
+{
+   if(!relatedGraph) return;
+   foreach(auto n, relatedGraph->getNodes())
+   {
+       if(n->GetType()==4)
+       {
+           InputNode* in=dynamic_cast<InputNode*>(n);
+           InnerInputNode* iin=new InnerInputNode(QPointF(GetLocation().x()-GetWidth(),GetLocation().y()-GetHeight()),n->GetWidth(),n->GetHeight());
+           ChangeElementAction* CEA1=new ChangeElementAction(iin,ElementShape::InnerInput,true,(Scene*)GetRelatedQGS());
+           Arrow* arr=new Arrow(iin->getNodeItem(),getNodeItem(),1);
+           CEA1->Do();
+           in->relatedInner.insert(iin->GetID(),iin);
+           ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)GetRelatedQGS());
+           CEA2->Do();
+           iin->BindToText(iin->GetRelatedQGS());
+           QString temp="0x";
+           temp+= QString::number(n->GetID(),16);
+           iin->content->change_input(temp);
+           iin->content->change_content("文本");
+       }
+       if(n->GetType()==5)
+       {
+           OutputNode* on=dynamic_cast<OutputNode*>(n);
+           InnerOutputNode* ion=new InnerOutputNode(QPointF(GetLocation().x()+GetWidth(),GetLocation().y()-GetHeight()),n->GetWidth(),n->GetHeight());
+           ChangeElementAction* CEA1=new ChangeElementAction(ion,ElementShape::InnerOutput,true,(Scene*)GetRelatedQGS());
+           Arrow* arr=new Arrow(ion->getNodeItem(),getNodeItem(),1);
+           CEA1->Do();
+           on->relatedInner.insert(ion->GetID(),ion);
+           ChangeElementAction* CEA2=new ChangeElementAction(arr,ElementShape::Arrow,true,(Scene*)GetRelatedQGS());
+           CEA2->Do();
+           ion->BindToText(ion->GetRelatedQGS());
+           QString temp="0x";
+           temp+= QString::number(n->GetID(),16);
+           ion->content->change_input(temp);
+           ion->content->change_content("文本");
+       }
+   }
+}
