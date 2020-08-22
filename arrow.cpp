@@ -437,10 +437,12 @@ void Arrow::removeArrow()
     new ChangeElementAction(ar, ElementShape::Arrow, false);
     scene->removeItem(ar);
     if(content)
-         {ar->content->delete_text(scene);
-          scene->removeItem(content);
-          auto action = new ChangeElementAction(content, ElementShape::Text, false);
-                  action->Do();
+         {if(ar->content){
+            ar->content->delete_text(scene);
+              scene->removeItem(ar->content);
+              auto action = new ChangeElementAction(ar->content, ElementShape::Text, false);
+                      action->Do();
+            }
     }
     if(ar->Arrownode!=nullptr){
         ar->Arrownode->Remove(scene);
@@ -616,9 +618,9 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
      auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
-     arrownode->ConnectAsSource(arrow3);
-     arrownode->ConnectAsDestination(arrow2);
-     //myStartItem->GetNode()->ConnectAsSource(arrow2);
+//     arrownode->ConnectAsSource(arrow3);
+//     arrownode->ConnectAsDestination(arrow2);
+     myStartItem->GetNode()->ConnectAsDestination(arrow2);
 
      arrow2->setArrowColor(color);
      arrow3->setArrowColor(color);
