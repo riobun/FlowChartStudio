@@ -54,7 +54,8 @@ void DetailsDialog2::verify()
     str.append(IDEdit->text());
    // str.chop(1);
     if(str==ID){
-        isID=true;
+        accept();
+        return;
     }
     else{
        isID2=isNorm(str);
@@ -62,7 +63,7 @@ void DetailsDialog2::verify()
          isID=isRepeat(str);
         }
     }
-    if (isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
+    if (!isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
         ID=str;
         accept();
         return;
@@ -81,7 +82,7 @@ void DetailsDialog2::verify()
             //reject();
     }
 
-    else if(!isID){
+    else if(isID){
         QMessageBox::StandardButton answer;
         answer = QMessageBox::warning(this, tr("修改后的ID不合法"),
             tr("修改后的ID与已有ID重复\n"
