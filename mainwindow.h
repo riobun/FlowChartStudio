@@ -79,7 +79,9 @@ public:
     int fontSize = 12;
     Graph* cutGraph = new Graph;
     int lineWidth = 2;
-
+    QMap<QModelIndex,Scene* > scenes;
+    QMap<QGraphicsScene*, Graph*> graphs;
+    Ui::MainWindow *ui;
 
 public:
     Ui::MainWindow* getUi() const;
@@ -160,7 +162,7 @@ private:
 
 
 private:
-    Ui::MainWindow *ui;
+
     int rename_index;
 
     static MainWindow* _instance;
@@ -195,8 +197,7 @@ private:
     QMap<int, Node*> _selectedNodes;
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
-    QMap<QModelIndex,Scene* > scenes;
-    QMap<QGraphicsScene*, Graph*> graphs;
+
 
     QVector<QPair<int,QString>> index_name_subgraph;
 };
