@@ -339,12 +339,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionsave, &QAction::triggered, [this]()
     {
         auto item = static_cast<Item*>(model->takeRow(0)[0]);
-        Saver::Save(item);
+        saveItem(item);
     });
 
     connect(ui->actionclose_pro, &QAction::triggered, [this]()
     {
-        removeItem(static_cast<Item*>(model->takeRow(0)[0]));
+        auto item = static_cast<Item*>(model->takeRow(0)[0]);
+        removeItem(item);
     });
 
     connect(ui->actionxinjian, &QAction::triggered, [this]()
@@ -785,10 +786,6 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             showPathAction = menu.addAction("Show Path");
         }
         auto selectedAction = menu.exec(QCursor::pos());
-        auto save = [item]()
-        {
-            Saver::Save(item);
-        };
         auto addFolder = [item]()
         {
             auto newPath = item->path() + "/新文件夹";
@@ -816,7 +813,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 }
             }
         }
-        else if (selectedAction == SaveProjectAction) save();
+        else if (selectedAction == SaveProjectAction) saveItem(item);
         else if (selectedAction == SaveProjectAsAction)
         {
             auto path = QFileDialog::getSaveFileName(this, "另存为项目", "",
@@ -968,4 +965,23 @@ void MainWindow::removeItem(Item* item)
     auto parent = item->parent();
     if (parent) parent->removeRow(row);
     else model->removeRow(row);
+}
+
+void MainWindow::saveItem(Item *item)
+{
+    auto type = item->itemType();
+    if (type != ItemType::Folder)
+    {
+        Saver::Save(item);
+    }
+    if (type != ItemType::File)
+    {
+        auto count = item->rowCount();
+        for (auto i = 0; i < count; i++)
+        {
+            auto child = item->child(i);
+            auto childItem = static_cast<Item*>(child);
+            saveItem(childItem);
+        }
+    }
 }

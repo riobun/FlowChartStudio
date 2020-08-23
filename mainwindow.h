@@ -161,6 +161,7 @@ private:
     void checkName(QStandardItem *item, bool showMessage = true);
     void closeItem(Item* item);
     void removeItem(Item* item);
+    void saveItem(Item* item);
 
 
 private:
