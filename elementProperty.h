@@ -9,6 +9,7 @@ enum class ElementProperty
     Location,
     BackgroundColor,
     FrameColor,
+    FrameWidth,
     Font,
     FontColor,
     String,

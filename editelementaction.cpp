@@ -46,7 +46,8 @@ EditElementAction::~EditElementAction()
         delete (bool*)from;
         delete (bool*)to;
     }
-    else if (property == ElementProperty::ArrowKind)
+    else if (property == ElementProperty::ArrowKind ||
+             property == ElementProperty::FrameWidth)
     {
         delete (int*)from;
         delete (int*)to;
@@ -83,6 +84,11 @@ void EditElementAction::Do()
            {
                auto toFrameColor = static_cast<QColor*>(to);
                node->SetFrameColor(*toFrameColor);
+           }
+           else if (property == ElementProperty::FrameWidth)
+           {
+               auto toSize = static_cast<int*>(to);
+               node->SetThickness((int)toSize);
            }
       }
       else if(shape==  ElementShape::Text)
