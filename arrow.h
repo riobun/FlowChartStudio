@@ -37,11 +37,12 @@ public:
     void removeArrow();
     void removemyself();
     void updatePosition();
+    Text* getcontent(){return content;}
     virtual void BindToText(QGraphicsScene* qgs) override;
     NodeItem *myStartItem;
     NodeItem *myEndItem;
     int getHaveEnd() {return HaveEnd;}
-
+    QList<QPointF> getlist(){return list;}
     using Selected = void (*)(Arrow* n,bool b);
     Selected s;
 

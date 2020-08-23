@@ -62,7 +62,7 @@ void DetailsDialog3::verify()
     s_i.append(InputEdit->text());
     if(input!=s_i){
         isInput=isNorm(s_i);
-        if(!isNorm){
+        if(!isInput){
             QMessageBox::StandardButton answer;
             answer = QMessageBox::warning(this, tr("修改后的REF不合法"),
                 tr("修改后的REF格式不正确\n"
@@ -80,7 +80,8 @@ void DetailsDialog3::verify()
     str.append(IDEdit->text());
    // str.chop(1);
     if(str==ID){
-        isID=true;
+        accept();
+        return;
     }
     else{
        isID2=isNorm(str);
@@ -88,7 +89,7 @@ void DetailsDialog3::verify()
          isID=isRepeat(str);
         }
     }
-    if (isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
+    if (!isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
         ID=str;
         accept();
         return;
@@ -107,7 +108,7 @@ void DetailsDialog3::verify()
             //reject();
     }
 
-    else if(!isID){
+    else if(isID){
         QMessageBox::StandardButton answer;
         answer = QMessageBox::warning(this, tr("修改后的ID不合法"),
             tr("修改后的节点ID与已有ID重复\n"

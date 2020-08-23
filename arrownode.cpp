@@ -91,5 +91,11 @@ int Arrownode::selecttext()
 {
     if(this->getNodeItem()->Getisselect()){
         this->content->setSelected(true);
+//        QVector<Arrow*> arrows= this->getArrows();
+//        foreach(Arrow* ar , arrows){
+//            if(ar->getcontent()!=nullptr)
+//            ar->getcontent()->move_text(QPointF((ar->getlist().at(0).x()+ar->getlist().at(1).x())/2,
+//                                (ar->getlist().at(0).y()+ar->getlist().at(1).y())/2));
+//        }
     }
 }

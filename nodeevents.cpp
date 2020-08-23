@@ -181,6 +181,15 @@ void NodeEvents::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
             text->move_text(text->get_text_location()+event->pos()-event->lastPos());
             texts.append(text);
         }
+        else{
+           QVector<Arrow*> arrows= node->getArrows();
+           foreach(Arrow* ar , arrows){
+               if(ar->content!=nullptr)
+               ar->content->move_text(QPointF((ar->getlist().at(0).x()+ar->getlist().at(1).x())/2,
+                                   (ar->getlist().at(0).y()+ar->getlist().at(1).y())/2));
+           }
+
+        }
     }
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {

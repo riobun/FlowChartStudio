@@ -35,6 +35,7 @@ class GraphElement //图形元素
           int CStringHexToInt(QString str);
           bool isRepeat(QString str);
           int chagearrowID(int oldid);
+
           //将对像转成JSONOBJECT
           virtual QJsonObject get_JsonObject()=0;
           //根据JSON转成成相应的对象
