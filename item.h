@@ -12,6 +12,8 @@ class Item : public QStandardItem
 {
 public:
     Item(::ItemType type, const QString& path);
+    ~Item();
+
     ::ItemType itemType() const { return _type; }
     const QString& path() const { return _path; }
     Scene* scene() const;

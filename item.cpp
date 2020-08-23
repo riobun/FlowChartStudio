@@ -33,6 +33,11 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path), _sc
     }
 }
 
+Item::~Item()
+{
+    qDebug() << _path;
+}
+
 Scene* Item::scene() const
 {
     auto window = MainWindow::instance();
