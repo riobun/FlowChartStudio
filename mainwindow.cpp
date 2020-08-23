@@ -350,17 +350,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionxinjian, &QAction::triggered, [this]()
     {
-
+        auto path = QFileDialog::getOpenFileName(this, "新建文件", "",
+                                                 "图文件(*.gr)");
+        Saver::AddNewFile(path);
     });
 
     connect(ui->actiondakai, &QAction::triggered, [this]()
     {
-
+        auto path = QFileDialog::getOpenFileName(this, "打开现有文件", "",
+                                                 "图文件(*.gr)");
+        Saver::Open(path);
     });
 
     connect(ui->actionbaocun, &QAction::triggered, [this]()
     {
-
+        //auto item = static_cast<Item*>(model->takeRow(0)[0]);
+        //saveItem(item);
     });
 
     connect(ui->actionguanbi, &QAction::triggered, [this]()
