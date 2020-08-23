@@ -8,8 +8,8 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path), _sc
     auto length = pathParts.length();
     auto fileName = pathParts[length - 1];
     auto nameParts = fileName.split('.');
-    auto name = nameParts[0];
-    setText(name);
+    _name = nameParts[0];
+    setText(_name);
     QIcon icon;
     switch (type)
     {

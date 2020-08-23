@@ -16,17 +16,16 @@ void Saver::AddNewFile(const QString& path)
 void Saver::Save(Item* item)
 {
     auto index = item->index();
-    auto scene = item->scene();
-    auto graph = scene->graph;
     auto path = item->path();
     auto type = item->itemType();
     if (type == ItemType::File)
     {
-
+        auto scene = item->scene();
+        auto graph = scene->graph;
     }
     else if (type == ItemType::Project)
     {
-
+        auto name = item->name();
     }
 }
 

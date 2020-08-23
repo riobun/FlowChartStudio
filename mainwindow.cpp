@@ -313,7 +313,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     // 项目菜单
-
     connect(ui->actionnew_pro, &QAction::triggered, [this]()
     {
         auto path = QFileDialog::getSaveFileName(this, "新建项目", QString(),
@@ -335,6 +334,42 @@ MainWindow::MainWindow(QWidget *parent)
             auto item = Saver::Open(path);
             model->appendRow(item);
         }
+    });
+
+    connect(ui->actionsave, &QAction::triggered, [this]()
+    {
+        auto item = static_cast<Item*>(model->takeRow(0)[0]);
+        Saver::Save(item);
+    });
+
+    connect(ui->actionclose_pro, &QAction::triggered, [this]()
+    {
+
+    });
+
+    connect(ui->actionxinjian, &QAction::triggered, [this]()
+    {
+
+    });
+
+    connect(ui->actiondakai, &QAction::triggered, [this]()
+    {
+
+    });
+
+    connect(ui->actionbaocun, &QAction::triggered, [this]()
+    {
+
+    });
+
+    connect(ui->actionguanbi, &QAction::triggered, [this]()
+    {
+
+    });
+
+    connect(ui->actionlingcunwei, &QAction::triggered, [this]()
+    {
+
     });
 
     // 将编辑菜单栏中的动作绑定到槽
@@ -644,8 +679,6 @@ void MainWindow::modifyTabText(QStandardItem* standardItem){
 
 
 }
-
-
 
 void MainWindow::sizeDialog(){
 //    QDialog dlg(this);
