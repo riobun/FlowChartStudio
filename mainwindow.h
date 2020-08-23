@@ -28,7 +28,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class Operator;
+class Item;
 
 struct item_data
 {
@@ -159,6 +159,8 @@ private:
     void clickTextColorButton();
     void addNewTab(QStandardItem* currentItem);
     void checkName(QStandardItem *item, bool showMessage = true);
+    void closeItem(Item* item);
+    void removeItem(Item* item);
 
 
 private:

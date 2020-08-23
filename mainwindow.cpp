@@ -344,7 +344,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionclose_pro, &QAction::triggered, [this]()
     {
-
+        removeItem(static_cast<Item*>(model->takeRow(0)[0]));
     });
 
     connect(ui->actionxinjian, &QAction::triggered, [this]()
@@ -785,29 +785,6 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             showPathAction = menu.addAction("Show Path");
         }
         auto selectedAction = menu.exec(QCursor::pos());
-        auto close = [this, curItem]()
-        {
-            auto texts = getChildrenPaths(curItem);
-            texts.append(curItem->text());
-            auto tabWidget = ui->tabWidget;
-            auto count = tabWidget->count();
-            for (auto i = count - 1; i >= 0; i--)
-            {
-                auto text = tabWidget->tabText(i);
-                if (texts.contains(text))
-                {
-                    tabWidget->tabCloseRequested(i);
-                }
-            }
-        };
-        auto remove = [this, close, curItem]()
-        {
-            close();
-            auto row = curItem->row();
-            auto parent = curItem->parent();
-            if (parent) parent->removeRow(row);
-            else model->removeRow(row);
-        };
         auto save = [item]()
         {
             Saver::Save(item);
@@ -846,7 +823,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                                                      "项目文件(*.pr)");
             Saver::SaveAs(item, path);
         }
-        else if (selectedAction == CloseProjectAction) remove();
+        else if (selectedAction == CloseProjectAction) removeItem(item);
         else if (selectedAction == AddFileAction) addFile();
         else if (selectedAction == AddFolderAction) addFolder();
         else if (selectedAction == AddExistingFolderAction)
@@ -862,9 +839,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 }
             }
         }
-        else if (selectedAction == RemoveFolderAction) remove();
-        else if (selectedAction == CloseFileAction) close();
-        else if (selectedAction == RemoveFileAction) remove();
+        else if (selectedAction == RemoveFolderAction) removeItem(item);
+        else if (selectedAction == CloseFileAction) closeItem(item);
+        else if (selectedAction == RemoveFileAction) removeItem(item);
         else if (selectedAction == SaveFileAction)
         {
             Saver::Save(item);
@@ -966,4 +943,29 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 void MainWindow::treeItemChanged(QStandardItem* item)
 {
 
+}
+
+void MainWindow::closeItem(Item* item)
+{
+    auto texts = getChildrenPaths(item);
+    texts.append(item->text());
+    auto tabWidget = ui->tabWidget;
+    auto count = tabWidget->count();
+    for (auto i = count - 1; i >= 0; i--)
+    {
+        auto text = tabWidget->tabText(i);
+        if (texts.contains(text))
+        {
+            tabWidget->tabCloseRequested(i);
+        }
+    }
+}
+
+void MainWindow::removeItem(Item* item)
+{
+    closeItem(item);
+    auto row = item->row();
+    auto parent = item->parent();
+    if (parent) parent->removeRow(row);
+    else model->removeRow(row);
 }
