@@ -1,6 +1,7 @@
 #ifndef ARROWNODE_H
 #define ARROWNODE_H
 #include"node.h"
+#include"arrow.h"
 class Arrownode:public Node
 {
 public:

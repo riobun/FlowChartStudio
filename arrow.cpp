@@ -344,8 +344,10 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
                 if(ar->Arrownode!=nullptr){
                     ar->Arrownode->getNodeItem()->SetSelected(true);
                 }
-                if(ar->content!=nullptr){
-                ar->content->setSelected(true);}
+                //不需要选定箭头的时候去选定文本框
+//                if(ar->content!=nullptr){
+//                ar->content->setSelected(true);
+//                }
                }
                 QBrush* brush=new QBrush();
                 painter->setBrush(*brush);
@@ -435,10 +437,12 @@ void Arrow::removeArrow()
     new ChangeElementAction(ar, ElementShape::Arrow, false);
     scene->removeItem(ar);
     if(content)
-         {ar->content->delete_text(scene);
-          scene->removeItem(content);
-          auto action = new ChangeElementAction(content, ElementShape::Text, false);
-                  action->Do();
+         {if(ar->content){
+            ar->content->delete_text(scene);
+              scene->removeItem(ar->content);
+              auto action = new ChangeElementAction(ar->content, ElementShape::Text, false);
+                      action->Do();
+            }
     }
     if(ar->Arrownode!=nullptr){
         ar->Arrownode->Remove(scene);
@@ -614,17 +618,23 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
      auto arrow2 = new Arrow(myStartItem,arrownode->getNodeItem(),0);
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
-
+//     arrownode->ConnectAsSource(arrow3);
+//     arrownode->ConnectAsDestination(arrow2);
+     myStartItem->GetNode()->ConnectAsDestination(arrow2);
 
      arrow2->setArrowColor(color);
      arrow3->setArrowColor(color);
      if(content!=nullptr){
      arrow2->content=content;
-     arrow3->content=content;
-     arrownode->content=content;
+     //arrow3->content=content;
+     //arrownode->content=content;
      //给arrownode的content赋值
      arrow2->content->putup_text(scene);
-     arrow2->content->build_text();}
+     arrow2->content->build_text();
+     }
+//     if(arrow2->content!=nullptr){
+//     arrow2->content->move_text(QPointF((arrow2->list.at(0).x()+arrow2->list.at(1).x())/2,
+//             (arrow2->list.at(0).y()+arrow2->list.at(1).y())/2));}
      arrownode->deleteID();
           arrow2->deleteID();
           arrow2->Id=oldid;
