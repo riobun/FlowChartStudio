@@ -676,6 +676,7 @@ void MainWindow::modifyTabText(QStandardItem* standardItem){
         //修改tab里存储的路径
         tab_data Data0;
         Data0.path = static_cast<Item*>(item->parent())->path()+"/"+item->text();
+        if (item->itemType() == ::ItemType::File) Data0.path += ".gr";
         qDebug()<<Data0.path;
         QVariant tabVariData;
         tabVariData.setValue<tab_data>(Data0);
