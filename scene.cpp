@@ -19,14 +19,9 @@
 #include "arrownode.h"
 #include <QVector>
 
-Scene::Scene(Graph* graph) : graph(graph)
-{
-
-}
-
 Scene::~Scene()
 {
-
+    delete graph;
 }
 
 void Scene::keyPressEvent(QKeyEvent *event)

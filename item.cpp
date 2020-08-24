@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 
 Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
-    _graph(new Graph())
+    _scene(nullptr)
 {
     auto pathParts = path.split('/');
     auto length = pathParts.length();
@@ -21,7 +21,8 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
     setIcon(icon);
     if (type == ::ItemType::File)
     {
-
+        _scene = new Scene();
+        _scene->setSceneRect(QRectF(0,0,5000,5000));
     }
     else if (type == ::ItemType::Project)
     {
@@ -36,7 +37,12 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
 
 Item::~Item()
 {
-    delete _graph;
+    if (_scene) delete _scene;
+}
+
+Graph* Item::graph() const
+{
+    return _scene->graph;
 }
 
 void Item::rename(const QString &newName)

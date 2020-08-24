@@ -12,11 +12,10 @@
 class Scene : public QGraphicsScene
 {
 public:
-    Scene(Graph* graph);
     ~Scene();
 
     static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);
-    Graph* graph;
+    Graph* graph = new Graph();
     void clearSelect();
     QList<Action*> undoStack;
     QList<Action*> redoStack;

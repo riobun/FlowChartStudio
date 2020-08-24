@@ -14,6 +14,7 @@
 #include <QList>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QScrollBar>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -443,17 +444,6 @@ QIcon MainWindow::createColorIcon(QColor color)
 
 void MainWindow::removeSubTab(int index){
 
-//    delete open_scenes[index];
-    auto tabwidget = ui->tabWidget;
-    tabwidget->setCurrentIndex(index);
-    auto widget = tabwidget->currentWidget();
-    auto layout = widget->layout();
-    auto item = layout->itemAt(0);
-    auto itemWidget = item->widget();
-    auto view = qobject_cast<QGraphicsView*>(itemWidget);
-    auto graphicsScene = view->scene();
-    auto scene = static_cast<Scene*>(graphicsScene);
-    delete scene;
     open_scenes.removeAt(index);
 
     if(ui->tabWidget->count() == 1) {
@@ -471,10 +461,9 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     auto item = static_cast<Item*>(currentItem);
 
     //创建新的VIEW和SCENE，并绑定
-    Scene* scene = new Scene(item->graph());
     QGraphicsView* graphicsView = new QGraphicsView();
 
-    graphicsView->setScene(scene);
+    graphicsView->setScene(item->scene());
 
     //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
     QWidget *tabFile = new QWidget(this);
@@ -493,15 +482,15 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     tabVariData.setValue<tab_data>(Data0);
     ui->tabWidget->tabBar()->setTabData(tabCount-1,tabVariData);
 
-
-    scene->setSceneRect(QRectF(0,0,5000,5000));
-    open_scenes.append(scene);
+    graphicsView->horizontalScrollBar()->setSliderPosition(0);
+    graphicsView->verticalScrollBar()->setSliderPosition(0);
+    open_scenes.append(item->scene());
 
 }
 
 void MainWindow::addNewTab(){
     //创建新的VIEW和SCENE，并绑定
-    defaultGraph->clear();
+/*    defaultGraph->clear();
     Scene* scene = new Scene(defaultGraph);
     QGraphicsView* graphicsView = new QGraphicsView();
 
@@ -525,7 +514,7 @@ void MainWindow::addNewTab(){
 
     scene->setSceneRect(QRectF(0,0,5000,5000));
     open_scenes.append(scene);
-    qDebug()<<open_scenes.count();
+    qDebug()<<open_scenes.count();*/
 }
 
 void MainWindow::addNewTab(QString name){
@@ -547,10 +536,9 @@ void MainWindow::addNewTab(QString name){
     Saver::AddNewFile(path);
 
     //创建新的VIEW和SCENE，并绑定
-    Scene* scene = new Scene(item->graph());
     QGraphicsView* graphicsView = new QGraphicsView();
 
-    graphicsView->setScene(scene);
+    graphicsView->setScene(item->scene());
 
     //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
     QWidget *tabFile = new QWidget(this);
@@ -560,8 +548,9 @@ void MainWindow::addNewTab(QString name){
     int index = ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),name);
     ui->tabWidget->setCurrentWidget(tabFile);
 
-    scene->setSceneRect(QRectF(0,0,5000,5000));
-    open_scenes.append(scene);
+    graphicsView->horizontalScrollBar()->setSliderPosition(0);
+    graphicsView->verticalScrollBar()->setSliderPosition(0);
+    open_scenes.append(item->scene());
 
     index_name_subgraph.push_back({index,name});
 
