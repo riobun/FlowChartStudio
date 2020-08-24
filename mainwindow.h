@@ -200,6 +200,7 @@ private:
     QMap<int, Node*> _selectedNodes;
     QMap<int, Arrow*> _selectedArrows;
     QVector<Text*> _selectedTexts;
+    Graph* defaultGraph = new Graph();
 
 
     QVector<QPair<int,QString>> index_name_subgraph;

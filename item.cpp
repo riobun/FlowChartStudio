@@ -2,7 +2,8 @@
 #include "item.h"
 #include "ui_mainwindow.h"
 
-Item::Item(::ItemType type, const QString& path) : _type(type), _path(path), _scene(nullptr)
+Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
+    _graph(new Graph())
 {
     auto pathParts = path.split('/');
     auto length = pathParts.length();
@@ -35,26 +36,7 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path), _sc
 
 Item::~Item()
 {
-    qDebug() << _path;
-}
-
-Scene* Item::scene() const
-{
-    auto window = MainWindow::instance();
-    auto ui = window->getUi();
-    auto tabWidget = ui->tabWidget;
-    auto tabCount = tabWidget->count();
-    auto tabBar = tabWidget->tabBar();
-    for (auto i = 0; i < tabCount; i++)
-    {
-        auto tabData = tabBar->tabData(i).value<tab_data>();
-        auto path = tabData.path;
-        if (path == _path)
-        {
-            return window->open_scene()[i];
-        }
-    }
-    return nullptr;
+    delete _graph;
 }
 
 void Item::rename(const QString &newName)

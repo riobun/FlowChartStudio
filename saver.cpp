@@ -20,8 +20,7 @@ void Saver::Save(Item* item)
     auto type = item->itemType();
     if (type == ItemType::File)
     {
-        auto scene = item->scene();
-        auto graph = scene->graph;
+        auto graph = item->graph();
     }
     else if (type == ItemType::Project)
     {

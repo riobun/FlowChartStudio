@@ -221,7 +221,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->treeView,&QTreeView::customContextMenuRequested,this,&MainWindow::onTreeViewMenuRequested);
 
-    _scene = new Scene();
+    _scene = new Scene(defaultGraph);
     ui->graphicsView->setScene(scene());
     //_scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
     _scene->setSceneRect(QRectF(0,0,5000,5000));
@@ -338,13 +338,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionsave, &QAction::triggered, [this]()
     {
-        auto item = static_cast<Item*>(model->takeRow(0)[0]);
+        auto root = model->invisibleRootItem();
+        auto item = static_cast<Item*>(root->child(0));
         saveItem(item);
     });
 
     connect(ui->actionclose_pro, &QAction::triggered, [this]()
     {
-        auto item = static_cast<Item*>(model->takeRow(0)[0]);
+        auto root = model->invisibleRootItem();
+        auto item = static_cast<Item*>(root->child(0));
         removeItem(item);
     });
 
@@ -441,6 +443,7 @@ QIcon MainWindow::createColorIcon(QColor color)
 
 void MainWindow::removeSubTab(int index){
 
+    delete open_scenes[index];
     open_scenes.removeAt(index);
 
     if(ui->tabWidget->count() == 1) {
@@ -458,7 +461,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     auto item = static_cast<Item*>(currentItem);
 
     //创建新的VIEW和SCENE，并绑定
-    Scene* scene = new Scene();
+    Scene* scene = new Scene(item->graph());
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -488,7 +491,8 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
 
 void MainWindow::addNewTab(){
     //创建新的VIEW和SCENE，并绑定
-    Scene* scene = new Scene();
+    defaultGraph->clear();
+    Scene* scene = new Scene(defaultGraph);
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);
@@ -525,9 +529,15 @@ void MainWindow::addNewTab(QString name){
             return;
         }
     }
+    auto root = model->invisibleRootItem();
+    auto projectItem = static_cast<Item*>(root->child(0));
+    auto path =  + "/" + name + ".gr";
+    auto item = new Item(ItemType::File, path);
+    projectItem->appendRow(item);
+    Saver::AddNewFile(path);
 
     //创建新的VIEW和SCENE，并绑定
-    Scene* scene = new Scene();
+    Scene* scene = new Scene(item->graph());
     QGraphicsView* graphicsView = new QGraphicsView();
 
     graphicsView->setScene(scene);

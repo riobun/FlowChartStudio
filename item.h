@@ -6,7 +6,7 @@
 
 #include "ItemType.h"
 
-class Scene;
+class Graph;
 
 class Item : public QStandardItem
 {
@@ -16,7 +16,7 @@ public:
 
     ::ItemType itemType() const { return _type; }
     const QString& path() const { return _path; }
-    Scene* scene() const;
+    Graph* graph() const { return _graph; }
     const QString& name() const { return _name; }
     void rename(const QString& newName);
     void setPath(const QString& path) { _path = path; }
@@ -24,7 +24,7 @@ public:
 private:
     ::ItemType _type;
     QString _path;
-    Scene* _scene;
+    Graph* _graph;
     QString _name;
 };
 
