@@ -170,7 +170,7 @@ private:
 
     static MainWindow* _instance;
 
-    Scene* _scene;
+    Scene* _scene = nullptr;
 
     QList<Scene*> open_scenes;
     QMenu *createColorMenu(const char *slot, QColor defaultColor);

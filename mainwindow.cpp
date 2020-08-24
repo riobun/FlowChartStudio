@@ -220,19 +220,19 @@ MainWindow::MainWindow(QWidget *parent)
     //treeview右键菜单
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->treeView,&QTreeView::customContextMenuRequested,this,&MainWindow::onTreeViewMenuRequested);
-
+/*
     _scene = new Scene(defaultGraph);
     ui->graphicsView->setScene(scene());
     //_scene->setSceneRect(QRectF(QPointF(0.0f, 0.0f), ui->graphicsView->size()));
     _scene->setSceneRect(QRectF(0,0,5000,5000));
-
+*/
     //页面选项卡设计
     ui->tabWidget->clear();
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->usesScrollButtons();
 
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
-
+/*
 //    FlowChartScene* scene = new FlowChartScene();
 //    ui->graphicsView->setScene(scene);
     QWidget *tabFile0 = new QWidget(this);
@@ -248,7 +248,7 @@ MainWindow::MainWindow(QWidget *parent)
     QVariant tabVariData;
     tabVariData.setValue<tab_data>(Data0);
     ui->tabWidget->tabBar()->setTabData(0,tabVariData);
-
+*/
 //     _scene = ui->graphicsView->scene();
 
     _instance = this;
@@ -306,7 +306,7 @@ MainWindow::MainWindow(QWidget *parent)
             QLayoutItem* item = ui->tabWidget->currentWidget()->layout()->itemAt(0);
             QGraphicsView* graphicView = qobject_cast<QGraphicsView*>(item->widget());
 
-            _scene->clearSelect();
+            if (_scene) _scene->clearSelect();
             _scene = static_cast<Scene*>(graphicView->scene());
         }
 
@@ -443,18 +443,28 @@ QIcon MainWindow::createColorIcon(QColor color)
 
 void MainWindow::removeSubTab(int index){
 
-    delete open_scenes[index];
+//    delete open_scenes[index];
+    auto tabwidget = ui->tabWidget;
+    tabwidget->setCurrentIndex(index);
+    auto widget = tabwidget->currentWidget();
+    auto layout = widget->layout();
+    auto item = layout->itemAt(0);
+    auto itemWidget = item->widget();
+    auto view = qobject_cast<QGraphicsView*>(itemWidget);
+    auto graphicsScene = view->scene();
+    auto scene = static_cast<Scene*>(graphicsScene);
+    delete scene;
     open_scenes.removeAt(index);
 
     if(ui->tabWidget->count() == 1) {
         ui->tabWidget->removeTab(index);
 
-        addNewTab();
+        _scene = nullptr;
+        //addNewTab();
     }
     else {
         ui->tabWidget->removeTab(index);
     }
-    qDebug()<<open_scenes.count();
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
