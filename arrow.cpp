@@ -527,6 +527,7 @@ void Arrow::BindToText(QGraphicsScene* qgs){
     content->reset_font(QFont(window->fontFamily, window->fontSize));
     content->reset_color(window->textColor);
     (new ChangeElementAction(content, ElementShape::Text, true))->Do();
+    this->boundTextView=content;
 
     }
 };
@@ -778,6 +779,7 @@ QJsonObject Arrow::get_JsonObject()
     QJsonObject qso;
     QJsonObject startpointobj;
     QJsonObject endpointobj;
+    QJsonObject TVqso;
 
     startpointobj.insert("x",myStartItem->pos().x());
     startpointobj.insert("y",myStartItem->pos().y());
@@ -790,6 +792,46 @@ QJsonObject Arrow::get_JsonObject()
     qso.insert("size",getSize());
     qso.insert("startPoint",startpointobj);
     qso.insert("endPoint",endpointobj);
+    qso.insert("HaveEnd",getHaveEnd());
+        //QList<QJsonObject> PathPoints;
+        QJsonArray PathPoints;
+        for(int i=1;i<list.length()-1;i++)
+        {
+            QJsonObject xy;
+            xy.insert("x",list[i].x());
+            xy.insert("y",list[i].y());
+            PathPoints.append(xy);
+
+        }
+        qso.insert("PathPoints",PathPoints);//PathPoints
+    /*
+        QJsonObject Arrownode;
+        Node*arrownode=getArrowNode();
+        if (arrownode!=nullptr)
+         {
+         Arrownode.insert("x",arrownode->GetLocation().x());
+         Arrownode.insert("y",arrownode->GetLocation().y());
+         qso.insert("Arrownode",Arrownode);
+        }//ArrowNode
+
+    */
+         if(this->boundTextView!=nullptr)
+        {
+
+            TVqso.insert("Id",boundTextView->getId());
+            TVqso.insert("Location_X",boundTextView->x());
+            TVqso.insert("Location_y",boundTextView->y());
+            TVqso.insert("FontColor",boundTextView->get_text_color().name());
+            TVqso.insert("FontSize",boundTextView->get_text_font().toString());
+
+            QJsonObject TVCqso;
+            TVCqso.insert("TextDescription",boundTextView->get_text_content());
+            TVCqso.insert("LogicAction",boundTextView->get_text_logic());
+
+            TVqso.insert("TextContent",QJsonValue(TVCqso));
+
+            qso.insert("TextView",QJsonValue(TVqso));
+        }
 
     return qso;
 

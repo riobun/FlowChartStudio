@@ -2,7 +2,15 @@
 #include "item.h"
 #include "scene.h"
 #include "saver.h"
-
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
+#include <QMessageBox>
+#include <QByteArray>
+#include <QDebug>
+#include <QVariant>
+#include<QApplication>
 void Saver::AddNewProject(const QString& path)
 {
 
@@ -21,10 +29,58 @@ void Saver::Save(Item* item)
     if (type == ItemType::File)
     {
         auto graph = item->graph();
+
+        QJsonArray graphArray;
+        QJsonObject qso;
+
+        graphArray.append(graph->get_JsonObject());
+
+        QJsonObject gqso;
+        gqso.insert("FilePath",path);
+        gqso.insert("GraphID",graph->GetID());
+        graphArray.append(gqso);
+        qso.insert("Flie",QJsonValue(graphArray));
+
+        QJsonDocument doc;
+        doc.setObject(qso);
+        QFile file(QApplication::applicationDirPath()+item->path());
+        if(!file.open(QIODevice::WriteOnly))
+        {
+            qDebug() << "File open failed!";
+        }
+        else
+        {
+            qDebug() <<"File open successfully!";
+        }
+             file.write(doc.toJson(QJsonDocument::Indented));
+             file.close();
     }
     else if (type == ItemType::Project)
     {
         auto name = item->name();
+        QJsonObject qso;
+        QJsonArray FileArray;
+        QJsonObject gqso;
+
+        FileArray.append(name);
+        FileArray.append(path);
+        gqso.insert("GraphID",item->graph()->GetID());
+        FileArray.append(gqso);
+        qso.insert("Project",QJsonValue(FileArray));
+
+        QJsonDocument doc;
+        doc.setObject(qso);
+        QFile file(QApplication::applicationDirPath()+item->path());
+        if(!file.open(QIODevice::WriteOnly))
+        {
+            qDebug() << "File open failed!";
+        }
+        else
+        {
+            qDebug() <<"File open successfully!";
+        }
+             file.write(doc.toJson(QJsonDocument::Indented));
+             file.close();
     }
 }
 

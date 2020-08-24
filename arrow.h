@@ -45,6 +45,7 @@ public:
     QList<QPointF> getlist(){return list;}
     using Selected = void (*)(Arrow* n,bool b);
     Selected s;
+     Node*  getArrowNode(){return Arrownode;}
 
     //将对像转成JSONOBJECT
         virtual QJsonObject get_JsonObject() override;
@@ -59,6 +60,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event)override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event)override;
+    Text *boundTextView=nullptr;
 private:
 
     QPolygonF arrowHead;
