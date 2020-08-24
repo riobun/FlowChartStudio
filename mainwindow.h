@@ -39,7 +39,7 @@ struct tab_data
 {
 
     QString path;
-
+    Item* item;
 };
 
 Q_DECLARE_METATYPE(item_data);

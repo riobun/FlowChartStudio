@@ -478,6 +478,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     //在tab里保存路径
     tab_data Data0;
     Data0.path = item->path();
+    Data0.item = item;
     QVariant tabVariData;
     tabVariData.setValue<tab_data>(Data0);
     ui->tabWidget->tabBar()->setTabData(tabCount-1,tabVariData);
@@ -547,6 +548,14 @@ void MainWindow::addNewTab(QString name){
     tabFile->setLayout(layout1);
     int index = ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),name);
     ui->tabWidget->setCurrentWidget(tabFile);
+
+    int tabCount = ui->tabWidget->count();
+    tab_data Data0;
+    Data0.path = item->path();
+    Data0.item = item;
+    QVariant tabVariData;
+    tabVariData.setValue<tab_data>(Data0);
+    ui->tabWidget->tabBar()->setTabData(tabCount-1,tabVariData);
 
     graphicsView->horizontalScrollBar()->setSliderPosition(0);
     graphicsView->verticalScrollBar()->setSliderPosition(0);
@@ -945,7 +954,9 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
                                                yesButton);
         if (result == yesButton)
         {
-
+            auto item = tabwidget->tabBar()->tabData(index).value<tab_data>().item;
+            Saver::Save(item);
+            scene->isChanged = false;
         }
     }
     tabwidget->setCurrentIndex(lastIndex);
