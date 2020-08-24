@@ -30,20 +30,17 @@ void Saver::Save(Item* item)
     {
         auto graph = item->graph();
 
-        QJsonArray graphArray;
         QJsonObject qso;
-
-        graphArray.append(graph->get_JsonObject());
-
         QJsonObject gqso;
         gqso.insert("FilePath",path);
-        gqso.insert("GraphID",graph->GetID());
-        graphArray.append(gqso);
-        qso.insert("Flie",QJsonValue(graphArray));
+        gqso.insert("Name",item->name());
+        gqso.insert("Graph",QJsonValue(graph->get_JsonObject()));
+        qso.insert("Flie",gqso);
 
         QJsonDocument doc;
         doc.setObject(qso);
-        QFile file(QApplication::applicationDirPath()+item->path());
+        QFile file(item->path());
+        qDebug() << path;
         if(!file.open(QIODevice::WriteOnly))
         {
             qDebug() << "File open failed!";
@@ -58,19 +55,26 @@ void Saver::Save(Item* item)
     else if (type == ItemType::Project)
     {
         auto name = item->name();
+
         QJsonObject qso;
         QJsonArray FileArray;
+        QJsonArray grapharray;
         QJsonObject gqso;
+        QJsonObject cgqso;
 
-        FileArray.append(name);
-        FileArray.append(path);
-        gqso.insert("GraphID",item->graph()->GetID());
+        gqso.insert("Name",name);
+        gqso.insert("Path",path);
+        cgqso.insert("GraphId",item->graph()->GetID());
+       // cgqso.insert("GraphName",item->graph()->);
+        grapharray.append(cgqso);
+        gqso.insert("graph",QJsonValue(grapharray));
         FileArray.append(gqso);
         qso.insert("Project",QJsonValue(FileArray));
 
         QJsonDocument doc;
         doc.setObject(qso);
-        QFile file(QApplication::applicationDirPath()+item->path());
+        QFile file(path);
+        qDebug() << path;
         if(!file.open(QIODevice::WriteOnly))
         {
             qDebug() << "File open failed!";

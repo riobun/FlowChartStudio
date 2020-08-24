@@ -88,7 +88,7 @@ void EditElementAction::Do()
            else if (property == ElementProperty::FrameWidth)
            {
                auto toSize = static_cast<int*>(to);
-               node->SetThickness((int)toSize);
+               node->SetThickness((int)(*toSize));
            }
       }
       else if(shape==  ElementShape::Text)
