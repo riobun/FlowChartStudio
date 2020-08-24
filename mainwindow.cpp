@@ -367,13 +367,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionbaocun, &QAction::triggered, [this]()
     {
-        //auto item = static_cast<Item*>(model->takeRow(0)[0]);
-        //saveItem(item);
+        auto tabwidget = ui->tabWidget;
+        auto index = tabwidget->currentIndex();
+        auto item = tabwidget->tabBar()->tabData(index).value<tab_data>().item;
+        Saver::Save(item);
     });
 
     connect(ui->actionguanbi, &QAction::triggered, [this]()
     {
-
+        auto tabwidget = ui->tabWidget;
+        auto index = tabwidget->currentIndex();
+        auto item = tabwidget->tabBar()->tabData(index).value<tab_data>().item;
+        closeItem(item);
     });
 
     connect(ui->actionlingcunwei, &QAction::triggered, [this]()
