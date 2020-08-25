@@ -23,12 +23,12 @@ DetailsDialog3::DetailsDialog3(QString input_,QString ID_,QString con,const QStr
 
 
     QGridLayout *mainLayout = new QGridLayout;
-    mainLayout->addWidget(IDLabel, 2, 0);
-    mainLayout->addWidget(IDEdit, 3, 0);
-    mainLayout->addWidget(InputEdit,1,0);
-    mainLayout->addWidget(InputLabel, 0, 0);
-    mainLayout->addWidget(contentLabel, 4, 0);
-    mainLayout->addWidget(contentEdit, 5,0,3,1);
+    mainLayout->addWidget(IDLabel, 0, 0);
+    mainLayout->addWidget(IDEdit, 1, 0);
+    mainLayout->addWidget(InputEdit,7,0);
+    mainLayout->addWidget(InputLabel, 6, 0);
+    mainLayout->addWidget(contentLabel, 2, 0);
+    mainLayout->addWidget(contentEdit, 3,0,3,1);
     mainLayout->addWidget(buttonBox, 8, 0, 1, 1);
     setLayout(mainLayout);
 
