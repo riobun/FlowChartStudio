@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addSeparator();
 
     fontBtn = new QFontComboBox(this);
+    fontBtn->setEditable(false);
     connect(fontBtn, &QFontComboBox::currentFontChanged, this, &MainWindow::changeFontFamily);
     ui->toolBar->addWidget(fontBtn);
 
