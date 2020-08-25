@@ -360,6 +360,29 @@ void MainWindow::changeLineWidth(QString widthString)
         action->Do();
     }
 }
+
+void MainWindow::changeFrameWidth(QString widthString)
+{
+    auto width = widthString.toInt();
+    if (selectedNodes()->empty())
+    {
+        frameWidth = width;
+    }
+    else
+    {
+        auto action = new GroupAction;
+        bdSizeCombo->setCurrentText(QString::number(frameWidth));
+        foreach (auto node, *selectedNodes())
+        {
+            *action << new EditElementAction(node, ElementShape::Rectangle,
+                                             ElementProperty::FrameWidth,
+                                             new int(node->GetThickness()),
+                                             new int(width));
+        }
+        action->Do();
+    }
+}
+
 void MainWindow::deleteElement()
 {
     NodeEvents::deleteElemets();

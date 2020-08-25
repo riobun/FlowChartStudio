@@ -79,6 +79,7 @@ public:
     int fontSize = 12;
     Graph* cutGraph = new Graph;
     int lineWidth = 2;
+    int frameWidth = 2;
     QMap<QModelIndex,Scene* > scenes;
     QMap<QGraphicsScene*, Graph*> graphs;
     Ui::MainWindow *ui;
@@ -102,6 +103,8 @@ public slots:
     void ok_sizeBtn_clicked();
     void cancel_sizeBtn_clicked();
     void treeItemChanged(QStandardItem* item);
+    void changeFrameWidth(QString widthString);
+    void changeLineWidth(QString width);
 
 private slots:
     void textColorChanged();
@@ -152,7 +155,6 @@ private:
     void changeLineColor(QColor color);
     void changeTextColor(QColor color);
     void changeFont(QFont font);
-    void changeLineWidth(QString width);
     void clickbdBtn();
     void clickFillBtn();
     void clickLineBtn();

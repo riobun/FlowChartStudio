@@ -65,6 +65,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
             node->SetFrameColor(window->bdColor);
             node->SetBackgroundColor(window->fillColor);
+            node->SetThickness(window->frameWidth);
             auto action = new ChangeElementAction(node, shape, true);
             action->Do();
         }
@@ -241,6 +242,7 @@ void Scene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         }
         newNode->SetFrameColor(node->GetFrameColor());
         newNode->SetBackgroundColor(node->GetBackgroundColor());
+        newNode->SetThickness(node->GetThickness());
         *action << new ChangeElementAction(newNode, shape, true);
         nodes.insert(node, newNode);
     }

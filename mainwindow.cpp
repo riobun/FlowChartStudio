@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //字号
     fontSizeCombo = new QComboBox(this);
-    fontSizeCombo->setEditable(true);
+    //fontSizeCombo->setEditable(true);
     for (int i = 6; i < 52; i = i + 2)
         fontSizeCombo->addItem(QString().setNum(i));
     fontSizeCombo->setCurrentText("12");
@@ -142,13 +142,13 @@ MainWindow::MainWindow(QWidget *parent)
      ui->toolBar->addWidget(ui->bdSizeButton);
 
     bdSizeCombo = new QComboBox(this);
-    bdSizeCombo->setEditable(true);
+    //bdSizeCombo->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
         bdSizeCombo->addItem(QString().setNum(i));
     bdSizeCombo->setCurrentText("2");
     QIntValidator *bd_validator = new QIntValidator(2, 15, this);
     bdSizeCombo->setValidator(bd_validator);
-    //connect(fontSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeFontSize);
+    connect(bdSizeCombo, SIGNAL(activated(const QString&)), this, SLOT(changeFrameWidth(QString)));
     ui->toolBar->addWidget(bdSizeCombo);
 
     //箭头粗细
@@ -156,13 +156,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addWidget(ui->arrowSizeButton);
 
     arrowSizeCombo = new QComboBox(this);
-    arrowSizeCombo->setEditable(true);
+    //arrowSizeCombo->setEditable(true);
     for (int i = 2; i < 16; i = i + 1)
         arrowSizeCombo->addItem(QString().setNum(i));
     arrowSizeCombo->setCurrentText("2");
     QIntValidator *arrow_validator = new QIntValidator(2, 15, this);
     arrowSizeCombo->setValidator(arrow_validator);
-    connect(arrowSizeCombo, &QComboBox::currentTextChanged, this, &MainWindow::changeLineWidth);
+    connect(arrowSizeCombo, SIGNAL(activated(const QString&)), this, SLOT(changeLineWidth(QString)));
     ui->toolBar->addWidget(arrowSizeCombo);
 
 
