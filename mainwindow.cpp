@@ -765,7 +765,22 @@ void MainWindow::sizeDialog(){
 
     connect(cancel_sizeBtn,&QPushButton::clicked,this,&MainWindow::cancel_sizeBtn_clicked);
     connect(ok_sizeBtn,&QPushButton::clicked,this,&MainWindow::ok_sizeBtn_clicked);
-    dlg->exec();
+    auto result = dlg->exec();
+    if (result == QDialog::Accepted)
+    {
+        auto frameWidthString = nodeSizeCombo_menu->currentText();
+        if (frameWidthString.toInt() != frameWidth)
+        {
+            bdSizeCombo->setCurrentText(frameWidthString);
+            changeFrameWidth(frameWidthString);
+        }
+        auto arrowWidthString = arrowSizeCombo_menu->currentText();
+        if (arrowWidthString.toInt() != lineWidth)
+        {
+            arrowSizeCombo->setCurrentText(arrowWidthString);
+            changeLineWidth(arrowWidthString);
+        }
+    }
 }
 
 void MainWindow::ok_sizeBtn_clicked(){
