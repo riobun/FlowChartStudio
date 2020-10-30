@@ -25,6 +25,7 @@
 #include "arrow.h"
 #include "item.h"
 #include "saver.h"
+#include "filemanager.h"
 
 //**************************
 #include "graph.h"
@@ -214,10 +215,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
 
-    //项目树形结构
-    model = new QStandardItemModel(ui->treeView);
-    ui->treeView->setModel(model);
-    model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
+    fileManager = new FileManager(this);
+    model = fileManager->model;
 
     //treeview右键菜单
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -314,30 +313,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     });
 
-    // 项目菜单
-    connect(ui->actionnew_pro, &QAction::triggered, [this]()
-    {
-        auto path = QFileDialog::getSaveFileName(this, "新建项目", QString(),
-                                                 "项目文件(*.pr)");
-        if (path != QString())
-        {
-            auto item = new Item(ItemType::Project, path);
-            model->appendRow(item);
-            Saver::AddNewProject(path);
-        }
-    });
-
-    connect(ui->actionopen_pro, &QAction::triggered, [this]()
-    {
-        auto path = QFileDialog::getOpenFileName(this, "打开项目", QString(),
-                                                 "项目文件(*.pr)");
-        if (path != QString())
-        {
-            auto item = Saver::Open(path);
-            model->appendRow(item);
-        }
-    });
-
     connect(ui->actionsave, &QAction::triggered, [this]()
     {
         auto root = model->invisibleRootItem();
@@ -395,6 +370,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pasteAction, SIGNAL(triggered()), this, SLOT(Paste()));
     connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
     connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
+
+
 }
 
 MainWindow::~MainWindow()
@@ -794,68 +771,60 @@ void MainWindow::cancel_sizeBtn_clicked(){
 void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
     QModelIndex curIndex = ui->treeView->indexAt(pos);
     QStandardItem* curItem = model->itemFromIndex(curIndex);
+    auto root = static_cast<Item*>(model->item(0));
     if(curIndex.isValid()){
         auto item = static_cast<Item*>(curItem);
         auto type = item->itemType();
         QMenu menu;
         int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
-        QAction* addProjectAction = nullptr, *addExistingProjectAction = nullptr,
+        QAction* addProjectAction = nullptr, *addExistingFileAction = nullptr,
                 *SaveProjectAction = nullptr, *SaveProjectAsAction = nullptr,
                 *CloseProjectAction = nullptr, *AddFolderAction = nullptr,
-                *AddExistingFolderAction = nullptr, *RemoveFolderAction = nullptr,
+                *RemoveFolderAction = nullptr,
                 *CloseFileAction = nullptr, *RemoveFileAction = nullptr,
                 *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
-                *AddFileAction = nullptr, *showPathAction = nullptr;
+                *addNewFileAction = nullptr, *showPathAction = nullptr;
         switch (type) {
         case ItemType::Project:
+            addNewFileAction = menu.addAction("添加新文件");
+            addExistingFileAction = menu.addAction("添加现有文件");
             addProjectAction = menu.addAction("Add New Folder to Project");
-            AddFileAction = menu.addAction("Add New File to Folder");
-            addExistingProjectAction = menu.addAction("Add Existing to Project");
             SaveProjectAction = menu.addAction("Save Project");
             SaveProjectAsAction = menu.addAction("Save Project As");
             CloseProjectAction = menu.addAction("Close Project");
             showPathAction = menu.addAction("Show Path");
             break;
         case ItemType::Folder:
-            AddFileAction = menu.addAction("Add New File to Folder");
+            addNewFileAction = menu.addAction("添加新文件");
+            addExistingFileAction = menu.addAction("添加现有文件");
             AddFolderAction = menu.addAction("Add New Folder to Folder");
-            AddExistingFolderAction = menu.addAction("Add Existing to Folder");
             RemoveFolderAction = menu.addAction("Remove from Project");
             showPathAction = menu.addAction("Show Path");
             break;
         case ItemType::File:
+            RemoveFileAction = menu.addAction("移除");
             CloseFileAction = menu.addAction("Close");
-            RemoveFileAction = menu.addAction("Remove from Project");
             SaveFileAction = menu.addAction("Save");
             SaveAsFileAction = menu.addAction("Save As");
             showPathAction = menu.addAction("Show Path");
         }
         auto selectedAction = menu.exec(QCursor::pos());
-        auto addFolder = [item]()
+        auto addFolder = [item, root]()
         {
             auto newPath = item->path() + "/新文件夹";
             auto newItem = new Item(::ItemType::Folder, newPath);
             item->appendRow(newItem);
-        };
-        auto addFile = [item]()
-        {
-            auto newPath = item->path() + "/新文件.gr";
-            auto newItem = new Item(::ItemType::File, newPath);
-            item->appendRow(newItem);
-            Saver::AddNewFile(newPath);
+            Saver::Save(root);
         };
         if (selectedAction == addProjectAction) addFolder();
-        else if (selectedAction == addExistingProjectAction)
+        else if (selectedAction == addExistingFileAction)
         {
-            auto path = QFileDialog::getOpenFileName(this, "打开现有文件", "",
-                                                     "图文件(*.gr)");
+            auto path = QFileDialog::getOpenFileName(this, "添加现有文件", QString(), "图文件(*.gr)");
             if (path != QString())
             {
                 auto newItem = Saver::Open(path);
-                if (newItem)
-                {
-                    item->appendRow(newItem);
-                }
+                item->appendRow(newItem);
+                Saver::Save(root);
             }
         }
         else if (selectedAction == SaveProjectAction) saveItem(item);
@@ -866,21 +835,18 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             Saver::SaveAs(item, path);
         }
         else if (selectedAction == CloseProjectAction) removeItem(item);
-        else if (selectedAction == AddFileAction) addFile();
-        else if (selectedAction == AddFolderAction) addFolder();
-        else if (selectedAction == AddExistingFolderAction)
+        else if (selectedAction == addNewFileAction)
         {
-            auto path = QFileDialog::getOpenFileName(this, "打开现有文件", "",
-                                                     "图文件(*.gr)");
+            auto path = QFileDialog::getSaveFileName(this, "添加新文件", QString(), "图文件(*.gr)");
             if (path != QString())
             {
-                auto newItem = Saver::Open(path);
-                if (newItem)
-                {
-                    item->appendRow(newItem);
-                }
+                auto newItem = new Item(::ItemType::File, path);
+                item->appendRow(newItem);
+                Saver::AddNewFile(path);
+                Saver::Save(root);
             }
         }
+        else if (selectedAction == AddFolderAction) addFolder();
         else if (selectedAction == RemoveFolderAction) removeItem(item);
         else if (selectedAction == CloseFileAction) closeItem(item);
         else if (selectedAction == RemoveFileAction) removeItem(item);

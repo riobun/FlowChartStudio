@@ -579,8 +579,8 @@
     <property name="title">
      <string>项目</string>
     </property>
-    <addaction name="actionnew_pro"/>
-    <addaction name="actionopen_pro"/>
+    <addaction name="newProjectAction"/>
+    <addaction name="openProjectAction"/>
     <addaction name="actionsave"/>
     <addaction name="actionclose_pro"/>
     <addaction name="actioncheck_pro"/>
@@ -834,7 +834,7 @@
     <string>点点划线</string>
    </property>
   </action>
-  <action name="actionnew_pro">
+  <action name="newProjectAction">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/new3.png</normaloff>:/images/new3.png</iconset>
@@ -843,7 +843,7 @@
     <string>新建</string>
    </property>
   </action>
-  <action name="actionopen_pro">
+  <action name="openProjectAction">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
@@ -928,17 +928,7 @@
     <string>保存项目</string>
    </property>
   </action>
-  <action name="newProjectAction">
-   <property name="text">
-    <string>新建项目</string>
-   </property>
-  </action>
   <action name="actionnewProject">
-   <property name="text">
-    <string>newProject</string>
-   </property>
-  </action>
-  <action name="newProjectAction_2">
    <property name="text">
     <string>newProject</string>
    </property>
@@ -946,11 +936,6 @@
   <action name="actionnewFile">
    <property name="text">
     <string>newFile</string>
-   </property>
-  </action>
-  <action name="openProjectAction">
-   <property name="text">
-    <string>openProject</string>
    </property>
   </action>
   <action name="actionxinjian">

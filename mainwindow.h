@@ -45,6 +45,8 @@ struct tab_data
 Q_DECLARE_METATYPE(item_data);
 Q_DECLARE_METATYPE(tab_data);
 
+class FileManager;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -167,6 +169,8 @@ private:
 
 
 private:
+
+    FileManager* fileManager;
 
     int rename_index;
 

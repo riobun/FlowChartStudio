@@ -24,6 +24,7 @@ SOURCES += \
     diamond.cpp \
     editelementaction.cpp \
     elementevents.cpp \
+    filemanager.cpp \
     graph.cpp \
     graphelement.cpp \
     groupaction.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     elementProperty.h \
     elementevents.h \
     elementshape.h \
+    filemanager.h \
     graph.h \
     graphelement.h \
     groupaction.h \
