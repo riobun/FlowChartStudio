@@ -813,9 +813,17 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             }
         }
         else if (selectedAction == AddFolderAction) addFolder();
-        else if (selectedAction == RemoveFolderAction) removeItem(item);
+        else if (selectedAction == RemoveFolderAction)
+        {
+            removeItem(item);
+            Saver::Save(root);
+        }
         else if (selectedAction == CloseFileAction) closeItem(item);
-        else if (selectedAction == RemoveFileAction) removeItem(item);
+        else if (selectedAction == RemoveFileAction)
+        {
+            removeItem(item);
+            Saver::Save(root);
+        }
         else if (selectedAction == SaveFileAction)
         {
             Saver::Save(item);
