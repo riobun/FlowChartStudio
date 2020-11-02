@@ -743,18 +743,17 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         auto type = item->itemType();
         QMenu menu;
         int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
-        QAction* addProjectAction = nullptr, *addExistingFileAction = nullptr,
+        QAction* addFolderAction = nullptr, *addExistingFileAction = nullptr,
                 *SaveProjectAction = nullptr, *SaveProjectAsAction = nullptr,
-                *CloseProjectAction = nullptr, *AddFolderAction = nullptr,
-                *RemoveFolderAction = nullptr,
-                *CloseFileAction = nullptr, *RemoveFileAction = nullptr,
+                *CloseProjectAction = nullptr,
+                *CloseFileAction = nullptr, *RemoveAction = nullptr,
                 *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
                 *addNewFileAction = nullptr, *showPathAction = nullptr;
         switch (type) {
         case ItemType::Project:
             addNewFileAction = menu.addAction("添加新文件");
             addExistingFileAction = menu.addAction("添加现有文件");
-            addProjectAction = menu.addAction("Add New Folder to Project");
+            addFolderAction = menu.addAction("添加筛选器");
             SaveProjectAction = menu.addAction("Save Project");
             SaveProjectAsAction = menu.addAction("Save Project As");
             CloseProjectAction = menu.addAction("Close Project");
@@ -763,13 +762,13 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         case ItemType::Folder:
             addNewFileAction = menu.addAction("添加新文件");
             addExistingFileAction = menu.addAction("添加现有文件");
-            AddFolderAction = menu.addAction("Add New Folder to Folder");
-            RemoveFolderAction = menu.addAction("Remove from Project");
+            addFolderAction = menu.addAction("添加筛选器");
+            RemoveAction = menu.addAction("移除筛选器");
             showPathAction = menu.addAction("Show Path");
             break;
         case ItemType::File:
-            RemoveFileAction = menu.addAction("移除");
-            CloseFileAction = menu.addAction("Close");
+            RemoveAction = menu.addAction("移除文件");
+            CloseFileAction = menu.addAction("关闭文件");
             SaveFileAction = menu.addAction("Save");
             SaveAsFileAction = menu.addAction("Save As");
             showPathAction = menu.addAction("Show Path");
@@ -782,7 +781,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             item->appendRow(newItem);
             Saver::Save(root);
         };
-        if (selectedAction == addProjectAction) addFolder();
+        if (selectedAction == addFolderAction) addFolder();
         else if (selectedAction == addExistingFileAction)
         {
             auto path = QFileDialog::getOpenFileName(this, "添加现有文件", QString(), "图文件(*.gr)");
@@ -812,14 +811,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 Saver::Save(root);
             }
         }
-        else if (selectedAction == AddFolderAction) addFolder();
-        else if (selectedAction == RemoveFolderAction)
-        {
-            removeItem(item);
-            Saver::Save(root);
-        }
         else if (selectedAction == CloseFileAction) closeItem(item);
-        else if (selectedAction == RemoveFileAction)
+        else if (selectedAction == RemoveAction)
         {
             removeItem(item);
             Saver::Save(root);

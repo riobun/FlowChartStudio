@@ -48,7 +48,7 @@ QJsonArray serializeFolder(Item* item)
         {
             jsonItem.insert("kind", "folder");
             jsonItem.insert("name", child->name());
-            jsonItem.insert("files", serializeFolder(child));
+            jsonItem.insert("items", serializeFolder(child));
         }
         files.append(jsonItem);
     }
@@ -71,7 +71,7 @@ QList<QStandardItem*> deserializeFolder(QJsonArray folder)
         else if (kind == "folder")
         {
             auto name = jsonItem.value("name").toString();
-            auto files = jsonItem.value("files").toArray();
+            auto files = jsonItem.value("items").toArray();
             item = new Item(ItemType::Folder, name);
             item->appendRows(deserializeFolder(files));
         }
