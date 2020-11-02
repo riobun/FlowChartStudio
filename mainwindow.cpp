@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setWindowState(Qt::WindowMaximized);
 
     //状态栏
         ui->listWidget->addItem("提示信息1");
