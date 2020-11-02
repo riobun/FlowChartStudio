@@ -327,41 +327,6 @@ MainWindow::MainWindow(QWidget *parent)
         removeItem(item);
     });
 
-    connect(ui->actionxinjian, &QAction::triggered, [this]()
-    {
-        auto path = QFileDialog::getOpenFileName(this, "新建文件", "",
-                                                 "图文件(*.gr)");
-        Saver::AddNewFile(path);
-    });
-
-    connect(ui->actiondakai, &QAction::triggered, [this]()
-    {
-        auto path = QFileDialog::getOpenFileName(this, "打开现有文件", "",
-                                                 "图文件(*.gr)");
-        Saver::Open(path);
-    });
-
-    connect(ui->actionbaocun, &QAction::triggered, [this]()
-    {
-        auto tabwidget = ui->tabWidget;
-        auto index = tabwidget->currentIndex();
-        auto item = tabwidget->tabBar()->tabData(index).value<tab_data>().item;
-        Saver::Save(item);
-    });
-
-    connect(ui->actionguanbi, &QAction::triggered, [this]()
-    {
-        auto tabwidget = ui->tabWidget;
-        auto index = tabwidget->currentIndex();
-        auto item = tabwidget->tabBar()->tabData(index).value<tab_data>().item;
-        closeItem(item);
-    });
-
-    connect(ui->actionlingcunwei, &QAction::triggered, [this]()
-    {
-
-    });
-
     // 将编辑菜单栏中的动作绑定到槽
     connect(ui->undoAction, SIGNAL(triggered()), this, SLOT(Undo()));
     connect(ui->redoAction, SIGNAL(triggered()), this, SLOT(Redo()));

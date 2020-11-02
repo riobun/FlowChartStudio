@@ -518,16 +518,6 @@
      <height>26</height>
     </rect>
    </property>
-   <widget class="QMenu" name="fileMenu">
-    <property name="title">
-     <string>文件</string>
-    </property>
-    <addaction name="actionxinjian"/>
-    <addaction name="actiondakai"/>
-    <addaction name="actionbaocun"/>
-    <addaction name="actionguanbi"/>
-    <addaction name="actionlingcunwei"/>
-   </widget>
    <widget class="QMenu" name="editMenu">
     <property name="title">
      <string>编辑</string>
@@ -586,9 +576,8 @@
     <addaction name="actioncheck_pro"/>
     <addaction name="actionrun_pro"/>
    </widget>
-   <addaction name="fileMenu"/>
-   <addaction name="editMenu"/>
    <addaction name="menu_2"/>
+   <addaction name="editMenu"/>
    <addaction name="nodeMenu"/>
    <addaction name="arrowMenu"/>
    <addaction name="textMenu"/>
@@ -604,56 +593,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="action1">
-   <property name="text">
-    <string>新建</string>
-   </property>
-  </action>
-  <action name="action1_2">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
-   </property>
-   <property name="text">
-    <string>打开</string>
-   </property>
-  </action>
-  <action name="action1_3">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/baocun.png</normaloff>:/images/baocun.png</iconset>
-   </property>
-   <property name="text">
-    <string>保存</string>
-   </property>
-  </action>
-  <action name="action1_4">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/lingcunwei.png</normaloff>:/images/lingcunwei.png</iconset>
-   </property>
-   <property name="text">
-    <string>另存为</string>
-   </property>
-  </action>
-  <action name="action1_5">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/daochu.png</normaloff>:/images/daochu.png</iconset>
-   </property>
-   <property name="text">
-    <string>导出</string>
-   </property>
-  </action>
-  <action name="action1_6">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
-   </property>
-   <property name="text">
-    <string>关闭</string>
-   </property>
-  </action>
   <action name="undoAction">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -714,15 +653,6 @@
     <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="action1_12">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/move.png</normaloff>:/images/move.png</iconset>
-   </property>
-   <property name="text">
-    <string>移动</string>
-   </property>
-  </action>
   <action name="deleteAction">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -733,20 +663,6 @@
    </property>
    <property name="shortcut">
     <string>Del</string>
-   </property>
-  </action>
-  <action name="action1_14">
-   <property name="text">
-    <string>1</string>
-   </property>
-  </action>
-  <action name="action1_15">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/new3.png</normaloff>:/images/new3.png</iconset>
-   </property>
-   <property name="text">
-    <string>新建</string>
    </property>
   </action>
   <action name="action_font">
@@ -822,16 +738,6 @@
    </property>
    <property name="text">
     <string>点线</string>
-   </property>
-  </action>
-  <action name="actiond">
-   <property name="text">
-    <string>点划线</string>
-   </property>
-  </action>
-  <action name="actiond_2">
-   <property name="text">
-    <string>点点划线</string>
    </property>
   </action>
   <action name="newProjectAction">
@@ -916,26 +822,6 @@
    </property>
    <property name="text">
     <string>箭头粗细</string>
-   </property>
-  </action>
-  <action name="actionss">
-   <property name="text">
-    <string>ss</string>
-   </property>
-  </action>
-  <action name="actionsaveProject">
-   <property name="text">
-    <string>保存项目</string>
-   </property>
-  </action>
-  <action name="actionnewProject">
-   <property name="text">
-    <string>newProject</string>
-   </property>
-  </action>
-  <action name="actionnewFile">
-   <property name="text">
-    <string>newFile</string>
    </property>
   </action>
   <action name="actionxinjian">
