@@ -2,10 +2,32 @@
 #include"arrow.h"
 #include "mainwindow.h"
 #include "changeelementaction.h"
+#include "inputnode.h"
+#include "outputnode.h"
+#include "innerinputnode.h"
+#include "inneroutputnode.h"
+#include "subgraphnode.h"
+#include "arrownode.h"
 
 Node::Node(){}
 Node::Node(QPointF lc,double w,double h):location(lc),width(w),height(h)
 {
+
+}
+
+ElementShape Node::getShape()
+{
+    if (_shape == ElementShape::Unknown)
+    {
+        if (dynamic_cast<Rectangle*>(this)) _shape = ElementShape::Rectangle;
+        else if (dynamic_cast<Diamond*>(this)) _shape = ElementShape::Diamond;
+        else if (dynamic_cast<InputNode*>(this)) _shape = ElementShape::Input;
+        else if (dynamic_cast<OutputNode*>(this)) _shape = ElementShape::Output;
+        else if (dynamic_cast<InnerInputNode*>(this)) _shape = ElementShape::InnerInput;
+        else if (dynamic_cast<InnerOutputNode*>(this)) _shape = ElementShape::InnerOutput;
+        else if (dynamic_cast<SubgraphNode*>(this)) _shape = ElementShape::SubGraph;
+        else if (dynamic_cast<ArrowNode*>(this)) _shape = ElementShape::ArrowNode;
+    }
 }
 
 Node::~Node()
@@ -286,4 +308,20 @@ void Node::set_JsonObject(QJsonObject qso)
   QString TVCLogicAction = TVCqso.value("LogicAction").toString();
 
 
+}
+
+Node* Node::create(ElementShape shape, QPointF point, qreal width, qreal height)
+{
+    Node* node;
+    switch (shape)
+    {
+        case ElementShape::Input: node = new InputNode(point, width, height); break;
+        case ElementShape::Output: node = new OutputNode(point, width, height); break;
+        case ElementShape::Diamond: node = new Diamond(point, width, height); break;
+        case ElementShape::SubGraph: node = new SubgraphNode(point, width); break;
+        case ElementShape::Rectangle: node = new Rectangle(point, width, height); break;
+        case ElementShape::InnerInput: node = new InnerInputNode(point, width, height); break;
+        case ElementShape::InnerOutput: node = new InnerOutputNode(point, width, height); break;
+        default: throw;
+    }
 }

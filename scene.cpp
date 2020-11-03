@@ -49,20 +49,9 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         auto point = event->scenePos();
         if (isNode(shape))
         {
-            Node* node;
             constexpr double width = 100;
             constexpr double height = 50;
-            switch (shape)
-            {
-                case ElementShape::Input: node = new InputNode(point, width, height); break;
-                case ElementShape::Output: node = new OutputNode(point, width, height); break;
-                case ElementShape::Diamond: node = new Diamond(point, width, height); break;
-                case ElementShape::SubGraph: node = new SubgraphNode(point, width); break;
-                case ElementShape::Rectangle: node = new Rectangle(point, width, height); break;
-                case ElementShape::InnerInput: node = new InnerInputNode(point, width, height); break;
-                case ElementShape::InnerOutput: node = new InnerOutputNode(point, width, height); break;
-                default: throw;
-            }
+            auto node = Node::create(shape, point, width, height);
             node->SetFrameColor(window->bdColor);
             node->SetBackgroundColor(window->fillColor);
             node->SetThickness(window->frameWidth);
@@ -208,38 +197,8 @@ void Scene::pasteElements(QGraphicsSceneContextMenuEvent *event)
     QMap<Node*, Node*> nodes;
     foreach (auto node, graph->getNodes())
     {
-        Node* newNode;
-        ElementShape shape;
-        if (dynamic_cast<Rectangle*>(node))
-        {
-            newNode = new Rectangle(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
-            shape = ElementShape::Rectangle;
-        }
-        else if (dynamic_cast<Diamond*>(node))
-        {
-            newNode = new Diamond(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
-            shape = ElementShape::Diamond;
-        }
-        else if (dynamic_cast<SubgraphNode*>(node))
-        {
-            newNode = new SubgraphNode(node->GetLocation() + offset, node->GetWidth());
-            shape = ElementShape::SubGraph;
-        }
-        else if (dynamic_cast<InputNode*>(node))
-        {
-            newNode = new InputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
-            shape = ElementShape::Input;
-        }
-        else if (dynamic_cast<OutputNode*>(node))
-        {
-            newNode = new OutputNode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
-            shape = ElementShape::Output;
-        }
-        else if (dynamic_cast<Arrownode*>(node))
-        {
-            newNode = new Arrownode(node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
-            shape = ElementShape::Arrownode;
-        }
+        auto shape = node->getShape();
+        auto newNode = Node::create(shape, node->GetLocation() + offset, node->GetWidth(), node->GetHeight());
         newNode->SetFrameColor(node->GetFrameColor());
         newNode->SetBackgroundColor(node->GetBackgroundColor());
         newNode->SetThickness(node->GetThickness());

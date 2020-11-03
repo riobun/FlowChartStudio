@@ -593,10 +593,10 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      QGraphicsItem::mouseDoubleClickEvent(event);
      isDoubleClick=true;
      auto point = event->scenePos();
-     auto arrownode = new class Arrownode(point, 5.0, 5.0);
+     auto arrownode = new ArrowNode(point, 5.0, 5.0);
 //     arrownode->SetBackgroundColor(this->getColor());
 //     arrownode->SetFrameColor(this->getColor());
-     *action << new ChangeElementAction(arrownode, ElementShape::Arrownode, true);
+     *action << new ChangeElementAction(arrownode, ElementShape::ArrowNode, true);
      arrownode->SetFrameColor(getColor());
      arrownode->SetBackgroundColor(getColor());
      auto arrows = myStartItem->GetNode()->getArrows();
@@ -656,10 +656,10 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //         arrow2->arrowlist[i]->Arrownode=arrownode;
      }
      if(arrow2->endItem()->GetWidth()<=5){
-         arrow2->Arrownode=dynamic_cast<class Arrownode*>(arrow2->endItem()->GetNode());
+         arrow2->Arrownode=dynamic_cast<class ArrowNode*>(arrow2->endItem()->GetNode());
      }
      if(arrow3->endItem()->GetWidth()<=5){
-         arrow3->Arrownode=dynamic_cast<class Arrownode*>(arrow3->endItem()->GetNode());
+         arrow3->Arrownode=dynamic_cast<class ArrowNode*>(arrow3->endItem()->GetNode());
      }
      arrow2->setType(getType());
      arrow3->setType(getType());

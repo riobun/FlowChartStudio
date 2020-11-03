@@ -1,19 +1,19 @@
 #include "arrownode.h"
 
-Arrownode::Arrownode()
+ArrowNode::ArrowNode()
 {
 
 }
-Arrownode:: Arrownode(QPointF lc,double wd,double h):Node(lc,wd,h)
+ArrowNode:: ArrowNode(QPointF lc,double wd,double h):Node(lc,wd,h)
 {
 
 
 }
-Arrownode::~Arrownode()
+ArrowNode::~ArrowNode()
 {
     delete shape;
 }
-void Arrownode::Paint(QGraphicsScene* qgs)
+void ArrowNode::Paint(QGraphicsScene* qgs)
 {
 
     QPolygonF polygon;
@@ -28,11 +28,11 @@ void Arrownode::Paint(QGraphicsScene* qgs)
     qgs->addItem(shape);
 }
 
-void Arrownode::SetVisibility(bool vis)
+void ArrowNode::SetVisibility(bool vis)
 {
     shape->setVisible(vis);
 }
-void Arrownode::SetLocation(const QPointF &qp)
+void ArrowNode::SetLocation(const QPointF &qp)
 {
     location=qp;
     QPolygonF polygon;
@@ -41,17 +41,17 @@ void Arrownode::SetLocation(const QPointF &qp)
     shape->setPolygon(polygon);
 }
 
-void Arrownode::SetWidth(double wd)
+void ArrowNode::SetWidth(double wd)
 {
 
 }
 
-void Arrownode::SetHeight(double h)
+void ArrowNode::SetHeight(double h)
 {
 
 }
 
-void Arrownode::SetBackgroundColor(const QColor &qc)
+void ArrowNode::SetBackgroundColor(const QColor &qc)
 {
     backgroundColor=qc;
     QBrush brush=shape->brush();
@@ -60,7 +60,7 @@ void Arrownode::SetBackgroundColor(const QColor &qc)
     shape->setBrush(brush);
 }
 
-void Arrownode::SetFrameColor(const QColor &qc)
+void ArrowNode::SetFrameColor(const QColor &qc)
 {
     frameColor=qc;
     QPen pen=shape->pen();
@@ -68,13 +68,13 @@ void Arrownode::SetFrameColor(const QColor &qc)
     shape->setPen(pen);
 }
 
-void Arrownode::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
+void ArrowNode::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
     qgs->removeItem(shape);
     if(content) content->delete_text(qgs);
 
 }
-void Arrownode::SetShape()
+void ArrowNode::SetShape()
 {
     QPolygonF polygon;
     polygon<<QPointF(location.x()-width/2,location.y()-height/2)<<QPointF(location.x()+width/2,location.y()-height/2);
@@ -83,11 +83,11 @@ void Arrownode::SetShape()
 }
 
 
-int Arrownode::GetType()
+int ArrowNode::GetType()
 {
     return 3;
 }
-int Arrownode::selecttext()
+int ArrowNode::selecttext()
 {
     if(this->getNodeItem()->Getisselect()){
         this->content->setSelected(true);

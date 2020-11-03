@@ -50,6 +50,7 @@ public:
     QString getInput(){return Input;}
     void change_input(QString inputID);
     void change_ID(QString ID_);
+    void change_logic(const QString& logic) { this->logic = logic; }
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);

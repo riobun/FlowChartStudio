@@ -7,11 +7,15 @@
 #include"graphelement.h"
 #include"QGraphicsScene"
 #include"nodeitem.h"
+#include "elementshape.h"
 class Arrow;
 class Graph;
+
 class Node:public GraphElement
 {
 public:
+    static Node* create(ElementShape shape, QPointF point, qreal width, qreal height);
+
     Node();
     Node(QPointF lc,double wd,double h);
     virtual void SetVisibility(bool vis);
@@ -48,6 +52,7 @@ public:
         virtual QJsonObject get_JsonObject() override;
         //根据JSON转成成相应的对象
         virtual void set_JsonObject(QJsonObject qso) override;
+    ElementShape getShape();
 protected:
     QPointF location=QPointF(0.0,0.0);//表示图形中心位置
     double width,height;
@@ -61,7 +66,7 @@ protected:
 private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;
-
+    ElementShape _shape = ElementShape::Unknown;
 };
 
 #endif // NODE_H

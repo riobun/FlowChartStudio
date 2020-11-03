@@ -60,6 +60,7 @@ void Graph::DeleteSubGraph(){
 void Graph::addNode(Node* node)
 {
     nodes.insert(node->GetID(), node);
+    node->graph = this;
 }
 
 
@@ -222,6 +223,7 @@ QVector<Text*> Graph::searchTexts(Node* node)
 void Graph::addArrow(Arrow* arrow)
 {
     arrows[arrow->GetID()] = arrow;
+    arrow->graph = this;
 }
 
 void Graph::removeArrow(Arrow* arrow)

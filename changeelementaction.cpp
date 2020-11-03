@@ -43,6 +43,7 @@ void ChangeElementAction::Do()
             node->Paint(scene);
             graph->addNode(node);
             graph->addNode(node,MainWindow::instance()->index_tab(),shape);
+            node->setId();
         }
         else
         {
@@ -95,6 +96,7 @@ void ChangeElementAction::Do()
             scene->addItem(arrow);
             arrow->updatePosition();
             graph->addArrow(arrow);
+            arrow->setId();
         }
         else
         {

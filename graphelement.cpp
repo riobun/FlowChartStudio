@@ -5,6 +5,7 @@
 #include <QtMath>
 #include<QMouseEvent>
 #include"idpool.h"
+#include "graph.h"
 
 //int GraphElement::maxid = 0;
 
@@ -12,11 +13,11 @@
 
 GraphElement::GraphElement()
 {
-//    Id = ++maxid;
-     this->setId();
-     this->setsId();
+    //Id = ++maxid;
+     //this->setId();
+     //this->setsId();
 }
-void GraphElement::setId(){
+/*void GraphElement::setId(){
     for(int i=0;i<200;i++){
         if(k1[i]==0){
             this->Id=i+1;
@@ -25,7 +26,7 @@ void GraphElement::setId(){
             //为0的时候表示ID未被占用，为1的时候表示已经被占用
         }
     }
-}
+}*/
 
 
 int GraphElement::GetID(){
@@ -52,8 +53,8 @@ QString GraphElement::getIdNum(int num)
 }//得到ID的16进制表示的字符串
 void GraphElement::deleteID()
 {
-   k1[this->Id-1]=0;
-   return ;
+/*   k1[this->Id-1]=0;
+   return ;*/
 }
 int GraphElement::CStringHexToInt(QString str)
 {
@@ -83,13 +84,13 @@ int GraphElement::CStringHexToInt(QString str)
     return nRet;
 }//利用ID字符串转成int值
 bool GraphElement::isRepeat(QString str){
-    int nRet=CStringHexToInt(str);
+/*    int nRet=CStringHexToInt(str);
     if(k1[nRet-1]==1){
             return true;
-        }else return false;
+        }else */return false;
 }
 bool GraphElement::changesId(QString str){
-    if(isRepeat(str)){
+/*    if(isRepeat(str)){
         return false;
         //用户输入的ID已经分配 0x111 8987
     }
@@ -99,10 +100,27 @@ bool GraphElement::changesId(QString str){
     k1[this->GetID()-1]=0;
     this->sId=str;
     this->Id=CStringHexToInt(str);
-    k1[this->GetID()-1]=1;
+    k1[this->GetID()-1]=1;*/
     return true;
 }
 int GraphElement::chagearrowID(int oldid){
-    k1[oldid-1]=1;
+    //k1[oldid-1]=1;
     return true;
+}
+void GraphElement::setId()
+{
+    if (Id != -1)
+    {
+        if (Id > graph->maxId) graph->maxId = Id;
+    }
+    else
+    {
+        Id = ++graph->maxId;
+        setsId();
+    }
+}
+void GraphElement::setId(int id)
+{
+    Id = id;
+    setsId();
 }

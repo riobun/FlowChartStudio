@@ -10,6 +10,7 @@
 //public:
 //    GraphElement();
 //};
+class Graph;
 
 class GraphElement //图形元素
 {
@@ -19,7 +20,7 @@ class GraphElement //图形元素
           int GetID();
           virtual void BindToText(QGraphicsScene* qgs)=0;
           int father;//一个流程图的父流程图的ID，暂定
-          int Id;//单个文件内唯一,文件内可能存在若干图形，不同图形ID不同
+          int Id = -1;//单个文件内唯一,文件内可能存在若干图形，不同图形ID不同
           QString sId;//16进制字符串的ID
           void setsId(){this->sId=getIdNum(this->Id);}
           QString getsId(){return this->sId;}
@@ -35,6 +36,8 @@ class GraphElement //图形元素
           int CStringHexToInt(QString str);
           bool isRepeat(QString str);
           int chagearrowID(int oldid);
+          void setId(int id);
+          Graph* graph;
 
           //将对像转成JSONOBJECT
           virtual QJsonObject get_JsonObject()=0;
@@ -42,6 +45,6 @@ class GraphElement //图形元素
           virtual void set_JsonObject(QJsonObject qso)=0;
 
 private:
-//          static int maxid;
+          //static int maxid;
 };
 #endif // GRAPHELEMENT_H

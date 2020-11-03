@@ -30,7 +30,7 @@ public:
     void setType(int flag);
     void setSize(int size);
     int getSize() {return asize;}
-    void setId(int size);
+    //void setId(int size);
     void setList();
     NodeItem *startItem() const { return myStartItem; }
     NodeItem *endItem() const { return myEndItem; }
@@ -51,7 +51,7 @@ public:
         virtual QJsonObject get_JsonObject() override;
         //根据JSON转成成相应的对象
         virtual void set_JsonObject(QJsonObject qso) override;
-
+    int HaveEnd;
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = nullptr) override;
@@ -61,6 +61,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event)override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event)override;
     Text *boundTextView=nullptr;
+
 private:
 
     QPolygonF arrowHead;
@@ -76,7 +77,7 @@ private:
     bool isFocus=false;
     bool isMoved=false;
     Node *Arrownode=nullptr;
-    int HaveEnd;
+
 
 };
 

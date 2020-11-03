@@ -56,6 +56,7 @@ public:
         int read_from_file(QString path);
 
         QString getPath();
+    int maxId = 0;
 private:
     void SetVisibility(bool set);
     bool isExpended;

@@ -2,7 +2,7 @@
 #define IDPOOL_H
 #include<QString>
 static int k1[200]={0};//图形的ID池
-static int k2[200]={0};//流程图的ID池
+// static int k2[200]={0};//流程图的ID池
 static int CStringHexToInt(QString str) //输入十六进制的ID字符串，如Ox6、Oxa这样
 {
     int nRet = 0;

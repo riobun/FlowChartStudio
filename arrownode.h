@@ -2,11 +2,11 @@
 #define ARROWNODE_H
 #include"node.h"
 #include"arrow.h"
-class Arrownode:public Node
+class ArrowNode:public Node
 {
 public:
-    Arrownode();
-    Arrownode(QPointF lc,double wd,double h);
+    ArrowNode();
+    ArrowNode(QPointF lc,double wd,double h);
     virtual void Paint(QGraphicsScene* qgs) override;
     void rePaint(QGraphicsScene* qgs);
     virtual void Remove(QGraphicsScene *qgs) override;
@@ -20,7 +20,7 @@ public:
     virtual void BindToText(QGraphicsScene* qgs) override{};
     virtual int GetType() override;
     int selecttext();
-    ~Arrownode();
+    ~ArrowNode();
 };
 
 
