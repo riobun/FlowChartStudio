@@ -836,7 +836,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
 
 Graph* MainWindow::graph()
 {
-    return static_cast<Scene*>(scene())->graph;
+    return scene() ? static_cast<Scene*>(scene())->graph : nullptr;
 }
 
 Ui::MainWindow* MainWindow::getUi() const

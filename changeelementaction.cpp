@@ -5,6 +5,8 @@
 #include "arrow.h"
 #include <QDebug>
 
+void onNodeSelected(Node* node, bool isSelected);
+void onTextSelected(Text* text, bool isSelected);
 void onArrowSelected(Arrow* arrow, bool isSelected);
 
 Scene* scene;
@@ -16,8 +18,11 @@ ChangeElementAction::ChangeElementAction(void* element, ElementShape shape, bool
     if (scene)
     {
         auto lastScene = MainWindow::instance()->scene();
-        lastScene->undoStack.removeLast();
-        scene->undoStack.append(this);
+        if (lastScene)
+        {
+            lastScene->undoStack.removeLast();
+            scene->undoStack.append(this);
+        }
     }
 }
 
@@ -38,8 +43,7 @@ void ChangeElementAction::Do()
         if (isCreated)
         {
             auto item = node->getNodeItem();
-            connect(item, &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
-            connect(item, &NodeItem::NewLocation, this, &ChangeElementAction::onNodeMoved);
+            connect(item, &NodeItem::Selected, [](Node* node, bool isSelected) { onNodeSelected(node, isSelected); });
             node->Paint(scene);
             graph->addNode(node);
             graph->addNode(node,MainWindow::instance()->index_tab(),shape);
@@ -57,7 +61,7 @@ void ChangeElementAction::Do()
             node->Remove(scene);
             graph->removeNode(node);
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
-            disconnect(node->getNodeItem(), &NodeItem::Selected, this, &ChangeElementAction::onNodeSelected);
+            disconnect(node->getNodeItem(), 0, 0, 0);
             node->getNodeItem()->setSelected(false);
         }
     }
@@ -70,7 +74,7 @@ void ChangeElementAction::Do()
             if (parent) parent->content = text;
             graph->addText(text);
             text->putup_text(scene);
-            connect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
+            connect(text, &Text::Selected, [](Text* text, bool isSelected) { onTextSelected(text, isSelected); });
             text->build_text(text->get_text_color(), text->get_text_font());
         }
         else
@@ -80,7 +84,7 @@ void ChangeElementAction::Do()
             graph->removeText(text);
             window->selectedTexts()->removeAll(text);
             text->delete_text(scene);
-            disconnect(text, &Text::Selected, this, &ChangeElementAction::onTextSelected);
+            disconnect(text, 0, 0, 0);
             text->setSelected(false);
         }
     }
@@ -116,7 +120,7 @@ void ChangeElementAction::Undo()
     ChangeElementAction(element, shape, !isCreated).Do();
 }
 
-void ChangeElementAction::onNodeSelected(Node* node, bool isSelected)
+void onNodeSelected(Node* node, bool isSelected)
 {
     auto selectedNodes = MainWindow::instance()->selectedNodes();
     if (isSelected)
@@ -129,12 +133,7 @@ void ChangeElementAction::onNodeSelected(Node* node, bool isSelected)
     }
 }
 
-void ChangeElementAction::onNodeMoved(Node* node, QPointF oldPosition)
-{
-
-}
-
-void ChangeElementAction::onTextSelected(Text* text, bool isSelected)
+void onTextSelected(Text* text, bool isSelected)
 {
     auto selectedTexts = MainWindow::instance()->selectedTexts();
     if (isSelected)

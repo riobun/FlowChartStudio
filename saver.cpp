@@ -70,7 +70,7 @@ QList<QStandardItem*> deserializeFolder(QJsonArray folder)
         if (kind == "file")
         {
             auto path = jsonItem.value("path").toString();
-            item = new Item(ItemType::File, path);
+            item = Saver::Open(path);
         }
         else if (kind == "folder")
         {
@@ -120,11 +120,9 @@ void Saver::Save(Item* item)
         auto graph = item->graph();
         QJsonObject graphJson;
         QJsonArray nodesJson;
-        graphJson.insert("nodes", nodesJson);
         foreach (auto node, graph->getNodes())
         {
             QJsonObject nodeJson;
-            nodesJson.append(nodeJson);
             nodeJson.insert("id", node->GetID());
             nodeJson.insert("shape", getShapeString(node->getShape()));
             nodeJson.insert("x", node->GetLocation().x());
@@ -140,13 +138,13 @@ void Saver::Save(Item* item)
                     .arg(frameColor.green()).arg(frameColor.blue());
             nodeJson.insert("frameColor", frameColorString);
             nodeJson.insert("thickness", node->GetThickness());
+            nodesJson.append(nodeJson);
         }
+        graphJson.insert("nodes", nodesJson);
         QJsonArray arrowsJson;
-        graphJson.insert("arrows", arrowsJson);
         foreach (auto arrow, graph->getArrows())
         {
             QJsonObject arrowJson;
-            arrowsJson.append(arrowJson);
             arrowJson.insert("id", arrow->GetID());
             arrowJson.insert("type", arrow->getType());
             arrowJson.insert("from", arrow->startItem()->GetNode()->GetID());
@@ -157,13 +155,13 @@ void Saver::Save(Item* item)
             arrowJson.insert("color", colorString);
             arrowJson.insert("size", arrow->getSize());
             arrowJson.insert("haveEnd", arrow->HaveEnd);
+            arrowsJson.append(arrowJson);
         }
+        graphJson.insert("arrows", arrowsJson);
         QJsonArray textsJson;
-        graphJson.insert("texts", textsJson);
         foreach (auto text, graph->getTexts())
         {
             QJsonObject textJson;
-            textsJson.append(textJson);
             textJson.insert("id", text->getId());
             auto font = text->get_text_font();
             auto fontString = QString("%1 %2 %3 %4").arg(font.family())
@@ -177,9 +175,12 @@ void Saver::Save(Item* item)
             textJson.insert("y", text->get_text_location().y());
             textJson.insert("logic", text->get_text_logic());
             textJson.insert("input", text->getInput());
-            textJson.insert("parent", text->parent->GetID());
+            if (text->parent) textJson.insert("parent", text->parent->GetID());
+            else textJson.insert("parent", -1);
             textJson.insert("content", text->get_text_content());
+            textsJson.append(textJson);
         }
+        graphJson.insert("texts", textsJson);
         doc.setObject(graphJson);
         write(path, doc);
     }
@@ -215,7 +216,6 @@ Item* Saver::Open(const QString& path)
         auto scene = item->scene();
         auto doc = read(path);
         auto graphJson = doc.object();
-        auto groupAction = new GroupAction();
         auto nodesJson = graphJson.value("nodes").toArray();
         foreach (auto nodeJsonValue, nodesJson)
         {
@@ -238,7 +238,7 @@ Item* Saver::Open(const QString& path)
             node->SetBackgroundColor(backgroundColor);
             node->SetFrameColor(frameColor);
             node->SetThickness(thickness);
-            *groupAction << new ChangeElementAction(node, shape, true, scene);
+            ChangeElementAction(node, shape, true, scene).Do();
         }
         auto arrowJson = graphJson.value("arrows").toArray();
         foreach (auto arrowJsonValue, arrowJson)
@@ -260,7 +260,7 @@ Item* Saver::Open(const QString& path)
             arrow->setType(type);
             arrow->setArrowColor(color);
             arrow->setSize(size);
-            *groupAction << new ChangeElementAction(arrow, ElementShape::Arrow, true, scene);
+            ChangeElementAction(arrow, ElementShape::Arrow, true, scene).Do();
         }
         auto textsJson = graphJson.value("texts").toArray();
         foreach (auto textJsonValue, textsJson)
@@ -279,7 +279,7 @@ Item* Saver::Open(const QString& path)
             QColor color(colorParts[0].toInt(),
                     colorParts[1].toInt(), colorParts[2].toInt());
             auto content = textJson.value("content").toString();
-            auto parentNode = graph->getNodes()[parent];
+            auto parentNode = parent == -1 ? nullptr : graph->getNodes()[parent];
             Text* text;
             if (parentNode)
             {
@@ -295,9 +295,8 @@ Item* Saver::Open(const QString& path)
             text->reset_font(font);
             text->reset_color(color);
             text->change_logic(logic);
-            *groupAction << new ChangeElementAction(text, ElementShape::Text, true, scene);
+            ChangeElementAction(text, ElementShape::Text, true, scene).Do();
         }
-        groupAction->Do();
     }
     return item;
 }

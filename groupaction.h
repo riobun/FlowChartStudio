@@ -2,9 +2,7 @@
 #define GROUPACTION_H
 
 #include <QVector>
-
 #include "action.h"
-
 
 class GroupAction : public Action
 {

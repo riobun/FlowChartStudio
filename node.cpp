@@ -28,6 +28,7 @@ ElementShape Node::getShape()
         else if (dynamic_cast<SubgraphNode*>(this)) _shape = ElementShape::SubGraph;
         else if (dynamic_cast<ArrowNode*>(this)) _shape = ElementShape::ArrowNode;
     }
+    return _shape;
 }
 
 Node::~Node()
@@ -324,4 +325,5 @@ Node* Node::create(ElementShape shape, QPointF point, qreal width, qreal height)
         case ElementShape::InnerOutput: node = new InnerOutputNode(point, width, height); break;
         default: throw;
     }
+    return node;
 }
