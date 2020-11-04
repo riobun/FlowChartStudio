@@ -264,18 +264,13 @@ MainWindow::MainWindow(QWidget *parent)
 
         if(item->itemType() == ::ItemType::File)
         {
-            int i;
-            for(i=0;i<ui->tabWidget->count();i++){   
-
-                if( ui->tabWidget->tabBar()->tabData(i).value<tab_data>().path==item->path())
-                    break;
+            if (item->tab())
+            {
+                ui->tabWidget->setCurrentWidget(item->tab());
             }
-            if(i>=ui->tabWidget->count()){
-
-               addNewTab(currentItem);
-            }
-            else {
-                ui->tabWidget->setCurrentIndex(i);
+            else
+            {
+                addNewTab(currentItem);
             }
         }
     });
@@ -314,6 +309,36 @@ MainWindow::MainWindow(QWidget *parent)
 
     });
 
+    auto closeProject = [this]()
+    {
+        auto root = model->invisibleRootItem();
+        auto item = static_cast<Item*>(root->child(0));
+        if (item) removeItem(item);
+    };
+
+    connect(ui->newProjectAction, &QAction::triggered, [this, closeProject]()
+    {
+        auto path = QFileDialog::getSaveFileName(window(), "新建项目文件", QString(), "项目文件(*.pr)");
+        if (path != QString())
+        {
+            closeProject();
+            auto item = new Item(ItemType::Project, path);
+            model->appendRow(item);
+            Saver::AddNewProject(path);
+        }
+    });
+
+    connect(ui->openProjectAction, &QAction::triggered, [this, closeProject]()
+    {
+        auto path = QFileDialog::getOpenFileName(window(), "打开项目", QString(), "项目文件(*.pr)");
+        if (path != QString())
+        {
+            closeProject();
+            auto item = Saver::Open(path);
+            model->appendRow(item);
+        }
+    });
+
     connect(ui->actionsave, &QAction::triggered, [this]()
     {
         auto root = model->invisibleRootItem();
@@ -321,11 +346,9 @@ MainWindow::MainWindow(QWidget *parent)
         saveItem(item);
     });
 
-    connect(ui->actionclose_pro, &QAction::triggered, [this]()
+    connect(ui->actionclose_pro, &QAction::triggered, [closeProject]()
     {
-        auto root = model->invisibleRootItem();
-        auto item = static_cast<Item*>(root->child(0));
-        removeItem(item);
+        closeProject();
     });
 
     // 将编辑菜单栏中的动作绑定到槽
@@ -421,6 +444,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     tabFile->setLayout(layout1);
     ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
     ui->tabWidget->setCurrentWidget(tabFile);
+    item->setTab(tabFile);
 
     int tabCount = ui->tabWidget->count();
 
@@ -497,6 +521,7 @@ void MainWindow::addNewTab(QString name){
     tabFile->setLayout(layout1);
     int index = ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),name);
     ui->tabWidget->setCurrentWidget(tabFile);
+    item->setTab(tabFile);
 
     int tabCount = ui->tabWidget->count();
     tab_data Data0;
@@ -754,24 +779,24 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             addNewFileAction = menu.addAction("添加新文件");
             addExistingFileAction = menu.addAction("添加现有文件");
             addFolderAction = menu.addAction("添加筛选器");
-            SaveProjectAction = menu.addAction("Save Project");
-            SaveProjectAsAction = menu.addAction("Save Project As");
-            CloseProjectAction = menu.addAction("Close Project");
-            showPathAction = menu.addAction("Show Path");
+            SaveProjectAction = menu.addAction("保存项目");
+            //SaveProjectAsAction = menu.addAction("Save Project As");
+            CloseProjectAction = menu.addAction("关闭项目");
+            showPathAction = menu.addAction("显示详细信息");
             break;
         case ItemType::Folder:
             addNewFileAction = menu.addAction("添加新文件");
             addExistingFileAction = menu.addAction("添加现有文件");
             addFolderAction = menu.addAction("添加筛选器");
             RemoveAction = menu.addAction("移除筛选器");
-            showPathAction = menu.addAction("Show Path");
+            showPathAction = menu.addAction("显示详细信息");
             break;
         case ItemType::File:
             RemoveAction = menu.addAction("移除文件");
             CloseFileAction = menu.addAction("关闭文件");
-            SaveFileAction = menu.addAction("Save");
-            SaveAsFileAction = menu.addAction("Save As");
-            showPathAction = menu.addAction("Show Path");
+            SaveFileAction = menu.addAction("保存文件");
+            //SaveAsFileAction = menu.addAction("Save As");
+            showPathAction = menu.addAction("显示详细信息");
         }
         auto selectedAction = menu.exec(QCursor::pos());
         auto addFolder = [item, root]()
@@ -829,7 +854,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         else if (selectedAction == showPathAction)
         {
-            QMessageBox::information(this, "path", item->path());
+            QMessageBox::information(this, "详细信息", "路径：" + item->path());
         }
     }
 }
@@ -886,6 +911,23 @@ void MainWindow::on_action1_3_triggered()
                  file.close();
 }
 
+void onCloseTab(QWidget* tab, Item* item)
+{
+    for (auto i = 0; i < item->rowCount(); i++)
+    {
+        auto child = static_cast<Item*>(item->child(i));
+        if (child->tab() == tab)
+        {
+            child->setTab(nullptr);
+            return;
+        }
+        if (child->itemType() == ItemType::Folder)
+        {
+            onCloseTab(tab, child);
+        }
+    }
+}
+
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     auto tabwidget = ui->tabWidget;
@@ -915,6 +957,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         }
     }
     tabwidget->setCurrentIndex(lastIndex);
+    onCloseTab(widget, static_cast<Item*>(model->invisibleRootItem()->child(0)));
 }
 
 void MainWindow::treeItemChanged(QStandardItem* item)

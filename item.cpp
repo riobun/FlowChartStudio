@@ -37,6 +37,12 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
 
 Item::~Item()
 {
+    if (_tab)
+    {
+        auto tabWidget = MainWindow::instance()->getUi()->tabWidget;
+        auto index = tabWidget->indexOf(_tab);
+        tabWidget->removeTab(index);
+    }
     if (_scene) delete _scene;
 }
 

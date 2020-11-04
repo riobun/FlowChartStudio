@@ -297,6 +297,7 @@ Item* Saver::Open(const QString& path)
             text->change_logic(logic);
             ChangeElementAction(text, ElementShape::Text, true, scene).Do();
         }
+        scene->isChanged = false;
     }
     return item;
 }

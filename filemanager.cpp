@@ -15,8 +15,8 @@ FileManager::FileManager(QObject *parent) : QObject(parent)
         ui->treeView->setModel(model);
         model->setHorizontalHeaderLabels(QStringList()<<"项目管理");
     }
-    connect(ui->newProjectAction, &QAction::triggered, this, &FileManager::newProject);
-    connect(ui->openProjectAction, &QAction::triggered, this, &FileManager::openProject);
+    //connect(ui->newProjectAction, &QAction::triggered, this, &FileManager::newProject);
+    //connect(ui->openProjectAction, &QAction::triggered, this, &FileManager::openProject);
 }
 
 MainWindow* FileManager::window() const
@@ -46,6 +46,7 @@ void FileManager::openProject()
     if (path != QString())
     {
         auto item = Saver::Open(path);
+        model->clear();
         model->appendRow(item);
     }
 }
