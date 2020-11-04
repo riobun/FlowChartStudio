@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "item.h"
 #include "ui_mainwindow.h"
@@ -51,6 +52,30 @@ Graph* Item::graph() const
     return _scene->graph;
 }
 
-void Item::rename(const QString &newName)
+bool Item::rename(const QString &newName)
 {
+    if (itemType() == ::ItemType::Project)
+    {
+        if (!QFile::rename(path() + "/" + name() + ".pr", path() + "/" + newName + ".pr"))
+        {
+            return false;
+        }
+    }
+    else if (itemType() == ::ItemType::File)
+    {
+        auto pathParts = path().split('/');
+        auto path = pathParts[0];
+        for (auto i = 1; i < pathParts.length() - 1; i++)
+        {
+            auto pathPart = pathParts[i];
+            path += "/" + pathPart;
+        }
+        if (!QFile::rename(path + "/" + name() + ".gr", path + "/" + newName + ".gr"))
+        {
+            return false;
+        }
+    }
+
+    _name = newName;
+    return true;
 }

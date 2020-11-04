@@ -314,6 +314,7 @@ MainWindow::MainWindow(QWidget *parent)
         auto root = model->invisibleRootItem();
         auto item = static_cast<Item*>(root->child(0));
         if (item) removeItem(item);
+        _scene = nullptr;
     };
 
     connect(ui->newProjectAction, &QAction::triggered, [this, closeProject]()
@@ -504,10 +505,17 @@ void MainWindow::addNewTab(QString name){
     }
     auto root = model->invisibleRootItem();
     auto projectItem = static_cast<Item*>(root->child(0));
-    auto path =  + "/" + name + ".gr";
-    auto item = new Item(ItemType::File, path);
-    projectItem->appendRow(item);
-    Saver::AddNewFile(path);
+    //auto path =  + "/" + name + ".gr";
+    Item* item;
+    auto path = QFileDialog::getSaveFileName(this, "添加新文件", QString(), "图文件(*.gr)");
+    if (path != QString())
+    {
+        item = new Item(::ItemType::File, path);
+        projectItem->appendRow(item);
+        Saver::AddNewFile(path);
+        Saver::Save(projectItem);
+    }
+    name = item->name();
 
     //创建新的VIEW和SCENE，并绑定
     QGraphicsView* graphicsView = new QGraphicsView();
@@ -632,7 +640,29 @@ void MainWindow::modifyTabText(QStandardItem* standardItem){
 
     auto item = static_cast<Item*>(standardItem);
 
-    if(item->itemType() == ItemType::File) {
+    if (item->text() == item->name()) return;
+
+    if (item->itemType() == ItemType::Folder)
+    {
+        auto parent = item->parent();
+        for (auto i = 0; i < parent->rowCount(); i++)
+        {
+            auto sibling = static_cast<Item*>(parent->child(i));
+            if (sibling != item && sibling->name() == item->text())
+            {
+                QMessageBox::warning(this, "警告", "父目录下已有同名筛选器！");
+                item->setText(item->name());
+                return;
+            }
+        }
+    }
+    if (!item->rename(item->text()))
+    {
+        QMessageBox::warning(this, "警告", "重命名文件失败！");
+        item->setText(item->name());
+    }
+    saveItem(static_cast<Item*>(model->invisibleRootItem()->child(0)));
+/*    if(item->itemType() == ItemType::File) {
         ui->tabWidget->tabBar()->setTabText(rename_index,standardItem->text());
 
         auto newName = item->text();
@@ -674,9 +704,7 @@ void MainWindow::modifyTabText(QStandardItem* standardItem){
         curPath+=item->text();
         item->setPath(curPath);
         modifyChildPath(item);
-    }
-
-
+    }*/
 }
 
 void MainWindow::sizeDialog(){
@@ -769,7 +797,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         QMenu menu;
         int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
         QAction* addFolderAction = nullptr, *addExistingFileAction = nullptr,
-                *SaveProjectAction = nullptr, *SaveProjectAsAction = nullptr,
+                *SaveProjectAction = nullptr,
                 *CloseProjectAction = nullptr,
                 *CloseFileAction = nullptr, *RemoveAction = nullptr,
                 *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
@@ -801,7 +829,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         auto selectedAction = menu.exec(QCursor::pos());
         auto addFolder = [item, root]()
         {
-            auto newPath = item->path() + "/新文件夹";
+            auto newPath = item->path() + "/新筛选器";
             auto newItem = new Item(::ItemType::Folder, newPath);
             item->appendRow(newItem);
             Saver::Save(root);
@@ -818,12 +846,12 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             }
         }
         else if (selectedAction == SaveProjectAction) saveItem(item);
-        else if (selectedAction == SaveProjectAsAction)
+/*        else if (selectedAction == SaveProjectAsAction)
         {
             auto path = QFileDialog::getSaveFileName(this, "另存为项目", "",
                                                      "项目文件(*.pr)");
             Saver::SaveAs(item, path);
-        }
+        }*/
         else if (selectedAction == CloseProjectAction) removeItem(item);
         else if (selectedAction == addNewFileAction)
         {

@@ -22,7 +22,7 @@ public:
     Graph* graph() const;
     QWidget* tab() const { return _tab; }
     const QString& name() const { return _name; }
-    void rename(const QString& newName);
+    bool rename(const QString& newName);
     void setPath(const QString& path) { _path = path; }
     void setTab(QWidget* tab) { _tab = tab; }
 
