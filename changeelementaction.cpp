@@ -45,9 +45,11 @@ void ChangeElementAction::Do()
             auto item = node->getNodeItem();
             connect(item, &NodeItem::Selected, [](Node* node, bool isSelected) { onNodeSelected(node, isSelected); });
             node->Paint(scene);
+            node->graph = graph;
+            node->setId();
             graph->addNode(node);
             graph->addNode(node,MainWindow::instance()->index_tab(),shape);
-            node->setId();
+
         }
         else
         {
