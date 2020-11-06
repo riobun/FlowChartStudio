@@ -119,6 +119,7 @@ void Saver::Save(Item* item)
     {
         auto graph = item->graph();
         QJsonObject graphJson;
+        graphJson.insert("id", graph->GetID());
         QJsonArray nodesJson;
         foreach (auto node, graph->getNodes())
         {
@@ -290,7 +291,7 @@ Item* Saver::Open(const QString& path)
             }
             else text = new Text(location);
             text->change_ID(id);
-            text->change_input(input);
+            if (input != "") text->change_input(input);
             text->change_content(content);
             text->reset_font(font);
             text->reset_color(color);

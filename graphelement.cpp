@@ -53,8 +53,8 @@ QString GraphElement::getIdNum(int num)
 }//得到ID的16进制表示的字符串
 void GraphElement::deleteID()
 {
-/*   k1[this->Id-1]=0;
-   return ;*/
+   if (Id != -1) graph->k1[this->Id-1]=0;
+   return ;
 }
 int GraphElement::CStringHexToInt(QString str)
 {
@@ -84,38 +84,45 @@ int GraphElement::CStringHexToInt(QString str)
     return nRet;
 }//利用ID字符串转成int值
 bool GraphElement::isRepeat(QString str){
-/*    int nRet=CStringHexToInt(str);
-    if(k1[nRet-1]==1){
+    int nRet=CStringHexToInt(str);
+    if(graph->k1[nRet-1]==1){
             return true;
-        }else */return false;
+        }else return false;
 }
 bool GraphElement::changesId(QString str){
-/*    if(isRepeat(str)){
+    if(isRepeat(str)){
         return false;
         //用户输入的ID已经分配 0x111 8987
     }
     else if(!str.startsWith("0x")){
         return false;
     }//未以0x开头，命名不规范
-    k1[this->GetID()-1]=0;
+    graph->k1[this->GetID()-1]=0;
     this->sId=str;
     this->Id=CStringHexToInt(str);
-    k1[this->GetID()-1]=1;*/
+    graph->k1[this->GetID()-1]=1;
     return true;
 }
 int GraphElement::chagearrowID(int oldid){
-    //k1[oldid-1]=1;
+    graph->k1[oldid-1]=1;
     return true;
 }
 void GraphElement::setId()
 {
     if (Id != -1)
     {
-        if (Id > graph->maxId) graph->maxId = Id;
+        graph->k1[Id - 1] = 1;
     }
     else
     {
-        Id = ++graph->maxId;
+        for(int i=0;i<200;i++){
+            if(graph->k1[i]==0){
+                this->Id=i+1;
+                graph->k1[i]=1;
+                break;
+                //为0的时候表示ID未被占用，为1的时候表示已经被占用
+            }
+        }
         setsId();
     }
 }

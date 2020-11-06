@@ -40,9 +40,12 @@ Item::~Item()
 {
     if (_tab)
     {
-        auto tabWidget = MainWindow::instance()->getUi()->tabWidget;
-        auto index = tabWidget->indexOf(_tab);
-        tabWidget->removeTab(index);
+        if (MainWindow::instance())
+        {
+            auto tabWidget = MainWindow::instance()->getUi()->tabWidget;
+            auto index = tabWidget->indexOf(_tab);
+            tabWidget->removeTab(index);
+        }
     }
     if (_scene) delete _scene;
 }

@@ -2,6 +2,7 @@
 #include<idpool.h>
 #include<QGridLayout>
 #include<QMessageBox>
+#include "mainwindow.h"
 
 
 DetailsDialog3::DetailsDialog3(QString input_,QString ID_,QString con,const QString &title, QWidget *parent)
@@ -86,10 +87,12 @@ void DetailsDialog3::verify()
     else{
        isID2=isNorm(str);
         if(isID2==true){
-         isID=isRepeat(str);
+         isID=isRepeat(MainWindow::instance()->graph(), str);
         }
     }
     if (!isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
+        auto node = MainWindow::instance()->graph()->getNodes()[CStringHexToInt(ID)];
+        node->changesId(str);
         ID=str;
         accept();
         return;

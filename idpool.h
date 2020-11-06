@@ -1,7 +1,8 @@
 #ifndef IDPOOL_H
 #define IDPOOL_H
 #include<QString>
-static int k1[200]={0};//图形的ID池
+#include "graph.h"
+//static int k1[200]={0};//图形的ID池
 // static int k2[200]={0};//流程图的ID池
 static int CStringHexToInt(QString str) //输入十六进制的ID字符串，如Ox6、Oxa这样
 {
@@ -31,9 +32,9 @@ static int CStringHexToInt(QString str) //输入十六进制的ID字符串，如
     return nRet;//返回由十六进制ID字符串转化来的int型十进制ID；
 }//利用ID字符串转成int值
 
-static bool isRepeat(QString str){
+static bool isRepeat(Graph* graph, QString str){
     int nRet=CStringHexToInt(str);
-    if(k1[nRet-1]==1){   //检测该id在id池当中是否已被占用，为1是已被占用，为0时未被占用
+    if(graph->k1[nRet-1]==1){   //检测该id在id池当中是否已被占用，为1是已被占用，为0时未被占用
             return true;
         }else return false;
 }

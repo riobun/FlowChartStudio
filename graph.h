@@ -57,6 +57,7 @@ public:
 
         QString getPath();
     int maxId = 0;
+    int k1[200]={0};
 private:
     void SetVisibility(bool set);
     bool isExpended;
