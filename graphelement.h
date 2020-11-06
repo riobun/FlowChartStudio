@@ -30,7 +30,7 @@ class GraphElement //图形元素
           //1 1 0 1 0 ...
           //创建一个位示图，表示流程图编号分配，每次合并就往编号小的合，然后大的置0，删除图形元素时，判定是否他单独构成一个流程图，如果是就之0
           Text* content=nullptr; //文本内容
-          void setId();
+          virtual void setId();
           void deleteID();//删除ID
           QString getIdNum(int num);
           int CStringHexToInt(QString str);

@@ -3,7 +3,7 @@
 #include "item.h"
 #include "ui_mainwindow.h"
 
-Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
+Item::Item(::ItemType type, const QString& path, bool setId) : _type(type), _path(path),
     _scene(nullptr)
 {
     auto pathParts = path.split('/');
@@ -22,7 +22,7 @@ Item::Item(::ItemType type, const QString& path) : _type(type), _path(path),
     setIcon(icon);
     if (type == ::ItemType::File)
     {
-        _scene = new Scene();
+        _scene = new Scene(setId);
         _scene->setSceneRect(QRectF(0,0,5000,5000));
     }
     else if (type == ::ItemType::Project)

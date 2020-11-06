@@ -12,6 +12,7 @@
 class Scene : public QGraphicsScene
 {
 public:
+    Scene(bool setId = true);
     ~Scene();
 
     static void pasteElements(QGraphicsSceneContextMenuEvent *event = nullptr);

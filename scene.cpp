@@ -19,6 +19,14 @@
 #include "arrownode.h"
 #include <QVector>
 
+Scene::Scene(bool setId)
+{
+    if (setId)
+    {
+        graph->setId();
+    }
+}
+
 Scene::~Scene()
 {
     delete graph;

@@ -212,11 +212,13 @@ Item* Saver::Open(const QString& path)
     }
     else if (path.endsWith(".gr"))
     {
-        item = new Item(ItemType::File, path);
+        item = new Item(ItemType::File, path, false);
         auto graph = item->graph();
         auto scene = item->scene();
         auto doc = read(path);
         auto graphJson = doc.object();
+        graph->GraphElement::setId(graphJson.value("id").toInt());
+        graph->setId();
         auto nodesJson = graphJson.value("nodes").toArray();
         foreach (auto nodeJsonValue, nodesJson)
         {

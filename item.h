@@ -13,7 +13,7 @@ class QWidget;
 class Item : public QStandardItem
 {
 public:
-    Item(::ItemType type, const QString& path);
+    Item(::ItemType type, const QString& path, bool setId = true);
     ~Item();
 
     ::ItemType itemType() const { return _type; }

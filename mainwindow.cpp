@@ -492,7 +492,7 @@ void MainWindow::addNewTab(){
     qDebug()<<open_scenes.count();*/
 }
 
-void MainWindow::addNewTab(QString name){
+bool MainWindow::addNewTab(Node* node, QString name){
     foreach(auto n, index_name_subgraph){
         if(n.second==name){
             if(!ui->tabWidget->isTabEnabled(n.first)){
@@ -500,7 +500,7 @@ void MainWindow::addNewTab(QString name){
                 break;
             }
             ui->tabWidget->setCurrentIndex(n.first);
-            return;
+            return true;
         }
     }
     auto root = model->invisibleRootItem();
@@ -514,7 +514,10 @@ void MainWindow::addNewTab(QString name){
         projectItem->appendRow(item);
         Saver::AddNewFile(path);
         Saver::Save(projectItem);
+        node->BindToText(scene());
+        node->content->change_content(item->name());
     }
+    else return false;
     name = item->name();
 
     //创建新的VIEW和SCENE，并绑定

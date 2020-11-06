@@ -89,9 +89,7 @@ void SubgraphNode::SetThickness(double nt)
 }
 void SubgraphNode::OpenSubGraph()
 {
-    
-    BindToText(MainWindow::instance()->scene());
-    point_w->addNewTab(content->get_text_content());
+    if (!point_w->addNewTab(this, content ? content->get_text_content() : "")) return;
     relatedGraph=MainWindow::instance()->graph();
     if(relatedGraph) relatedGraph->AddRelatedNode(this);
     QVector<QPair<Node*,ElementShape>> v =

@@ -66,7 +66,7 @@ public:
     QVector<Text*>* selectedTexts() { return &_selectedTexts; }
     QMap<int, Arrow*>* selectedArrows() { return &_selectedArrows; }
     void addNewTab();
-    void addNewTab(QString name);
+    bool addNewTab(Node* node, QString name);
     int index_tab();
     Graph* graph();
     QVector<QString> getChildrenPaths(QStandardItem* item);

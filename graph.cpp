@@ -1,8 +1,39 @@
 #include "graph.h"
 #include "arrow.h"
 #include "subgraphnode.h"
+#include "idpool.h"
+
+Graph::Graph()
+{
+
+}
+
 Graph::Graph(QVector<Node*>& v_Node, QVector<Text*>& v_Text, QVector<Graph*>& v_Graph){
 
+}
+
+Graph::~Graph()
+{
+    if (Id != -1)
+    {
+        k2[Id - 1] = 0;
+    }
+}
+
+void Graph::setId()
+{
+    if (Id != -1) k2[Id - 1] = 1;
+    else
+    {
+        for(int i=0;i<200;i++){
+                if(k2[i]==0){
+                    this->Id=i+1;
+                    k2[i]=1;
+                    break;
+                }
+        }
+        setsId();
+    }
 }
 
 void Graph::resizeGraph(){
