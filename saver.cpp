@@ -6,6 +6,7 @@
 #include "groupaction.h"
 #include "changeelementaction.h"
 #include "arrownode.h"
+#include "mainwindow.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -95,9 +96,25 @@ void Saver::AddNewProject(const QString& path)
     write(path, doc);
 }
 
-void Saver::AddNewFile(const QString& path)
+void checkExisting(Item* item, const QString& path, Item* newItem)
 {
-    QJsonObject graph;
+    for (auto i = 0; i < item->rowCount(); i++)
+    {
+        auto child = static_cast<Item*>(item->child(i));
+        if (child->itemType() == ItemType::File)
+        {
+            if (child->path() == path && child != newItem)
+            {
+                child->parent()->removeRow(i);
+            }
+        }
+        else checkExisting(child, path, newItem);
+    }
+}
+
+void Saver::AddNewFile(const QString& path, Item* item)
+{
+/*    QJsonObject graph;
     QJsonDocument doc;
     QJsonArray nodes;
     graph.insert("nodes", nodes);
@@ -106,7 +123,9 @@ void Saver::AddNewFile(const QString& path)
     QJsonArray texts;
     graph.insert("texts", texts);
     doc.setObject(graph);
-    write(path, doc);
+    write(path, doc);*/
+    auto rootItem = MainWindow::instance()->RootItem();
+    checkExisting(rootItem, path, item);
 }
 
 void Saver::Save(Item* item)

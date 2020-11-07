@@ -11,6 +11,7 @@
 #include "elementshape.h"
 #include "action.h"
 #include "node.h"
+#include "item.h"
 #include "graph.h"
 #include "scene.h"
 #include <QMap>
@@ -56,6 +57,7 @@ public:
     ~MainWindow();
 
     static MainWindow* instance() { return _instance; }
+    Item* RootItem() const { return static_cast<Item*>(model->invisibleRootItem()->child(0)); }
     Scene* scene() { return _scene; }
     QList<Scene*> open_scene(){return open_scenes;}
     ElementShape nextAddedShape() const {return _nextAddedShape; }

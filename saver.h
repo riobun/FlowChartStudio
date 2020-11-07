@@ -8,7 +8,7 @@ class Saver
 {
 public:
     static void AddNewProject(const QString& path);
-    static void AddNewFile(const QString& path);
+    static void AddNewFile(const QString& path, Item* item);
     static void Save(Item* item);
     static void SaveProject(Item* item);
     static void SaveAs(Item* item, const QString& path);

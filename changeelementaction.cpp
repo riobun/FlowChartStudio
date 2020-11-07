@@ -111,6 +111,7 @@ void ChangeElementAction::Do()
             arrow->myEndItem->GetNode()->DisconnectAsDestination(arrow);
             graph->removeArrow(arrow);
             scene->removeItem(arrow);
+            arrow->deleteID();
             MainWindow::instance()->selectedArrows()->remove(arrow->GetID());
             arrow->s = nullptr;
             arrow->setSelected(false);

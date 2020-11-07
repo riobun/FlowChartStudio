@@ -512,8 +512,8 @@ bool MainWindow::addNewTab(Node* node, QString name){
     {
         item = new Item(::ItemType::File, path);
         projectItem->appendRow(item);
-        Saver::AddNewFile(path);
-        Saver::Save(projectItem);
+        Saver::AddNewFile(path, item);
+        saveItem(projectItem);
         node->BindToText(scene());
         node->content->change_content(item->name());
     }
@@ -830,6 +830,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             showPathAction = menu.addAction("显示详细信息");
         }
         auto selectedAction = menu.exec(QCursor::pos());
+        if (selectedAction == nullptr) return;
         auto addFolder = [item, root]()
         {
             auto newPath = item->path() + "/新筛选器";
@@ -863,8 +864,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             {
                 auto newItem = new Item(::ItemType::File, path);
                 item->appendRow(newItem);
-                Saver::AddNewFile(path);
-                Saver::Save(root);
+                Saver::AddNewFile(path, newItem);
+                saveItem(root);
             }
         }
         else if (selectedAction == CloseFileAction) closeItem(item);

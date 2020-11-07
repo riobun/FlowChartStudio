@@ -434,7 +434,7 @@ void Arrow::removeArrow()
     auto scene = window->scene();
     ar->endItem()->RemoveAsDestination(ar);
     ar->startItem()->RemoveAsSource(ar);
-    new ChangeElementAction(ar, ElementShape::Arrow, false);
+    //new ChangeElementAction(ar, ElementShape::Arrow, false);
     scene->removeItem(ar);
     if(content)
          {if(ar->content){
