@@ -37,7 +37,7 @@ class GraphElement //图形元素
           bool isRepeat(QString str);
           int chagearrowID(int oldid);
           void setId(int id);
-          Graph* graph;
+          Graph* graph = nullptr;
 
           //将对像转成JSONOBJECT
           virtual QJsonObject get_JsonObject()=0;

@@ -104,12 +104,12 @@ bool GraphElement::changesId(QString str){
     return true;
 }
 int GraphElement::chagearrowID(int oldid){
-    graph->k1[oldid-1]=1;
+    if (graph) graph->k1[oldid-1]=1;
     return true;
 }
 void GraphElement::setId()
 {
-    if (Id != -1)
+    if (Id != -1 && graph->k1[Id - 1] == 0)
     {
         graph->k1[Id - 1] = 1;
     }

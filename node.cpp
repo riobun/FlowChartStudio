@@ -323,6 +323,7 @@ Node* Node::create(ElementShape shape, QPointF point, qreal width, qreal height)
         case ElementShape::Rectangle: node = new Rectangle(point, width, height); break;
         case ElementShape::InnerInput: node = new InnerInputNode(point, width, height); break;
         case ElementShape::InnerOutput: node = new InnerOutputNode(point, width, height); break;
+        case ElementShape::ArrowNode: node = new ArrowNode(point, 5, 5); break;
         default: throw;
     }
     return node;

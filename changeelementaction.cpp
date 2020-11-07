@@ -101,8 +101,9 @@ void ChangeElementAction::Do()
             arrow->s = onArrowSelected;
             scene->addItem(arrow);
             arrow->updatePosition();
-            graph->addArrow(arrow);
+            arrow->graph = graph;
             arrow->setId();
+            graph->addArrow(arrow);
         }
         else
         {
