@@ -5,6 +5,7 @@
 #include "arrow.h"
 #include "groupaction.h"
 #include "changeelementaction.h"
+#include "arrownode.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -156,6 +157,13 @@ void Saver::Save(Item* item)
             arrowJson.insert("color", colorString);
             arrowJson.insert("size", arrow->getSize());
             arrowJson.insert("haveEnd", arrow->HaveEnd);
+            QJsonArray arrowListJson;
+            auto arrowList = arrow->arrowlist;
+            foreach (auto carrow, arrowList)
+            {
+                arrowListJson.append(carrow->GetID());
+            }
+            arrowJson.insert("list", arrowListJson);
             arrowsJson.append(arrowJson);
         }
         graphJson.insert("arrows", arrowsJson);
@@ -244,6 +252,7 @@ Item* Saver::Open(const QString& path)
             ChangeElementAction(node, shape, true, scene).Do();
         }
         auto arrowJson = graphJson.value("arrows").toArray();
+        QMap<Arrow*, QJsonArray> arrowMap;
         foreach (auto arrowJsonValue, arrowJson)
         {
             auto arrowJson = arrowJsonValue.toObject();
@@ -259,11 +268,25 @@ Item* Saver::Open(const QString& path)
             auto fromItem = graph->getNodes()[from]->getNodeItem();
             auto toItem = graph->getNodes()[to]->getNodeItem();
             auto arrow = new Arrow(fromItem, toItem, haveEnd);
+            arrowMap.insert(arrow, arrowJson.value("list").toArray());
             arrow->setId(id);
             arrow->setType(type);
             arrow->setArrowColor(color);
             arrow->setSize(size);
             ChangeElementAction(arrow, ElementShape::Arrow, true, scene).Do();
+        }
+        QMapIterator<Arrow*, QJsonArray> i(arrowMap);
+        while (i.hasNext())
+        {
+            auto pair = i.next();
+            auto arrow = pair.key();
+            auto jsonArray = pair.value();
+            foreach (auto jsonValue, jsonArray)
+            {
+                auto arrowId = jsonValue.toInt();
+                auto carrow = graph->getArrows()[arrowId];
+                arrow->arrowlist.append(carrow);
+            }
         }
         auto textsJson = graphJson.value("texts").toArray();
         foreach (auto textJsonValue, textsJson)

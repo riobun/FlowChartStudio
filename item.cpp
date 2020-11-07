@@ -40,6 +40,7 @@ Item::~Item()
 {
     if (_tab)
     {
+        auto i = MainWindow::instance();
         if (MainWindow::instance())
         {
             auto tabWidget = MainWindow::instance()->getUi()->tabWidget;
