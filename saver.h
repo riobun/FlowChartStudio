@@ -14,6 +14,8 @@ public:
     static void SaveAs(Item* item, const QString& path);
     static Item* Open(const QString& path);
     static void Rename(const QString& oldPath, const QString& newName);
+    static void AddRelation();
+    static void ClearRelation();
 };
 
 #endif // SAVER_H

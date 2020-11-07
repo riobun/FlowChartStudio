@@ -8,6 +8,7 @@
 #include "graph.h"
 #include "action.h"
 
+class Item;
 
 class Scene : public QGraphicsScene
 {
@@ -23,6 +24,7 @@ public:
     int lastUndoSize;
     bool isChanged = false;
     QString file_path;
+    Item* item = nullptr;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

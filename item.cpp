@@ -24,6 +24,7 @@ Item::Item(::ItemType type, const QString& path, bool setId) : _type(type), _pat
     {
         _scene = new Scene(setId);
         _scene->setSceneRect(QRectF(0,0,5000,5000));
+        _scene->item = this;
     }
     else if (type == ::ItemType::Project)
     {
@@ -40,8 +41,8 @@ Item::~Item()
 {
     if (_tab)
     {
-        auto i = MainWindow::instance();
-        if (MainWindow::instance())
+        auto i = MainWindow::instance()->getUi()->tabWidget;
+        if (i)
         {
             auto tabWidget = MainWindow::instance()->getUi()->tabWidget;
             auto index = tabWidget->indexOf(_tab);
@@ -82,4 +83,19 @@ bool Item::rename(const QString &newName)
 
     _name = newName;
     return true;
+}
+
+QString Item::logicPath()
+{
+    auto project = MainWindow::instance()->RootItem();
+    QString path = name();
+    auto item = this->parent();
+    while (item != project)
+    {
+        auto myItem = static_cast<Item*>(item);
+        path = myItem->name() + "/" + path;
+        item = item->parent();
+    }
+    path = project->name() + "/" + path;
+    return path;
 }

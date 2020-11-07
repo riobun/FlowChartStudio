@@ -7,6 +7,7 @@
 #include "changeelementaction.h"
 #include "arrownode.h"
 #include "mainwindow.h"
+#include "subgraphnode.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -18,6 +19,13 @@
 #include <QApplication>
 #include <QDir>
 #include <QMetaEnum>
+
+QMap<SubgraphNode*, int> relations;
+
+void Saver::ClearRelation()
+{
+    relations.clear();
+}
 
 QJsonDocument read(const QString& path)
 {
@@ -144,8 +152,9 @@ void Saver::Save(Item* item)
         foreach (auto node, graph->getNodes())
         {
             QJsonObject nodeJson;
+            auto shape = node->getShape();
             nodeJson.insert("id", node->GetID());
-            nodeJson.insert("shape", getShapeString(node->getShape()));
+            nodeJson.insert("shape", getShapeString(shape));
             nodeJson.insert("x", node->GetLocation().x());
             nodeJson.insert("y", node->GetLocation().y());
             nodeJson.insert("width", node->GetWidth());
@@ -159,6 +168,14 @@ void Saver::Save(Item* item)
                     .arg(frameColor.green()).arg(frameColor.blue());
             nodeJson.insert("frameColor", frameColorString);
             nodeJson.insert("thickness", node->GetThickness());
+            if (shape == ElementShape::SubGraph)
+            {
+                auto relationGraph = ((SubgraphNode*)node)->relatedGraph;
+                if (relationGraph)
+                {
+                    nodeJson.insert("relation", relationGraph->GetID());
+                }
+            }
             nodesJson.append(nodeJson);
         }
         graphJson.insert("nodes", nodesJson);
@@ -268,6 +285,11 @@ Item* Saver::Open(const QString& path)
             node->SetBackgroundColor(backgroundColor);
             node->SetFrameColor(frameColor);
             node->SetThickness(thickness);
+            if (shape == ElementShape::SubGraph)
+            {
+                auto relationId = nodeJson.value("relation").toInt();
+                relations.insert((SubgraphNode*)node, relationId);
+            }
             ChangeElementAction(node, shape, true, scene).Do();
         }
         auto arrowJson = graphJson.value("arrows").toArray();
@@ -335,7 +357,14 @@ Item* Saver::Open(const QString& path)
             }
             else text = new Text(location);
             text->change_ID(id);
-            if (input != "") text->change_input(input);
+            if (parentNode)
+            {
+                auto parentShape = parentNode->getShape();
+                if (input != "" && parentShape != ElementShape::InnerInput && parentShape != ElementShape::InnerOutput)
+                {
+                    text->change_input(input);
+                }
+            }
             text->change_content(content);
             text->reset_font(font);
             text->reset_color(color);
@@ -350,4 +379,21 @@ Item* Saver::Open(const QString& path)
 void Saver::Rename(const QString& oldPath, const QString& newName)
 {
 
+}
+
+void Saver::AddRelation()
+{
+    QMapIterator<SubgraphNode*, int> i(relations);
+    while (i.hasNext())
+    {
+        auto pair = i.next();
+        auto node = pair.key();
+        auto id = pair.value();
+        if (Graph::graphs.contains(id))
+        {
+            auto graph = Graph::graphs[id];
+            node->relatedGraph = graph;
+            graph->AddRelatedNode(node);
+        }
+    }
 }

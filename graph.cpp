@@ -3,6 +3,8 @@
 #include "subgraphnode.h"
 #include "idpool.h"
 
+QMap<int, Graph*> Graph::graphs;
+
 Graph::Graph()
 {
 
@@ -17,6 +19,7 @@ Graph::~Graph()
     if (Id != -1)
     {
         k2[Id - 1] = 0;
+        graphs.remove(Id);
     }
 }
 
@@ -34,6 +37,7 @@ void Graph::setId()
         }
         setsId();
     }
+    graphs.insert(Id, this);
 }
 
 void Graph::resizeGraph(){

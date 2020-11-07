@@ -6,9 +6,11 @@
 #include "elementshape.h"
 #include <QFile>
 class SubgraphNode;
+class Scene;
 class Graph:public GraphElement
 {
 public:
+    Scene* scene;
     Graph();
     //调用下面这个函数来定义子图，传入要生成子图的节点们
     Graph(QVector<Node*>& v_Node, QVector<Text*>& v_Text, QVector<Graph*>& v_Graph);
@@ -60,6 +62,8 @@ public:
     int maxId = 0;
     int k1[200]={0};
     void setId() override;
+
+    static QMap<int, Graph*> graphs;
 private:
     void SetVisibility(bool set);
     bool isExpended;

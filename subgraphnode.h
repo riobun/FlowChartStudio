@@ -26,10 +26,11 @@ public:
     
     void OpenSubGraph();
     void CreateAllPort();
+    Graph* relatedGraph=nullptr;
     
 protected:
     QVector<QGraphicsLineItem*> subShape;
-    Graph* relatedGraph=nullptr;
+
 };
 
 #endif // SUBGRAPHNODE_H

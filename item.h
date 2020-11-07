@@ -25,6 +25,7 @@ public:
     bool rename(const QString& newName);
     void setPath(const QString& path) { _path = path; }
     void setTab(QWidget* tab) { _tab = tab; }
+    QString logicPath();
 
 private:
     ::ItemType _type;

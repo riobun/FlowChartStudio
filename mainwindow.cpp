@@ -26,6 +26,7 @@
 #include "item.h"
 #include "saver.h"
 #include "filemanager.h"
+#include "subgraphnode.h"
 
 //**************************
 #include "graph.h"
@@ -335,7 +336,9 @@ MainWindow::MainWindow(QWidget *parent)
         if (path != QString())
         {
             closeProject();
+            Saver::ClearRelation();
             auto item = Saver::Open(path);
+            Saver::AddRelation();
             model->appendRow(item);
         }
     });
@@ -344,7 +347,7 @@ MainWindow::MainWindow(QWidget *parent)
     {
         auto root = model->invisibleRootItem();
         auto item = static_cast<Item*>(root->child(0));
-        saveItem(item);
+        if (item) saveItem(item);
     });
 
     connect(ui->actionclose_pro, &QAction::triggered, [closeProject]()
@@ -493,15 +496,13 @@ void MainWindow::addNewTab(){
 }
 
 bool MainWindow::addNewTab(Node* node, QString name){
-    foreach(auto n, index_name_subgraph){
-        if(n.second==name){
-            if(!ui->tabWidget->isTabEnabled(n.first)){
-                n.second="";
-                break;
-            }
-            ui->tabWidget->setCurrentIndex(n.first);
-            return true;
-        }
+    auto subGraph = static_cast<SubgraphNode*>(node);
+    if (subGraph->relatedGraph)
+    {
+        auto item = subGraph->relatedGraph->scene->item;
+        if (item->tab()) ui->tabWidget->setCurrentWidget(item->tab());
+        else addNewTab(item);
+        return true;
     }
     auto root = model->invisibleRootItem();
     auto projectItem = static_cast<Item*>(root->child(0));
@@ -510,6 +511,11 @@ bool MainWindow::addNewTab(Node* node, QString name){
     auto path = QFileDialog::getSaveFileName(this, "添加新文件", QString(), "图文件(*.gr)");
     if (path != QString())
     {
+        if (scene()->item->path() == path)
+        {
+            QMessageBox::warning(this, "警告", "不能把这张图替换为子图");
+            return false;
+        }
         item = new Item(::ItemType::File, path);
         projectItem->appendRow(item);
         Saver::AddNewFile(path, item);
@@ -548,6 +554,7 @@ bool MainWindow::addNewTab(Node* node, QString name){
 
     index_name_subgraph.push_back({index,name});
 
+    return true;
 }
 
 int MainWindow::index_tab(){
