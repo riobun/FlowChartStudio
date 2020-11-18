@@ -180,7 +180,7 @@ Text* Text::get_item() {
 void Text::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseMoveEvent(event);
-    NodeEvents::mouseMoveEvent(event);
+    if (isMoveable) NodeEvents::mouseMoveEvent(event);
 }
 
 void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){

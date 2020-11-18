@@ -51,6 +51,7 @@ public:
     void change_input(QString inputID);
     void change_ID(QString ID_);
     void change_logic(const QString& logic) { this->logic = logic; }
+    bool isMoveable = true;
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);

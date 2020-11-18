@@ -179,31 +179,6 @@ void Saver::Save(Item* item)
             nodesJson.append(nodeJson);
         }
         graphJson.insert("nodes", nodesJson);
-        QJsonArray arrowsJson;
-        foreach (auto arrow, graph->getArrows())
-        {
-            QJsonObject arrowJson;
-            arrowJson.insert("id", arrow->GetID());
-            arrowJson.insert("type", arrow->getType());
-            arrowJson.insert("from", arrow->startItem()->GetNode()->GetID());
-            arrowJson.insert("to", arrow->endItem()->GetNode()->GetID());
-            auto color = arrow->getColor();
-            auto colorString = QString("%1 %2 %3").arg(color.red())
-                    .arg(color.green()).arg(color.blue());
-            arrowJson.insert("color", colorString);
-            arrowJson.insert("size", arrow->getSize());
-            arrowJson.insert("haveEnd", arrow->HaveEnd);
-            QJsonArray arrowListJson;
-            auto arrowList = arrow->arrowlist;
-            foreach (auto carrow, arrowList)
-            {
-                arrowListJson.append(carrow->GetID());
-            }
-            arrowJson.insert("list", arrowListJson);
-
-            arrowsJson.append(arrowJson);
-        }
-        graphJson.insert("arrows", arrowsJson);
         QJsonArray textsJson;
         foreach (auto text, graph->getTexts())
         {
@@ -227,6 +202,31 @@ void Saver::Save(Item* item)
             textsJson.append(textJson);
         }
         graphJson.insert("texts", textsJson);
+        QJsonArray arrowsJson;
+        foreach (auto arrow, graph->getArrows())
+        {
+            QJsonObject arrowJson;
+            arrowJson.insert("id", arrow->GetID());
+            arrowJson.insert("type", arrow->getType());
+            arrowJson.insert("from", arrow->startItem()->GetNode()->GetID());
+            arrowJson.insert("to", arrow->endItem()->GetNode()->GetID());
+            auto color = arrow->getColor();
+            auto colorString = QString("%1 %2 %3").arg(color.red())
+                    .arg(color.green()).arg(color.blue());
+            arrowJson.insert("color", colorString);
+            arrowJson.insert("size", arrow->getSize());
+            arrowJson.insert("haveEnd", arrow->HaveEnd);
+            QJsonArray arrowListJson;
+            auto arrowList = arrow->arrowlist;
+            foreach (auto carrow, arrowList)
+            {
+                arrowListJson.append(carrow->GetID());
+            }
+            arrowJson.insert("list", arrowListJson);
+            if (arrow->content) arrowJson.insert("text", arrow->content->getId());
+            arrowsJson.append(arrowJson);
+        }
+        graphJson.insert("arrows", arrowsJson);
         doc.setObject(graphJson);
         write(path, doc);
     }

@@ -520,16 +520,17 @@ void Arrow::BindToText(QGraphicsScene* qgs){
 //                     (myStartItem->pos().y()+myEndItem->pos().y())/2)));
             content=new Text((QPoint((intersectPoint.x()+list[1].x())/2,
                              (intersectPoint.y()+list[1].y())/2)));
-    content->putup_text(qgs);
-    content->build_text();
+    //content->putup_text(qgs);
+    //content->build_text();
     content->change_content("文本");
     auto window = MainWindow::instance();
     content->reset_font(QFont(window->fontFamily, window->fontSize));
     content->reset_color(window->textColor);
-    //(new ChangeElementAction(content, ElementShape::Text, true))->Do();
+    (new ChangeElementAction(content, ElementShape::Text, true))->Do();
     this->boundTextView=content;
     setSelected(false);
     content->get_item()->setSelected(true);
+    content->isMoveable = false;
     }
 };
 //void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){

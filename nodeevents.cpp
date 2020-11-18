@@ -194,6 +194,7 @@ void NodeEvents::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     foreach (auto text, *MainWindow::instance()->selectedTexts())
     {
         if (texts.contains(text)) continue;
+        if (!text->isMoveable) continue;
         text->move_text((text->get_text_location()+event->pos()-event->lastPos()));
     }
 }
