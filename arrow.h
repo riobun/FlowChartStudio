@@ -52,6 +52,7 @@ public:
         //根据JSON转成成相应的对象
         virtual void set_JsonObject(QJsonObject qso) override;
     int HaveEnd;
+    Text *boundTextView=nullptr;
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = nullptr) override;
@@ -60,7 +61,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event)override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event)override;
-    Text *boundTextView=nullptr;
+
 
 private:
 

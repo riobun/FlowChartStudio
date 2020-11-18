@@ -199,6 +199,7 @@ void Saver::Save(Item* item)
             if (text->parent) textJson.insert("parent", text->parent->GetID());
             else textJson.insert("parent", -1);
             textJson.insert("content", text->get_text_content());
+            textJson.insert("arrowId", text->getArrowId());
             textsJson.append(textJson);
         }
         graphJson.insert("texts", textsJson);
@@ -223,7 +224,7 @@ void Saver::Save(Item* item)
                 arrowListJson.append(carrow->GetID());
             }
             arrowJson.insert("list", arrowListJson);
-            if (arrow->content) arrowJson.insert("text", arrow->content->getId());
+            arrowJson.insert("text", arrow->content ? arrow->content->getArrowId() : -1);
             arrowsJson.append(arrowJson);
         }
         graphJson.insert("arrows", arrowsJson);
@@ -293,43 +294,7 @@ Item* Saver::Open(const QString& path)
             }
             ChangeElementAction(node, shape, true, scene).Do();
         }
-        auto arrowJson = graphJson.value("arrows").toArray();
-        QMap<Arrow*, QJsonArray> arrowMap;
-        foreach (auto arrowJsonValue, arrowJson)
-        {
-            auto arrowJson = arrowJsonValue.toObject();
-            auto id = arrowJson.value("id").toInt();
-            auto type = arrowJson.value("type").toInt();
-            auto from = arrowJson.value("from").toInt();
-            auto to = arrowJson.value("to").toInt();
-            auto colorParts = arrowJson.value("color").toString().split(" ");
-            QColor color(colorParts[0].toInt(),
-                    colorParts[1].toInt(), colorParts[2].toInt());
-            auto size = arrowJson.value("size").toInt();
-            auto haveEnd = arrowJson.value("haveEnd").toInt();
-            auto fromItem = graph->getNodes()[from]->getNodeItem();
-            auto toItem = graph->getNodes()[to]->getNodeItem();
-            auto arrow = new Arrow(fromItem, toItem, haveEnd);
-            arrowMap.insert(arrow, arrowJson.value("list").toArray());
-            arrow->setId(id);
-            arrow->setType(type);
-            arrow->setArrowColor(color);
-            arrow->setSize(size);
-            ChangeElementAction(arrow, ElementShape::Arrow, true, scene).Do();
-        }
-        QMapIterator<Arrow*, QJsonArray> i(arrowMap);
-        while (i.hasNext())
-        {
-            auto pair = i.next();
-            auto arrow = pair.key();
-            auto jsonArray = pair.value();
-            foreach (auto jsonValue, jsonArray)
-            {
-                auto arrowId = jsonValue.toInt();
-                auto carrow = graph->getArrows()[arrowId];
-                arrow->arrowlist.append(carrow);
-            }
-        }
+        QMap<int, Text*> texts;
         auto textsJson = graphJson.value("texts").toArray();
         foreach (auto textJsonValue, textsJson)
         {
@@ -371,6 +336,51 @@ Item* Saver::Open(const QString& path)
             text->reset_color(color);
             text->change_logic(logic);
             ChangeElementAction(text, ElementShape::Text, true, scene).Do();
+            texts.insert(textJson.value("arrowId").toInt(), text);
+        }
+        auto arrowJson = graphJson.value("arrows").toArray();
+        QMap<Arrow*, QJsonArray> arrowMap;
+        foreach (auto arrowJsonValue, arrowJson)
+        {
+            auto arrowJson = arrowJsonValue.toObject();
+            auto id = arrowJson.value("id").toInt();
+            auto type = arrowJson.value("type").toInt();
+            auto from = arrowJson.value("from").toInt();
+            auto to = arrowJson.value("to").toInt();
+            auto colorParts = arrowJson.value("color").toString().split(" ");
+            QColor color(colorParts[0].toInt(),
+                    colorParts[1].toInt(), colorParts[2].toInt());
+            auto size = arrowJson.value("size").toInt();
+            auto haveEnd = arrowJson.value("haveEnd").toInt();
+            auto fromItem = graph->getNodes()[from]->getNodeItem();
+            auto toItem = graph->getNodes()[to]->getNodeItem();
+            auto arrow = new Arrow(fromItem, toItem, haveEnd);
+            auto text = texts[arrowJson.value("text").toInt()];
+            if (text)
+            {
+                arrow->boundTextView = text;
+                arrow->content = text;
+                text->isMoveable = false;
+            }
+            arrowMap.insert(arrow, arrowJson.value("list").toArray());
+            arrow->setId(id);
+            arrow->setType(type);
+            arrow->setArrowColor(color);
+            arrow->setSize(size);
+            ChangeElementAction(arrow, ElementShape::Arrow, true, scene).Do();
+        }
+        QMapIterator<Arrow*, QJsonArray> i(arrowMap);
+        while (i.hasNext())
+        {
+            auto pair = i.next();
+            auto arrow = pair.key();
+            auto jsonArray = pair.value();
+            foreach (auto jsonValue, jsonArray)
+            {
+                auto arrowId = jsonValue.toInt();
+                auto carrow = graph->getArrows()[arrowId];
+                arrow->arrowlist.append(carrow);
+            }
         }
         scene->isChanged = false;
     }

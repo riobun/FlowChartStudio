@@ -531,6 +531,7 @@ void Arrow::BindToText(QGraphicsScene* qgs){
     setSelected(false);
     content->get_item()->setSelected(true);
     content->isMoveable = false;
+    content->setArrowId(GetID());
     }
 };
 //void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){
@@ -631,6 +632,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow2->boundTextView = content;
      this->content = nullptr;
      this->boundTextView = nullptr;
+     content->setArrowId(GetID());
      //arrow3->content=content;
      //arrownode->content=content;
      //给arrownode的content赋值

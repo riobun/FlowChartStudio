@@ -52,6 +52,8 @@ public:
     void change_ID(QString ID_);
     void change_logic(const QString& logic) { this->logic = logic; }
     bool isMoveable = true;
+    void setArrowId(int id) {arrowId = id;}
+    int getArrowId() {return arrowId;}
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
@@ -72,6 +74,7 @@ private:
     bool IDchange=false;
     QString Input;
     bool isInput=false;
+    int arrowId;
 
 signals:
     void Selected(Text*t,bool b);
