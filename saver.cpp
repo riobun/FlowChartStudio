@@ -200,6 +200,7 @@ void Saver::Save(Item* item)
                 arrowListJson.append(carrow->GetID());
             }
             arrowJson.insert("list", arrowListJson);
+
             arrowsJson.append(arrowJson);
         }
         graphJson.insert("arrows", arrowsJson);
@@ -356,7 +357,7 @@ Item* Saver::Open(const QString& path)
                 text = new Text(position, parentNode, temp, true);
             }
             else text = new Text(location);
-            text->change_ID(id);
+            if (id != "") text->change_ID(id);
             if (parentNode)
             {
                 auto parentShape = parentNode->getShape();

@@ -499,7 +499,7 @@ void Arrow::removemyself()
 //}
 
 void Arrow::BindToText(QGraphicsScene* qgs){
-    if(content==nullptr){
+    if(arrowlist[arrowlist.size() - 1]->content==nullptr){
         QLineF centerLine(myStartItem->pos(), list[1]);
         QPolygonF StartPolygon = myStartItem->polygon();
         //得到myEndItem图形所有顶点相对于中点的坐标组
@@ -526,9 +526,10 @@ void Arrow::BindToText(QGraphicsScene* qgs){
     auto window = MainWindow::instance();
     content->reset_font(QFont(window->fontFamily, window->fontSize));
     content->reset_color(window->textColor);
-    (new ChangeElementAction(content, ElementShape::Text, true))->Do();
+    //(new ChangeElementAction(content, ElementShape::Text, true))->Do();
     this->boundTextView=content;
-
+    setSelected(false);
+    content->get_item()->setSelected(true);
     }
 };
 //void Arrow::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent){
@@ -555,8 +556,7 @@ void Arrow::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     else if(selectedAction == addTextAction){
 
              BindToText(MainWindow::instance()->scene());
-             setSelected(false);
-             content->get_item()->setSelected(true);
+
     }
     else if (selectedAction == cutAction)
     {
@@ -613,7 +613,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      Text* content=this->content;
      QColor color=this->myColor;
      int oldid=this->GetID();
-     this->removemyself();
+
      MainWindow::instance()->scene()->removeItem(this);
 
      //auto arrow1 = new Arrow(myEndItem,myStartItem);
@@ -627,11 +627,14 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow3->setArrowColor(color);
      if(content!=nullptr){
      arrow2->content=content;
+     arrow2->boundTextView = content;
+     this->content = nullptr;
+     this->boundTextView = nullptr;
      //arrow3->content=content;
      //arrownode->content=content;
      //给arrownode的content赋值
-     arrow2->content->putup_text(scene);
-     arrow2->content->build_text();
+     //arrow2->content->putup_text(scene);
+     //arrow2->content->build_text();
      }
 //     if(arrow2->content!=nullptr){
 //     arrow2->content->move_text(QPointF((arrow2->list.at(0).x()+arrow2->list.at(1).x())/2,
@@ -668,6 +671,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow3->HaveEnd=1;}
      else{
      arrow3->HaveEnd=0;}
+     this->removemyself();
      //思考，我们加入箭头构造的判定条件如果满足就不生成黑色三角形
      *action << new ChangeElementAction(arrow2, ElementShape::Arrow, true);
      *action << new ChangeElementAction(arrow3, ElementShape::Arrow, true);
