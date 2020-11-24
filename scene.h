@@ -25,6 +25,7 @@ public:
     bool isChanged = false;
     QString file_path;
     Item* item = nullptr;
+    QMap<QString, QString> branches;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

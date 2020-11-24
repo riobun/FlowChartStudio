@@ -145,9 +145,21 @@ void Saver::Save(Item* item)
     QJsonDocument doc;
     if (type == ItemType::File)
     {
+        auto scene = item->scene();
         auto graph = item->graph();
         QJsonObject graphJson;
         graphJson.insert("id", graph->GetID());
+        QJsonObject branchesJson;
+        auto& branches = scene->branches;
+        QMapIterator<QString, QString> i(branches);
+        while (i.hasNext())
+        {
+            auto pair = i.next();
+            auto key = pair.key();
+            auto value = pair.value();
+            branchesJson.insert(key, value);
+        }
+        graphJson.insert("branches", branchesJson);
         QJsonArray nodesJson;
         foreach (auto node, graph->getNodes())
         {
@@ -200,6 +212,7 @@ void Saver::Save(Item* item)
             else textJson.insert("parent", -1);
             textJson.insert("content", text->get_text_content());
             textJson.insert("arrowId", text->getArrowId());
+            textJson.insert("branch", text->branch);
             textsJson.append(textJson);
         }
         graphJson.insert("texts", textsJson);
@@ -224,7 +237,6 @@ void Saver::Save(Item* item)
                 arrowListJson.append(carrow->GetID());
             }
             arrowJson.insert("list", arrowListJson);
-            arrowJson.insert("text", arrow->content ? arrow->content->getArrowId() : -1);
             arrowsJson.append(arrowJson);
         }
         graphJson.insert("arrows", arrowsJson);
@@ -265,6 +277,12 @@ Item* Saver::Open(const QString& path)
         auto graphJson = doc.object();
         graph->GraphElement::setId(graphJson.value("id").toInt());
         graph->setId();
+        auto branchesJson = graphJson.value("branches").toObject();
+        auto& branches = scene->branches;
+        for (auto i = branchesJson.begin(); i != branchesJson.end(); i++)
+        {
+            branches.insert(i.key(), i.value().toString());
+        }
         auto nodesJson = graphJson.value("nodes").toArray();
         foreach (auto nodeJsonValue, nodesJson)
         {
@@ -306,6 +324,7 @@ Item* Saver::Open(const QString& path)
             auto input = textJson.value("input").toString();
             auto parent = textJson.value("parent").toInt();
             auto fontParts = textJson.value("font").toString().split(" ");
+            auto branch = textJson.value("branch").toString();
             QFont font(fontParts[0], fontParts[1].toInt(), fontParts[2] == "true",
                     fontParts[3] == "true");
             auto colorParts = textJson.value("color").toString().split(" ");
@@ -335,8 +354,13 @@ Item* Saver::Open(const QString& path)
             text->reset_font(font);
             text->reset_color(color);
             text->change_logic(logic);
+            text->branch = branch;
             ChangeElementAction(text, ElementShape::Text, true, scene).Do();
-            texts.insert(textJson.value("arrowId").toInt(), text);
+            auto arrowId = textJson.value("arrowId").toInt();
+            if (arrowId != -1)
+            {
+                texts.insert(arrowId, text);
+            }
         }
         auto arrowJson = graphJson.value("arrows").toArray();
         QMap<Arrow*, QJsonArray> arrowMap;
@@ -355,9 +379,9 @@ Item* Saver::Open(const QString& path)
             auto fromItem = graph->getNodes()[from]->getNodeItem();
             auto toItem = graph->getNodes()[to]->getNodeItem();
             auto arrow = new Arrow(fromItem, toItem, haveEnd);
-            auto text = texts[arrowJson.value("text").toInt()];
-            if (text)
+            if (texts.contains(id))
             {
+                auto text = texts[id];
                 arrow->boundTextView = text;
                 arrow->content = text;
                 text->isMoveable = false;
@@ -407,4 +431,74 @@ void Saver::AddRelation()
             graph->AddRelatedNode(node);
         }
     }
+}
+
+void Saver::ImportBranches(Item *item, const QString &path)
+{
+    auto scene = item->scene();
+    QMap<QString, QString>& branches = scene->branches;
+    branches.clear();
+    QFile file(path);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream stream(&file);
+    while (!stream.atEnd())
+    {
+        auto line = stream.readLine();
+        auto keyStartIndex = line.indexOf("{\"");
+        auto keyEndIndex = line.indexOf("\", ");
+        auto valueStartIndex = line.indexOf(", ");
+        auto valueEndIndex = line.indexOf("}");
+        if (keyStartIndex == -1) continue;
+        auto key = line.mid(keyStartIndex + 2, keyEndIndex - keyStartIndex - 2);
+        auto value = line.mid(valueStartIndex + 2, valueEndIndex - valueStartIndex - 2);
+        branches.insert(key, value);
+    }
+    file.close();
+}
+
+void Saver::ExportCsv(Item *item, const QString &path)
+{
+    QFile file(path);
+    if (file.exists()) file.remove();
+    file.open(QIODevice::ReadWrite | QIODevice::Text);
+    QTextStream out(&file);
+    out << "node_id,parent_id,node_en,branch_en" << endl;
+    QMap<int, int> connections;
+    foreach (auto arrow, item->scene()->graph->getArrows())
+    {
+        auto from = arrow->myStartItem->GetNode();
+        if (!dynamic_cast<ArrowNode*>(from))
+        {
+            if (arrow->arrowlist.size() == 0)
+            {
+                connections.insert(arrow->myEndItem->GetNode()->GetID(), from->GetID());
+            }
+            else foreach (auto arrow, arrow->arrowlist)
+            {
+                auto to = arrow->myEndItem->GetNode();
+                if (!dynamic_cast<ArrowNode*>(from))
+                {
+                    if (!connections.contains(to->GetID())) connections.insert(to->GetID(), from->GetID());
+                    break;
+                }
+            }
+        }
+    }
+    foreach (auto node, item->scene()->graph->getNodes())
+    {
+        if (dynamic_cast<ArrowNode*>(node)) continue;
+        auto id = node->GetID();
+        out << id << ",";
+        QString parentId, nodeText, branch;
+        if (connections.contains(id)) parentId = QString::number(connections[id]);
+        else parentId = "-1";
+        auto text = node->content;
+        if (text)
+        {
+            nodeText = text->get_text_content();
+            branch = text->branch;
+        }
+        out << parentId << "," << nodeText << "," << branch << endl;
+    }
+    file.close();
 }

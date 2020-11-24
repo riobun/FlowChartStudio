@@ -211,6 +211,11 @@ QVector<Arrow*> Node::getSourceArrows()
     }
     return vec;
 }
+Arrow* Node::getDestinationArrow()
+{
+    if (destinationArrows.size() == 0) return nullptr;
+    return destinationArrows[0];
+}
 
 void Node::ChangeZValue(bool isSelected)
 {

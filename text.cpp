@@ -12,6 +12,7 @@
 #include<QFontDialog>
 #include<QColorDialog>
 #include "nodeevents.h"
+#include "branchdialog.h"
 
 Text::Text(QPointF primary_location,Node* parent,QString parentID,bool IDchanged )
 {
@@ -226,6 +227,8 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     auto deleteAction = menu.addAction("删除");
     auto editAction = menu.addAction("编辑");
     auto logicAction=menu.addAction("组合逻辑");
+    QAction* branchAction = nullptr;
+    if (parent) branchAction = menu.addAction("branch");
     auto fontAction = menu.addAction("修改字体");
     auto colorAction = menu.addAction("修改颜色");
     auto cutAction = menu.addAction("剪切");
@@ -236,7 +239,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 
     deleteAction->setShortcut(QKeySequence::Delete);
     auto selectedAction = menu.exec(event->screenPos());
-
+    if (!selectedAction) return;
     if (selectedAction == deleteAction)
     {
         NodeEvents::deleteElemets();
@@ -309,6 +312,14 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     }
     else if (selectedAction == copyAction) {
         NodeEvents::copyElements();
+    }
+    else if (selectedAction == branchAction)
+    {
+        BranchDialog dialog(this);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            branch = dialog.getBranch();
+        }
     }
 }
 

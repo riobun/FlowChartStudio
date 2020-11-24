@@ -499,7 +499,16 @@ void Arrow::removemyself()
 //}
 
 void Arrow::BindToText(QGraphicsScene* qgs){
-    if(arrowlist[arrowlist.size() - 1]->content==nullptr){
+    bool hasText = false;
+    foreach (auto arrow, arrowlist)
+    {
+        if (arrow->content)
+        {
+            hasText = true;
+            break;
+        }
+    }
+    if(!hasText){
         QLineF centerLine(myStartItem->pos(), list[1]);
         QPolygonF StartPolygon = myStartItem->polygon();
         //得到myEndItem图形所有顶点相对于中点的坐标组
@@ -632,7 +641,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow2->boundTextView = content;
      this->content = nullptr;
      this->boundTextView = nullptr;
-     content->setArrowId(GetID());
+     content->setArrowId(arrow2->GetID());
      //arrow3->content=content;
      //arrownode->content=content;
      //给arrownode的content赋值

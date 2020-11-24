@@ -16,6 +16,8 @@ public:
     static void Rename(const QString& oldPath, const QString& newName);
     static void AddRelation();
     static void ClearRelation();
+    static void ImportBranches(Item* item, const QString& path);
+    static void ExportCsv(Item* item, const QString& path);
 };
 
 #endif // SAVER_H

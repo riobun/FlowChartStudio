@@ -20,6 +20,7 @@ SOURCES += \
     action.cpp \
     arrow.cpp \
     arrownode.cpp \
+    branchdialog.cpp \
     changeelementaction.cpp \
     diamond.cpp \
     editelementaction.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     action.h \
     arrow.h \
     arrownode.h \
+    branchdialog.h \
     changeelementaction.h \
     diamond.h \
     editelementaction.h \

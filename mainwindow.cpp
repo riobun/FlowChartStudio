@@ -807,10 +807,11 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         QMenu menu;
         int item_type=curItem->data(Qt::UserRole).value<item_data>().type;
         QAction* addFolderAction = nullptr, *addExistingFileAction = nullptr,
-                *SaveProjectAction = nullptr,
-                *CloseProjectAction = nullptr,
+                *SaveProjectAction = nullptr, *importBranchesAction = nullptr,
+                *CloseProjectAction = nullptr, *exportCsvAction = nullptr,
                 *CloseFileAction = nullptr, *RemoveAction = nullptr,
                 *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
+                *ShowBrachesAction = nullptr,
                 *addNewFileAction = nullptr, *showPathAction = nullptr;
         switch (type) {
         case ItemType::Project:
@@ -833,6 +834,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             RemoveAction = menu.addAction("移除文件");
             CloseFileAction = menu.addAction("关闭文件");
             SaveFileAction = menu.addAction("保存文件");
+            importBranchesAction = menu.addAction("导入Branches文件");
+            exportCsvAction = menu.addAction("导出csv文件");
+            //ShowBrachesAction = menu.addAction("显示Branches");
             //SaveAsFileAction = menu.addAction("Save As");
             showPathAction = menu.addAction("显示详细信息");
         }
@@ -894,6 +898,26 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         else if (selectedAction == showPathAction)
         {
             QMessageBox::information(this, "详细信息", "路径：" + item->path());
+        }
+        else if (selectedAction == importBranchesAction)
+        {
+            auto path = QFileDialog::getOpenFileName(this, "导入Branches文件", "", "Branches文件(*.branches)");
+            if (path != "")
+            {
+                Saver::ImportBranches(item, path);
+            }
+        }
+        else if (selectedAction == exportCsvAction)
+        {
+            auto path = QFileDialog::getSaveFileName(this, "导出csv文件", "", "csv文件(*.csv)");
+            if (path != "")
+            {
+                Saver::ExportCsv(item, path);
+            }
+        }
+        else if (selectedAction == ShowBrachesAction)
+        {
+
         }
     }
 }

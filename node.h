@@ -40,6 +40,7 @@ public:
     virtual ~Node();
     QVector<Arrow*> getArrows();
     QVector<Arrow*> getSourceArrows();
+    Arrow* getDestinationArrow();
     virtual void ChangeZValue(bool isSelected);
     void SetRef(QString s);
 
