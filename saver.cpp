@@ -8,6 +8,7 @@
 #include "arrownode.h"
 #include "mainwindow.h"
 #include "subgraphnode.h"
+#include "rootnode.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -335,13 +336,14 @@ Item* Saver::Open(const QString& path)
             Text* text;
             if (parentNode)
             {
+                auto idChanged = !dynamic_cast<RootNode*>(parentNode);
                 QString temp="0x";
                 temp+= QString::number(parentNode->GetID(),16);
                 auto position = parentNode->GetLocation() + location - parentNode->GetLocation();
-                text = new Text(position, parentNode, temp, true);
+                text = new Text(position, parentNode, temp, idChanged);
             }
             else text = new Text(location);
-            if (id != "") text->change_ID(id);
+            //if (id != "") text->change_ID(id);
             if (parentNode)
             {
                 auto parentShape = parentNode->getShape();
@@ -478,7 +480,11 @@ void Saver::ExportCsv(Item *item, const QString &path)
                 auto to = arrow->myEndItem->GetNode();
                 if (!dynamic_cast<ArrowNode*>(from))
                 {
-                    if (!connections.contains(to->GetID())) connections.insert(to->GetID(), from->GetID());
+                    if (!connections.contains(to->GetID()))
+                    {
+                        auto fromId = dynamic_cast<RootNode*>(from) ? -1 : from->GetID();
+                        connections.insert(to->GetID(), fromId);
+                    }
                     break;
                 }
             }
@@ -487,6 +493,7 @@ void Saver::ExportCsv(Item *item, const QString &path)
     foreach (auto node, item->scene()->graph->getNodes())
     {
         if (dynamic_cast<ArrowNode*>(node)) continue;
+        if (dynamic_cast<RootNode*>(node)) continue;
         auto id = node->GetID();
         out << id << ",";
         QString parentId, nodeText, branch;

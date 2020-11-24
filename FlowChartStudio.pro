@@ -41,6 +41,7 @@ SOURCES += \
     nodeitem.cpp \
     outputnode.cpp \
     rectangle.cpp\
+    rootnode.cpp \
     saver.cpp \
     scene.cpp \
     subgraphnode.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     nodeitem.h \
     outputnode.h \
     rectangle.h\
+    rootnode.h \
     saver.h \
     scene.h \
     subgraphnode.h \

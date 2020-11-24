@@ -14,18 +14,19 @@ void NodeEvents::contextMenuEvent(Node* node, QGraphicsSceneContextMenuEvent *ev
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     deleteAction->setShortcut(QKeySequence::Delete);
-    QAction* subGraphAction;
-    QAction* subGraphAction2;
-    if (dynamic_cast<SubgraphNode*>(node))
+    QAction* subGraphAction = nullptr;
+    QAction* subGraphAction2 = nullptr;
+    /*if (dynamic_cast<SubgraphNode*>(node))
     {
         subGraphAction = menu.addAction("打开子图");
         subGraphAction2 = menu.addAction("创建所有端口");
-    }
+    }*/
     auto cutAction = menu.addAction("剪切");
     cutAction->setShortcut(QKeySequence::Cut);
     auto copyAction = menu.addAction("复制");
     copyAction->setShortcut(QKeySequence::Copy);
     auto selectedAction = menu.exec(event->screenPos());
+    if (selectedAction == nullptr) return;
     if (selectedAction == deleteAction)
     {
         deleteElemets();

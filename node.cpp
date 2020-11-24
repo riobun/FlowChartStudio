@@ -8,6 +8,7 @@
 #include "inneroutputnode.h"
 #include "subgraphnode.h"
 #include "arrownode.h"
+#include "rootnode.h"
 
 Node::Node(){}
 Node::Node(QPointF lc,double w,double h):location(lc),width(w),height(h)
@@ -27,6 +28,7 @@ ElementShape Node::getShape()
         else if (dynamic_cast<InnerOutputNode*>(this)) _shape = ElementShape::InnerOutput;
         else if (dynamic_cast<SubgraphNode*>(this)) _shape = ElementShape::SubGraph;
         else if (dynamic_cast<ArrowNode*>(this)) _shape = ElementShape::ArrowNode;
+        else if (dynamic_cast<RootNode*>(this)) _shape = ElementShape::RootNode;
     }
     return _shape;
 }
@@ -172,7 +174,8 @@ void Node::BindToText(QGraphicsScene* qgs)
     {
         QString temp="0x";
         temp+= QString::number(GetID(),16);
-        auto text = new Text(QPointF(location.x()-width/2,location.y()-height/2), this, temp, true);
+        auto idChanged = !dynamic_cast<RootNode*>(this);
+        auto text = new Text(QPointF(location.x()-width/2,location.y()-height/2), this, temp, idChanged);
         text->change_content("文本");
         text->setZValue(shape->zValue());
         auto window = MainWindow::instance();
@@ -329,6 +332,7 @@ Node* Node::create(ElementShape shape, QPointF point, qreal width, qreal height)
         case ElementShape::InnerInput: node = new InnerInputNode(point, width, height); break;
         case ElementShape::InnerOutput: node = new InnerOutputNode(point, width, height); break;
         case ElementShape::ArrowNode: node = new ArrowNode(point, 5, 5); break;
+    case ElementShape::RootNode: node = new RootNode(point, width, height); break;
         default: throw;
     }
     return node;

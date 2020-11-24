@@ -12,6 +12,7 @@
 #include<QFontDialog>
 #include<QColorDialog>
 #include "nodeevents.h"
+#include "rootnode.h"
 #include "branchdialog.h"
 
 Text::Text(QPointF primary_location,Node* parent,QString parentID,bool IDchanged )
@@ -198,7 +199,7 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
                 Input=dialog.senderInput();
             }
         }
-        else if(ID!=NULL){
+        else if(ID!=NULL && !dynamic_cast<RootNode*>(parent)){
         DetailsDialog2 dialog(ID,content);
 
         if (dialog.exec() == QDialog::Accepted) {
@@ -228,7 +229,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     auto editAction = menu.addAction("编辑");
     auto logicAction=menu.addAction("组合逻辑");
     QAction* branchAction = nullptr;
-    if (parent) branchAction = menu.addAction("branch");
+    if (parent && !dynamic_cast<RootNode*>(parent)) branchAction = menu.addAction("branch");
     auto fontAction = menu.addAction("修改字体");
     auto colorAction = menu.addAction("修改颜色");
     auto cutAction = menu.addAction("剪切");
@@ -257,7 +258,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
                 Input=dialog.senderInput();
             }
         }
-        else if(ID!=NULL){
+        else if(ID!=NULL && !dynamic_cast<RootNode*>(parent)){
         DetailsDialog2 dialog(ID,content);
 
         if (dialog.exec() == QDialog::Accepted) {

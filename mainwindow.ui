@@ -290,57 +290,6 @@
              <normaloff>:/images/paste.png</normaloff>:/images/paste.png</iconset>
            </property>
           </widget>
-          <widget class="QPushButton" name="boldBtn">
-           <property name="geometry">
-            <rect>
-             <x>30</x>
-             <y>50</y>
-             <width>22</width>
-             <height>18</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/images/bold.png</normaloff>:/images/bold.png</iconset>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="italicBtn">
-           <property name="geometry">
-            <rect>
-             <x>50</x>
-             <y>50</y>
-             <width>22</width>
-             <height>18</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/images/italic.png</normaloff>:/images/italic.png</iconset>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="underlineBtn">
-           <property name="geometry">
-            <rect>
-             <x>80</x>
-             <y>50</y>
-             <width>22</width>
-             <height>18</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/images/underline.png</normaloff>:/images/underline.png</iconset>
-           </property>
-          </widget>
           <widget class="QPushButton" name="backBtn">
            <property name="geometry">
             <rect>

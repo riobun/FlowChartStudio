@@ -61,9 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //工具栏
-    ui->toolBar->addWidget(ui->backBtn);
-    ui->toolBar->addWidget(ui->copyBtn);
-    ui->toolBar->addWidget(ui->pasteBtn);
+    //ui->toolBar->addWidget(ui->backBtn);
+    //ui->toolBar->addWidget(ui->copyBtn);
+    //ui->toolBar->addWidget(ui->pasteBtn);
 
     ui->toolBar->addSeparator();
 
@@ -87,9 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->toolBar->addSeparator();
 
-    ui->toolBar->addWidget(ui->boldBtn);
-    ui->toolBar->addWidget(ui->italicBtn);
-    ui->toolBar->addWidget(ui->underlineBtn);
+    //ui->toolBar->addWidget(ui->boldBtn);
+    //ui->toolBar->addWidget(ui->italicBtn);
+    //ui->toolBar->addWidget(ui->underlineBtn);
 
     //字体颜色
     fontColorToolBtn = new QToolButton(this);

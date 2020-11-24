@@ -3,7 +3,7 @@
 #include "text.h"
 #include "node.h"
 #include "arrow.h"
-#include <QDebug>
+#include "rootnode.h"
 
 void onNodeSelected(Node* node, bool isSelected);
 void onTextSelected(Text* text, bool isSelected);

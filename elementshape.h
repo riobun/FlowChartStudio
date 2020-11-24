@@ -16,6 +16,7 @@ enum class ElementShape
     ArrowNode,
     InnerInput,
     InnerOutput,
+    RootNode,
 };
 
 inline bool isNode(ElementShape shape)
@@ -23,7 +24,8 @@ inline bool isNode(ElementShape shape)
     return shape == ElementShape::Input || shape == ElementShape::Output ||
             shape == ElementShape::Diamond || shape == ElementShape::SubGraph ||
             shape == ElementShape::Rectangle || shape == ElementShape::InnerInput ||
-            shape == ElementShape::InnerOutput || shape == ElementShape::ArrowNode;
+            shape == ElementShape::InnerOutput || shape == ElementShape::ArrowNode ||
+            shape == ElementShape::RootNode;
 }
 
 inline const char* getShapeString(ElementShape shape)
@@ -41,6 +43,7 @@ inline const char* getShapeString(ElementShape shape)
     case ElementShape::Rectangle: return "rectangle";
     case ElementShape::InnerInput: return "innerInput";
     case ElementShape::InnerOutput: return "innerOutput";
+    case ElementShape::RootNode: return "rootNode";
     }
 }
 
@@ -56,6 +59,7 @@ inline ElementShape parseShape(const QString& str)
     else if (str == "innerInput") return ElementShape::InnerInput;
     else if (str == "innerOutput") return ElementShape::InnerOutput;
     else if (str == "arrowNode") return ElementShape::ArrowNode;
+    else if (str == "rootNode") return ElementShape::RootNode;
     else return ElementShape::Unknown;
 }
 

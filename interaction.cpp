@@ -57,7 +57,8 @@ void MainWindow::on_addTextButton_clicked()
 
 void MainWindow::on_addSubgraghButton_clicked()
 {
-    _nextAddedShape = ElementShape::SubGraph;
+    // _nextAddedShape = ElementShape::SubGraph;
+    _nextAddedShape = ElementShape::RootNode;
 }
 
 void MainWindow::on_addInputButton_clicked()
