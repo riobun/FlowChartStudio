@@ -209,6 +209,14 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
 
         }
         }
+        else if (arrowId != -1) {
+            BranchDialog dialog(this);
+            if (dialog.exec() == QDialog::Accepted)
+            {
+                branch = dialog.getBranch();
+                change_content(branch);
+            }
+        }
         else{
             QString dlgTitle="文本框对话框";
                     QString txtLable="请输入文本框中的文字";
@@ -229,7 +237,7 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     auto editAction = menu.addAction("编辑");
     auto logicAction=menu.addAction("组合逻辑");
     QAction* branchAction = nullptr;
-    if (parent && !dynamic_cast<RootNode*>(parent)) branchAction = menu.addAction("branch");
+    // if (arrowId != -1) branchAction = menu.addAction("branch");
     auto fontAction = menu.addAction("修改字体");
     auto colorAction = menu.addAction("修改颜色");
     auto cutAction = menu.addAction("剪切");

@@ -508,6 +508,7 @@ void Arrow::BindToText(QGraphicsScene* qgs){
             break;
         }
     }
+    if (arrowlist.size() == 0 && content) hasText = true;
     if(!hasText){
         QLineF centerLine(myStartItem->pos(), list[1]);
         QPolygonF StartPolygon = myStartItem->polygon();
