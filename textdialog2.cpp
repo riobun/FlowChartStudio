@@ -6,7 +6,7 @@
 
 
 DetailsDialog2::DetailsDialog2(QString ID_,QString con,const QString &title, QWidget *parent)
-    : QDialog(parent)
+    : QDialog(MainWindow::instance())
 {
 
     IDLabel = new QLabel(tr("ID:"));
@@ -65,7 +65,15 @@ void DetailsDialog2::verify()
         }
     }
     if (!isID && !contentEdit->toPlainText().isEmpty()&&isID2) {
-        auto node = MainWindow::instance()->graph()->getNodes()[CStringHexToInt(ID)];
+        Node* node;
+        int oldNodeId = CStringHexToInt(ID);
+        foreach (auto currentNode, MainWindow::instance()->graph()->getNodes())
+        {
+            if (currentNode->getNodeId() == oldNodeId)
+            {
+                node = currentNode;
+            }
+        }
         node->changesId(str);
         ID=str;
         accept();

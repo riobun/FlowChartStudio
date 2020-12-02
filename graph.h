@@ -60,7 +60,7 @@ public:
 
         QString getPath();
     int maxId = 0;
-    int k1[200]={0};
+    bool nodeIds[200] = {};
     void setId() override;
 
     static QMap<int, Graph*> graphs;

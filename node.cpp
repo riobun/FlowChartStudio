@@ -173,8 +173,8 @@ void Node::BindToText(QGraphicsScene* qgs)
     if(content==nullptr)
     {
         QString temp="0x";
-        temp+= QString::number(GetID(),16);
-        auto idChanged = !dynamic_cast<RootNode*>(this);
+        temp+= QString::number(getNodeId(),16);
+        auto idChanged = true;
         auto text = new Text(QPointF(location.x()-width/2,location.y()-height/2), this, temp, idChanged);
         text->change_content("文本");
         text->setZValue(shape->zValue());
@@ -336,4 +336,36 @@ Node* Node::create(ElementShape shape, QPointF point, qreal width, qreal height)
         default: throw;
     }
     return node;
+}
+
+int Node::getNodeId() const
+{
+    return _nodeId;
+}
+
+void Node::setNodeId(int id)
+{
+    _nodeId = id;
+    sId = getIdNum(_nodeId);
+}
+
+void Node::setNodeId()
+{
+    if (_nodeId != -1 && !graph->nodeIds[_nodeId - 1])
+    {
+        graph->nodeIds[_nodeId - 1] = true;
+    }
+    else
+    {
+        for(int i = 0; i < 200; i++)
+        {
+            if(!graph->nodeIds[i])
+            {
+                _nodeId = i + 1;
+                graph->nodeIds[i] = true;
+                break;
+            }
+        }
+        sId = getIdNum(_nodeId);
+    }
 }

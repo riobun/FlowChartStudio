@@ -199,7 +199,7 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
                 Input=dialog.senderInput();
             }
         }
-        else if(ID!=NULL && !dynamic_cast<RootNode*>(parent)){
+        else if(ID!=NULL){
         DetailsDialog2 dialog(ID,content);
 
         if (dialog.exec() == QDialog::Accepted) {

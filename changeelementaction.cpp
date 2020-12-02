@@ -46,10 +46,10 @@ void ChangeElementAction::Do()
             connect(item, &NodeItem::Selected, [](Node* node, bool isSelected) { onNodeSelected(node, isSelected); });
             node->graph = graph;
             node->setId();
+            node->setNodeId();
             node->Paint(scene);
             graph->addNode(node);
             graph->addNode(node,MainWindow::instance()->index_tab(),shape);
-
         }
         else
         {

@@ -181,6 +181,7 @@ void Saver::Save(Item* item)
                     .arg(frameColor.green()).arg(frameColor.blue());
             nodeJson.insert("frameColor", frameColorString);
             nodeJson.insert("thickness", node->GetThickness());
+            nodeJson.insert("nodeId", node->getNodeId());
             if (shape == ElementShape::SubGraph)
             {
                 auto relationGraph = ((SubgraphNode*)node)->relatedGraph;
@@ -301,8 +302,10 @@ Item* Saver::Open(const QString& path)
             QColor frameColor(frameColorParts[0].toInt(),
                     frameColorParts[1].toInt(), frameColorParts[2].toInt());
             auto thickness = nodeJson.value("thickness").toVariant().toReal();
+            auto nodeId = nodeJson.value("nodeId").toInt();
             Node* node = Node::create(shape, location, width, height);
             node->setId(id);
+            node->setNodeId(nodeId);
             node->SetBackgroundColor(backgroundColor);
             node->SetFrameColor(frameColor);
             node->SetThickness(thickness);
@@ -336,9 +339,9 @@ Item* Saver::Open(const QString& path)
             Text* text;
             if (parentNode)
             {
-                auto idChanged = !dynamic_cast<RootNode*>(parentNode);
+                auto idChanged = true;
                 QString temp="0x";
-                temp+= QString::number(parentNode->GetID(),16);
+                temp+= QString::number(parentNode->getNodeId(),16);
                 auto position = parentNode->GetLocation() + location - parentNode->GetLocation();
                 text = new Text(position, parentNode, temp, idChanged);
             }
@@ -466,6 +469,7 @@ void Saver::ExportCsv(Item *item, const QString &path)
     QTextStream out(&file);
     out << "node_id,parent_id,node_en,branch_en" << endl;
     QMap<int, int> connections;
+    QMap<Node*, QString> branches;
     foreach (auto arrow, item->scene()->graph->getArrows())
     {
         auto from = arrow->myStartItem->GetNode();
@@ -474,28 +478,36 @@ void Saver::ExportCsv(Item *item, const QString &path)
             if (arrow->arrowlist.size() == 0)
             {
                 connections.insert(arrow->myEndItem->GetNode()->GetID(), from->GetID());
-            }
-            else foreach (auto arrow, arrow->arrowlist)
-            {
-                auto to = arrow->myEndItem->GetNode();
-                if (!dynamic_cast<ArrowNode*>(from))
+                if (arrow->content)
                 {
-                    if (!connections.contains(to->GetID()))
-                    {
-                        auto fromId = dynamic_cast<RootNode*>(from) ? -1 : from->GetID();
-                        connections.insert(to->GetID(), fromId);
-                    }
-                    break;
+                    branches.insert(arrow->myEndItem->GetNode(), arrow->content->get_text_content());
                 }
+            }
+            else
+            {
+                QString branch;
+                Node* toNode;
+                foreach (auto arrow, arrow->arrowlist)
+                {
+                    auto to = arrow->myEndItem->GetNode();
+                    if (arrow->content) branch = arrow->content->get_text_content();
+                    if (!dynamic_cast<ArrowNode*>(to))
+                    {
+                        if (!connections.contains(to->GetID()))
+                        {
+                            connections.insert(to->GetID(), from->GetID());
+                        }
+                        toNode = to;
+                    }
+                }
+                branches.insert(toNode, branch);
             }
         }
     }
     foreach (auto node, item->scene()->graph->getNodes())
     {
         if (dynamic_cast<ArrowNode*>(node)) continue;
-        if (dynamic_cast<RootNode*>(node)) continue;
         auto id = node->GetID();
-        out << id << ",";
         QString parentId, nodeText, branch;
         if (connections.contains(id)) parentId = QString::number(connections[id]);
         else parentId = "-1";
@@ -503,9 +515,17 @@ void Saver::ExportCsv(Item *item, const QString &path)
         if (text)
         {
             nodeText = text->get_text_content();
-            branch = text->branch;
         }
-        out << parentId << "," << nodeText << "," << branch << endl;
+        if (branches.contains(node))
+        {
+            branch = branches[node];
+        }
+        if (dynamic_cast<RootNode*>(node))
+        {
+            parentId = "-1";
+            branch = "Root node";
+        }
+        out << id << "," << parentId << "," << nodeText << "," << branch << endl;
     }
     file.close();
 }

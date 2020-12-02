@@ -54,6 +54,9 @@ public:
         //根据JSON转成成相应的对象
         virtual void set_JsonObject(QJsonObject qso) override;
     ElementShape getShape();
+    int getNodeId() const;
+    void setNodeId();
+    void setNodeId(int id);
 protected:
     QPointF location=QPointF(0.0,0.0);//表示图形中心位置
     double width,height;
@@ -68,6 +71,7 @@ private:
     QMap<int,Arrow*> sourceArrows;
     QMap<int,Arrow*> destinationArrows;
     ElementShape _shape = ElementShape::Unknown;
+    int _nodeId = -1;
 };
 
 #endif // NODE_H

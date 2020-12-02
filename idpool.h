@@ -34,7 +34,7 @@ static int CStringHexToInt(QString str) //输入十六进制的ID字符串，如
 
 static bool isRepeat(Graph* graph, QString str){
     int nRet=CStringHexToInt(str);
-    if(graph->k1[nRet-1]==1){   //检测该id在id池当中是否已被占用，为1是已被占用，为0时未被占用
+    if(graph->nodeIds[nRet-1]==1){   //检测该id在id池当中是否已被占用，为1是已被占用，为0时未被占用
             return true;
         }else return false;
 }

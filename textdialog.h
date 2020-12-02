@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include<QLabel>
-#include<QcheckBox>
+#include<QCheckBox>
 #include<QLineEdit>
 #include<QTableWidget>
 #include<QTextEdit>
