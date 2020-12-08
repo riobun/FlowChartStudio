@@ -1,6 +1,8 @@
 #ifndef SAVER_H
 #define SAVER_H
 
+#include <QMap>
+
 class QString;
 class Item;
 
@@ -18,6 +20,7 @@ public:
     static void ClearRelation();
     static void ImportBranches(Item* item, const QString& path);
     static void ExportCsv(Item* item, const QString& path);
+    static void ImportDictionary(QMap<QString, QString>& dictionary, const QString& path);
 };
 
 #endif // SAVER_H

@@ -811,7 +811,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 *CloseProjectAction = nullptr, *exportCsvAction = nullptr,
                 *CloseFileAction = nullptr, *RemoveAction = nullptr,
                 *SaveFileAction = nullptr, *SaveAsFileAction = nullptr,
-                *ShowBrachesAction = nullptr,
+                *ShowBrachesAction = nullptr, *importNodeDictionaryPathAction = nullptr,
+                *importBranchDictionaryPathAction = nullptr,
                 *addNewFileAction = nullptr, *showPathAction = nullptr;
         switch (type) {
         case ItemType::Project:
@@ -836,8 +837,8 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             SaveFileAction = menu.addAction("保存文件");
             importBranchesAction = menu.addAction("导入Branches文件");
             exportCsvAction = menu.addAction("导出csv文件");
-            //ShowBrachesAction = menu.addAction("显示Branches");
-            //SaveAsFileAction = menu.addAction("Save As");
+            importNodeDictionaryPathAction = menu.addAction("导入节点字典文件");
+            importBranchDictionaryPathAction = menu.addAction("导入分支字典文件");
             showPathAction = menu.addAction("显示详细信息");
         }
         auto selectedAction = menu.exec(QCursor::pos());
@@ -897,14 +898,37 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         else if (selectedAction == showPathAction)
         {
-            QMessageBox::information(this, "详细信息", "路径：" + item->path());
+            auto string = "路径：" + item->path() + "\n" +
+                    "分支表文件路径：" + item->graph()->branchesPath + "\n" +
+                    "节点字典文件路径：" + item->graph()->nodeDictionaryPath + "\n" +
+                    "分支字典文件路径：" + item->graph()->branchDictionaryPath + "\n";
+            QMessageBox::information(this, "详细信息", string);
         }
         else if (selectedAction == importBranchesAction)
         {
             auto path = QFileDialog::getOpenFileName(this, "导入Branches文件", "", "Branches文件(*.branches)");
             if (path != "")
             {
+                item->graph()->branchesPath = path;
                 Saver::ImportBranches(item, path);
+            }
+        }
+        else if (selectedAction == importNodeDictionaryPathAction)
+        {
+            auto path = QFileDialog::getOpenFileName(this, "导入节点字典文件", "", "csv文件(*.csv)");
+            if (path != "")
+            {
+                item->graph()->nodeDictionaryPath = path;
+                Saver::ImportDictionary(item->scene()->nodeDictionary, path);
+            }
+        }
+        else if (selectedAction == importBranchDictionaryPathAction)
+        {
+            auto path = QFileDialog::getOpenFileName(this, "导入分支字典文件", "", "csv文件(*.csv)");
+            if (path != "")
+            {
+                item->graph()->branchDictionaryPath = path;
+                Saver::ImportDictionary(item->scene()->branchDictionary, path);
             }
         }
         else if (selectedAction == exportCsvAction)

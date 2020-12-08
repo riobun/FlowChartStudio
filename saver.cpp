@@ -150,17 +150,9 @@ void Saver::Save(Item* item)
         auto graph = item->graph();
         QJsonObject graphJson;
         graphJson.insert("id", graph->GetID());
-        QJsonObject branchesJson;
-        auto& branches = scene->branches;
-        QMapIterator<QString, QString> i(branches);
-        while (i.hasNext())
-        {
-            auto pair = i.next();
-            auto key = pair.key();
-            auto value = pair.value();
-            branchesJson.insert(key, value);
-        }
-        graphJson.insert("branches", branchesJson);
+        graphJson.insert("branchesPath", graph->branchesPath);
+        graphJson.insert("nodeDictionaryPath", graph->nodeDictionaryPath);
+        graphJson.insert("branchDictionaryPath", graph->branchDictionaryPath);
         QJsonArray nodesJson;
         foreach (auto node, graph->getNodes())
         {
@@ -365,6 +357,7 @@ Item* Saver::Open(const QString& path)
             if (arrowId != -1)
             {
                 texts.insert(arrowId, text);
+                text->setArrowId(arrowId);
             }
         }
         auto arrowJson = graphJson.value("arrows").toArray();
@@ -411,6 +404,12 @@ Item* Saver::Open(const QString& path)
                 arrow->arrowlist.append(carrow);
             }
         }
+        auto branchesPath = graphJson.value("branchesPath").toString();
+        ImportBranches(item, branchesPath);
+        auto nodeDictionaryPath = graphJson.value("nodeDictionaryPath").toString();
+        ImportDictionary(scene->nodeDictionary, nodeDictionaryPath);
+        auto branchDictionaryPath = graphJson.value("branchDictionaryPath").toString();
+        ImportDictionary(scene->branchDictionary, branchDictionaryPath);
         scene->isChanged = false;
     }
     return item;
@@ -441,7 +440,7 @@ void Saver::AddRelation()
 void Saver::ImportBranches(Item *item, const QString &path)
 {
     auto scene = item->scene();
-    QMap<QString, QString>& branches = scene->branches;
+    auto& branches = scene->branches;
     branches.clear();
     QFile file(path);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -526,6 +525,24 @@ void Saver::ExportCsv(Item *item, const QString &path)
             branch = "Root node";
         }
         out << id << "," << parentId << "," << nodeText << "," << branch << endl;
+    }
+    file.close();
+}
+
+void Saver::ImportDictionary(QMap<QString, QString> &dictionary, const QString &path)
+{
+    dictionary.clear();
+    QFile file(path);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream stream(&file);
+    stream.setCodec("utf-8");
+    stream.readLine();
+    while (!stream.atEnd())
+    {
+        auto line = stream.readLine();
+        auto parts = line.split(',');
+        if (parts.count() != 2) continue;
+        dictionary.insert(parts[0], parts[1]);
     }
     file.close();
 }

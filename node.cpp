@@ -36,6 +36,7 @@ ElementShape Node::getShape()
 Node::~Node()
 {
     delete content;
+    if (_nodeId != -1) delete shape;
 }
 double Node::GetWidth()
 {
@@ -155,7 +156,12 @@ void Node::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
 {
     isRemoved=true;
     qgs->removeItem(shape);
-    if(content) content->delete_text(qgs);
+    if(content)
+    {
+        content->delete_text(qgs);
+        static_cast<Scene*>(qgs)->graph->removeText(content);
+        content = nullptr;
+    }
      foreach (auto arrow, sourceArrows)
      {
         arrow->removeArrow();

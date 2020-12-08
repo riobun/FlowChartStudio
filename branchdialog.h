@@ -21,8 +21,10 @@ private:
     Text* text;
     QLabel* branchLabel;
     QLabel* functionLabel;
+    QLabel* englishLabel;
     QLineEdit* branchEdit;
     QLineEdit* functionEdit;
+    QLineEdit* englishEdit;
     QCompleter* branchCompleter;
     QDialogButtonBox* buttonBox;
 };

@@ -26,6 +26,8 @@ public:
     QString file_path;
     Item* item = nullptr;
     QMap<QString, QString> branches;
+    QMap<QString, QString> nodeDictionary;
+    QMap<QString, QString> branchDictionary;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

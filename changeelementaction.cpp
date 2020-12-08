@@ -65,6 +65,7 @@ void ChangeElementAction::Do()
             MainWindow::instance()->selectedNodes()->remove(node->GetID());
             disconnect(node->getNodeItem(), 0, 0, 0);
             node->getNodeItem()->setSelected(false);
+            if (node->content) node->content = nullptr;
         }
     }
     else if (shape == ElementShape::Text)
@@ -107,6 +108,12 @@ void ChangeElementAction::Do()
         }
         else
         {
+            if(arrow->content) {
+                arrow->content->delete_text(scene);
+                scene->removeItem(arrow->content);
+                auto action = new ChangeElementAction(arrow->content, ElementShape::Text, false);
+                        action->Do();
+            }
             arrow->myStartItem->GetNode()->DisconnectAsSource(arrow);
             arrow->myEndItem->GetNode()->DisconnectAsDestination(arrow);
             graph->removeArrow(arrow);

@@ -64,6 +64,10 @@ public:
     void setId() override;
 
     static QMap<int, Graph*> graphs;
+
+    QString branchesPath;
+    QString nodeDictionaryPath;
+    QString branchDictionaryPath;
 private:
     void SetVisibility(bool set);
     bool isExpended;

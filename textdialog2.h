@@ -27,7 +27,10 @@ private:
     QLabel *IDLabel;
     QLineEdit *IDEdit;
     QLabel *contentLabel;
-    QTextEdit *contentEdit;
+    QLineEdit *contentEdit;
+    QLabel* englishLabel;
+    QLineEdit* englishEdit;
+    QCompleter* contentCompleter;
     QDialogButtonBox *buttonBox;
     QString content;
     QString ID;
