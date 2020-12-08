@@ -99,9 +99,9 @@ bool GraphElement::changesId(QString str){
     else if(!str.startsWith("0x")){
         return false;
     }//未以0x开头，命名不规范
-    graph->nodeIds[this->GetID()-1] = false;
+    graph->nodeIds[node->getNodeId()-1] = false;
     node->setNodeId(CStringHexToInt(str));
-    graph->nodeIds[this->GetID()-1] = true;
+    graph->nodeIds[node->getNodeId()-1] = true;
     return true;
 }
 int GraphElement::chagearrowID(int oldid){

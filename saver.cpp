@@ -405,10 +405,13 @@ Item* Saver::Open(const QString& path)
             }
         }
         auto branchesPath = graphJson.value("branchesPath").toString();
+        graph->branchesPath = branchesPath;
         ImportBranches(item, branchesPath);
         auto nodeDictionaryPath = graphJson.value("nodeDictionaryPath").toString();
+        graph->nodeDictionaryPath = nodeDictionaryPath;
         ImportDictionary(scene->nodeDictionary, nodeDictionaryPath);
         auto branchDictionaryPath = graphJson.value("branchDictionaryPath").toString();
+        graph->branchDictionaryPath = branchDictionaryPath;
         ImportDictionary(scene->branchDictionary, branchDictionaryPath);
         scene->isChanged = false;
     }
@@ -462,6 +465,8 @@ void Saver::ImportBranches(Item *item, const QString &path)
 
 void Saver::ExportCsv(Item *item, const QString &path)
 {
+    auto& nodeDictionary = item->scene()->nodeDictionary;
+    auto& branchDictionary = item->scene()->branchDictionary;
     QFile file(path);
     if (file.exists()) file.remove();
     file.open(QIODevice::ReadWrite | QIODevice::Text);
@@ -476,7 +481,7 @@ void Saver::ExportCsv(Item *item, const QString &path)
         {
             if (arrow->arrowlist.size() == 0)
             {
-                connections.insert(arrow->myEndItem->GetNode()->GetID(), from->GetID());
+                connections.insert(arrow->myEndItem->GetNode()->getNodeId(), from->getNodeId());
                 if (arrow->content)
                 {
                     branches.insert(arrow->myEndItem->GetNode(), arrow->content->get_text_content());
@@ -492,9 +497,9 @@ void Saver::ExportCsv(Item *item, const QString &path)
                     if (arrow->content) branch = arrow->content->get_text_content();
                     if (!dynamic_cast<ArrowNode*>(to))
                     {
-                        if (!connections.contains(to->GetID()))
+                        if (!connections.contains(to->getNodeId()))
                         {
-                            connections.insert(to->GetID(), from->GetID());
+                            connections.insert(to->getNodeId(), from->getNodeId());
                         }
                         toNode = to;
                     }
@@ -506,18 +511,22 @@ void Saver::ExportCsv(Item *item, const QString &path)
     foreach (auto node, item->scene()->graph->getNodes())
     {
         if (dynamic_cast<ArrowNode*>(node)) continue;
-        auto id = node->GetID();
+        auto id = node->getNodeId();
         QString parentId, nodeText, branch;
         if (connections.contains(id)) parentId = QString::number(connections[id]);
         else parentId = "-1";
         auto text = node->content;
         if (text)
         {
-            nodeText = text->get_text_content();
+            auto rawText = text->get_text_content();
+            if (nodeDictionary.contains(rawText)) nodeText = nodeDictionary[rawText];
+            else nodeText = rawText;
         }
         if (branches.contains(node))
         {
-            branch = branches[node];
+            auto rawBranch = branches[node];
+            if (branchDictionary.contains(rawBranch)) branch = branchDictionary[rawBranch];
+            else branch = rawBranch;
         }
         if (dynamic_cast<RootNode*>(node))
         {

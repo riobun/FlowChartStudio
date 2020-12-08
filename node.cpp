@@ -172,6 +172,10 @@ void Node::Remove(QGraphicsScene *qgs)//等待arrow完成后继续修改
      }
      isRemoved=false;
       this->deleteID();
+     if (_nodeId != -1)
+     {
+         graph->nodeIds[_nodeId - 1] = false;
+     }
 }
 
 void Node::BindToText(QGraphicsScene* qgs)
