@@ -544,7 +544,7 @@ void Saver::ImportDictionary(QMap<QString, QString> &dictionary, const QString &
     QFile file(path);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream stream(&file);
-    stream.setCodec("utf-8");
+    //stream.setCodec("utf-8");
     stream.readLine();
     while (!stream.atEnd())
     {

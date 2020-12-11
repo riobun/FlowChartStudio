@@ -27,6 +27,7 @@
 #include "saver.h"
 #include "filemanager.h"
 #include "subgraphnode.h"
+#include "checker.h"
 
 //**************************
 #include "graph.h"
@@ -51,11 +52,11 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowState(Qt::WindowMaximized);
 
     //状态栏
-        ui->listWidget->addItem("提示信息1");
+/*        ui->listWidget->addItem("提示信息1");
         ui->listWidget->addItem("提示信息2");
         ui->listWidget->addItem("提示信息3");
         ui->listWidget->addItem("提示信息4");
-        ui->listWidget->addItem("提示信息5");
+        ui->listWidget->addItem("提示信息5");*/
 
 
 
@@ -353,6 +354,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionclose_pro, &QAction::triggered, [closeProject]()
     {
         closeProject();
+    });
+
+    connect(ui->actioncheck_pro, &QAction::triggered, []()
+    {
+        Checker::check();
     });
 
     // 将编辑菜单栏中的动作绑定到槽

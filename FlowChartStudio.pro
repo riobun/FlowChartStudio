@@ -22,6 +22,7 @@ SOURCES += \
     arrownode.cpp \
     branchdialog.cpp \
     changeelementaction.cpp \
+    checker.cpp \
     diamond.cpp \
     editelementaction.cpp \
     elementevents.cpp \
@@ -58,6 +59,7 @@ HEADERS += \
     arrownode.h \
     branchdialog.h \
     changeelementaction.h \
+    checker.h \
     diamond.h \
     editelementaction.h \
     elementProperty.h \
