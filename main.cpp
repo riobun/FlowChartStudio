@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     point_w = &w;
-    //showSplashScreen();
+    showSplashScreen();
     w.show();
 
     return a.exec();

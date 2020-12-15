@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 #include "arrow.h"
 #include "arrownode.h"
-#include "subgraphnode.h"
+#include "rootnode.h"
 
 QVector<QString> Checker::messages;
 MainWindow* Checker::window;
@@ -41,13 +41,13 @@ QString Checker::getArrowString(const Arrow* arrow)
     auto from = arrow->startItem()->GetNode();
     while (dynamic_cast<ArrowNode*>(from) != nullptr)
     {
-        from = from->getDestinationArrow()->startItem()->GetNode();
+        from = from->getSourceArrow()->startItem()->GetNode();
     }
     auto fromString = getNodeString(from);
     auto to = arrow->endItem()->GetNode();
     while (dynamic_cast<ArrowNode*>(to) != nullptr)
     {
-        to = to->getSourceArrow()->startItem()->GetNode();
+        to = to->getDestinationArrow()->startItem()->GetNode();
     }
     auto toString = getNodeString(to);
     return QString("连接%1和%2的箭头").arg(fromString).arg(toString);
@@ -73,7 +73,7 @@ void Checker::checkNodes()
     foreach (auto node, nodes)
     {
         checkNodeEnglish(node);
-        if (dynamic_cast<SubgraphNode*>(node) != nullptr)
+        if (dynamic_cast<RootNode*>(node) != nullptr)
         {
             if (root != nullptr)
             {
@@ -110,13 +110,13 @@ void Checker::checkNodeEnglish(const Node* node)
 
 void Checker::checkRootNode(const Node* node)
 {
-    if (node->getSourceArrow() != nullptr)
+    if (node->getDestinationArrow() != nullptr)
     {
         auto nodeString = getNodeString(node);
         auto message = QString("%1不能有入口箭头。").arg(nodeString);
         addErrorMessage(message);
     }
-    if (node->getDestinationArrows().size() > 1)
+    if (node->getSourceArrows().size() > 1)
     {
         auto nodeString = getNodeString(node);
         auto message = QString("%1不能有多个出口箭头。").arg(nodeString);
@@ -126,13 +126,13 @@ void Checker::checkRootNode(const Node* node)
 
 void Checker::checkRectangle(const Node* node)
 {
-    if (node->getSourceArrow() == nullptr)
+    if (node->getDestinationArrows().size() != 1)
     {
         auto nodeString = getNodeString(node);
-        auto message = QString("%1必须有入口箭头。").arg(nodeString);
+        auto message = QString("%1必须有1个入口箭头。").arg(nodeString);
         addErrorMessage(message);
     }
-    if (node->getDestinationArrows().size() > 1)
+    if (node->getSourceArrows().size() > 1)
     {
         auto nodeString = getNodeString(node);
         auto message = QString("%1不能有多个出口箭头。").arg(nodeString);
@@ -142,13 +142,13 @@ void Checker::checkRectangle(const Node* node)
 
 void Checker::checkDiamond(const Node* node)
 {
-    if (node->getSourceArrow() == nullptr)
+    if (node->getDestinationArrows().size() != 1)
     {
         auto nodeString = getNodeString(node);
-        auto message = QString("%1必须有入口箭头。").arg(nodeString);
+        auto message = QString("%1必须有1个入口箭头。").arg(nodeString);
         addErrorMessage(message);
     }
-    if (node->getDestinationArrows().size() != 2)
+    if (node->getSourceArrows().size() != 2)
     {
         auto nodeString = getNodeString(node);
         auto message = QString("%1必须有2个出口箭头。").arg(nodeString);

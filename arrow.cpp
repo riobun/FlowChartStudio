@@ -23,8 +23,8 @@ Arrow::Arrow(NodeItem *startItem, NodeItem *endItem,int haveEnd, QGraphicsItem *
     : QGraphicsPathItem(parent), myStartItem(startItem),myEndItem(endItem),HaveEnd(haveEnd)
 {
 //    apath=new QPainterPath(startItem->pos());
-    startItem->GetNode()->ConnectAsSource(this);
-    endItem->GetNode()->ConnectAsDestination(this);
+    //startItem->GetNode()->ConnectAsSource(this);
+    //endItem->GetNode()->ConnectAsDestination(this);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 //    setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     //setType(1);
@@ -633,7 +633,7 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      auto arrow3 = new Arrow(arrownode->getNodeItem(),myEndItem,1);
 //     arrownode->ConnectAsSource(arrow3);
 //     arrownode->ConnectAsDestination(arrow2);
-     myStartItem->GetNode()->ConnectAsDestination(arrow2);
+     //myStartItem->GetNode()->ConnectAsDestination(arrow2);
 
      arrow2->setArrowColor(color);
      arrow3->setArrowColor(color);
@@ -652,13 +652,13 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 //     if(arrow2->content!=nullptr){
 //     arrow2->content->move_text(QPointF((arrow2->list.at(0).x()+arrow2->list.at(1).x())/2,
 //             (arrow2->list.at(0).y()+arrow2->list.at(1).y())/2));}
-     arrownode->deleteID();
-          arrow2->deleteID();
-          arrow2->Id=oldid;
-          arrow2->chagearrowID(oldid);
-          arrow3->deleteID();
-          arrow3->Id=oldid;
-          arrow3->chagearrowID(oldid);
+     //arrownode->deleteID();
+          //arrow2->deleteID();
+          //arrow2->Id=oldid;
+          //arrow2->chagearrowID(oldid);
+          //arrow3->deleteID();
+          //arrow3->Id=oldid;
+          //arrow3->chagearrowID(oldid);
      arrow2->arrowlist.append(this->arrowlist);
      arrow3->arrowlist.append(this->arrowlist);
      arrow2->arrowlist.removeOne(this);
@@ -686,9 +686,9 @@ void Arrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
      arrow3->HaveEnd=0;}
      this->removemyself();
      //思考，我们加入箭头构造的判定条件如果满足就不生成黑色三角形
+     *action << new ChangeElementAction(this, ElementShape::Arrow, false);
      *action << new ChangeElementAction(arrow2, ElementShape::Arrow, true);
      *action << new ChangeElementAction(arrow3, ElementShape::Arrow, true);
-     *action << new ChangeElementAction(this, ElementShape::Arrow, false);
      action->Do();
      this->update();
 }

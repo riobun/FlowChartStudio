@@ -96,6 +96,8 @@ void ChangeElementAction::Do()
         auto arrow = static_cast<Arrow*>(element);
         if (isCreated)
         {
+            arrow->graph = graph;
+            arrow->setId();
             arrow->myStartItem->GetNode()->ConnectAsSource(arrow);
             arrow->myEndItem->GetNode()->ConnectAsDestination(arrow);
             arrow->setZValue(-100.0);

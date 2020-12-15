@@ -236,12 +236,12 @@ QVector<Arrow*> Node::getSourceArrows() const
 Arrow* Node::getDestinationArrow() const
 {
     if (destinationArrows.size() == 0) return nullptr;
-    return destinationArrows[0];
+    return destinationArrows.first();
 }
 Arrow* Node::getSourceArrow() const
 {
     if (sourceArrows.size() == 0) return nullptr;
-    return sourceArrows[0];
+    return sourceArrows.first();
 }
 
 void Node::ChangeZValue(bool isSelected)

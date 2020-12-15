@@ -440,7 +440,7 @@ void MainWindow::removeSubTab(int index){
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
-    ui->tabWidget->setStyleSheet("boeder-image: url();");
+    ui->tabWidget->setStyleSheet("border-image: url();");
 
     auto item = static_cast<Item*>(currentItem);
 
