@@ -39,8 +39,10 @@ public:
     virtual void BindToText(QGraphicsScene* qgs) override;
     virtual ~Node();
     QVector<Arrow*> getArrows();
-    QVector<Arrow*> getSourceArrows();
-    Arrow* getDestinationArrow();
+    QVector<Arrow*> getDestinationArrows() const;
+    QVector<Arrow*> getSourceArrows() const;
+    Arrow* getDestinationArrow() const;
+    Arrow* getSourceArrow() const;
     virtual void ChangeZValue(bool isSelected);
     void SetRef(QString s);
 

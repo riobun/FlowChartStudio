@@ -2,13 +2,13 @@
 #define CHECKER_H
 
 #include <QVector>
-#include <QMap>
 #include <QString>
 
 class MainWindow;
 class Scene;
 class Graph;
 class Node;
+class Arrow;
 
 namespace Ui
 {
@@ -29,9 +29,18 @@ private:
     static Graph* graph;
 
 private:
-    static void initialize();
+    static bool initialize();
+    static QString getNodeString(const Node* node);
+    static QString getArrowString(const Arrow* arrow);
+    static void addWarningMessage(const QString& message);
+    static void addErrorMessage(const QString& message);
     static void checkNodes();
-    static void checkNodesEnglish(const QMap<int, Node*>& nodes);
+    static void checkNodeEnglish(const Node* node);
+    static void checkRootNode(const Node* node);
+    static void checkRectangle(const Node* node);
+    static void checkDiamond(const Node* node);
+    static void checkArrows();
+    static void checkArrowText(const Arrow* arrow);
     static void showMessages();
 };
 

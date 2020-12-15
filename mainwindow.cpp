@@ -370,7 +370,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
     connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 
-
+    ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
 }
 
 MainWindow::~MainWindow()
@@ -424,8 +424,7 @@ QIcon MainWindow::createColorIcon(QColor color)
     return QIcon(pixmap);
 }
 
-void MainWindow::removeSubTab(int index){
-
+void MainWindow::removeSubTab(int index){    
     open_scenes.removeAt(index);
 
     if(ui->tabWidget->count() == 1) {
@@ -437,9 +436,12 @@ void MainWindow::removeSubTab(int index){
     else {
         ui->tabWidget->removeTab(index);
     }
+    ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
+    ui->tabWidget->setStyleSheet("boeder-image: url();");
+
     auto item = static_cast<Item*>(currentItem);
 
     //创建新的VIEW和SCENE，并绑定
@@ -469,7 +471,6 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     graphicsView->horizontalScrollBar()->setSliderPosition(0);
     graphicsView->verticalScrollBar()->setSliderPosition(0);
     open_scenes.append(item->scene());
-
 }
 
 void MainWindow::addNewTab(){

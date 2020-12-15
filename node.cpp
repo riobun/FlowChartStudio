@@ -215,7 +215,16 @@ double Node::GetThickness()
     QPen pen=shape->pen();
     return pen.widthF();
 }
-QVector<Arrow*> Node::getSourceArrows()
+QVector<Arrow*> Node::getDestinationArrows() const
+{
+    QVector<Arrow*> vec;
+    foreach (auto arrow, destinationArrows)
+    {
+        vec.append(arrow);
+    }
+    return vec;
+}
+QVector<Arrow*> Node::getSourceArrows() const
 {
     QVector<Arrow*> vec;
     foreach (auto arrow, sourceArrows)
@@ -224,10 +233,15 @@ QVector<Arrow*> Node::getSourceArrows()
     }
     return vec;
 }
-Arrow* Node::getDestinationArrow()
+Arrow* Node::getDestinationArrow() const
 {
     if (destinationArrows.size() == 0) return nullptr;
     return destinationArrows[0];
+}
+Arrow* Node::getSourceArrow() const
+{
+    if (sourceArrows.size() == 0) return nullptr;
+    return sourceArrows[0];
 }
 
 void Node::ChangeZValue(bool isSelected)

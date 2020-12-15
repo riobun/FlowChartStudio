@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>FlowChartStudio</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <property name="spacing">
@@ -236,6 +239,9 @@
        </item>
        <item>
         <widget class="QTabWidget" name="tabWidget">
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/images/one_plane.png);</string>
+         </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
            <string>Tab 1</string>
@@ -254,6 +260,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
            </property>
           </widget>
           <widget class="QPushButton" name="copyBtn">

@@ -67,5 +67,7 @@
         <file>images/cuxi.png</file>
         <file>images/arrow_cuxi.png</file>
         <file>images/bd_cuxi.png</file>
+        <file>images/line_planes.jpg</file>
+        <file>images/one_plane.png</file>
     </qresource>
 </RCC>
