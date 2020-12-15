@@ -317,6 +317,7 @@ MainWindow::MainWindow(QWidget *parent)
         auto item = static_cast<Item*>(root->child(0));
         if (item) removeItem(item);
         _scene = nullptr;
+        ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
     };
 
     connect(ui->newProjectAction, &QAction::triggered, [this, closeProject]()
@@ -450,6 +451,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
 
     //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
     QWidget *tabFile = new QWidget(this);
+    tabFile->setStyleSheet("border: 0px solid #ffffff");
     QVBoxLayout *layout1 = new QVBoxLayout;
     //layout1->setSpacing(0);
     layout1->addWidget(graphicsView);

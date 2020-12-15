@@ -285,7 +285,7 @@ void MainWindow::changeFontFamily(QFont font)
             *action << new EditElementAction(text, ElementShape::Text,
                                              ElementProperty::Font,
                                              new QFont(text->get_text_font()),
-                                             new QFont(family, fontSize));
+                                             new QFont(family, text->get_text_font().pointSize()));
         }
         action->Do();
     }
@@ -307,7 +307,7 @@ void MainWindow::changeFontSize(QString sizeString)
             *action << new EditElementAction(text, ElementShape::Text,
                                              ElementProperty::Font,
                                              new QFont(text->get_text_font()),
-                                             new QFont(fontFamily, size));
+                                             new QFont(text->get_text_font().family(), size));
         }
         action->Do();
     }

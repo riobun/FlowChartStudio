@@ -121,6 +121,7 @@ QVector<QPair<Node*,ElementShape>> Graph::Nodes_ElementShape(int index){
 
 void Graph::removeNode(Node* node)
 {
+    nodeIds[node->getNodeId() - 1] = false;
     nodes.remove(node->GetID());
 }
 

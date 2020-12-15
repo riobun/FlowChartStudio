@@ -103,6 +103,7 @@ void NodeEvents::cutElements(Node* node)
         *action << new ChangeElementAction(arrow, ElementShape::Arrow, false);
     }
     action->Do();
+    auto g = MainWindow::instance()->graph();
 }
 
 void NodeEvents::copyElements(Node* node)

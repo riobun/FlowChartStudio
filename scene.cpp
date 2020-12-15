@@ -225,9 +225,10 @@ void Scene::pasteElements(QGraphicsSceneContextMenuEvent *event)
         Text* newText;
         if (text->parent)
         {
+            continue;
             auto newNode = nodes[text->parent];
             QString temp="0x";
-            temp+= QString::number(newNode->GetID(),16);
+            temp+= QString::number(newNode->getNodeId(),16);
             auto position = newNode->GetLocation() + text->get_text_location() - text->parent->GetLocation();
             newText = new Text(position, newNode, temp, true);
         }
