@@ -45,6 +45,7 @@ SOURCES += \
     rootnode.cpp \
     saver.cpp \
     scene.cpp \
+    splashscreen.cpp \
     subgraphnode.cpp \
     text.cpp \
     textitem.cpp\
@@ -83,6 +84,7 @@ HEADERS += \
     rootnode.h \
     saver.h \
     scene.h \
+    splashscreen.h \
     subgraphnode.h \
     text.h \
     textitem.h\

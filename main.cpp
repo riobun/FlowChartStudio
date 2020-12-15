@@ -1,28 +1,24 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QSplashScreen>
-#include <QThread>
+#include "splashscreen.h"
 
 MainWindow* point_w = nullptr;
 
-void showSplashScreen();
+void showSplashScreen(QApplication& app);
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     point_w = &w;
-    showSplashScreen();
-    w.show();
+    showSplashScreen(a);
+    //w.show();
 
     return a.exec();
 }
 
-void showSplashScreen()
+void showSplashScreen(QApplication& app)
 {
-    QPixmap pixmap(":/images/line_planes.jpg");
-    QSplashScreen splashScreen;
-    splashScreen.setPixmap(pixmap);
-    splashScreen.show();
-    QThread::sleep(1);
+    SplashScreen splashScreen;
+    splashScreen.showScreen(app);
 }

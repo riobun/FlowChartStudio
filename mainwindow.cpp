@@ -370,7 +370,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->selectAllAction, SIGNAL(triggered()), this, SLOT(SelectAll()));
     connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 
-    ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+    //ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
 }
 
 MainWindow::~MainWindow()
@@ -440,18 +440,18 @@ void MainWindow::removeSubTab(int index){
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
-    ui->tabWidget->setStyleSheet("border-image: url();");
-
     auto item = static_cast<Item*>(currentItem);
 
     //创建新的VIEW和SCENE，并绑定
     QGraphicsView* graphicsView = new QGraphicsView();
+    graphicsView->setContentsMargins(0, 0, 0, 0);
 
     graphicsView->setScene(item->scene());
 
     //在tabWidget中加入 包含VIEW的布局的widget 并 切换tab
     QWidget *tabFile = new QWidget(this);
     QVBoxLayout *layout1 = new QVBoxLayout;
+    //layout1->setSpacing(0);
     layout1->addWidget(graphicsView);
     tabFile->setLayout(layout1);
     ui->tabWidget->addTab(tabFile,QIcon(":/images/file.png"),currentItem->text());
@@ -471,6 +471,9 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     graphicsView->horizontalScrollBar()->setSliderPosition(0);
     graphicsView->verticalScrollBar()->setSliderPosition(0);
     open_scenes.append(item->scene());
+
+    auto a = layout1->spacing();
+    ui->tabWidget->setStyleSheet("border: 10px solid #215E21");
 }
 
 void MainWindow::addNewTab(){
