@@ -18,6 +18,7 @@
 #include "innerinputnode.h"
 #include "inneroutputnode.h"
 #include "arrownode.h"
+#include "rootnode.h"
 #include <QVector>
 
 Scene::Scene(bool setId)
@@ -59,9 +60,14 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         auto point = event->scenePos();
         if (isNode(shape))
         {
-            constexpr double width = 100;
-            constexpr double height = 50;
-            auto node = Node::create(shape, point, width, height);
+            Node* node;
+            switch (shape)
+            {
+            case ElementShape::Rectangle: node = new Rectangle(point, 150, 52); break;
+            case ElementShape::Diamond: node = new Diamond(point, 300, 80); break;
+            case ElementShape::RootNode: node = new RootNode(point, 300, 105); break;
+            default: throw;
+            }
             node->SetFrameColor(window->bdColor);
             node->SetBackgroundColor(window->fillColor);
             node->SetThickness(window->frameWidth);
@@ -89,7 +95,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             window->setNextAddedShape(ElementShape::Unknown);
             return;
         }
-        window->setNextAddedShape(ElementShape::Unknown);
+        window->clearButton();
     }
     else if (event->button() == Qt::MouseButton::RightButton)
     {

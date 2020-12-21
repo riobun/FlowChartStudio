@@ -17,6 +17,7 @@ GroupAction& GroupAction::operator<<(Action* action)
 
 void GroupAction::Do()
 {
+    if (actions.size() == 0) MainWindow::instance()->Discard(this);
     foreach (auto action, actions)
     {
         action->Do();

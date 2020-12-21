@@ -7,6 +7,9 @@
 #include "nodeevents.h"
 #include "arrow.h"
 
+static const QString ButtonsDefaultStyleString = QString("QPushButton:hover{background-color:rgba(255, 255, 255, 191);}");
+static const QString SelectedButtonStyleString = QString("background-color:rgba(0,0,0,63)");
+
 void MainWindow::textColorChanged()
 {
     textAction = qobject_cast<QAction *>(sender());
@@ -35,30 +38,75 @@ void MainWindow::arrowColorChanged()
     changeLineColor(color);
 }
 
+void MainWindow::clearButton()
+{
+    _nextAddedShape = ElementShape::Unknown;
+    ui->scrollArea->setStyleSheet(ButtonsDefaultStyleString);
+}
+
 void MainWindow::on_addRectangleButton_clicked()
 {
-    _nextAddedShape = ElementShape::Rectangle;
+    if (_nextAddedShape == ElementShape::Rectangle) clearButton();
+    else
+    {
+        _nextAddedShape = ElementShape::Rectangle;
+        auto styleString = ButtonsDefaultStyleString +
+                QString("#addRectangleButton{%1}#addRectangleButton:hover{%1}")
+                .arg(SelectedButtonStyleString);
+        ui->scrollArea->setStyleSheet(styleString);
+    }
 }
 
 void MainWindow::on_addDiamondButton_clicked()
 {
-    _nextAddedShape = ElementShape::Diamond;
+    if (_nextAddedShape == ElementShape::Diamond) clearButton();
+    else
+    {
+        _nextAddedShape = ElementShape::Diamond;
+        auto styleString = ButtonsDefaultStyleString +
+                QString("#addDiamondButton{%1}#addDiamondButton:hover{%1}")
+                .arg(SelectedButtonStyleString);
+        ui->scrollArea->setStyleSheet(styleString);
+    }
 }
 
 void MainWindow::on_addArrowButton_clicked()
 {
-    _nextAddedShape = ElementShape::Arrow;
+    if (_nextAddedShape == ElementShape::Arrow) clearButton();
+    else
+    {
+        _nextAddedShape = ElementShape::Arrow;
+        auto styleString = ButtonsDefaultStyleString +
+                QString("#addArrowButton{%1}#addArrowButton:hover{%1}")
+                .arg(SelectedButtonStyleString);
+        ui->scrollArea->setStyleSheet(styleString);
+    }
 }
 
 void MainWindow::on_addTextButton_clicked()
 {
-    _nextAddedShape = ElementShape::Text;
+    if (_nextAddedShape == ElementShape::Text) clearButton();
+    else
+    {
+        _nextAddedShape = ElementShape::Text;
+        auto styleString = ButtonsDefaultStyleString +
+                QString("#addTextButton{%1}#addTextButton:hover{%1}")
+                .arg(SelectedButtonStyleString);
+        ui->scrollArea->setStyleSheet(styleString);
+    }
 }
 
 void MainWindow::on_addSubgraghButton_clicked()
 {
-    // _nextAddedShape = ElementShape::SubGraph;
-    _nextAddedShape = ElementShape::RootNode;
+    if (_nextAddedShape == ElementShape::RootNode) clearButton();
+    else
+    {
+        _nextAddedShape = ElementShape::RootNode;
+        auto styleString = ButtonsDefaultStyleString +
+                QString("#addSubgraghButton{%1}#addSubgraghButton:hover{%1}")
+                .arg(SelectedButtonStyleString);
+        ui->scrollArea->setStyleSheet(styleString);
+    }
 }
 
 void MainWindow::on_addInputButton_clicked()

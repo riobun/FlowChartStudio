@@ -20,6 +20,7 @@ SOURCES += \
     action.cpp \
     arrow.cpp \
     arrownode.cpp \
+    autosavethread.cpp \
     branchdialog.cpp \
     changeelementaction.cpp \
     checker.cpp \
@@ -58,6 +59,7 @@ HEADERS += \
     action.h \
     arrow.h \
     arrownode.h \
+    autosavethread.h \
     branchdialog.h \
     changeelementaction.h \
     checker.h \

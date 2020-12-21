@@ -69,5 +69,11 @@
         <file>images/bd_cuxi.png</file>
         <file>images/line_planes.jpg</file>
         <file>images/one_plane.png</file>
+        <file>images/line_planes_new.jpg</file>
+        <file>images/rectangle_new.png</file>
+        <file>images/diamond_new.png</file>
+        <file>images/arrow_new.png</file>
+        <file>images/text_new.png</file>
+        <file>images/subgraph3.0_new.png</file>
     </qresource>
 </RCC>

@@ -9,6 +9,7 @@
 #include "mainwindow.h"
 #include "subgraphnode.h"
 #include "rootnode.h"
+#include "ui_mainwindow.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -147,6 +148,7 @@ void Saver::Save(Item* item)
     if (type == ItemType::File)
     {
         auto scene = item->scene();
+        if (!scene->isChanged) return;
         auto graph = item->graph();
         QJsonObject graphJson;
         graphJson.insert("id", graph->GetID());
@@ -236,6 +238,11 @@ void Saver::Save(Item* item)
         graphJson.insert("arrows", arrowsJson);
         doc.setObject(graphJson);
         write(path, doc);
+        scene->isChanged = false;
+        auto tabWidget = MainWindow::instance()->ui->tabWidget;
+        auto index = tabWidget->indexOf(item->tab());
+        auto oldText = tabWidget->tabText(index);
+        if (oldText.endsWith('*')) tabWidget->setTabText(index, oldText.mid(0, oldText.size() - 1));
     }
     else if (type == ItemType::Project)
     {

@@ -28,6 +28,7 @@
 #include "filemanager.h"
 #include "subgraphnode.h"
 #include "checker.h"
+#include "autosavethread.h"
 
 //**************************
 #include "graph.h"
@@ -70,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     fontBtn = new QFontComboBox(this);
     fontBtn->setEditable(false);
+    fontBtn->setCurrentFont(QFont("微软雅黑"));
     connect(fontBtn, &QFontComboBox::currentFontChanged, this, &MainWindow::changeFontFamily);
     ui->toolBar->addWidget(fontBtn);
 
@@ -80,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     //fontSizeCombo->setEditable(true);
     for (int i = 6; i < 52; i = i + 2)
         fontSizeCombo->addItem(QString().setNum(i));
-    fontSizeCombo->setCurrentText("12");
+    fontSizeCombo->setCurrentText("10");
     QIntValidator *validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
     connect(fontSizeCombo, SIGNAL(activated(const QString&)), this, SLOT(changeFontSize(QString)));
@@ -181,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(ui->action_font,&QAction::triggered,[this](){
         bool flag;
-        auto font = QFontDialog::getFont(&flag, QFont("宋体",20));
+        auto font = QFontDialog::getFont(&flag, QFont("微软雅黑",10));
         if (flag) changeFont(font);
     });
     //箭头
@@ -296,6 +298,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //改tab名字和路径
     connect(model,&QStandardItemModel::itemChanged,this,&MainWindow::modifyTabText);
+    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::on_tabWidget_tabCloseRequested);
 
 
     //切换选项卡时scene的切换
@@ -313,11 +316,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto closeProject = [this]()
     {
+        startWait();
         auto root = model->invisibleRootItem();
         auto item = static_cast<Item*>(root->child(0));
         if (item) removeItem(item);
         _scene = nullptr;
         ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+        endWait();
     };
 
     connect(ui->newProjectAction, &QAction::triggered, [this, closeProject]()
@@ -326,9 +331,11 @@ MainWindow::MainWindow(QWidget *parent)
         if (path != QString())
         {
             closeProject();
+            startWait();
             auto item = new Item(ItemType::Project, path);
             model->appendRow(item);
             Saver::AddNewProject(path);
+            endWait();
         }
     });
 
@@ -338,28 +345,36 @@ MainWindow::MainWindow(QWidget *parent)
         if (path != QString())
         {
             closeProject();
+            startWait();
             Saver::ClearRelation();
             auto item = Saver::Open(path);
             Saver::AddRelation();
             model->appendRow(item);
+            endWait();
         }
     });
 
     connect(ui->actionsave, &QAction::triggered, [this]()
     {
+        startWait();
         auto root = model->invisibleRootItem();
         auto item = static_cast<Item*>(root->child(0));
         if (item) saveItem(item);
+        endWait();
     });
 
-    connect(ui->actionclose_pro, &QAction::triggered, [closeProject]()
+    connect(ui->actionclose_pro, &QAction::triggered, [this, closeProject]()
     {
+        startWait();
         closeProject();
+        endWait();
     });
 
-    connect(ui->actioncheck_pro, &QAction::triggered, []()
+    connect(ui->actioncheck_pro, &QAction::triggered, [this]()
     {
+        startWait();
         Checker::check();
+        endWait();
     });
 
     // 将编辑菜单栏中的动作绑定到槽
@@ -372,11 +387,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->deleteAction, SIGNAL(triggered()), this, SLOT(deleteElement()));
 
     //ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+
+    connect(AutoSaveThread::instance(), &AutoSaveThread::autoSave, this, &MainWindow::autoSave, Qt::BlockingQueuedConnection);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    _instance = nullptr;
+}
+
+void MainWindow::autoSave()
+{
+    startWait();
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (item) saveItem(item);
+    endWait();
 }
 
 QMenu *MainWindow::createColorMenu(const char *slot, QColor defaultColor)
@@ -684,6 +711,9 @@ void MainWindow::modifyTabText(QStandardItem* standardItem){
         item->setText(item->name());
     }
     saveItem(static_cast<Item*>(model->invisibleRootItem()->child(0)));
+    auto tabWidget = ui->tabWidget;
+    auto index = tabWidget->indexOf(item->tab());
+    tabWidget->setTabText(index, item->text());
 /*    if(item->itemType() == ItemType::File) {
         ui->tabWidget->tabBar()->setTabText(rename_index,standardItem->text());
 
@@ -855,12 +885,14 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
         }
         auto selectedAction = menu.exec(QCursor::pos());
         if (selectedAction == nullptr) return;
-        auto addFolder = [item, root]()
+        auto addFolder = [item, root, this]()
         {
             auto newPath = item->path() + "/新筛选器";
             auto newItem = new Item(::ItemType::Folder, newPath);
             item->appendRow(newItem);
+            startWait();
             Saver::Save(root);
+            endWait();
         };
         if (selectedAction == addFolderAction) addFolder();
         else if (selectedAction == addExistingFileAction)
@@ -868,9 +900,11 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             auto path = QFileDialog::getOpenFileName(this, "添加现有文件", QString(), "图文件(*.gr)");
             if (path != QString())
             {
+                startWait();
                 auto newItem = Saver::Open(path);
                 item->appendRow(newItem);
                 Saver::Save(root);
+                endWait();
             }
         }
         else if (selectedAction == SaveProjectAction) saveItem(item);
@@ -888,19 +922,25 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             {
                 auto newItem = new Item(::ItemType::File, path);
                 item->appendRow(newItem);
+                startWait();
                 Saver::AddNewFile(path, newItem);
                 saveItem(root);
+                endWait();
             }
         }
         else if (selectedAction == CloseFileAction) closeItem(item);
         else if (selectedAction == RemoveAction)
         {
             removeItem(item);
+            startWait();
             Saver::Save(root);
+            endWait();
         }
         else if (selectedAction == SaveFileAction)
         {
+            startWait();
             Saver::Save(item);
+            endWait();
         }
         else if (selectedAction == SaveAsFileAction)
         {
@@ -922,7 +962,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             if (path != "")
             {
                 item->graph()->branchesPath = path;
+                startWait();
                 Saver::ImportBranches(item, path);
+                endWait();
             }
         }
         else if (selectedAction == importNodeDictionaryPathAction)
@@ -931,7 +973,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             if (path != "")
             {
                 item->graph()->nodeDictionaryPath = path;
+                startWait();
                 Saver::ImportDictionary(item->scene()->nodeDictionary, path);
+                endWait();
             }
         }
         else if (selectedAction == importBranchDictionaryPathAction)
@@ -940,7 +984,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             if (path != "")
             {
                 item->graph()->branchDictionaryPath = path;
+                startWait();
                 Saver::ImportDictionary(item->scene()->branchDictionary, path);
+                endWait();
             }
         }
         else if (selectedAction == exportCsvAction)
@@ -948,7 +994,9 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             auto path = QFileDialog::getSaveFileName(this, "导出csv文件", "", "csv文件(*.csv)");
             if (path != "")
             {
+                startWait();
                 Saver::ExportCsv(item, path);
+                endWait();
             }
         }
         else if (selectedAction == ShowBrachesAction)
@@ -1033,6 +1081,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     auto lastIndex = tabwidget->currentIndex();
     tabwidget->setCurrentIndex(index);
     auto widget = tabwidget->currentWidget();
+    if (widget == nullptr) return;
     auto layout = widget->layout();
     auto item = layout->itemAt(0);
     auto itemWidget = item->widget();
@@ -1044,6 +1093,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     {
         auto yesButton = QMessageBox::Yes;
         QString fileName = tabwidget->tabText(index);
+        if (fileName.endsWith('*')) fileName = fileName.mid(0, fileName.size() - 1);
         auto message = fileName + "文件有更改，要保存吗？";
         auto result = QMessageBox::information(this, "提示", message,
                                                yesButton | QMessageBox::No,
@@ -1051,8 +1101,9 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         if (result == yesButton)
         {
             auto item = tabwidget->tabBar()->tabData(index).value<tab_data>().item;
+            startWait();
             Saver::Save(item);
-            scene->isChanged = false;
+            endWait();
         }
     }
     tabwidget->setCurrentIndex(lastIndex);
@@ -1106,4 +1157,26 @@ void MainWindow::saveItem(Item *item)
             saveItem(childItem);
         }
     }
+}
+
+void MainWindow::change()
+{
+    if (_scene == nullptr) return;
+    _scene->isChanged = true;
+    auto tabWidget = ui->tabWidget;
+    auto index = tabWidget->currentIndex();
+    auto oldText = tabWidget->tabText(index);
+    if (!oldText.endsWith('*')) tabWidget->setTabText(index, oldText + '*');
+}
+
+void MainWindow::startWait()
+{
+    setCursor(Qt::WaitCursor);
+    setEnabled(false);
+}
+
+void MainWindow::endWait()
+{
+    setCursor(Qt::ArrowCursor);
+    setEnabled(true);
 }

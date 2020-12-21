@@ -235,7 +235,8 @@ void Text::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     QMenu menu;
     auto deleteAction = menu.addAction("删除");
     auto editAction = menu.addAction("编辑");
-    auto logicAction=menu.addAction("组合逻辑");
+    QAction* logicAction = nullptr;
+    //auto logicAction=menu.addAction("组合逻辑");
     QAction* branchAction = nullptr;
     // if (arrowId != -1) branchAction = menu.addAction("branch");
     auto fontAction = menu.addAction("修改字体");

@@ -35,7 +35,7 @@ void ChangeElementAction::Do()
 {
     auto window = MainWindow::instance();
     auto scene = ::scene ? ::scene : window->scene();
-    scene->isChanged = true;
+    window->change();
     auto graph = scene->graph;
     if (isNode(shape))
     {

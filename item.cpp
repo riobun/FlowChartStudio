@@ -41,10 +41,10 @@ Item::~Item()
 {
     if (_tab)
     {
-        auto i = MainWindow::instance()->getUi()->tabWidget;
-        if (i)
+        auto window = MainWindow::instance();
+        if (window)
         {
-            auto tabWidget = MainWindow::instance()->getUi()->tabWidget;
+            auto tabWidget = window->getUi()->tabWidget;
             auto index = tabWidget->indexOf(_tab);
             tabWidget->removeTab(index);
         }
@@ -75,10 +75,12 @@ bool Item::rename(const QString &newName)
             auto pathPart = pathParts[i];
             path += "/" + pathPart;
         }
-        if (!QFile::rename(path + "/" + name() + ".gr", path + "/" + newName + ".gr"))
+        auto newPath = path + "/" + newName + ".gr";
+        if (!QFile::rename(path + "/" + name() + ".gr", newPath))
         {
             return false;
         }
+        _path = newPath;
     }
 
     _name = newName;

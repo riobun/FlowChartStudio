@@ -79,17 +79,23 @@ public:
     QColor lineColor = Qt::black;
     QColor textColor = Qt::black;
     int lineType = 1;
-    QString fontFamily = "宋体";
-    int fontSize = 12;
+    QString fontFamily = "微软雅黑";
+    int fontSize = 10;
     Graph* cutGraph = new Graph;
     int lineWidth = 2;
     int frameWidth = 2;
     QMap<QModelIndex,Scene* > scenes;
     QMap<QGraphicsScene*, Graph*> graphs;
     Ui::MainWindow *ui;
+    QStandardItemModel* model;
+
+    void saveItem(Item* item);
+    void change();
+
 
 public:
     Ui::MainWindow* getUi() const;
+    void clearButton();
 
 public slots:
     void Undo();
@@ -152,6 +158,7 @@ private slots:
     void on_addOutputButton_clicked();
 
     void on_tabWidget_tabCloseRequested(int index);
+    void autoSave();
 
 private:
     void changeFrameColor(QColor color);
@@ -167,7 +174,9 @@ private:
     void checkName(QStandardItem *item, bool showMessage = true);
     void closeItem(Item* item);
     void removeItem(Item* item);
-    void saveItem(Item* item);
+    void startWait();
+    void endWait();
+
 
 
 private:
@@ -197,7 +206,7 @@ private:
     QPushButton* ok_sizeBtn;
     QPushButton* cancel_sizeBtn;
     QDialog *dlg;
-    QStandardItemModel* model;
+
 
     QToolButton* arrowColorToolBtn;
     QToolButton* bdColorToolBtn;
