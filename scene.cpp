@@ -92,7 +92,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 line->setPen(QPen(window->lineColor, 2));
                 addItem(line);
             }
-            window->setNextAddedShape(ElementShape::Unknown);
+            window->clearButton();
             return;
         }
         window->clearButton();

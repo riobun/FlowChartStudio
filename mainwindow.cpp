@@ -464,7 +464,10 @@ void MainWindow::removeSubTab(int index){
     else {
         ui->tabWidget->removeTab(index);
     }
-    ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+    if (ui->tabWidget->count() == 0)
+    {
+        ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+    }
 }
 
 void MainWindow::addNewTab(QStandardItem* currentItem){
@@ -921,6 +924,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
             if (path != QString())
             {
                 auto newItem = new Item(::ItemType::File, path);
+                newItem->scene()->isChanged = true;
                 item->appendRow(newItem);
                 startWait();
                 Saver::AddNewFile(path, newItem);
@@ -964,6 +968,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 item->graph()->branchesPath = path;
                 startWait();
                 Saver::ImportBranches(item, path);
+                scene()->isChanged = true;
                 endWait();
             }
         }
@@ -975,6 +980,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 item->graph()->nodeDictionaryPath = path;
                 startWait();
                 Saver::ImportDictionary(item->scene()->nodeDictionary, path);
+                scene()->isChanged = true;
                 endWait();
             }
         }
@@ -986,6 +992,7 @@ void MainWindow::onTreeViewMenuRequested(const QPoint &pos){
                 item->graph()->branchDictionaryPath = path;
                 startWait();
                 Saver::ImportDictionary(item->scene()->branchDictionary, path);
+                scene()->isChanged = true;
                 endWait();
             }
         }

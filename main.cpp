@@ -17,7 +17,9 @@ int main(int argc, char *argv[])
     showSplashScreen(a);
     //w.show();
 
-    return a.exec();
+    auto returnCode = a.exec();
+    autoSaveThread.exit();
+    return returnCode;
 }
 
 void showSplashScreen(QApplication& app)

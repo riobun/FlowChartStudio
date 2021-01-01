@@ -23,6 +23,7 @@
 #include <QMetaEnum>
 
 QMap<SubgraphNode*, int> relations;
+QString projectPath;
 
 void Saver::ClearRelation()
 {
@@ -58,7 +59,8 @@ QJsonArray serializeFolder(Item* item)
         if (type == ItemType::File)
         {
             jsonItem.insert("kind", "file");
-            jsonItem.insert("path", child->path());
+            auto path = child->path().mid(projectPath.size());
+            jsonItem.insert("path", path);
         }
         else if (type == ItemType::Folder)
         {
@@ -81,7 +83,7 @@ QList<QStandardItem*> deserializeFolder(QJsonArray folder)
         Item* item;
         if (kind == "file")
         {
-            auto path = jsonItem.value("path").toString();
+            auto path = projectPath + jsonItem.value("path").toString();
             item = Saver::Open(path);
         }
         else if (kind == "folder")
@@ -152,9 +154,9 @@ void Saver::Save(Item* item)
         auto graph = item->graph();
         QJsonObject graphJson;
         graphJson.insert("id", graph->GetID());
-        graphJson.insert("branchesPath", graph->branchesPath);
-        graphJson.insert("nodeDictionaryPath", graph->nodeDictionaryPath);
-        graphJson.insert("branchDictionaryPath", graph->branchDictionaryPath);
+        graphJson.insert("branchesPath", graph->branchesPath.mid(projectPath.size()));
+        graphJson.insert("nodeDictionaryPath", graph->nodeDictionaryPath.mid(projectPath.size()));
+        graphJson.insert("branchDictionaryPath", graph->branchDictionaryPath.mid(projectPath.size()));
         QJsonArray nodesJson;
         foreach (auto node, graph->getNodes())
         {
@@ -246,6 +248,7 @@ void Saver::Save(Item* item)
     }
     else if (type == ItemType::Project)
     {
+        projectPath = item->path() + '/';
         QJsonObject project;
         project.insert("root", serializeFolder(item));
         doc.setObject(project);
@@ -264,6 +267,15 @@ Item* Saver::Open(const QString& path)
     auto doc = read(path);
     if (path.endsWith(".pr"))
     {
+        // set project path.
+        {
+            auto parts = path.split('/');
+            projectPath = "";
+            for (auto i = 0; i < parts.size() - 1; i++)
+            {
+                projectPath += parts[i] + '/';
+            }
+        }
         item = new Item(ItemType::Project, path);
         auto project = doc.object();
         auto root = project.value("root").toArray();
@@ -411,13 +423,13 @@ Item* Saver::Open(const QString& path)
                 arrow->arrowlist.append(carrow);
             }
         }
-        auto branchesPath = graphJson.value("branchesPath").toString();
+        auto branchesPath = projectPath + graphJson.value("branchesPath").toString();
         graph->branchesPath = branchesPath;
         ImportBranches(item, branchesPath);
-        auto nodeDictionaryPath = graphJson.value("nodeDictionaryPath").toString();
+        auto nodeDictionaryPath = projectPath + graphJson.value("nodeDictionaryPath").toString();
         graph->nodeDictionaryPath = nodeDictionaryPath;
         ImportDictionary(scene->nodeDictionary, nodeDictionaryPath);
-        auto branchDictionaryPath = graphJson.value("branchDictionaryPath").toString();
+        auto branchDictionaryPath = projectPath + graphJson.value("branchDictionaryPath").toString();
         graph->branchDictionaryPath = branchDictionaryPath;
         ImportDictionary(scene->branchDictionary, branchDictionaryPath);
         scene->isChanged = false;
