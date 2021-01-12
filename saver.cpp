@@ -149,6 +149,8 @@ void Saver::Save(Item* item)
     QJsonDocument doc;
     if (type == ItemType::File)
     {
+        auto lastSlantIndex = path.lastIndexOf('/');
+        projectPath = path.left(lastSlantIndex + 1);
         auto scene = item->scene();
         if (!scene->isChanged) return;
         auto graph = item->graph();
@@ -283,6 +285,8 @@ Item* Saver::Open(const QString& path)
     }
     else if (path.endsWith(".gr"))
     {
+        auto lastSlantIndex = path.lastIndexOf('/');
+        projectPath = path.left(lastSlantIndex + 1);
         item = new Item(ItemType::File, path, false);
         auto graph = item->graph();
         auto scene = item->scene();

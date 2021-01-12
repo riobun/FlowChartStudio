@@ -53,6 +53,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    void importBranches();
+    void importNodeDictionary();
+    void importBranchDictionary();
+    void exportCsv();
+    void showDetail();
+
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 

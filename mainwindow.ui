@@ -451,6 +451,9 @@ border-image: url(:/images/rectangle_new.png);
        </item>
        <item>
         <widget class="QTreeView" name="treeView">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -459,13 +462,13 @@ border-image: url(:/images/rectangle_new.png);
          </property>
          <property name="minimumSize">
           <size>
-           <width>221</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>221</width>
+           <width>0</width>
            <height>16777215</height>
           </size>
          </property>
@@ -570,7 +573,7 @@ border-image: url(:/images/rectangle_new.png);
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>项目</string>
+     <string>模型</string>
     </property>
     <addaction name="newProjectAction"/>
     <addaction name="openProjectAction"/>
@@ -578,7 +581,18 @@ border-image: url(:/images/rectangle_new.png);
     <addaction name="actionclose_pro"/>
     <addaction name="actioncheck_pro"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionimportBranches"/>
+    <addaction name="actionimportNodeDictionary"/>
+    <addaction name="actionimportBranchDictionary"/>
+    <addaction name="actionexportCsv"/>
+    <addaction name="actionshowDetail"/>
+   </widget>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
    <addaction name="editMenu"/>
    <addaction name="nodeMenu"/>
    <addaction name="arrowMenu"/>
@@ -881,6 +895,31 @@ border-image: url(:/images/rectangle_new.png);
    </property>
    <property name="text">
     <string>另存为</string>
+   </property>
+  </action>
+  <action name="actionimportBranches">
+   <property name="text">
+    <string>导入Branches文件</string>
+   </property>
+  </action>
+  <action name="actionimportNodeDictionary">
+   <property name="text">
+    <string>导入节点字典文件</string>
+   </property>
+  </action>
+  <action name="actionimportBranchDictionary">
+   <property name="text">
+    <string>导入分支字典文件</string>
+   </property>
+  </action>
+  <action name="actionexportCsv">
+   <property name="text">
+    <string>导出CSV文件</string>
+   </property>
+  </action>
+  <action name="actionshowDetail">
+   <property name="text">
+    <string>显示详细信息</string>
    </property>
   </action>
  </widget>

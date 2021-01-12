@@ -327,13 +327,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->newProjectAction, &QAction::triggered, [this, closeProject]()
     {
-        auto path = QFileDialog::getSaveFileName(window(), "新建项目文件", QString(), "项目文件(*.pr)");
+        auto path = QFileDialog::getSaveFileName(window(), "新建图文件", QString(), "图文件(*.gr)");
         if (path != QString())
         {
             closeProject();
             startWait();
-            auto item = new Item(ItemType::Project, path);
+            auto item = new Item(ItemType::File, path);
             model->appendRow(item);
+            addNewTab(item);
             Saver::AddNewProject(path);
             endWait();
         }
@@ -341,7 +342,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->openProjectAction, &QAction::triggered, [this, closeProject]()
     {
-        auto path = QFileDialog::getOpenFileName(window(), "打开项目", QString(), "项目文件(*.pr)");
+        auto path = QFileDialog::getOpenFileName(window(), "打开文件", QString(), "图文件(*.gr)");
         if (path != QString())
         {
             closeProject();
@@ -350,6 +351,7 @@ MainWindow::MainWindow(QWidget *parent)
             auto item = Saver::Open(path);
             Saver::AddRelation();
             model->appendRow(item);
+            addNewTab(item);
             endWait();
         }
     });
@@ -389,6 +391,12 @@ MainWindow::MainWindow(QWidget *parent)
     //ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
 
     connect(AutoSaveThread::instance(), &AutoSaveThread::autoSave, this, &MainWindow::autoSave, Qt::BlockingQueuedConnection);
+
+    connect(ui->actionimportBranches, &QAction::triggered, this, &MainWindow::importBranches);
+    connect(ui->actionimportNodeDictionary, &QAction::triggered, this, &MainWindow::importNodeDictionary);
+    connect(ui->actionimportBranchDictionary, &QAction::triggered, this, &MainWindow::importBranchDictionary);
+    connect(ui->actionexportCsv, &QAction::triggered, this, &MainWindow::exportCsv);
+    connect(ui->actionshowDetail, &QAction::triggered, this, &MainWindow::showDetail);
 }
 
 MainWindow::~MainWindow()
@@ -840,6 +848,80 @@ void MainWindow::ok_sizeBtn_clicked(){
 }
 void MainWindow::cancel_sizeBtn_clicked(){
     dlg->done(0);
+}
+
+void MainWindow::importBranches()
+{
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (!item) return;
+    auto path = QFileDialog::getOpenFileName(this, "导入Branches文件", "", "Branches文件(*.branches)");
+    if (path != "")
+    {
+        item->graph()->branchesPath = path;
+        startWait();
+        Saver::ImportBranches(item, path);
+        scene()->isChanged = true;
+        endWait();
+    }
+}
+
+void MainWindow::importNodeDictionary()
+{
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (!item) return;
+    auto path = QFileDialog::getOpenFileName(this, "导入节点字典文件", "", "csv文件(*.csv)");
+    if (path != "")
+    {
+        item->graph()->nodeDictionaryPath = path;
+        startWait();
+        Saver::ImportDictionary(item->scene()->nodeDictionary, path);
+        scene()->isChanged = true;
+        endWait();
+    }
+}
+
+void MainWindow::importBranchDictionary()
+{
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (!item) return;
+    auto path = QFileDialog::getOpenFileName(this, "导入分支字典文件", "", "csv文件(*.csv)");
+    if (path != "")
+    {
+        item->graph()->branchDictionaryPath = path;
+        startWait();
+        Saver::ImportDictionary(item->scene()->branchDictionary, path);
+        scene()->isChanged = true;
+        endWait();
+    }
+}
+
+void MainWindow::exportCsv()
+{
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (!item) return;
+    auto path = QFileDialog::getSaveFileName(this, "导出csv文件", "", "csv文件(*.csv)");
+    if (path != "")
+    {
+        startWait();
+        Saver::ExportCsv(item, path);
+        endWait();
+    }
+}
+
+void MainWindow::showDetail()
+{
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (!item) return;
+    auto string = "路径：" + item->path() + "\n" +
+            "分支表文件路径：" + item->graph()->branchesPath + "\n" +
+            "节点字典文件路径：" + item->graph()->nodeDictionaryPath + "\n" +
+            "分支字典文件路径：" + item->graph()->branchDictionaryPath + "\n";
+    QMessageBox::information(this, "详细信息", string);
 }
 
 void MainWindow::onTreeViewMenuRequested(const QPoint &pos){

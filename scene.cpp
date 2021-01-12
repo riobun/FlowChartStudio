@@ -191,7 +191,7 @@ void Scene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         pasteAction->setShortcut(QKeySequence::Paste);
         auto selectAllAction = menu.addAction("全选");
         selectAllAction->setShortcut(QKeySequence::SelectAll);
-        auto showPath = menu.addAction("显示逻辑层次");
+        //auto showPath = menu.addAction("显示逻辑层次");
         auto selectedAction = menu.exec(event->screenPos());
         if (selectedAction == pasteAction)
         {
@@ -201,10 +201,10 @@ void Scene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         {
             NodeEvents::selectAll();
         }
-        else if (selectedAction == showPath)
+        /*else if (selectedAction == showPath)
         {
             QMessageBox::information(MainWindow::instance(), "逻辑层次", item->logicPath());
-        }
+        }*/
     }
 }
 
