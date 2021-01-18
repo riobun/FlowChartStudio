@@ -18,7 +18,7 @@ namespace Ui
 class Checker
 {
 public:
-    static void check();
+    static bool check();
 
 private:
     static QVector<QString> messages;

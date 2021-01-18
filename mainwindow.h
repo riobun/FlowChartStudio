@@ -53,11 +53,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    void closeProject();
+    void newModel();
+    void editModel(QString path = "");
+    bool verifyModel(QString path = "");
     void importBranches();
     void importNodeDictionary();
     void importBranchDictionary();
-    void exportCsv();
+    void exportCsv(bool choosePath = true);
     void showDetail();
+    void initializePosition();
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -183,10 +188,11 @@ private:
     void startWait();
     void endWait();
 
-
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
-
+    QGraphicsView* _view;
     FileManager* fileManager;
 
     int rename_index;

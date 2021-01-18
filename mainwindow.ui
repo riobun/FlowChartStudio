@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>FlowChartStudio</string>
+   <string>自主决策系统图形化配置软件</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -67,7 +67,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>141</width>
+           <width>174</width>
            <height>16777215</height>
           </size>
          </property>
@@ -128,7 +128,7 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>150</width>
+              <width>174</width>
               <height>16777215</height>
              </size>
             </property>

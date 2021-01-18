@@ -38,6 +38,7 @@ SOURCES += \
     item.cpp \
     main.cpp \
     mainwindow.cpp \
+    navigationbutton.cpp \
     node.cpp \
     nodeevents.cpp \
     nodeitem.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     inputnode.h \
     item.h \
     mainwindow.h \
+    navigationbutton.h \
     node.h \
     nodeevents.h \
     nodeitem.h \

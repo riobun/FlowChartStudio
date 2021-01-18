@@ -11,12 +11,13 @@ Ui::MainWindow* Checker::ui;
 Scene* Checker::scene;
 Graph* Checker::graph;
 
-void Checker::check()
+bool Checker::check()
 {
-    if (!initialize()) return;
+    if (!initialize()) return false;
     checkNodes();
     checkArrows();
     showMessages();
+    return messages.size() == 0;
 }
 
 bool Checker::initialize()

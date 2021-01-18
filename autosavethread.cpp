@@ -7,6 +7,11 @@ AutoSaveThread::AutoSaveThread(QObject *parent) : QThread(parent)
     _instance = this;
 }
 
+AutoSaveThread::~AutoSaveThread()
+{
+
+}
+
 AutoSaveThread* AutoSaveThread::instance()
 {
     return _instance;

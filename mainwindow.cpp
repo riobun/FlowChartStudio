@@ -327,33 +327,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->newProjectAction, &QAction::triggered, [this, closeProject]()
     {
-        auto path = QFileDialog::getSaveFileName(window(), "新建图文件", QString(), "图文件(*.gr)");
-        if (path != QString())
-        {
-            closeProject();
-            startWait();
-            auto item = new Item(ItemType::File, path);
-            model->appendRow(item);
-            addNewTab(item);
-            Saver::AddNewProject(path);
-            endWait();
-        }
+        newModel();
     });
 
     connect(ui->openProjectAction, &QAction::triggered, [this, closeProject]()
     {
-        auto path = QFileDialog::getOpenFileName(window(), "打开文件", QString(), "图文件(*.gr)");
-        if (path != QString())
-        {
-            closeProject();
-            startWait();
-            Saver::ClearRelation();
-            auto item = Saver::Open(path);
-            Saver::AddRelation();
-            model->appendRow(item);
-            addNewTab(item);
-            endWait();
-        }
+        editModel();
     });
 
     connect(ui->actionsave, &QAction::triggered, [this]()
@@ -374,9 +353,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actioncheck_pro, &QAction::triggered, [this]()
     {
-        startWait();
-        Checker::check();
-        endWait();
+        verifyModel();
     });
 
     // 将编辑菜单栏中的动作绑定到槽
@@ -397,6 +374,64 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionimportBranchDictionary, &QAction::triggered, this, &MainWindow::importBranchDictionary);
     connect(ui->actionexportCsv, &QAction::triggered, this, &MainWindow::exportCsv);
     connect(ui->actionshowDetail, &QAction::triggered, this, &MainWindow::showDetail);
+}
+
+void MainWindow::closeProject()
+{
+    startWait();
+    auto root = model->invisibleRootItem();
+    auto item = static_cast<Item*>(root->child(0));
+    if (item) removeItem(item);
+    _scene = nullptr;
+    ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+    endWait();
+}
+
+void MainWindow::newModel()
+{
+    auto path = QFileDialog::getSaveFileName(window(), "新建工作区", QString(), "文件夹");
+    if (path != QString())
+    {
+        closeProject();
+        startWait();
+        QDir dir;
+        dir.mkdir(path);
+        auto name = path.mid(path.lastIndexOf('/') + 1);
+        auto grPath = path + '/' + name + ".gr";
+        auto item = new Item(ItemType::File, grPath);
+        model->appendRow(item);
+        addNewTab(item);
+        Saver::AddNewProject(grPath);
+        endWait();
+    }
+}
+
+void MainWindow::editModel(QString path)
+{
+    if (path == "") path = QFileDialog::getOpenFileName(window(), "打开文件", QString(), "图文件(*.gr)");
+    if (path != QString())
+    {
+        closeProject();
+        startWait();
+        Saver::ClearRelation();
+        auto item = Saver::Open(path);
+        Saver::AddRelation();
+        model->appendRow(item);
+        addNewTab(item);
+        endWait();
+    }
+}
+
+bool MainWindow::verifyModel(QString path)
+{
+    if (path != "")
+    {
+        editModel(path);
+    }
+    startWait();
+    auto result = Checker::check();
+    endWait();
+    return result;
 }
 
 MainWindow::~MainWindow()
@@ -510,10 +545,18 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
 
     graphicsView->horizontalScrollBar()->setSliderPosition(0);
     graphicsView->verticalScrollBar()->setSliderPosition(0);
+    _view = graphicsView;
     open_scenes.append(item->scene());
 
     auto a = layout1->spacing();
     ui->tabWidget->setStyleSheet("border: 10px solid #215E21");
+}
+
+void MainWindow::initializePosition()
+{
+    if (!_view) return;
+    _view->horizontalScrollBar()->setSliderPosition(0);
+    _view->verticalScrollBar()->setSliderPosition(0);
 }
 
 void MainWindow::addNewTab(){
@@ -898,12 +941,18 @@ void MainWindow::importBranchDictionary()
     }
 }
 
-void MainWindow::exportCsv()
+void MainWindow::exportCsv(bool choosePath)
 {
     auto root = model->invisibleRootItem();
     auto item = static_cast<Item*>(root->child(0));
     if (!item) return;
-    auto path = QFileDialog::getSaveFileName(this, "导出csv文件", "", "csv文件(*.csv)");
+    QString path;
+    if (choosePath) path = QFileDialog::getSaveFileName(this, "导出csv文件", "", "csv文件(*.csv)");
+    else
+    {
+        auto filePath = item->path();
+        path = filePath.left(filePath.size() - 2) + "csv";
+    }
     if (path != "")
     {
         startWait();
@@ -1268,4 +1317,11 @@ void MainWindow::endWait()
 {
     setCursor(Qt::ArrowCursor);
     setEnabled(true);
+}
+
+extern QMainWindow* firstWindow;
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    firstWindow->show();
 }

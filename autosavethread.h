@@ -10,6 +10,7 @@ public:
     static AutoSaveThread* instance();
 
     explicit AutoSaveThread(QObject *parent = nullptr);
+    ~AutoSaveThread();
 
 protected:
     void run() override;
