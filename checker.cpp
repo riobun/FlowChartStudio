@@ -204,7 +204,10 @@ void Checker::showMessages()
     {
         foreach (auto& message, messages)
         {
-            listWidget->addItem(message);
+            QIcon icon = message.startsWith("警") ?
+                        QIcon(":/images/warning.svg") : QIcon(":/images/error.svg");
+            auto item = new QListWidgetItem(icon, message);
+            listWidget->addItem(item);
         }
     }
 }

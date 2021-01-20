@@ -83,5 +83,9 @@
         <file>images/generate_data.png</file>
         <file>images/technology_blue.jfif</file>
         <file>images/technology_blue.jpg</file>
+        <file>images/Icon.ico</file>
+        <file>images/Icon.png</file>
+        <file>images/error.svg</file>
+        <file>images/warning.svg</file>
     </qresource>
 </RCC>

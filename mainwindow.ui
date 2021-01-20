@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>自主决策系统图形化配置软件</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/images/Icon.png</normaloff>:/images/Icon.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
@@ -353,7 +357,7 @@ border-image: url(:/images/rectangle_new.png);
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="styleSheet">
-          <string notr="true">border-image: url(:/images/one_plane.png);</string>
+          <string notr="true">border: 10px solid #215E21</string>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">

@@ -46,6 +46,7 @@ void showNavigationWindow()
 {
     firstWindow = new QMainWindow();
     firstWindow->setWindowTitle("自主决策系统图形化配置软件");
+    firstWindow->setWindowIcon(QIcon(":/images/Icon.png"));
     auto centralWidget = new QWidget(firstWindow);
     centralWidget->setObjectName("centralWidget");
     centralWidget->setStyleSheet(
@@ -111,7 +112,7 @@ void showNavigationWindow()
         else
         {
             firstWindow->hide();
-            mainWindow->closeProject();
+            // mainWindow->closeProject();
             mainWindow->show();
             mainWindow->initializePosition();
         }
@@ -124,10 +125,14 @@ void showNavigationWindow()
         //window->close();
         //mainWindow->show();
         mainWindow->editModel();
-        mainWindow->importBranches();
-        mainWindow->importNodeDictionary();
-        mainWindow->importBranchDictionary();
-        QMessageBox::information(firstWindow, "提示", "导入结束");
+        QString message;
+        if (mainWindow->importBranches()) message += "Branches文件导入成功\n";
+        else message += "Branches文件的导入被取消\n";
+        if (mainWindow->importNodeDictionary()) message += "节点字典文件导入成功\n";
+        else message += "节点字典文件的导入被取消\n";
+        if (mainWindow->importBranchDictionary()) message += "分支字典文件导入成功\n";
+        else message += "分支字典文件的导入被取消\n";
+        QMessageBox::information(firstWindow, "导入结果", message);
     });
     auto generateButton = new NavigationButton(container);
     generateButton->setGeometry(390, 490, 300, 200);

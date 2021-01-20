@@ -321,7 +321,7 @@ MainWindow::MainWindow(QWidget *parent)
         auto item = static_cast<Item*>(root->child(0));
         if (item) removeItem(item);
         _scene = nullptr;
-        ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+        // ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
         endWait();
     };
 
@@ -383,7 +383,7 @@ void MainWindow::closeProject()
     auto item = static_cast<Item*>(root->child(0));
     if (item) removeItem(item);
     _scene = nullptr;
-    ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+    // ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
     endWait();
 }
 
@@ -509,7 +509,7 @@ void MainWindow::removeSubTab(int index){
     }
     if (ui->tabWidget->count() == 0)
     {
-        ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
+        // ui->tabWidget->setStyleSheet("border-image: url(:/images/one_plane.png);");
     }
 }
 
@@ -549,7 +549,7 @@ void MainWindow::addNewTab(QStandardItem* currentItem){
     open_scenes.append(item->scene());
 
     auto a = layout1->spacing();
-    ui->tabWidget->setStyleSheet("border: 10px solid #215E21");
+    // ui->tabWidget->setStyleSheet("border: 10px solid #215E21");
 }
 
 void MainWindow::initializePosition()
@@ -893,11 +893,11 @@ void MainWindow::cancel_sizeBtn_clicked(){
     dlg->done(0);
 }
 
-void MainWindow::importBranches()
+bool MainWindow::importBranches()
 {
     auto root = model->invisibleRootItem();
     auto item = static_cast<Item*>(root->child(0));
-    if (!item) return;
+    if (!item) return false;
     auto path = QFileDialog::getOpenFileName(this, "导入Branches文件", "", "Branches文件(*.branches)");
     if (path != "")
     {
@@ -906,14 +906,16 @@ void MainWindow::importBranches()
         Saver::ImportBranches(item, path);
         scene()->isChanged = true;
         endWait();
+        return true;
     }
+    return false;
 }
 
-void MainWindow::importNodeDictionary()
+bool MainWindow::importNodeDictionary()
 {
     auto root = model->invisibleRootItem();
     auto item = static_cast<Item*>(root->child(0));
-    if (!item) return;
+    if (!item) return false;
     auto path = QFileDialog::getOpenFileName(this, "导入节点字典文件", "", "csv文件(*.csv)");
     if (path != "")
     {
@@ -922,14 +924,16 @@ void MainWindow::importNodeDictionary()
         Saver::ImportDictionary(item->scene()->nodeDictionary, path);
         scene()->isChanged = true;
         endWait();
+        return true;
     }
+    return false;
 }
 
-void MainWindow::importBranchDictionary()
+bool MainWindow::importBranchDictionary()
 {
     auto root = model->invisibleRootItem();
     auto item = static_cast<Item*>(root->child(0));
-    if (!item) return;
+    if (!item) return false;
     auto path = QFileDialog::getOpenFileName(this, "导入分支字典文件", "", "csv文件(*.csv)");
     if (path != "")
     {
@@ -938,7 +942,9 @@ void MainWindow::importBranchDictionary()
         Saver::ImportDictionary(item->scene()->branchDictionary, path);
         scene()->isChanged = true;
         endWait();
+        return true;
     }
+    return false;
 }
 
 void MainWindow::exportCsv(bool choosePath)

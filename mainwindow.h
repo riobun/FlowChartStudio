@@ -57,9 +57,9 @@ public:
     void newModel();
     void editModel(QString path = "");
     bool verifyModel(QString path = "");
-    void importBranches();
-    void importNodeDictionary();
-    void importBranchDictionary();
+    bool importBranches();
+    bool importNodeDictionary();
+    bool importBranchDictionary();
     void exportCsv(bool choosePath = true);
     void showDetail();
     void initializePosition();
